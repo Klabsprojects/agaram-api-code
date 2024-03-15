@@ -3,7 +3,10 @@ const Schema = mongoose.Schema;
 
 const categoriesSchema = new Schema({
     category_type: String,
-      order_for: String,
+    category_name: String,
+    category_code: String,
+
+    /*  order_for: String,
       order_for_code: String,
       post_type: String,
       post_code: String,
@@ -37,7 +40,7 @@ const categoriesSchema = new Schema({
     order_type_code: String,
     suspension_order_for: String,
     suspension_order_code: String,
-    location_change: String,
+    location_change: String,*/
 	createdAt: {
 		type: Date, 
 		default: Date.now
