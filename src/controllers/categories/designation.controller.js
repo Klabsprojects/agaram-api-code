@@ -1,4 +1,6 @@
 const designations = require('../../models/categories/designation.model');
+//const { successRes, errorRes } = require("../../middlewares/response.middleware")
+const { successRes, errorRes } = require("../../middlewares/response.middleware")
 
 // Designations creation
 exports.addDesignations = async (req, res) => {
@@ -6,10 +8,13 @@ exports.addDesignations = async (req, res) => {
         console.log('try create departments');
         const query = req.body;
         const data = await designations.create(query);
-        res.json(data);
+        //res.json(data);
+        successRes(res, data, 'Designation registered Successfully');
     } catch (error) {
         console.log('catch create departments');
-        res.json(error);
+        //res.json(error);
+        const message = error.message ? error.message : ERRORS.UPDATED;
+        errorRes(res, error, message, file);
     }
     }
 
@@ -25,9 +30,12 @@ exports.getDesignations = async (req, res) => {
             }
             else
                 data = await designations.find();
-            res.json(data);
+            //res.json(data);
+            successRes(res, data, 'Designation listed Successfully');
         } catch (error) {
             console.log('error', error);
-            res.json(error);
+            //res.json(error);
+            const message = error.message ? error.message : ERRORS.UPDATED;
+            errorRes(res, error, message, file);
         }
     }
