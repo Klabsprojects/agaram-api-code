@@ -14,7 +14,7 @@ exports.addDesignations = async (req, res) => {
         console.log('catch create departments');
         //res.json(error);
         const message = error.message ? error.message : ERRORS.UPDATED;
-        errorRes(res, error, message, file);
+        errorRes(res, error, message);
     }
     }
 
@@ -36,6 +36,6 @@ exports.getDesignations = async (req, res) => {
             console.log('error', error);
             //res.json(error);
             const message = error.message ? error.message : ERRORS.UPDATED;
-            errorRes(res, error, message, file);
+            errorRes(res, error, message);
         }
     }

@@ -31,8 +31,8 @@ let successResDocumentChecklistAnalysis = function successValue(res, surveyList,
     return res.status(200).send({ status: 200, surveyList: surveyList, documentChecklistAnalysisArray: documentChecklistAnalysisArray, message: message });
 };
 
-let errorRes = function errorValue(res, error, message, file) {
-    logger.log('error', error, message, file);
+let errorRes = function errorValue(res, error, message) {
+    logger.log('error', error, message);
     return res.status(400).send({ status: 400, message: message });
 
 };
