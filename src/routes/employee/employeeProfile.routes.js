@@ -21,5 +21,10 @@ module.exports = (app) => {
     value.addEmployeeProfile
   );
 
+  app.get(
+    "/getEmployeeByJoiningDate",
+    value.getEmployeeByJoiningDate
+  );
+
 
 }
