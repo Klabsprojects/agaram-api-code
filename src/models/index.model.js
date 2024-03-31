@@ -1,5 +1,5 @@
 
-const { OtpSchema } = require('./categories/categories.model');
+//const { OtpSchema } = require('./categories/categories.model');
 
 let schema = [];
 

@@ -1,20 +1,26 @@
+const { ObjectID, ObjectId, BSON } = require('mongodb');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const employeeProfileSchema = new Schema({
     fullName: String,
-	gender: String,
+	gender: ObjectId,
 	dateOfBirth: Date,
 	dateOfJoining: Date,
 	dateOfRetirement: Date,
-	state: String,
+	state: ObjectId,
 	batch: Number,
-	recruitmentType: String,
-	serviceStatus: String,
+	recruitmentType: ObjectId,
+	serviceStatus: ObjectId,
 	qualification1: String,
 	qualification2: String,
-	community: String,
+	community: ObjectId,
 	caste: String,
+	religion: ObjectId,
+	degree: ObjectId,
+	stream: String,
+	promotionGrade: ObjectId,
+	payscale: String,
 	email: { 
 		type: String, 
 		unique: true 
@@ -22,6 +28,9 @@ const employeeProfileSchema = new Schema({
 	mobileNo1: Number,
 	mobileNo2: Number,
 	mobileNo3: Number,
+	addressLine: String,
+	city: String,
+	pincode: Number,
 	employeeId: String,
 	ifhrmsId: String,
 	createdAt: {

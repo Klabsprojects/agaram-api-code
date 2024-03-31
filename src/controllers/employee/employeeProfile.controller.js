@@ -10,7 +10,7 @@ exports.addEmployeeProfile = async (req, res) => {
         const data = await employeeProfile.create(query);
         successRes(res, data, 'Employee added Successfully');
     } catch (error) {
-        console.log('catch create employeeProfile');
+        console.log('catch create employeeProfile', error);
         errorRes(res, error, "Error on employeeProfile creation");
     }
     }
@@ -33,7 +33,7 @@ exports.getEmployeeProfile = async (req, res) => {
         }
         successRes(res, data, 'Employee listed Successfully');
         } catch (error) {
-            console.log('error', error.reason);
+            console.log('error', error);
             errorRes(res, error, "Error on listing employee");
         }
     }
