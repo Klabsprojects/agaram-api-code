@@ -17,8 +17,10 @@ const employeeProfileSchema = new Schema({
 	community: ObjectId,
 	caste: String,
 	religion: ObjectId,
-	degree: ObjectId,
-	stream: String,
+	degreeData : [{
+		degree : ObjectId,
+		stream : String
+		 }],
 	promotionGrade: ObjectId,
 	payscale: String,
 	email: { 
