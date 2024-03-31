@@ -5,6 +5,7 @@ const { successRes, errorRes } = require("../../middlewares/response.middleware"
 // employeeProfile creation
 exports.addEmployeeProfile = async (req, res) => {
     try {
+        console.log('DEMO');
         console.log('try create employeeProfile');
         const query = req.body;
         const data = await employeeProfile.create(query);
