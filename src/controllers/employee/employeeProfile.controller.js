@@ -24,10 +24,13 @@ exports.getEmployeeProfile = async (req, res) => {
         let data;
         if(req.query){
             query.where = req.query;
-            data = await employeeProfile.find(req.query).exec();
+            data = await employeeProfile.find(req.query).sort({ batch: 'asc' }).exec();
+            console.log('if', data);
         }
-        else
-            data = await employeeProfile.find();
+        else{
+            data = await employeeProfile.find().sort({ batch: 'asc' }).exec();
+            console.log('else', data);
+        }
         successRes(res, data, 'Employee listed Successfully');
         } catch (error) {
             console.log('error', error.reason);
