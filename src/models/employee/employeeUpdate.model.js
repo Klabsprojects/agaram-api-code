@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const employeeUpdateSchema = new Schema({
+	empProfileId: ObjectId,
     updateType: String,
-	orderTypeCategoryCode: String,
+	orderTypeCategoryCode: ObjectId,
 	orderNumber: Number,
-	orderForCategoryCode: String,
+	orderForCategoryCode: ObjectId,
 	dateOfOrder: Date,
 	employeeId: {
 		type: String,
@@ -15,13 +16,13 @@ const employeeUpdateSchema = new Schema({
 		match: /^[A-Za-z0-9\s]+$/, // Regular expression to allow alphanumeric characters and spaces
 	  },
 	fullName: String,
-	fromPostingInCategoryCode: String,
+	fromPostingInCategoryCode: ObjectId,
 	fromDepartmentId: ObjectId,
 	fromDesignationId: ObjectId,
-	toPostingInCategoryCode: String,
+	toPostingInCategoryCode: ObjectId,
 	toDepartmentId: ObjectId,
 	toDesignationId: ObjectId,
-	postTypeCategoryCode: String,
+	postTypeCategoryCode: ObjectId,
 	locationChangeCategoryId: ObjectId,
 	orderFile: String,
 	remarks: String,
