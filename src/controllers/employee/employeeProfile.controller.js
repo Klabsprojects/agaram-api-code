@@ -62,3 +62,48 @@ exports.getEmployeeByJoiningDate = async (req, res) => {
         errorRes(res, error, "Error on listing employee");
     }
 }
+
+// employeeProfile updation
+exports.updateEmployeeProfile = async (req, res) => {
+    try {
+        console.log('try update employeeProfile');
+        const query = req.body;
+        let update = {};
+        if(query.fullName){
+            update.fullName = query.fullName;
+        }
+        if(query.email){
+            update.email = query.email;
+        }
+        if(query.degreeData){
+            update.degreeData = query.degreeData;
+        }
+        if(query.mobileNo1){
+            update.mobileNo1 = query.mobileNo1;
+        }
+        if(query.mobileNo2){
+            update.mobileNo2 = query.mobileNo2;
+        }
+        if(query.mobileNo3){
+            update.mobileNo3 = query.mobileNo3;
+        }
+        if(query.religion){
+            update.religion = query.religion;
+        }
+        let filter = {
+            _id : query.id
+        }
+
+        console.log('update ', update);
+        console.log('filter ', filter);
+
+        const data = await employeeProfile.findOneAndUpdate(filter, update, {
+            new: true
+          });
+        console.log('data updated ', data);
+        successRes(res, data, 'Employee updated Successfully');
+    } catch (error) {
+        console.log('catch update employeeProfile', error);
+        errorRes(res, error, "Error on employeeProfile updation");
+    }
+    }

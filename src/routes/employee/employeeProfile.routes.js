@@ -26,5 +26,9 @@ module.exports = (app) => {
     value.getEmployeeByJoiningDate
   );
 
+  app.put(
+    "/updateEmployeeProfile",
+    value.updateEmployeeProfile
+  );
 
 }
