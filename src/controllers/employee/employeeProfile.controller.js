@@ -1,7 +1,8 @@
 const employeeProfile = require('../../models/employee/employeeProfile.model');
 const employeeUpdate = require('../../models/employee/employeeUpdate.model');
 
-const { successRes, errorRes } = require("../../middlewares/response.middleware")
+const { successRes, errorRes } = require("../../middlewares/response.middleware");
+const { ObjectId, ObjectID } = require('mongodb');
 
 // employeeProfile creation
 exports.addEmployeeProfile = async (req, res) => {
@@ -47,6 +48,7 @@ exports.getEmployeeByFilter = async (req, res) => {
         let data = [];
         let dataUpdate = [];
         let matched = [];
+        let postData = [];
             if(req.query.name && !req.query.start && !req.query.end){
                 let name = req.query.name;
                 
@@ -156,7 +158,131 @@ exports.getEmployeeByFilter = async (req, res) => {
                 console.log('DATA RES from date search ', data);
                 successRes(res, matched, 'Employee listed Successfully');
             }
-    } catch (error) {
+            if(req.query.posting_in){
+                let dataJsonFrom = {};
+                let dataJsonTo = {};
+                let resData = [];
+                if(req.query.department && !req.query.designation){
+                    dataJsonFrom.fromPostingInCategoryCode = req.query.posting_in;
+                    dataJsonTo.toPostingInCategoryCode = req.query.posting_in;
+                    dataJsonFrom.fromDepartmentId = req.query.department;
+                    dataJsonTo.toDepartmentId = req.query.department;
+                }
+                else if(req.query.department && req.query.designation){
+                    dataJsonFrom.fromPostingInCategoryCode = req.query.posting_in;
+                    dataJsonTo.toPostingInCategoryCode = req.query.posting_in;
+                    dataJsonFrom.fromDepartmentId = req.query.department;
+                    dataJsonTo.toDepartmentId = req.query.department;
+                    dataJsonFrom.fromDesignationId = req.query.designation;
+                    dataJsonTo.toDesignationId = req.query.designation;
+                }
+                else if(!req.query.department && !req.query.designation){
+                    dataJsonFrom.fromPostingInCategoryCode = req.query.posting_in;
+                    dataJsonTo.toPostingInCategoryCode = req.query.posting_in;
+                }
+                dataUpdate = await employeeUpdate.find({$or:[dataJsonFrom,dataJsonTo]}).exec();
+                    if(dataUpdate.length == 0){
+                        console.log('no');
+                    }
+                    else{
+                        console.log('dataUpdate ', dataUpdate);
+                        const array = [1, 2, 3, 2, 4, 5, 4, 5];
+                        const uniqueElements = new Set();
+
+                        dataUpdate.forEach(item => {
+                            if (!uniqueElements.has(item.fullName)) {
+                                uniqueElements.add(item.fullName);
+                            }
+                        });
+                        const arrayUnique = Array.from(uniqueElements);
+                        //console.log('UNIQUE ARR => ', arrayUnique);
+                        let matchedData = [];
+                        for (var i = 0; i < arrayUnique.length; i++) {
+                            console.log('inside I => ',i);
+                            for (var j = 0; j < dataUpdate.length; j++) {
+                                console.log('inside J => ',i, j);
+                                if (arrayUnique[i] == dataUpdate[j].fullName) {
+                                    console.log('array matched ', arrayUnique[i], dataUpdate[j].fullName);
+                                    matchedData.push(dataUpdate[j])
+                                  }
+                                else{
+                                    console.log('error');
+                                }
+                            }
+                            //console.log('dummy ===>>> ', dummy);
+                            matchedData.sort((a, b) => a.dateOfOrder - b.dateOfOrder);
+                            //console.log('dummy sorted ===>>> ', dummy);
+                            matchedData = matchedData.reverse();
+                            //console.log('dummy reversed ===>>> ', dummy);
+                            if(matchedData.length == 0){
+                                console.log('no');
+                            }
+                            else{
+                                matchedData = matchedData[0];
+                                console.log('dataUpdate ====> ', matchedData);
+                                if (typeof matchedData["fromDepartmentId"] !== "undefined" ) {
+                                    console.log('from exists');
+                                    let today = new Date()
+                                console.log(matchedData.dateOfOrder);
+                                console.log(today);
+                                if(matchedData.dateOfOrder > today){
+                                    console.log('date of order greater');
+                                    department = matchedData.fromDepartmentId;
+                                    designation = matchedData.fromDesignationId;
+                                }
+                                else {
+                                    console.log('today greater');
+                                    department = matchedData.toDepartmentId;
+                                    designation = matchedData.toDesignationId;
+                                }
+                                } else {
+                                    console.log('from does not exist');
+                                    console.log('only to dept avail');
+                                department = matchedData.toDepartmentId;
+                                designation = matchedData.toDesignationId;
+                                }
+                            }
+                            if(matchedData.length !== 0){
+        
+                                let jsonval = {
+                                    /*fullName: res.fullName,
+                                    gender: res.gender,
+                                    batch: res.batch,*/
+                                    department: department,
+                                    designation: designation,
+                                    empProfileId: matchedData.empProfileId,
+                                    fullName: matchedData.fullName
+                                    }
+                                    resData.push(jsonval);
+                            }
+                            /*resData.push({
+                                fullName: matchedData[0].fullName,
+                                empProfileId: matchedData[0].empProfileId,
+                            });*/
+                            matchedData = [];
+                        }
+                        //console.log('resData ==> ', resData);
+                        for(let i=0; i< resData.length; i++){
+                            console.log('resData name==> ', resData[i]);
+                            let getQueryJson = {
+                                _id: resData[i].empProfileId
+                            } 
+                            console.log(getQueryJson);
+                            postData = await employeeProfile.find(getQueryJson, {
+                                new: true
+                            }).select({"gender": 1, "batch": 1}).exec();
+                            console.log('post data ', postData);
+                            console.log('res data ', resData[i]);
+                            resData[i].gender = postData[0].gender;
+                            resData[i].batch = postData[0].batch;
+                            console.log('resdata[i] = > ', resData[i]);
+                        }
+
+                console.log('DATA RES from date search ', resData);
+                successRes(res, resData, 'Employee listed Successfully');
+            }
+    }}
+    catch (error) {
         console.log('error => ', error);
         console.log('error', error.reason);
         errorRes(res, error, "Error on listing employee");
