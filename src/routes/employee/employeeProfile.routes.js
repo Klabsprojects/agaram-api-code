@@ -22,8 +22,8 @@ module.exports = (app) => {
   );
 
   app.get(
-    "/getEmployeeByJoiningDate",
-    value.getEmployeeByJoiningDate
+    "/getEmployeeByFilter",
+    value.getEmployeeByFilter
   );
 
   app.put(
