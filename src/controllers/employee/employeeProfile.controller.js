@@ -1,4 +1,5 @@
 const employeeProfile = require('../../models/employee/employeeProfile.model');
+const employeeUpdate = require('../../models/employee/employeeUpdate.model');
 
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 
@@ -43,19 +44,58 @@ exports.getEmployeeProfile = async (req, res) => {
 exports.getEmployeeByFilter = async (req, res) => {
     console.log('helo from getEmployeeByJoiningDate controller', req.query);
     try {
-            let data;
+        let data = [];
+        let dataUpdate = [];
+        let matched = [];
             if(req.query.name && !req.query.start && !req.query.end){
                 let name = req.query.name;
+                
                 let getQueryJson = {
                     fullName: name
                 } 
                 console.log(getQueryJson);
                 data = await employeeProfile.find(getQueryJson).exec();
-                console.log('DATA RES from Name search ', data);
-                successRes(res, data, 'Employee listed Successfully');
+                dataUpdate = await employeeUpdate.find({empProfileId: data[0]._id}).sort({ dateOfOrder: 'desc' }).exec();
+                console.log('data ', data);
+                console.log('dataUpdate ', dataUpdate);
+                let department;
+                let designation;
+                if(dataUpdate.length == 0){
+                    console.log('no');
+                    throw 'No posting available for employee';
+                }
+                if(dataUpdate[0].fromDepartmentId){
+                    let today = new Date()
+                    console.log(dataUpdate[0].dateOfOrder);
+                    console.log(today);
+                    if(dataUpdate[0].dateOfOrder > today){
+                        console.log('date of order greater');
+                        department = dataUpdate[0].fromDepartmentId;
+                        designation = dataUpdate[0].fromDesignationId;
+                    }
+                    else {
+                        console.log('today greater');
+                        department = dataUpdate[0].toDepartmentId;
+                        designation = dataUpdate[0].toDesignationId;
+                    }
+                }
+                else
+                {
+                    console.log('only to dept avail');
+                    department = dataUpdate[0].toDepartmentId;
+                    designation = dataUpdate[0].toDesignationId;
+                }
+                let result = {
+                    fullName: data[0].fullName,
+                    gender: data[0].gender,
+                    batch: data[0].batch,
+                    department: department,
+                    designation: designation
+                }
+                console.log('DATA RES from Name search ', result);
+                successRes(res, result, 'Employee listed Successfully');
             }
-            if(req.query.start && req.query.end){ 
-                //&& !req.query.posting_in && !req.query.department && !req.query.designation && !req.query.name){
+            if(req.query.start && req.query.end){
                 let dateJson = {};
                 let start = req.query.start;
                 let end = req.query.end;   
@@ -67,14 +107,54 @@ exports.getEmployeeByFilter = async (req, res) => {
                     $gte: new Date(start), 
                     $lt: endDate
                 }
-                if(req.query.name){
-                    dateJson.fullName = req.query.name;
-
-                }
                 console.log('dateJson ', dateJson);
                 data = await employeeProfile.find(dateJson).exec();
+                for(let res of data){
+                    dataUpdate = await employeeUpdate.find({empProfileId: res._id}).sort({ dateOfOrder: 'desc' }).exec();
+                    if(dataUpdate.length == 0){
+                        console.log('no');
+                    }
+                    else{
+                        dataUpdate = dataUpdate[0];
+                        console.log('dataUpdate ====> ', dataUpdate);
+                        if (typeof dataUpdate["fromDepartmentId"] !== "undefined" ) {
+                            console.log('from exists');
+                            let today = new Date()
+                        console.log(dataUpdate.dateOfOrder);
+                        console.log(today);
+                        if(dataUpdate.dateOfOrder > today){
+                            console.log('date of order greater');
+                            department = dataUpdate.fromDepartmentId;
+                            designation = dataUpdate.fromDesignationId;
+                        }
+                        else {
+                            console.log('today greater');
+                            department = dataUpdate.toDepartmentId;
+                            designation = dataUpdate.toDesignationId;
+                        }
+                        } else {
+                            console.log('from does not exist');
+                            console.log('only to dept avail');
+                        department = dataUpdate.toDepartmentId;
+                        designation = dataUpdate.toDesignationId;
+                        }
+                    }
+                    if(dataUpdate.length !== 0){
+
+                        let jsonval = {
+                            fullName: res.fullName,
+                            gender: res.gender,
+                            batch: res.batch,
+                            department: department,
+                            designation: designation
+                            }
+                            matched.push(jsonval);
+                    }
+
+                }
+                console.log()
                 console.log('DATA RES from date search ', data);
-                successRes(res, data, 'Employee listed Successfully');
+                successRes(res, matched, 'Employee listed Successfully');
             }
     } catch (error) {
         console.log('error => ', error);

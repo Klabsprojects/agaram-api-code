@@ -9,12 +9,7 @@ const employeeUpdateSchema = new Schema({
 	orderNumber: Number,
 	orderForCategoryCode: ObjectId,
 	dateOfOrder: Date,
-	employeeId: {
-		type: String,
-		required: true,
-		unique: true,
-		match: /^[A-Za-z0-9\s]+$/, // Regular expression to allow alphanumeric characters and spaces
-	  },
+	employeeId: String,
 	fullName: String,
 	fromPostingInCategoryCode: ObjectId,
 	fromDepartmentId: ObjectId,
@@ -22,6 +17,9 @@ const employeeUpdateSchema = new Schema({
 	toPostingInCategoryCode: ObjectId,
 	toDepartmentId: ObjectId,
 	toDesignationId: ObjectId,
+	promotionGrade: ObjectId,
+	promotedGrade: ObjectId,
+	additionalCharge: String,
 	postTypeCategoryCode: ObjectId,
 	locationChangeCategoryId: ObjectId,
 	orderFile: String,
