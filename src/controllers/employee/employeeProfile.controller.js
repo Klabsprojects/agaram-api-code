@@ -334,9 +334,6 @@ exports.updateEmployeeProfile = async (req, res) => {
         if(query.fullName){
             update.fullName = query.fullName;
         }
-        if(query.email){
-            update.email = query.email;
-        }
         if(query.degreeData){
             update.degreeData = query.degreeData;
         }
@@ -351,6 +348,9 @@ exports.updateEmployeeProfile = async (req, res) => {
         }
         if(query.religion){
             update.religion = query.religion;
+        }
+        if(query.personalEmail){
+            update.personalEmail = query.personalEmail;
         }
         let filter = {
             _id : query.id
