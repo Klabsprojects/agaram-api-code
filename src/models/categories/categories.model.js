@@ -5,6 +5,7 @@ const categoriesSchema = new Schema({
     category_type: String,
     category_name: String,
     category_code: String,
+	payscale: String,
 	createdAt: {
 		type: Date, 
 		default: Date.now
