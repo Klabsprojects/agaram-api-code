@@ -13,7 +13,23 @@ exports.addEmployeeUpdate = async (req, res) => {
         console.log('catch create employeeUpdate');
         errorRes(res, error, "Error on employeeUpdate creation");
     }
+}
+
+exports.addTransferOrPostingManyEmployees = async (req, res) => {
+    try {
+            console.log('try create bulk employees transfer/posting');
+            let query = {};
+            if(req.body.transferOrPostingEmployeesList){
+                console.log('yes');
+                query = req.body;
+            }
+            const data = await employeeUpdate.create(query);
+            successRes(res, data, 'Bulk Employees transfer/posting Added successfully');
+    } catch (error) {
+            console.log('catch create employeeUpdate', error);
+            errorRes(res, error, "Error on Bulk Employees transfer/posting Add");
     }
+}
 
 // Get employeeUpdate
 exports.getEmployeeUpdate = async (req, res) => {

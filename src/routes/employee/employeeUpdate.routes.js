@@ -21,5 +21,10 @@ module.exports = (app) => {
     value.addEmployeeUpdate
   );
 
+  app.post(
+    "/addTransferOrPostingManyEmployees",
+    value.addTransferOrPostingManyEmployees
+  );
+
 
 }

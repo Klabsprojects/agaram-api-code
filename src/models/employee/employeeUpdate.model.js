@@ -22,6 +22,16 @@ const employeeUpdateSchema = new Schema({
 	additionalCharge: String,
 	postTypeCategoryCode: ObjectId,
 	locationChangeCategoryId: ObjectId,
+	transferOrPostingEmployeesList: [{
+		employeeId: String,
+		fullName: String,
+		toPostingInCategoryCode: ObjectId,
+		toDepartmentId: ObjectId,
+		toDesignationId: ObjectId,
+		additionalCharge: String,
+		postTypeCategoryCode: ObjectId,
+		locationChangeCategoryId: ObjectId,
+	}],
 	orderFile: String,
 	remarks: String,
 	createdAt: {
