@@ -10,8 +10,44 @@ exports.addEmployeeProfile = async (req, res) => {
         console.log('DEMO');
         console.log('try create employeeProfile');
         const query = req.body;
+        query.photo = Buffer.from(query.photo.split(",")[1], 'base64')
         const data = await employeeProfile.create(query);
-        successRes(res, data, 'Employee added Successfully');
+        let data1 = data;
+        console.log(data1);
+        console.log(data1.fullName);
+        console.log(data1.photo);
+        console.log(data1.photo.toString('base64'));
+        let pho = data1.photo.toString('base64');
+        let data3 = {
+            fullName: data1.fullName,
+  gender: data1.gender,
+  dateOfBirth: data1.dateOfBirth,
+  dateOfJoining: data1.dateOfJoining,
+  dateOfRetirement: data1.dateOfRetirement,
+  state: data1.state,
+  batch: data1.batch,
+  recruitmentType: data1.recruitmentType,
+  serviceStatus: data1.serviceStatus,
+  qualification1: data1.qualification1,
+  qualification2: data1.qualification2,
+  community: data1.community,
+  degreeData: data1.degreeData,
+  caste: data1.caste,
+  religion: data1.religion,
+  promotionGrade: data1.promotionGrade,
+  payscale: data1.payscale,
+  officeEmail: data1.officeEmail,
+  mobileNo1: data1.mobileNo1,
+  mobileNo2: data1.mobileNo2,
+  mobileNo3: data1.mobileNo3,
+  addressLine: data1.addressLine,
+  city: data1.city,
+  pincode: data1.pincode,
+  employeeId: data1.employeeId,
+  ifhrmsId: data1.ifhrmsId,
+            photo: pho
+        }
+        successRes(res, data3, 'Employee added Successfully');
     } catch (error) {
         console.log('catch create employeeProfile', error);
         errorRes(res, error, "Error on employeeProfile creation");

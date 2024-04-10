@@ -23,10 +23,11 @@ const employeeProfileSchema = new Schema({
 		 }],
 	promotionGrade: ObjectId,
 	payscale: String,
-	email: { 
-		type: String, 
-		unique: true 
+	officeEmail: {
+		type: String,
+		unique: true
 	},
+	personalEmail: [String],
 	mobileNo1: Number,
 	mobileNo2: Number,
 	mobileNo3: Number,
@@ -35,6 +36,7 @@ const employeeProfileSchema = new Schema({
 	pincode: Number,
 	employeeId: String,
 	ifhrmsId: String,
+	photo: Buffer,
 	createdAt: {
 		type: Date, 
 		default: Date.now
