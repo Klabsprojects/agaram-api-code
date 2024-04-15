@@ -40,5 +40,14 @@ module.exports = (app) => {
     "/getFemaleEmployees",
     value.getFemaleEmployees
   )
+
+  app.get(
+    "/getActiveEmployees",
+    value.getActiveEmployees
+  )
   
+  app.get(
+    "/getRetiredEmployees",
+    value.getRetiredEmployees
+  )
 }

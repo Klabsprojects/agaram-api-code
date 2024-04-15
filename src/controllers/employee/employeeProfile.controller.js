@@ -373,7 +373,6 @@ exports.updateEmployeeProfile = async (req, res) => {
 
     // Get MaleEmployees
 exports.getMaleEmployees = async (req, res) => {
-    console.log('helo from employeeProfile controller', req.query);
     try {
         let query = {};
         let genderDetails;
@@ -389,7 +388,7 @@ exports.getMaleEmployees = async (req, res) => {
         query = {
             gender : genderId
         };
-        data = await employeeProfile.find(query).exec();
+        data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
         
         let resData = {
             empCount : data.length,
@@ -404,7 +403,6 @@ exports.getMaleEmployees = async (req, res) => {
 
     // Get MaleEmployees
     exports.getFemaleEmployees = async (req, res) => {
-        console.log('helo from employeeProfile controller', req.query);
         try {
             let query = {};
             let genderDetails;
@@ -420,7 +418,7 @@ exports.getMaleEmployees = async (req, res) => {
             query = {
                 gender : genderId
             };
-            data = await employeeProfile.find(query).exec();
+            data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
             
             let resData = {
                 empCount : data.length,
@@ -432,3 +430,63 @@ exports.getMaleEmployees = async (req, res) => {
             errorRes(res, error, "Error on listing Female employees");
         }
     }
+
+// Get Active Employees
+exports.getActiveEmployees = async (req, res) => {
+    try {
+        let query = {};
+        let serviceDetails;
+        let data;
+        let serviceId;
+
+        serviceDetails = await categories.find({
+            "category_name": "Serving"
+        })
+
+        console.log('service Details', serviceDetails[0]._id);
+        serviceId = serviceDetails[0]._id;
+        query = {
+            serviceStatus : serviceId
+        };
+        data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
+        
+        let resData = {
+            empCount : data.length,
+            empList: data
+        }
+        successRes(res, resData, 'Active Employees listed Successfully');
+    } catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing Active employees");
+    }
+}
+
+// Get Retired Employees
+exports.getRetiredEmployees = async (req, res) => {
+    try {
+        let query = {};
+        let serviceDetails;
+        let data;
+        let serviceId;
+
+        serviceDetails = await categories.find({
+            "category_name": "Retired"
+        })
+
+        console.log('service Details', serviceDetails[0]._id);
+        serviceId = serviceDetails[0]._id;
+        query = {
+            serviceStatus : serviceId
+        };
+        data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
+        
+        let resData = {
+            empCount : data.length,
+            empList: data
+        }
+        successRes(res, resData, 'Retired Employees listed Successfully');
+    } catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing Retired employees");
+    }
+}
