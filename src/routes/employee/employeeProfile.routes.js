@@ -31,4 +31,14 @@ module.exports = (app) => {
     value.updateEmployeeProfile
   );
 
+  app.get(
+    "/getMaleEmployees",
+    value.getMaleEmployees
+  )
+
+  app.get(
+    "/getFemaleEmployees",
+    value.getFemaleEmployees
+  )
+  
 }

@@ -1,5 +1,6 @@
 const employeeProfile = require('../../models/employee/employeeProfile.model');
 const employeeUpdate = require('../../models/employee/employeeUpdate.model');
+const categories = require('../../models/categories/categories.model');
 
 const { successRes, errorRes } = require("../../middlewares/response.middleware");
 const { ObjectId, ObjectID } = require('mongodb');
@@ -368,4 +369,66 @@ exports.updateEmployeeProfile = async (req, res) => {
         console.log('catch update employeeProfile', error);
         errorRes(res, error, "Error on employeeProfile updation");
     }
+    }
+
+    // Get MaleEmployees
+exports.getMaleEmployees = async (req, res) => {
+    console.log('helo from employeeProfile controller', req.query);
+    try {
+        let query = {};
+        let genderDetails;
+        let data;
+        let genderId;
+
+        genderDetails = await categories.find({
+            "category_name": "Male"
+        })
+
+        console.log('genderDetails', genderDetails[0]._id);
+        genderId = genderDetails[0]._id;
+        query = {
+            gender : genderId
+        };
+        data = await employeeProfile.find(query).exec();
+        
+        let resData = {
+            empCount : data.length,
+            empList: data
+        }
+        successRes(res, resData, 'Male Employees listed Successfully');
+    } catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing Male employees");
+    }
+}
+
+    // Get MaleEmployees
+    exports.getFemaleEmployees = async (req, res) => {
+        console.log('helo from employeeProfile controller', req.query);
+        try {
+            let query = {};
+            let genderDetails;
+            let data;
+            let genderId;
+    
+            genderDetails = await categories.find({
+                "category_name": "Female"
+            })
+    
+            console.log('genderDetails', genderDetails[0]._id);
+            genderId = genderDetails[0]._id;
+            query = {
+                gender : genderId
+            };
+            data = await employeeProfile.find(query).exec();
+            
+            let resData = {
+                empCount : data.length,
+                empList: data
+            }
+            successRes(res, resData, 'Female Employees listed Successfully');
+        } catch (error) {
+            console.log('error', error);
+            errorRes(res, error, "Error on listing Female employees");
+        }
     }
