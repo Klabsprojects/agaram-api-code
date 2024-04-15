@@ -490,3 +490,33 @@ exports.getRetiredEmployees = async (req, res) => {
         errorRes(res, error, "Error on listing Retired employees");
     }
 }
+
+// Get Employees from chennai / outside chennai
+exports.getByLocation = async (req, res) => {
+    try {
+        let query = {};
+        let data;
+
+        if(req.query.chennai == 'yes'){
+            query = { 
+                city: { $regex: 'chennai', $options: 'i' }
+            };
+        }
+        else if(req.query.chennai == 'no'){
+            query = {
+                city: { $not: { $regex: 'chennai', $options: 'i' } }
+            };
+        }
+
+        data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
+        
+        let resData = {
+            empCount : data.length,
+            empList: data
+        }
+        successRes(res, resData, 'List employees based on location Success');
+    } catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing employees based on location");
+    }
+}

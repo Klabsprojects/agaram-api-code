@@ -50,4 +50,10 @@ module.exports = (app) => {
     "/getRetiredEmployees",
     value.getRetiredEmployees
   )
+
+  app.get(
+    "/getByLocation",
+    value.getByLocation
+  )
+
 }
