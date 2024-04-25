@@ -633,7 +633,11 @@ exports.getBySecretariat = async (req, res) => {
           for(let i=0; i< resData.length; i++){
             console.log('resData name==> ', resData[i]);
         }
-          successRes(res, resData, 'Secretariat Employees listed Successfully');
+        let result = {
+            empCount: resData.length,
+            empList: resData
+        }
+          successRes(res, result, 'Secretariat Employees listed Successfully');
     }
     catch(error){
         console.log('error', error);
