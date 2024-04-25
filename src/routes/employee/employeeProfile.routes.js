@@ -66,4 +66,9 @@ module.exports = (app) => {
     value.getBySecretariat
   )
 
+  app.get(
+    "/getByDesignation",
+    value.getByDesignation
+  )
+
 }

@@ -1,6 +1,8 @@
 const employeeProfile = require('../../models/employee/employeeProfile.model');
 const employeeUpdate = require('../../models/employee/employeeUpdate.model');
 const categories = require('../../models/categories/categories.model');
+const designations = require('../../models/categories/designation.model');
+const { Op } = require('sequelize');
 
 const { successRes, errorRes } = require("../../middlewares/response.middleware");
 const { ObjectId, ObjectID } = require('mongodb');
@@ -605,7 +607,7 @@ exports.getBySecretariat = async (req, res) => {
                     console.log('profileData ', profileData._doc);
                     let resJson = {
                         employeeId : data.employeeId,
-                        fullName: data.fullName,
+                        //fullName: data.fullName,
                         toPostingInCategoryCode: data.toPostingInCategoryCode , 
                         toDepartmentId: data.toDepartmentId ,
                         toDesignationId: data.toDesignationId ,
@@ -617,7 +619,10 @@ exports.getBySecretariat = async (req, res) => {
                         ifhrmsId: profileData[0].ifhrmsId,
                         officeEmail: profileData[0].officeEmail,
                         mobileNo1: profileData[0].mobileNo1,
-                        city: profileData[0].city
+                        city: profileData[0].city,
+                        gender: profileData[0].gender,
+                        fullName: profileData[0].fullName,
+                        _id: profileData[0]._id
                     }
                     console.log('resJson ', resJson);
                     resData.push(resJson);
@@ -642,5 +647,110 @@ exports.getBySecretariat = async (req, res) => {
     catch(error){
         console.log('error', error);
         errorRes(res, error, "Error on listing employees based on Secretariat");
+    }
+}
+
+// Get Employees by Designation
+exports.getByDesignation = async (req, res) => {
+    try{
+        let query = {};
+        let secretariatDetails;
+        let designationDetails;
+        let resData = [];
+        let designationId1;
+        let designationId2;
+        let resDataFinal;
+        if(req.query.designation){
+            designationDetails = await designations.find({
+                "designation_name": req.query.designation
+            })
+            if(req.query.designation == "Additional Collector")
+            {
+                desig1 = "Additional Collector (Revenue)";
+                desig2= "Additional Collector (Development)";
+                designationDetails = await designations.find({
+                    where: {
+                        [Op.and]: [
+                          { designation_name: desig1 },
+                          { designation_name: desig2 }
+                        ]
+                      }
+                })
+                console.log('designationDetails', designationDetails);
+            }
+        }
+        console.log('designationDetails', designationDetails[0]._id);
+        console.log('designationDetails', designationDetails[1]._id);
+        designationId1 = designationDetails[0]._id.toString();
+        designationId2 = designationDetails[1]._id.toString();
+        secretariatDetails =  await employeeUpdate.find({})
+          const uniqueNamesByLatestDateOfOrder = secretariatDetails
+            .sort((a, b) => new Date(b.dateOfOrder) - new Date(a.dateOfOrder)) // Sort by latest date first
+            .reduce((acc, curr) => {
+              if (!acc[curr.empProfileId]) { // Check if name already exists in accumulator
+                acc[curr.empProfileId] = curr; // If not, add the current item
+              }
+              return acc;
+            }, {});
+          
+          const uniqueArray = Object.values(uniqueNamesByLatestDateOfOrder);
+          console.log('Unique by latest date of order:', uniqueArray);
+          //if(req.query.secretariat == 'yes'){
+            let lastIndex = -1;
+            for(let data of uniqueArray){
+                
+                console.log('toDesignationId => ', data.toDesignationId);
+                console.log('designationId => ', designationId);
+                if(data.toDesignationId == designationId)
+                {
+                    console.log('true');
+                    let getQueryJson = {
+                        _id: data.empProfileId
+                    } 
+                    console.log(getQueryJson);
+                    const profileData = await employeeProfile.find(getQueryJson).exec();
+                    console.log('profileData ', profileData);
+                    let resJson = {
+                        employeeId : data.employeeId,
+                        fullName: data.fullName,
+                        toPostingInCategoryCode: data.toPostingInCategoryCode , 
+                        toDepartmentId: data.toDepartmentId ,
+                        toDesignationId: data.toDesignationId ,
+                        postTypeCategoryCode: data.postTypeCategoryCode ,
+                        dateOfOrder: data.dateOfOrder ,
+                        orderForCategoryCode: data.orderForCategoryCode ,
+                        orderTypeCategoryCode: data.orderTypeCategoryCode,
+                        batch: profileData[0].batch,
+                        ifhrmsId: profileData[0].ifhrmsId,
+                        officeEmail: profileData[0].officeEmail,
+                        mobileNo1: profileData[0].mobileNo1,
+                        city: profileData[0].city,
+                        gender: profileData[0].gender,
+                        fullName: profileData[0].fullName,
+                        _id: profileData[0]._id
+                    }
+                    console.log('resJson ', resJson);
+                    resData.push(resJson);
+                    console.log('resData ', resData);
+                    lastIndex++;
+                }
+                if (lastIndex === uniqueArray.length - 1) {
+                    console.log('Reached the end of the array');
+                    //console.log(resData);
+                  }   
+            }
+          //}
+          for(let i=0; i< resData.length; i++){
+            console.log('resData name==> ', resData[i]);
+        }
+        let result = {
+            empCount: resData.length,
+            empList: resData
+        }
+          successRes(res, result, 'Designation wise Employees listed Successfully');
+    }
+    catch(error){
+        console.log('error', error);
+        errorRes(res, error, "Error on listing employees based on Designation");
     }
 }
