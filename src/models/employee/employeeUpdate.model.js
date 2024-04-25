@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const employeeUpdateSchema = new Schema({
-	empProfileId: ObjectId,
     updateType: String,
 	orderTypeCategoryCode: ObjectId,
 	orderNumber: Number,
 	orderForCategoryCode: ObjectId,
 	dateOfOrder: Date,
+	empProfileId: ObjectId,
 	employeeId: String,
 	fullName: String,
 	fromPostingInCategoryCode: ObjectId,
@@ -23,6 +23,7 @@ const employeeUpdateSchema = new Schema({
 	postTypeCategoryCode: ObjectId,
 	locationChangeCategoryId: ObjectId,
 	transferOrPostingEmployeesList: [{
+		empProfileId: ObjectId,
 		employeeId: String,
 		fullName: String,
 		toPostingInCategoryCode: ObjectId,

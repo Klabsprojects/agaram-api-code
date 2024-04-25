@@ -94,9 +94,9 @@ exports.getEmployeeByFilter = async (req, res) => {
                 } 
                 console.log(getQueryJson);
                 data = await employeeProfile.find(getQueryJson).exec();
+                console.log('Data ==> ', data);
                 dataUpdate = await employeeUpdate.find({empProfileId: data[0]._id}).sort({ dateOfOrder: 'desc' }).exec();
-                console.log('data ', data);
-                console.log('dataUpdate ', dataUpdate);
+                console.log('DataUpdate ==> ', dataUpdate);
                 let department;
                 let designation;
                 if(dataUpdate.length == 0){
@@ -518,5 +518,125 @@ exports.getByLocation = async (req, res) => {
     } catch (error) {
         console.log('error', error);
         errorRes(res, error, "Error on listing employees based on location");
+    }
+}
+
+// Get Employees from Secretariat / not from getBySecretariat
+exports.getBySecretariat = async (req, res) => {
+    try{
+        let query = {};
+        let secretariatDetails;
+        let categoryDetails;
+        let resData = [];
+        let categoryId;
+        let resDataFinal;
+        categoryDetails = await categories.find({
+            "category_name": "Secretariat"
+        })
+        console.log('categoryDetails', categoryDetails[0]._id);
+        categoryId = categoryDetails[0]._id.toString();
+        secretariatDetails =  await employeeUpdate.find({})
+          const uniqueNamesByLatestDateOfOrder = secretariatDetails
+            .sort((a, b) => new Date(b.dateOfOrder) - new Date(a.dateOfOrder)) // Sort by latest date first
+            .reduce((acc, curr) => {
+              if (!acc[curr.empProfileId]) { // Check if name already exists in accumulator
+                acc[curr.empProfileId] = curr; // If not, add the current item
+              }
+              return acc;
+            }, {});
+          
+          const uniqueArray = Object.values(uniqueNamesByLatestDateOfOrder);
+          console.log('Unique by latest date of order:', uniqueArray);
+          if(req.query.secretariat == 'yes'){
+            let lastIndex = -1;
+            for(let data of uniqueArray){
+                
+                console.log('toPostingInCategoryCode => ', data.toPostingInCategoryCode);
+                console.log('categoryId => ', categoryId);
+                if(data.toPostingInCategoryCode == categoryId)
+                {
+                    console.log('true');
+                    let getQueryJson = {
+                        _id: data.empProfileId
+                    } 
+                    console.log(getQueryJson);
+                    const profileData = await employeeProfile.find(getQueryJson).exec();
+                    console.log('profileData ', profileData);
+                    let resJson = {
+                        employeeId : data.employeeId,
+                        fullName: data.fullName,
+                        toPostingInCategoryCode: data.toPostingInCategoryCode , 
+                        toDepartmentId: data.toDepartmentId ,
+                        toDesignationId: data.toDesignationId ,
+                        postTypeCategoryCode: data.postTypeCategoryCode ,
+                        dateOfOrder: data.dateOfOrder ,
+                        orderForCategoryCode: data.orderForCategoryCode ,
+                        orderTypeCategoryCode: data.orderTypeCategoryCode,
+                        batch: profileData[0].batch,
+                        ifhrmsId: profileData[0].ifhrmsId,
+                        officeEmail: profileData[0].officeEmail,
+                        mobileNo1: profileData[0].mobileNo1,
+                        city: profileData[0].city
+                    }
+                    console.log('resJson ', resJson);
+                    resData.push(resJson);
+                    console.log('resData ', resData);
+                    lastIndex++;
+                }
+                if (lastIndex === uniqueArray.length - 1) {
+                    console.log('Reached the end of the array');
+                    //console.log(resData);
+                  }   
+            }
+          }
+          else{
+            let lastIndex = -1;
+            for(let data of uniqueArray){
+                console.log('toPostingInCategoryCode => ', data.toPostingInCategoryCode);
+                console.log('categoryId => ', categoryId);
+                if(data.toPostingInCategoryCode != categoryId)
+                {
+                    console.log('true');
+                    let getQueryJson = {
+                        _id: data.empProfileId
+                    } 
+                    console.log(getQueryJson);
+                    const profileData = await employeeProfile.find(getQueryJson).exec();
+                    console.log('profileData ', profileData._doc);
+                    let resJson = {
+                        employeeId : data.employeeId,
+                        fullName: data.fullName,
+                        toPostingInCategoryCode: data.toPostingInCategoryCode , 
+                        toDepartmentId: data.toDepartmentId ,
+                        toDesignationId: data.toDesignationId ,
+                        postTypeCategoryCode: data.postTypeCategoryCode ,
+                        dateOfOrder: data.dateOfOrder ,
+                        orderForCategoryCode: data.orderForCategoryCode ,
+                        orderTypeCategoryCode: data.orderTypeCategoryCode,
+                        batch: profileData[0].batch,
+                        ifhrmsId: profileData[0].ifhrmsId,
+                        officeEmail: profileData[0].officeEmail,
+                        mobileNo1: profileData[0].mobileNo1,
+                        city: profileData[0].city
+                    }
+                    console.log('resJson ', resJson);
+                    resData.push(resJson);
+                    console.log('resData ', resData);
+                    lastIndex++;
+                }
+                if (lastIndex === uniqueArray.length - 1) {
+                    console.log('Reached the end of the array');
+                    //console.log(resData);
+                  }   
+            }
+          }
+          for(let i=0; i< resData.length; i++){
+            console.log('resData name==> ', resData[i]);
+        }
+          successRes(res, resData, 'Secretariat Employees listed Successfully');
+    }
+    catch(error){
+        console.log('error', error);
+        errorRes(res, error, "Error on listing employees based on Secretariat");
     }
 }

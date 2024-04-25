@@ -56,4 +56,14 @@ module.exports = (app) => {
     value.getByLocation
   )
 
+  app.get(
+    "/getByLocation",
+    value.getByLocation
+  )
+
+  app.get(
+    "/getBySecretariat",
+    value.getBySecretariat
+  )
+
 }
