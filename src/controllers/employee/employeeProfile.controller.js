@@ -2,7 +2,7 @@ const employeeProfile = require('../../models/employee/employeeProfile.model');
 const employeeUpdate = require('../../models/employee/employeeUpdate.model');
 const categories = require('../../models/categories/categories.model');
 const designations = require('../../models/categories/designation.model');
-const { Op } = require('sequelize');
+//const { Op } = require('sequelize');
 
 const { successRes, errorRes } = require("../../middlewares/response.middleware");
 const { ObjectId, ObjectID } = require('mongodb');
