@@ -37,6 +37,8 @@ const employeeProfileSchema = new Schema({
 	employeeId: String,
 	ifhrmsId: String,
 	photo: Buffer,
+	foreignVisit: String,
+	foreignVisitCount: Number,
 	createdAt: {
 		type: Date, 
 		default: Date.now
