@@ -8,7 +8,8 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 const routes = require('./src/routes/index.routes');
 
 const port = process.env.PORT;
-const MONGO_URI = 'mongodb://localhost:27017/agaram';
+const MONGO_URI = 'mongodb://127.0.0.1:27017/agaram';
+//const MONGO_URI = 'mongodb://localhost:27017/agaram';
 console.log(MONGO_URI);
 
 mongoose
@@ -22,8 +23,14 @@ mongoose
   app.use(express.urlencoded({ limit: "2mb", extended: true }));
   app.use(express.json({ limit: "3mb" }));
   
-  app.use(cors());
-  
+  //app.use(cors());
+  app.use(cors({
+    origin: ['http://localhost:4200', 'https://agaram.a2zweb.in'],
+    //, 'https://agaram.a2zweb.in/'], // Allow requests from this origin
+    methods: ['GET', 'POST'],      // Allow only GET and POST requests
+    allowedHeaders: ['Content-Type'] // Allow only specific headers
+}));
+
   
   app.use(express.static(__dirname + '/view'));
   app.get('/home/', function (req, res) {
