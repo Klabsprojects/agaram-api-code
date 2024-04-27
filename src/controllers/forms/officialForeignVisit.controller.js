@@ -10,6 +10,7 @@ exports.addVisit = async (req, res) => {
         
         if(req.file){
             query.politicalClearance = req.file.path
+            //query.fcraClearance = req.file.path
             console.log('Uploaded file path:', req.file.path);
         }
         const data = await foreignVisit.create(query);

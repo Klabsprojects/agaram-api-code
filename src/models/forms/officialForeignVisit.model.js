@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const employeeProfileModel = require('../employee/employeeProfile.model');
 const { ObjectId } = require('mongodb');
 const Schema = mongoose.Schema;
 
@@ -21,9 +20,9 @@ const officialForeignVisitSchema = new Schema({
 	fundsSanctionedBy: Number,
 	fundsSanctioned: Number,
 	orderType: ObjectId, 
-	orderNo: ObjectId, 
+	orderNo: Number, 
 	orderFor: ObjectId,
-	dateOfOrder: Date,
+	//dateOfOrder: Date,
 	createdAt: {
 		type: Date, 
 		default: Date.now

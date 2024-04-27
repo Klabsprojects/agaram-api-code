@@ -7,5 +7,9 @@ require("./employee/employeeProfile.routes")(app);
 require("./employee/employeeUpdate.routes")(app);
 require("./employee/degree.routes")(app);
 require("./forms/officialForeignVisit.routes")(app);
+require("./forms/saf.routes")(app);
+require("./forms/privateVisit.routes")(app);
+require("./forms/immovableMovable.routes")(app);
+require("./forms/officersTour.routes")(app);
 module.exports = app;
 

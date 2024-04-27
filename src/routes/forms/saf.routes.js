@@ -1,9 +1,8 @@
 module.exports = (app) => {
-    const value = require("../../controllers/forms/officialForeignVisit.controller");
+    const value = require("../../controllers/forms/saf.controller");
    //const { joi, cache } = require("../../helpers/index.helper");
    //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
 
-   const upload = require("../../middlewares/upload")
    app.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
@@ -13,14 +12,12 @@ module.exports = (app) => {
   });
 
   app.get(
-    "/getVisit",
-    value.getVisit
+    "/getSaf",
+    value.getSaf
   );
 
   app.post(
-    "/addVisit",
-    upload.single('politicalClearance'),
-    //upload.single('fcraClearance'),
-    value.addVisit
+    "/addSaf",
+    value.addSaf
   );
 }
