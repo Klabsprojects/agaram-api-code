@@ -7,6 +7,11 @@ exports.addEmployeeUpdate = async (req, res) => {
     try {
         console.log('try create employeeUpdate');
         const query = req.body;
+        if(req.file){
+            query.orderFile = req.file.path
+            //query.fcraClearance = req.file.path
+            console.log('Uploaded file path:', req.file.path);
+        }
         const data = await employeeUpdate.create(query);
         successRes(res, data, 'Employee Update added Successfully');
     } catch (error) {
