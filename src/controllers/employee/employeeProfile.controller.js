@@ -373,13 +373,35 @@ exports.updateEmployeeProfile = async (req, res) => {
     }
     }
 
+exports.getEmployeeUpdate = async(empId) => {
+    console.log('inside getEmployeeUpdate function')
+    let secretariatDetails;
+    secretariatDetails =  await employeeUpdate.find({
+        empProfileId: empId
+    })
+    const uniqueNamesByLatestDateOfOrder = secretariatDetails
+      .sort((a, b) => new Date(b.dateOfOrder) - new Date(a.dateOfOrder)) // Sort by latest date first
+      .reduce((acc, curr) => {
+        if (!acc[curr.empProfileId]) { // Check if name already exists in accumulator
+          acc[curr.empProfileId] = curr; // If not, add the current item
+        }
+        return acc;
+      }, {});
+    
+    const uniqueArray = Object.values(uniqueNamesByLatestDateOfOrder);
+    //console.log('Unique by latest date of order:', uniqueArray);
+    return uniqueArray;
+}
+
     // Get MaleEmployees
 exports.getMaleEmployees = async (req, res) => {
     try {
         let query = {};
         let genderDetails;
-        let data;
+        let data = [];
         let genderId;
+        let uniqueArray = [];
+        let resultData = [];
 
         genderDetails = await categories.find({
             "category_name": "Male"
@@ -391,10 +413,65 @@ exports.getMaleEmployees = async (req, res) => {
             gender : genderId
         };
         data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
-        
+        for(let employee of data){
+            uniqueArray = await this.getEmployeeUpdate(employee._id);
+            console.log('length ==> ', uniqueArray.length);
+            if(uniqueArray.length == 1){
+                let dataAll = {
+                    toPostingInCategoryCode: uniqueArray[0].toPostingInCategoryCode,
+                    toDepartmentId: uniqueArray[0].toDepartmentId,
+                    toDesignationId: uniqueArray[0].toDesignationId,
+                    postTypeCategoryCode: uniqueArray[0].postTypeCategoryCode,
+                    locationChangeCategoryId: uniqueArray[0].locationChangeCategoryId,
+                    remarks: uniqueArray[0].remarks,
+                    updateType: uniqueArray[0].updateType,
+                    orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                    orderNumber: uniqueArray[0].orderNumber,
+                    orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                    dateOfOrder: uniqueArray[0].dateOfOrder,
+                    personalEmail: employee.personalEmail,
+                    _id: employee._id,
+                    fullName: employee.fullName,
+                    gender: employee.gender,
+                    dateOfBirth: employee.dateOfBirth,
+                    dateOfJoining: employee.dateOfJoining,
+                    dateOfRetirement: employee.dateOfRetirement,
+                    state: employee.state,
+                    batch: employee.batch,
+                    recruitmentType: employee.recruitmentType,
+                    serviceStatus: employee.serviceStatus,
+                    qualification1: employee.qualification1,
+                    qualification2: employee.qualification2,
+                    community: employee.community,
+                    degreeData: employee.degreeData,
+                    caste: employee.caste,
+                    religion: employee.religion,
+                    promotionGrade: employee.promotionGrade,
+                    payscale: employee.payscale,
+                    officeEmail: employee.officeEmail,
+                    mobileNo1: employee.mobileNo1,
+                    mobileNo2: employee.mobileNo2,
+                    mobileNo3: employee.mobileNo3,
+                    addressLine: employee.addressLine,
+                    city: employee.city,
+                    pincode: employee.pincode,
+                    employeeId: employee.employeeId,
+                    ifhrmsId: employee.ifhrmsId,
+                    //photo: employee.photo
+                }
+                console.log('dataAll => ', dataAll);
+                resultData.push(dataAll);
+            }else{
+                resultData.push(employee);
+                console.log('employee => ', employee);
+            }
+            
+            
+        }
+        console.log('Unique by latest date of order:', uniqueArray);
         let resData = {
-            empCount : data.length,
-            empList: data
+            empCount : resultData.length,
+            empList: resultData
         }
         successRes(res, resData, 'Male Employees listed Successfully');
     } catch (error) {
@@ -410,7 +487,9 @@ exports.getMaleEmployees = async (req, res) => {
             let genderDetails;
             let data;
             let genderId;
-    
+            let uniqueArray = [];
+            let resultData = [];
+
             genderDetails = await categories.find({
                 "category_name": "Female"
             })
@@ -421,11 +500,70 @@ exports.getMaleEmployees = async (req, res) => {
                 gender : genderId
             };
             data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
-            
+            for(let employee of data){
+                uniqueArray = await this.getEmployeeUpdate(employee._id);
+                console.log('length ==> ', uniqueArray.length);
+                if(uniqueArray.length == 1){
+                    let dataAll = {
+                        toPostingInCategoryCode: uniqueArray[0].toPostingInCategoryCode,
+                        toDepartmentId: uniqueArray[0].toDepartmentId,
+                        toDesignationId: uniqueArray[0].toDesignationId,
+                        postTypeCategoryCode: uniqueArray[0].postTypeCategoryCode,
+                        locationChangeCategoryId: uniqueArray[0].locationChangeCategoryId,
+                        remarks: uniqueArray[0].remarks,
+                        updateType: uniqueArray[0].updateType,
+                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                        orderNumber: uniqueArray[0].orderNumber,
+                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                        dateOfOrder: uniqueArray[0].dateOfOrder,
+                        personalEmail: employee.personalEmail,
+                        _id: employee._id,
+                        fullName: employee.fullName,
+                        gender: employee.gender,
+                        dateOfBirth: employee.dateOfBirth,
+                        dateOfJoining: employee.dateOfJoining,
+                        dateOfRetirement: employee.dateOfRetirement,
+                        state: employee.state,
+                        batch: employee.batch,
+                        recruitmentType: employee.recruitmentType,
+                        serviceStatus: employee.serviceStatus,
+                        qualification1: employee.qualification1,
+                        qualification2: employee.qualification2,
+                        community: employee.community,
+                        degreeData: employee.degreeData,
+                        caste: employee.caste,
+                        religion: employee.religion,
+                        promotionGrade: employee.promotionGrade,
+                        payscale: employee.payscale,
+                        officeEmail: employee.officeEmail,
+                        mobileNo1: employee.mobileNo1,
+                        mobileNo2: employee.mobileNo2,
+                        mobileNo3: employee.mobileNo3,
+                        addressLine: employee.addressLine,
+                        city: employee.city,
+                        pincode: employee.pincode,
+                        employeeId: employee.employeeId,
+                        ifhrmsId: employee.ifhrmsId,
+                        //photo: employee.photo
+                    }
+                    console.log('dataAll => ', dataAll);
+                    resultData.push(dataAll);
+                }else{
+                    resultData.push(employee);
+                    console.log('employee => ', employee);
+                }
+                
+                
+            }
+            console.log('Unique by latest date of order:', uniqueArray);
             let resData = {
+                empCount : resultData.length,
+                empList: resultData
+            }
+            /*let resData = {
                 empCount : data.length,
                 empList: data
-            }
+            }*/
             successRes(res, resData, 'Female Employees listed Successfully');
         } catch (error) {
             console.log('error', error);
@@ -440,6 +578,8 @@ exports.getActiveEmployees = async (req, res) => {
         let serviceDetails;
         let data;
         let serviceId;
+        let uniqueArray = [];
+            let resultData = [];
 
         serviceDetails = await categories.find({
             "category_name": "Serving"
@@ -451,11 +591,66 @@ exports.getActiveEmployees = async (req, res) => {
             serviceStatus : serviceId
         };
         data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
-        
-        let resData = {
-            empCount : data.length,
-            empList: data
-        }
+         for(let employee of data){
+                uniqueArray = await this.getEmployeeUpdate(employee._id);
+                console.log('length ==> ', uniqueArray.length);
+                if(uniqueArray.length == 1){
+                    let dataAll = {
+                        toPostingInCategoryCode: uniqueArray[0].toPostingInCategoryCode,
+                        toDepartmentId: uniqueArray[0].toDepartmentId,
+                        toDesignationId: uniqueArray[0].toDesignationId,
+                        postTypeCategoryCode: uniqueArray[0].postTypeCategoryCode,
+                        locationChangeCategoryId: uniqueArray[0].locationChangeCategoryId,
+                        remarks: uniqueArray[0].remarks,
+                        updateType: uniqueArray[0].updateType,
+                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                        orderNumber: uniqueArray[0].orderNumber,
+                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                        dateOfOrder: uniqueArray[0].dateOfOrder,
+                        personalEmail: employee.personalEmail,
+                        _id: employee._id,
+                        fullName: employee.fullName,
+                        gender: employee.gender,
+                        dateOfBirth: employee.dateOfBirth,
+                        dateOfJoining: employee.dateOfJoining,
+                        dateOfRetirement: employee.dateOfRetirement,
+                        state: employee.state,
+                        batch: employee.batch,
+                        recruitmentType: employee.recruitmentType,
+                        serviceStatus: employee.serviceStatus,
+                        qualification1: employee.qualification1,
+                        qualification2: employee.qualification2,
+                        community: employee.community,
+                        degreeData: employee.degreeData,
+                        caste: employee.caste,
+                        religion: employee.religion,
+                        promotionGrade: employee.promotionGrade,
+                        payscale: employee.payscale,
+                        officeEmail: employee.officeEmail,
+                        mobileNo1: employee.mobileNo1,
+                        mobileNo2: employee.mobileNo2,
+                        mobileNo3: employee.mobileNo3,
+                        addressLine: employee.addressLine,
+                        city: employee.city,
+                        pincode: employee.pincode,
+                        employeeId: employee.employeeId,
+                        ifhrmsId: employee.ifhrmsId,
+                        //photo: employee.photo
+                    }
+                    console.log('dataAll => ', dataAll);
+                    resultData.push(dataAll);
+                }else{
+                    resultData.push(employee);
+                    console.log('employee => ', employee);
+                }
+                
+                
+            }
+            console.log('Unique by latest date of order:', uniqueArray);
+            let resData = {
+                empCount : resultData.length,
+                empList: resultData
+            }
         successRes(res, resData, 'Active Employees listed Successfully');
     } catch (error) {
         console.log('error', error);
@@ -470,6 +665,8 @@ exports.getRetiredEmployees = async (req, res) => {
         let serviceDetails;
         let data;
         let serviceId;
+        let uniqueArray = [];
+        let resultData = [];
 
         serviceDetails = await categories.find({
             "category_name": "Retired"
@@ -481,10 +678,65 @@ exports.getRetiredEmployees = async (req, res) => {
             serviceStatus : serviceId
         };
         data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
-        
+        for(let employee of data){
+            uniqueArray = await this.getEmployeeUpdate(employee._id);
+            console.log('length ==> ', uniqueArray.length);
+            if(uniqueArray.length == 1){
+                let dataAll = {
+                    toPostingInCategoryCode: uniqueArray[0].toPostingInCategoryCode,
+                    toDepartmentId: uniqueArray[0].toDepartmentId,
+                    toDesignationId: uniqueArray[0].toDesignationId,
+                    postTypeCategoryCode: uniqueArray[0].postTypeCategoryCode,
+                    locationChangeCategoryId: uniqueArray[0].locationChangeCategoryId,
+                    remarks: uniqueArray[0].remarks,
+                    updateType: uniqueArray[0].updateType,
+                    orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                    orderNumber: uniqueArray[0].orderNumber,
+                    orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                    dateOfOrder: uniqueArray[0].dateOfOrder,
+                    personalEmail: employee.personalEmail,
+                    _id: employee._id,
+                    fullName: employee.fullName,
+                    gender: employee.gender,
+                    dateOfBirth: employee.dateOfBirth,
+                    dateOfJoining: employee.dateOfJoining,
+                    dateOfRetirement: employee.dateOfRetirement,
+                    state: employee.state,
+                    batch: employee.batch,
+                    recruitmentType: employee.recruitmentType,
+                    serviceStatus: employee.serviceStatus,
+                    qualification1: employee.qualification1,
+                    qualification2: employee.qualification2,
+                    community: employee.community,
+                    degreeData: employee.degreeData,
+                    caste: employee.caste,
+                    religion: employee.religion,
+                    promotionGrade: employee.promotionGrade,
+                    payscale: employee.payscale,
+                    officeEmail: employee.officeEmail,
+                    mobileNo1: employee.mobileNo1,
+                    mobileNo2: employee.mobileNo2,
+                    mobileNo3: employee.mobileNo3,
+                    addressLine: employee.addressLine,
+                    city: employee.city,
+                    pincode: employee.pincode,
+                    employeeId: employee.employeeId,
+                    ifhrmsId: employee.ifhrmsId,
+                    //photo: employee.photo
+                }
+                console.log('dataAll => ', dataAll);
+                resultData.push(dataAll);
+            }else{
+                resultData.push(employee);
+                console.log('employee => ', employee);
+            }
+            
+            
+        }
+        console.log('Unique by latest date of order:', uniqueArray);
         let resData = {
-            empCount : data.length,
-            empList: data
+            empCount : resultData.length,
+            empList: resultData
         }
         successRes(res, resData, 'Retired Employees listed Successfully');
     } catch (error) {
@@ -498,6 +750,8 @@ exports.getByLocation = async (req, res) => {
     try {
         let query = {};
         let data;
+        let uniqueArray = [];
+        let resultData = [];
 
         if(req.query.chennai == 'yes'){
             query = { 
@@ -511,10 +765,65 @@ exports.getByLocation = async (req, res) => {
         }
 
         data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
-        
+        for(let employee of data){
+            uniqueArray = await this.getEmployeeUpdate(employee._id);
+            console.log('length ==> ', uniqueArray.length);
+            if(uniqueArray.length == 1){
+                let dataAll = {
+                    toPostingInCategoryCode: uniqueArray[0].toPostingInCategoryCode,
+                    toDepartmentId: uniqueArray[0].toDepartmentId,
+                    toDesignationId: uniqueArray[0].toDesignationId,
+                    postTypeCategoryCode: uniqueArray[0].postTypeCategoryCode,
+                    locationChangeCategoryId: uniqueArray[0].locationChangeCategoryId,
+                    remarks: uniqueArray[0].remarks,
+                    updateType: uniqueArray[0].updateType,
+                    orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                    orderNumber: uniqueArray[0].orderNumber,
+                    orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                    dateOfOrder: uniqueArray[0].dateOfOrder,
+                    personalEmail: employee.personalEmail,
+                    _id: employee._id,
+                    fullName: employee.fullName,
+                    gender: employee.gender,
+                    dateOfBirth: employee.dateOfBirth,
+                    dateOfJoining: employee.dateOfJoining,
+                    dateOfRetirement: employee.dateOfRetirement,
+                    state: employee.state,
+                    batch: employee.batch,
+                    recruitmentType: employee.recruitmentType,
+                    serviceStatus: employee.serviceStatus,
+                    qualification1: employee.qualification1,
+                    qualification2: employee.qualification2,
+                    community: employee.community,
+                    degreeData: employee.degreeData,
+                    caste: employee.caste,
+                    religion: employee.religion,
+                    promotionGrade: employee.promotionGrade,
+                    payscale: employee.payscale,
+                    officeEmail: employee.officeEmail,
+                    mobileNo1: employee.mobileNo1,
+                    mobileNo2: employee.mobileNo2,
+                    mobileNo3: employee.mobileNo3,
+                    addressLine: employee.addressLine,
+                    city: employee.city,
+                    pincode: employee.pincode,
+                    employeeId: employee.employeeId,
+                    ifhrmsId: employee.ifhrmsId,
+                    //photo: employee.photo
+                }
+                console.log('dataAll => ', dataAll);
+                resultData.push(dataAll);
+            }else{
+                resultData.push(employee);
+                console.log('employee => ', employee);
+            }
+            
+            
+        }
+        console.log('Unique by latest date of order:', uniqueArray);
         let resData = {
-            empCount : data.length,
-            empList: data
+            empCount : resultData.length,
+            empList: resultData
         }
         successRes(res, resData, 'List employees based on location Success');
     } catch (error) {

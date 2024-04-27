@@ -15,7 +15,7 @@ exports.addEmployeeUpdate = async (req, res) => {
         const data = await employeeUpdate.create(query);
         successRes(res, data, 'Employee Update added Successfully');
     } catch (error) {
-        console.log('catch create employeeUpdate');
+        console.log('catch create employeeUpdate', error);
         errorRes(res, error, "Error on employeeUpdate creation");
     }
 }
