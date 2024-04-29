@@ -977,6 +977,7 @@ exports.getByDesignation = async (req, res) => {
         let designationId1;
         let designationId2;
         let resDataFinal;
+        let resJson;
         if(req.query.designation){
             designationDetails = await designations.find({
                 "designation_name": req.query.designation
@@ -1032,7 +1033,46 @@ exports.getByDesignation = async (req, res) => {
                             console.log(getQueryJson);
                             const profileData = await employeeProfile.find(getQueryJson).exec();
                             console.log('profileData ', profileData);
-                            let resJson = {
+                            if(profileData.length > 0){
+                                resJson = {
+                                    employeeId : data.employeeId,
+                                    fullName: data.fullName,
+                                    toPostingInCategoryCode: data.toPostingInCategoryCode , 
+                                    toDepartmentId: data.toDepartmentId ,
+                                    toDesignationId: data.toDesignationId ,
+                                    postTypeCategoryCode: data.postTypeCategoryCode ,
+                                    dateOfOrder: data.dateOfOrder ,
+                                    orderForCategoryCode: data.orderForCategoryCode ,
+                                    orderTypeCategoryCode: data.orderTypeCategoryCode,
+                                    batch: profileData[0].batch,
+                                    ifhrmsId: profileData[0].ifhrmsId,
+                                    officeEmail: profileData[0].officeEmail,
+                                    mobileNo1: profileData[0].mobileNo1,
+                                    city: profileData[0].city,
+                                    gender: profileData[0].gender,
+                                    fullName: profileData[0].fullName,
+                                    _id: profileData[0]._id
+                                }
+                                console.log('resJson ', resJson);
+                                resData.push(resJson);
+                                console.log('resData ', resData);
+                            }
+                            lastIndex++;
+                        }
+                    }
+                }
+                else {
+                    if(data.toDesignationId == designationId1)
+                    {
+                        console.log('true');
+                        let getQueryJson = {
+                            _id: data.empProfileId
+                        } 
+                        console.log(getQueryJson);
+                        const profileData = await employeeProfile.find(getQueryJson).exec();
+                        console.log('profileData ', profileData);
+                        if(profileData.length > 0){
+                            resJson = {
                                 employeeId : data.employeeId,
                                 fullName: data.fullName,
                                 toPostingInCategoryCode: data.toPostingInCategoryCode , 
@@ -1054,42 +1094,7 @@ exports.getByDesignation = async (req, res) => {
                             console.log('resJson ', resJson);
                             resData.push(resJson);
                             console.log('resData ', resData);
-                            lastIndex++;
                         }
-                    }
-                }
-                else {
-                    if(data.toDesignationId == designationId1)
-                    {
-                        console.log('true');
-                        let getQueryJson = {
-                            _id: data.empProfileId
-                        } 
-                        console.log(getQueryJson);
-                        const profileData = await employeeProfile.find(getQueryJson).exec();
-                        console.log('profileData ', profileData);
-                        let resJson = {
-                            employeeId : data.employeeId,
-                            fullName: data.fullName,
-                            toPostingInCategoryCode: data.toPostingInCategoryCode , 
-                            toDepartmentId: data.toDepartmentId ,
-                            toDesignationId: data.toDesignationId ,
-                            postTypeCategoryCode: data.postTypeCategoryCode ,
-                            dateOfOrder: data.dateOfOrder ,
-                            orderForCategoryCode: data.orderForCategoryCode ,
-                            orderTypeCategoryCode: data.orderTypeCategoryCode,
-                            batch: profileData[0].batch,
-                            ifhrmsId: profileData[0].ifhrmsId,
-                            officeEmail: profileData[0].officeEmail,
-                            mobileNo1: profileData[0].mobileNo1,
-                            city: profileData[0].city,
-                            gender: profileData[0].gender,
-                            fullName: profileData[0].fullName,
-                            _id: profileData[0]._id
-                        }
-                        console.log('resJson ', resJson);
-                        resData.push(resJson);
-                        console.log('resData ', resData);
                         lastIndex++;
                     }
                 }
