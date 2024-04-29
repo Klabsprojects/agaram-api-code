@@ -1123,12 +1123,14 @@ exports.getEmployeeHistory = async (req, res) => {
     console.log('helo from employee profile with history controller', req.query);
     try {
         let query = {};
+        if(req.query)
+            query = req.query;
         let queryUpdate = {};
         let data;
         let dataUpdate;
         let resJson = {};
         let resArray = [];
-        data = await employeeProfile.find().exec();
+        data = await employeeProfile.find(query).exec();
             for(let employee of data){
                 queryUpdate = {
                     empProfileId: employee._id
@@ -1175,3 +1177,26 @@ exports.getEmployeeHistory = async (req, res) => {
         errorRes(res, error, "Error on listing employee profile with history");
     }
 }
+
+// Get Employee with search option
+/*
+exports.getEmployeeSearch = async (req, res) => {
+    console.log('helo from getEmployeeSearch controller', req.query);
+    try {
+            const { name, batch, department, period, postingIn } = req.query;
+            let queryProfile = {};
+            let queryUpdate = {};
+            // Construct the query based on the parameters provided
+            if (name) query.name = name;
+            if (batch) query.batch = batch;
+            if (department) query.department = department;
+            if (period) query.period = period;
+            if (postingIn) query.postingIn = postingIn;
+
+            successRes(res, resArray, 'Employee profile with history listed Successfully');
+        } 
+        catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing employee profile with history");
+        }
+}*/
