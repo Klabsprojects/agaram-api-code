@@ -70,5 +70,10 @@ module.exports = (app) => {
     "/getByDesignation",
     value.getByDesignation
   )
+  
+  app.get(
+    "/getEmployeeHistory",
+    value.getEmployeeHistory
+  );
 
 }
