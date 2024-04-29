@@ -1128,49 +1128,47 @@ exports.getEmployeeHistory = async (req, res) => {
         let dataUpdate;
         let resJson = {};
         let resArray = [];
-        if(req.query){
-            query.where = req.query;
-            data = await employeeProfile.find(req.query).exec();
+        data = await employeeProfile.find().exec();
             for(let employee of data){
                 queryUpdate = {
                     empProfileId: employee._id
                 }
                 resJson = {
-                    "personalEmail": data[0].personalEmail,
-                    "_id": data[0]._id,
-                    "fullName": data[0].fullName,
-                    "gender": data[0].gender,
-                    "dateOfBirth": data[0].dateOfBirth,
-                    "dateOfJoining": data[0].dateOfJoining,
-                    "dateOfRetirement": data[0].dateOfRetirement,
-                    "state": data[0].state,
-                    "batch": data[0].batch,
-                    "recruitmentType": data[0].recruitmentType,
-                    "serviceStatus": data[0].serviceStatus,
-                    "qualification1": data[0].qualification1,
-                    "qualification2": data[0].qualification2,
-                    "community": data[0].community,
-                    "degreeData": data[0].degreeData,
-                    "caste": data[0].caste,
-                    "religion": data[0].religion,
-                    "promotionGrade": data[0].promotionGrade,
-                    "payscale": data[0].payscale,
-                    "officeEmail": data[0].officeEmail,
-                    "mobileNo1": data[0].mobileNo1,
-                    "mobileNo2": data[0].mobileNo2,
-                    "mobileNo3": data[0].mobileNo3,
-                    "addressLine": data[0].addressLine,
-                    "city": data[0].city,
-                    "pincode": data[0].pincode,
-                    "employeeId": data[0].employeeId,
-                    "ifhrmsId": data[0].ifhrmsId,
+                    "personalEmail": employee.personalEmail,
+                    "_id": employee._id,
+                    "fullName": employee.fullName,
+                    "gender": employee.gender,
+                    "dateOfBirth": employee.dateOfBirth,
+                    "dateOfJoining": employee.dateOfJoining,
+                    "dateOfRetirement": employee.dateOfRetirement,
+                    "state": employee.state,
+                    "batch": employee.batch,
+                    "recruitmentType": employee.recruitmentType,
+                    "serviceStatus": employee.serviceStatus,
+                    "qualification1": employee.qualification1,
+                    "qualification2": employee.qualification2,
+                    "community": employee.community,
+                    "degreeData": employee.degreeData,
+                    "caste": employee.caste,
+                    "religion": employee.religion,
+                    "promotionGrade": employee.promotionGrade,
+                    "payscale": employee.payscale,
+                    "officeEmail": employee.officeEmail,
+                    "mobileNo1": employee.mobileNo1,
+                    "mobileNo2": employee.mobileNo2,
+                    "mobileNo3": employee.mobileNo3,
+                    "addressLine": employee.addressLine,
+                    "city": employee.city,
+                    "pincode": employee.pincode,
+                    "employeeId": employee.employeeId,
+                    "ifhrmsId": employee.ifhrmsId,
                 }
                 data.update = queryUpdate;
-                dataUpdate = await employeeUpdate.find(req.query).exec();
+                dataUpdate = await employeeUpdate.find(queryUpdate).sort({ dateOfOrder: 'asc' }).exec();
                 resJson.employeeHistory = dataUpdate;
                 resArray.push(resJson);
             }
-        }
+
         successRes(res, resArray, 'Employee profile with history listed Successfully');
     } catch (error) {
         console.log('error', error);
