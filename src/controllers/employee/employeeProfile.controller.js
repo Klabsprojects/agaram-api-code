@@ -841,6 +841,7 @@ exports.getBySecretariat = async (req, res) => {
         let resData = [];
         let categoryId;
         let resDataFinal;
+        let resJson;
         categoryDetails = await categories.find({
             "category_name": "Secretariat"
         })
@@ -873,25 +874,28 @@ exports.getBySecretariat = async (req, res) => {
                     console.log(getQueryJson);
                     const profileData = await employeeProfile.find(getQueryJson).exec();
                     console.log('profileData ', profileData);
-                    let resJson = {
-                        employeeId : data.employeeId,
-                        fullName: data.fullName,
-                        toPostingInCategoryCode: data.toPostingInCategoryCode , 
-                        toDepartmentId: data.toDepartmentId ,
-                        toDesignationId: data.toDesignationId ,
-                        postTypeCategoryCode: data.postTypeCategoryCode ,
-                        dateOfOrder: data.dateOfOrder ,
-                        orderForCategoryCode: data.orderForCategoryCode ,
-                        orderTypeCategoryCode: data.orderTypeCategoryCode,
-                        batch: profileData[0].batch,
-                        ifhrmsId: profileData[0].ifhrmsId,
-                        officeEmail: profileData[0].officeEmail,
-                        mobileNo1: profileData[0].mobileNo1,
-                        city: profileData[0].city
-                    }
+                    if(profileData.length > 0){
+                        resJson = {
+                            employeeId : data.employeeId,
+                            fullName: data.fullName,
+                            toPostingInCategoryCode: data.toPostingInCategoryCode , 
+                            toDepartmentId: data.toDepartmentId ,
+                            toDesignationId: data.toDesignationId ,
+                            postTypeCategoryCode: data.postTypeCategoryCode ,
+                            dateOfOrder: data.dateOfOrder ,
+                            orderForCategoryCode: data.orderForCategoryCode ,
+                            orderTypeCategoryCode: data.orderTypeCategoryCode,
+                            batch: profileData[0].batch,
+                            ifhrmsId: profileData[0].ifhrmsId,
+                            officeEmail: profileData[0].officeEmail,
+                            mobileNo1: profileData[0].mobileNo1,
+                            city: profileData[0].city
+                        }
+                        
                     console.log('resJson ', resJson);
                     resData.push(resJson);
                     console.log('resData ', resData);
+                    }
                     lastIndex++;
                 }
                 if (lastIndex === uniqueArray.length - 1) {
@@ -914,28 +918,31 @@ exports.getBySecretariat = async (req, res) => {
                     console.log(getQueryJson);
                     const profileData = await employeeProfile.find(getQueryJson).exec();
                     console.log('profileData ', profileData._doc);
-                    let resJson = {
-                        employeeId : data.employeeId,
-                        //fullName: data.fullName,
-                        toPostingInCategoryCode: data.toPostingInCategoryCode , 
-                        toDepartmentId: data.toDepartmentId ,
-                        toDesignationId: data.toDesignationId ,
-                        postTypeCategoryCode: data.postTypeCategoryCode ,
-                        dateOfOrder: data.dateOfOrder ,
-                        orderForCategoryCode: data.orderForCategoryCode ,
-                        orderTypeCategoryCode: data.orderTypeCategoryCode,
-                        batch: profileData[0].batch,
-                        ifhrmsId: profileData[0].ifhrmsId,
-                        officeEmail: profileData[0].officeEmail,
-                        mobileNo1: profileData[0].mobileNo1,
-                        city: profileData[0].city,
-                        gender: profileData[0].gender,
-                        fullName: profileData[0].fullName,
-                        _id: profileData[0]._id
+                    if(profileData.length > 0){
+                        resJson = {
+                            employeeId : data.employeeId,
+                            //fullName: data.fullName,
+                            toPostingInCategoryCode: data.toPostingInCategoryCode , 
+                            toDepartmentId: data.toDepartmentId ,
+                            toDesignationId: data.toDesignationId ,
+                            postTypeCategoryCode: data.postTypeCategoryCode ,
+                            dateOfOrder: data.dateOfOrder ,
+                            orderForCategoryCode: data.orderForCategoryCode ,
+                            orderTypeCategoryCode: data.orderTypeCategoryCode,
+                            batch: profileData[0].batch,
+                            ifhrmsId: profileData[0].ifhrmsId,
+                            officeEmail: profileData[0].officeEmail,
+                            mobileNo1: profileData[0].mobileNo1,
+                            city: profileData[0].city,
+                            gender: profileData[0].gender,
+                            fullName: profileData[0].fullName,
+                            _id: profileData[0]._id
+                        }
+                        console.log('resJson ', resJson);
+                        resData.push(resJson);
+                        console.log('resData ', resData);
                     }
-                    console.log('resJson ', resJson);
-                    resData.push(resJson);
-                    console.log('resData ', resData);
+                    
                     lastIndex++;
                 }
                 if (lastIndex === uniqueArray.length - 1) {
