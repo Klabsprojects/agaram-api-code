@@ -28,5 +28,5 @@ module.exports = (app) => {
   );*/
 
   app.route("/login")
-    .get(value.login)
+    .post(value.login)
 }

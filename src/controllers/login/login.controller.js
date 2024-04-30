@@ -59,14 +59,14 @@ exports.register = async (req, res) => {
         console.log('try');
         console.log('Jkey => ',Jkey)
         console.log('expire => ',expire)
-        console.log(req.query);
+        console.log(req.body);
         let query = {};
         query = {
-            username: req.query.username,
+            username: req.body.username,
         };
         console.log('query ', query);
        let user = [];
-       if (req.query.username && req.query.password) {
+       if (req.body.username && req.body.password) {
            console.log('if');
            user = await login.find(query).exec();
            console.log(user);
@@ -76,9 +76,9 @@ exports.register = async (req, res) => {
     }
     else if(user.length == 1){
         console.log('else => ',user);
-        if(bcrypt.compareSync(req.query.password, user[0].password)){
-            const token = jwt.sign({ username: req.query.username,
-            password: req.query.password }, Jkey, { expiresIn: expire });
+        if(bcrypt.compareSync(req.body.password, user[0].password)){
+            const token = jwt.sign({ username: req.body.username,
+            password: req.body.password }, Jkey, { expiresIn: expire });
             let result = {
                 data: user,
                 token: token
