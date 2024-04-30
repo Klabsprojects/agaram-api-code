@@ -11,5 +11,6 @@ require("./forms/saf.routes")(app);
 require("./forms/privateVisit.routes")(app);
 require("./forms/immovableMovable.routes")(app);
 require("./forms/officersTour.routes")(app);
+require("./login/login.route")(app);
 module.exports = app;
 
