@@ -389,7 +389,7 @@ exports.getEmployeeUpdate = async(empId) => {
       }, {});
     
     const uniqueArray = Object.values(uniqueNamesByLatestDateOfOrder);
-    //console.log('Unique by latest date of order:', uniqueArray);
+    console.log('Unique by latest date of order:', uniqueArray);
     return uniqueArray;
 }
 
@@ -1179,19 +1179,17 @@ exports.getEmployeeHistory = async (req, res) => {
 }
 
 // Get Employee with search option
-/*
-exports.getEmployeeSearch = async (req, res) => {
+/*exports.getEmployeeSearch = async (req, res) => {
     console.log('helo from getEmployeeSearch controller', req.query);
     try {
             const { name, batch, department, period, postingIn } = req.query;
             let queryProfile = {};
             let queryUpdate = {};
             // Construct the query based on the parameters provided
-            if (name) query.name = name;
-            if (batch) query.batch = batch;
-            if (department) query.department = department;
-            if (period) query.period = period;
-            if (postingIn) query.postingIn = postingIn;
+            if (name) queryProfile.name = name;
+            if (batch) queryProfile.batch = batch;
+            if (department) queryUpdate.department = department;
+            if (postingIn) queryUpdate.postingIn = postingIn;
 
             successRes(res, resArray, 'Employee profile with history listed Successfully');
         } 
@@ -1200,3 +1198,532 @@ exports.getEmployeeSearch = async (req, res) => {
         errorRes(res, error, "Error on listing employee profile with history");
         }
 }*/
+
+// Get Employee with search option
+exports.getEmployeeSearch = async (req, res) => {
+    console.log('helo from getEmployeeSearch controller', req.query);
+    try {
+            let result = [];
+            const count = Object.keys(req.body).length;
+            console.log(`Number of parameters: ${count}`);
+            if(count == 0){
+                successRes(res, result, 'No employee matched');
+            }
+            else if(count == 1){
+                result = await this.oneParameter(req.body);
+                console.log('getEmployeeSearch', result)
+                successRes(res, result, 'Employee listed -> one param Successfully');
+            }
+            else if(count == 2){
+                result = await this.twoParameter(req.body);
+                console.log('getEmployeeSearch', result)
+                successRes(res, result, 'Employee listed -> 2 params Successfully');
+            }
+            else if(count == 3){
+                result = await this.threeParameter(req.body);
+                console.log('getEmployeeSearch', result)
+                successRes(res, result, 'Employee listed -> 3 params Successfully');
+            }
+            else if(count == 4){
+                result = await this.fourParameter(req.body);
+                console.log('getEmployeeSearch', result)
+                successRes(res, result, 'Employee listed -> 4 params Successfully');
+            }
+            else if(count == 5){
+                result = await this.fiveParameter(req.body);
+                console.log('getEmployeeSearch', result)
+                successRes(res, result, 'Employee listed -> 5 params Successfully');
+            }
+            //successRes(res, count, 'Employee profile with history listed Successfully');
+        } 
+        catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing employee profile with history");
+        }
+}
+
+exports.oneParameter = async(input) => {
+    console.log('inside oneParameter function', input);
+    let result;
+    if(input.name){
+        console.log('name present');
+        result = await this.byProfile(input, "name");
+        console.log('oneParameter name ', result);
+        return result;
+    }
+    else if(input.batch){
+        console.log('batch present');
+        result = await this.byProfile(input, "batch");
+        console.log('oneParameter batch ', result);
+        return result;
+    }
+    else if(input.department){
+        console.log('department present');
+        result = await this.byProfile(input, "department");
+        console.log('oneParameter department ', result);
+        return result;
+    }
+    else if(input.postingIn){
+        console.log('postingIn present');
+        result = await this.byProfile(input, "postingIn");
+        console.log('oneParameter posting ', result);
+        return result;
+    }
+    else if(input.period){
+        console.log('period present');
+        result = await this.byProfile(input, "period");
+        console.log('oneParameter period ', result);
+        return result;
+    }
+    let oneResult = [];
+    return oneResult;
+}
+
+exports.twoParameter = async(input) => {
+    console.log('inside twoParameter function', input);
+    let result;
+    if(input.name && input.batch && !input.department && !input.period && !input.postingIn){
+        console.log('name and batch present');
+        result = await this.byProfile(input, "naBa");
+        console.log('twoParameter name batch', result);
+        return result;
+    }
+    else if(input.name && !input.batch && input.department && !input.period && !input.postingIn){
+        console.log('name department present');
+        result = await this.byProfile(input, "naDe");
+        console.log('twoParameter name department', result);
+        return result;
+    }
+    else if(input.name && !input.batch && !input.department && input.period && !input.postingIn){
+        console.log('name period present');
+        result = await this.byProfile(input, "naPe");
+        console.log('twoParameter name department', result);
+        return result;
+    }
+    else if(input.name && !input.batch && !input.department && !input.period && input.postingIn){
+        console.log('name postingIn present');
+        result = await this.byProfile(input, "naPo");
+        console.log('twoParameter name postingIn', result);
+        return result;
+    }
+    else if(!input.name && input.batch && input.department && !input.period && !input.postingIn){
+        console.log('batch department present');
+        result = await this.byProfile(input, "baDe");
+        console.log('twoParameter batch department', result);
+        return result;
+    }
+    else if(!input.name && input.batch && !input.department && input.period && !input.postingIn){
+        console.log('batch period present');
+        result = await this.byProfile(input, "baPe");
+        console.log('twoParameter batch period', result);
+        return result;
+    }
+    else if(!input.name && input.batch && !input.department && !input.period && input.postingIn){
+        console.log('batch postingIn present');
+        result = await this.byProfile(input, "baPo");
+        console.log('twoParameter postingIn department', result);
+        return result;
+    }
+    else if(!input.name && !input.batch && input.department && input.period && !input.postingIn){
+        console.log('department period present');
+        result = await this.byProfile(input, "dePe");
+        console.log('twoParameter department period', result);
+        return result;
+    }
+    else if(!input.name && !input.batch && input.department && !input.period && input.postingIn){
+        console.log('department postingIn present');
+        result = await this.byProfile(input, "dePo");
+        console.log('twoParameter department postingIn', result);
+        return result;
+    }
+    else if(!input.name && !input.batch && !input.department && input.period && input.postingIn){
+        console.log('period postingIn present');
+        result = await this.byProfile(input, "pePo");
+        console.log('twoParameter period postingIn', result);
+        return result;
+    }
+    else {
+        let oneResult = [];
+        return oneResult;
+    }
+}
+
+exports.threeParameter = async(input) => {
+    console.log('inside 3Parameter function', input);
+    let result;
+    if(input.name && input.batch && input.department && !input.period && !input.postingIn){
+        console.log('name batch department present');
+        result = await this.byProfile(input, "naBaDe");
+        console.log('threeParameter name batch department', result);
+        return result;
+    }
+    else if(input.name && input.batch && !input.department && input.period && !input.postingIn){
+        console.log('name batch period present');
+        result = await this.byProfile(input, "naBaPe");
+        console.log('threeParameter name batch period', result);
+        return result;
+    }
+    else if(input.name && input.batch && !input.department && !input.period && input.postingIn){
+        console.log('name batch postingIn present');
+        result = await this.byProfile(input, "naBaPo");
+        console.log('threeParameter name batch postingIn', result);
+        return result;
+    }
+    else if(input.name && !input.batch && input.department && input.period && !input.postingIn){
+        console.log('name department period present');
+        result = await this.byProfile(input, "naDePe");
+        console.log('threeParameter name department period', result);
+        return result;
+    }
+    else if(input.name && !input.batch && input.department && !input.period && input.postingIn){
+        console.log('name department postingIn present');
+        result = await this.byProfile(input, "naDePo");
+        console.log('threeParameter name department postingIn', result);
+        return result;
+    }
+    else if(input.name && !input.batch && !input.department && input.period && input.postingIn){
+        console.log('name period postingIn present');
+        result = await this.byProfile(input, "naPePo");
+        console.log('threeParameter name period postingIn', result);
+        return result;
+    }
+    else if(!input.name && input.batch && input.department && input.period && !input.postingIn){
+        console.log('batch department period present');
+        result = await this.byProfile(input, "baDePe");
+        console.log('threeParameter batch department period', result);
+        return result;
+    }
+    else if(!input.name && input.batch && input.department && !input.period && input.postingIn){
+        console.log('batch department postingIn present');
+        result = await this.byProfile(input, "baDePo");
+        console.log('threeParameter batch department postingIn', result);
+        return result;
+    }
+    else if(!input.name && input.batch && !input.department && input.period && input.postingIn){
+        console.log('batch period postingIn present');
+        result = await this.byProfile(input, "baPePo");
+        console.log('threeParameter batch period postingIn', result);
+        return result;
+    }
+    else if(!input.name && !input.batch && input.department && input.period && input.postingIn){
+        console.log('department period postingIn present');
+        result = await this.byProfile(input, "dePePo");
+        console.log('threeParameter department period postingIn', result);
+        return result;
+    }
+    else {
+        let oneResult = [];
+        return oneResult;
+    }
+}
+
+exports.fourParameter = async(input) => {
+    console.log('inside 4Parameter function', input);
+    let result;
+    if(input.name && input.batch && input.department && input.period && !input.postingIn){
+        result = await this.byProfile(input, "naBaDePe");
+        console.log('4Parameter name batch department period', result);
+        return result;
+    }
+    else if(input.name && input.batch && input.department && !input.period && input.postingIn){
+        result = await this.byProfile(input, "naBaDePo");
+        console.log('4Parameter name batch department postingIn', result);
+        return result;
+    }
+    else if(input.name && input.batch && !input.department && input.period && input.postingIn){
+        result = await this.byProfile(input, "naBaPePo");
+        console.log('4Parameter name batch period postingIn', result);
+        return result;
+    }
+    else if(input.name && !input.batch && input.department && input.period && input.postingIn){
+        result = await this.byProfile(input, "naDePePo");
+        console.log('4Parameter name department period postingIn', result);
+        return result;
+    }
+    /*else if(input.name && !input.batch && input.department && input.period && input.postingIn){
+        result = await this.byProfile(input, "naDePePo");
+        console.log('4Parameter name department period postingIn', result);
+        return result;
+    }*/
+    else if(!input.name && input.batch && input.department && input.period && input.postingIn){
+        result = await this.byProfile(input, "baDePePo");
+        console.log('4Parameter batch department period postingIn', result);
+        return result;
+    }
+    else {
+        let oneResult = [];
+        return oneResult;
+    }
+}
+
+exports.fiveParameter = async(input) => {
+    console.log('inside fiveParameter function', input);
+    let resultFive = await this.byProfile(input, "all");
+    console.log('fiveParameter batch ', resultFive);
+    return resultFive;
+}
+
+exports.byProfile = async(input, by) =>{
+    try{
+        //let batch = input;
+        let updateQueryJson;
+        console.log('input => ', input+' by => ', by);
+        let getQueryJson;
+        ////, , , , 
+        let uniqueArray = [];
+        let resultData = [];
+        if(by == "name" || by == 'naDePe' || by == 'naDePo' || by == 'naPePo' || by == 'naDePePo'){
+            getQueryJson = {
+                fullName: input.name
+            } 
+        }
+        else if(by == "batch" || by == 'baDe' || by == 'baPe' || by == "baPo" ||
+        by == 'baDePe' || by == 'baDePo' || by == 'baPePo' || by == 'baDePePo'){
+            getQueryJson = {
+                batch: input.batch
+            } 
+        }
+        else if(by == 'all' || by == 'naBa' || by == 'naBaDe' || by == 'naBaPe' || by == 'naBaPo' || 
+        by == 'naBaDePe' || by == 'naBaDePo' || by == 'naBaPePo'){
+            getQueryJson = {
+                fullName: input.name,
+                batch: input.batch
+            } 
+        }
+        /*else if(by == 'naBa'){
+            getQueryJson = {
+                fullName: input.name,
+                batch: input.batch
+            }
+        }*/
+        else if(by == 'naDe' || by == 'naPe' || by == "naPo"){
+            console.log('yes dept/ period => ');
+            getQueryJson = {
+                fullName: input.name
+            }
+        }
+
+        console.log(getQueryJson);
+        if(by == "name" || by == "batch" || by == "all" || 
+        by == "naBa" || by == "naDe" || by == "naPe" || by == "naPo" || 
+        by == 'baDe' || by == 'baPe' || by == "baPo" || 
+        by == 'naBaDe' || by == 'naBaPe' || by == 'naBaPo' || 
+        by == 'naDePe' || by == 'naDePo' || 
+        by == 'naPePo' ||
+        by == 'baDePe' || by == 'baDePo' || by == 'baPePo' || 
+        by == 'naBaDePe' || by == 'naBaDePo' || by == 'naBaPePo' || 
+        by == 'naDePePo' || by == 'baDePePo')
+            data = await employeeProfile.find(getQueryJson).sort({ dateOfJoining: 'asc' }).exec();
+        else if(by == "department" || by == "period" || by == "postingIn"
+        || by == 'dePe' || by == 'dePo' || by == 'pePo' || by == 'dePePo')
+            data = await employeeProfile.find().sort({ dateOfJoining: 'asc' }).exec();
+        for(let employee of data){
+            updateQueryJson = {
+                empId: employee._id
+            }
+            uniqueArray = await this.getEmployeeUpdateFilter(updateQueryJson);
+            console.log('length ==> ', uniqueArray.length);
+            if(uniqueArray.length == 1){
+                let dataAll = {
+                    toPostingInCategoryCode: uniqueArray[0].toPostingInCategoryCode,
+                    toDepartmentId: uniqueArray[0].toDepartmentId,
+                    toDesignationId: uniqueArray[0].toDesignationId,
+                    postTypeCategoryCode: uniqueArray[0].postTypeCategoryCode,
+                    locationChangeCategoryId: uniqueArray[0].locationChangeCategoryId,
+                    remarks: uniqueArray[0].remarks,
+                    updateType: uniqueArray[0].updateType,
+                    orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                    orderNumber: uniqueArray[0].orderNumber,
+                    orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                    dateOfOrder: uniqueArray[0].dateOfOrder,
+                    personalEmail: employee.personalEmail,
+                    _id: employee._id,
+                    fullName: employee.fullName,
+                    gender: employee.gender,
+                    dateOfBirth: employee.dateOfBirth,
+                    dateOfJoining: employee.dateOfJoining,
+                    dateOfRetirement: employee.dateOfRetirement,
+                    state: employee.state,
+                    batch: employee.batch,
+                    recruitmentType: employee.recruitmentType,
+                    serviceStatus: employee.serviceStatus,
+                    qualification1: employee.qualification1,
+                    qualification2: employee.qualification2,
+                    community: employee.community,
+                    degreeData: employee.degreeData,
+                    caste: employee.caste,
+                    religion: employee.religion,
+                    promotionGrade: employee.promotionGrade,
+                    payscale: employee.payscale,
+                    officeEmail: employee.officeEmail,
+                    mobileNo1: employee.mobileNo1,
+                    mobileNo2: employee.mobileNo2,
+                    mobileNo3: employee.mobileNo3,
+                    addressLine: employee.addressLine,
+                    city: employee.city,
+                    pincode: employee.pincode,
+                    employeeId: employee.employeeId,
+                    ifhrmsId: employee.ifhrmsId,
+                    //photo: employee.photo
+                }
+                if(by == 'department' || by == 'naDe' || by == "baDe" || by == 'naBaDe'){
+                    console.log('yes dept ');
+                    if(uniqueArray[0].toDepartmentId == input.department){
+                        resultData.push(dataAll);
+                    }
+                }
+                if( by == "period" || by == 'naPe' || by == 'baPe' || by == 'naBaPe'){
+                    console.log('yes period ');
+                    let per = input.period;
+                    console.log('input.period', input.period);
+                    console.log('per', per);
+                    console.log('per.fromDate ', per.fromDate);
+                    console.log('per.toDate', per.toDate);
+                    //dateToCheck >= fromDate && dateToCheck <= toDate
+                    let from = new Date(per.fromDate)
+                    let to = new Date(per.toDate)
+                    console.log('from',from);
+                    console.log('to',to);
+                    if(uniqueArray[0].dateOfOrder >= from &&
+                    uniqueArray[0].dateOfOrder <= to){
+                        // && uniqueArray[0].dateOfOrder < input.period.toDate){
+                        console.log('date matched')
+                        resultData.push(dataAll);
+                    }else console.log('date not matched');
+                }
+                if(by == 'postingIn' || by == 'naPo' || by == "baPo" || by == 'naBaPo'){
+                    console.log('yes posting ');
+                    if(uniqueArray[0].toPostingInCategoryCode){
+                        {console.log('yes toposting avail')
+                        if(uniqueArray[0].toPostingInCategoryCode == input.postingIn)
+                            {
+                                console.log('yes posting matched')
+                                resultData.push(dataAll);
+                            }
+                    }
+                    }
+                }
+                else if(by == 'dePe' || by == 'naDePe' || by == 'baDePe' || by == 'naBaDePe'){
+                    console.log('yes period ');
+                    let per = input.period;
+                    console.log('input.period', input.period);
+                    console.log('per', per);
+                    console.log('per.fromDate ', per.fromDate);
+                    console.log('per.toDate', per.toDate);
+                    //dateToCheck >= fromDate && dateToCheck <= toDate
+                    let from = new Date(per.fromDate)
+                    let to = new Date(per.toDate)
+                    console.log('from',from);
+                    console.log('to',to);
+                    if(uniqueArray[0].dateOfOrder >= from &&
+                    uniqueArray[0].dateOfOrder <= to && 
+                    uniqueArray[0].toDepartmentId == input.department){
+                        resultData.push(dataAll);
+                    }
+                }
+                else if(by == 'dePo' || by == 'naDePo' || by == 'baDePo' || by == 'naBaDePo'){
+                    if(uniqueArray[0].toDepartmentId == input.department){
+                        if(uniqueArray[0].toPostingInCategoryCode){
+                            console.log('yes toposting avail')
+                            if(uniqueArray[0].toPostingInCategoryCode == input.postingIn)
+                            {
+                                console.log('yes posting matched')
+                                resultData.push(dataAll);
+                            }
+                        }
+                    }
+                }
+                else if(by == 'pePo' || by == 'naPePo' || by == 'baPePo' || by == 'naBaPePo'){
+                    console.log('yes period ');
+                    let per = input.period;
+                    console.log('input.period', input.period);
+                    console.log('per', per);
+                    console.log('per.fromDate ', per.fromDate);
+                    console.log('per.toDate', per.toDate);
+                    //dateToCheck >= fromDate && dateToCheck <= toDate
+                    let from = new Date(per.fromDate)
+                    let to = new Date(per.toDate)
+                    console.log('from',from);
+                    console.log('to',to);
+                    if(uniqueArray[0].dateOfOrder >= from &&
+                    uniqueArray[0].dateOfOrder <= to){
+                        if(uniqueArray[0].toPostingInCategoryCode){
+                            console.log('yes toposting avail')
+                            if(uniqueArray[0].toPostingInCategoryCode == input.postingIn)
+                            {
+                                console.log('yes posting matched')
+                                resultData.push(dataAll);
+                            }
+                        }
+                    }
+                }
+                else if(by == "all" || by == 'dePePo' || by == 'naDePePo' || by == 'baDePePo'){
+                    if(uniqueArray[0].toDepartmentId == input.department){
+                        console.log('yes period ');
+                    let per = input.period;
+                    console.log('input.period', input.period);
+                    console.log('per', per);
+                    console.log('per.fromDate ', per.fromDate);
+                    console.log('per.toDate', per.toDate);
+                    //dateToCheck >= fromDate && dateToCheck <= toDate
+                    let from = new Date(per.fromDate)
+                    let to = new Date(per.toDate)
+                    console.log('from',from);
+                    console.log('to',to);
+                    if(uniqueArray[0].dateOfOrder >= from &&
+                    uniqueArray[0].dateOfOrder <= to){
+                        if(uniqueArray[0].toPostingInCategoryCode){
+                            console.log('yes toposting avail')
+                            if(uniqueArray[0].toPostingInCategoryCode == input.postingIn)
+                            {
+                                console.log('yes posting matched')
+                                resultData.push(dataAll);
+                            }
+                        }
+                    }
+                    }
+                }
+                else if(by == 'name' || by == 'batch' || by == 'naBa'){
+                    console.log('dataAll => ', dataAll);
+                    resultData.push(dataAll);
+                }
+                //else 
+                    //resultData = [];
+            }/*else{
+                resultData.push(employee);
+                console.log('employee => ', employee);
+            }  */
+        }
+        console.log('Unique by latest date of order: 2', uniqueArray);
+        let resData = {
+            empCount : resultData.length,
+            empList: resultData
+        }
+        console.log('resDate =====> ', resData);
+        return resData;
+    }
+    catch (error) {
+        console.log('error', error);
+        return [];
+        }
+}
+
+exports.getEmployeeUpdateFilter = async(input) => {
+    console.log('inside getEmployeeUpdate function')
+    let secretariatDetails;
+    secretariatDetails =  await employeeUpdate.find({
+        empProfileId: input.empId
+    })
+    const uniqueNamesByLatestDateOfOrder = secretariatDetails
+      .sort((a, b) => new Date(b.dateOfOrder) - new Date(a.dateOfOrder)) // Sort by latest date first
+      .reduce((acc, curr) => {
+        if (!acc[curr.empProfileId]) { // Check if name already exists in accumulator
+          acc[curr.empProfileId] = curr; // If not, add the current item
+        }
+        return acc;
+      }, {});
+    
+    const uniqueArray = Object.values(uniqueNamesByLatestDateOfOrder);
+    console.log('Unique by latest date of order:', uniqueArray);
+    return uniqueArray;
+}

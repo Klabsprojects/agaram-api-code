@@ -76,4 +76,9 @@ module.exports = (app) => {
     value.getEmployeeHistory
   );
 
+  app.post(
+    "/getEmployeeSearch",
+    value.getEmployeeSearch
+  );
+
 }
