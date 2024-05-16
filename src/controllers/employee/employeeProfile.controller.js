@@ -1164,6 +1164,7 @@ exports.getEmployeeHistory = async (req, res) => {
                     "pincode": employee.pincode,
                     "employeeId": employee.employeeId,
                     "ifhrmsId": employee.ifhrmsId,
+                    "photo": employee.photo,
                 }
                 data.update = queryUpdate;
                 dataUpdate = await employeeUpdate.find(queryUpdate).sort({ dateOfOrder: 'asc' }).exec();
