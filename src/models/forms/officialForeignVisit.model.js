@@ -12,17 +12,18 @@ const officialForeignVisitSchema = new Schema({
 	toDate: Date,
 	otherDelegates: String,
 	presentStatus: String,
-	rejectReason: String, //
-	faxMessageLetterNo: String, //
-	dateOfOrder: Date,
+	rejectReason: String, 
+	faxMessageLetterNo: String, 
+	dateOfOrderofFaxMessage: Date,
 	politicalClearance: String, //file
 	fcraClearance: String, //file
-	fundsSanctionedBy: Number,
+	fundsSanctionedBy: String,
 	fundsSanctioned: Number,
 	orderType: ObjectId, 
 	orderNo: Number, 
 	orderFor: ObjectId,
-	//dateOfOrder: Date,
+	dateOfOrder: Date,
+	orderFile: String, //file
 	createdAt: {
 		type: Date, 
 		default: Date.now

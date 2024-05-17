@@ -3,9 +3,6 @@ const login = require('../../models/login/login.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
-//const bcrypt = require('bcrypt');
-
 let file = "login.controller";
 let Jkey = process.env.JWT_SECRET_KEY;
 const expire = process.env.EXPIRE;
