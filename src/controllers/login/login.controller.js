@@ -1,7 +1,7 @@
 //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
 const login = require('../../models/login/login.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 let file = "login.controller";
 let Jkey = process.env.JWT_SECRET_KEY;
