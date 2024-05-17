@@ -9,10 +9,16 @@ exports.addVisit = async (req, res) => {
         console.log(query);
         //console.log('Uploaded file path:', req.file.path);
         console.log(req.file);
-        if(req.file){
+        /*if(req.file){
             query.politicalClearance = req.file.path
             //query.fcraClearance = req.file.path
             console.log('Uploaded file path:', req.file.path);
+        }*/
+        if (req.file) {
+            query.politicalClearance = req.file.path;
+            console.log('Uploaded file path:', req.file.path);
+        } else {
+            throw new Error('File upload failed: No file uploaded');
         }
         const data = await foreignVisit.create(query);
         //res.json(data);
@@ -20,6 +26,10 @@ exports.addVisit = async (req, res) => {
     } catch (error) {
         console.log('catch create foreignVisit');
         //res.json(error);
+        if (req.fileValidationError) {
+            throw req.fileValidationError;
+        }
+        //throw error;
         errorRes(res, error, "Error on creating foreignVisit");
     }
     }

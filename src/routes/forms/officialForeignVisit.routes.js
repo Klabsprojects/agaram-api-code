@@ -20,6 +20,7 @@ module.exports = (app) => {
   app.post(
     "/addVisit",
     upload.single('politicalClearance'),
+    
     //upload.single('fcraClearance'),
     value.addVisit
   );
