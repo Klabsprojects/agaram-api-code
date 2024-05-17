@@ -27,6 +27,7 @@ exports.addVisit = async (req, res) => {
         console.log('catch create foreignVisit');
         //res.json(error);
         if (req.fileValidationError) {
+            console.log(req.fileValidationError);
             throw req.fileValidationError;
         }
         //throw error;
