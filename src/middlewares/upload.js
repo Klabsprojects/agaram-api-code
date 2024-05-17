@@ -25,6 +25,7 @@ var upload = multer({
             file.mimetype == "image/jpeg" ||
             file.mimetype === "application/pdf"
         ){
+            console.log('FILE', file);
             callback(null, true)
         }
         else{
