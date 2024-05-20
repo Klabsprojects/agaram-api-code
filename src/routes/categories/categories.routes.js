@@ -21,5 +21,9 @@ module.exports = (app) => {
     value.addCategories
   );
 
+  app.get(
+    "/getCategoryTypes",
+    value.getCategoryTypes
+  )
 
 }
