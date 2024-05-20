@@ -1,12 +1,18 @@
-const privateVisit = require('../../models/forms/privateVisit.model');
+const privateVisit = require('../../models/forms/privateForeignVisit.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 
 // privateVisit creation
-exports.addPrivateVisit = async (req, res) => {
+exports.addPrivateForeignVisit = async (req, res) => {
     try {
         console.log('try create privateVisit');
         const query = req.body;
         //console.log('Uploaded file path:', req.file.path);
+        if (req.file) {
+            query.orderFile = req.file.path;
+            console.log('Uploaded file path:', req.file.path);
+        } else {
+            throw new Error('File upload failed: No file uploaded');
+        }
         const data = await privateVisit.create(query);
         //res.json(data);
         successRes(res, data, 'privateVisit created Successfully');
@@ -18,7 +24,7 @@ exports.addPrivateVisit = async (req, res) => {
     }
 
 // Get privateVisit
-exports.getPrivateVisit = async (req, res) => {
+exports.getPrivateForeignVisit = async (req, res) => {
         console.log('helo from privateVisit controller', req.query);
         try {
             let query = {};

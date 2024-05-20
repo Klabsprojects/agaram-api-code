@@ -9,16 +9,18 @@ const privateVisitSchema = new Schema({
 	designationId: ObjectId,
 	department: String,
 	departmentId: ObjectId,
-	proposedPlace: String,
+	proposedCountry: String,
 	fromDate: Date,
 	toDate: Date,
-	fundSource: Number,
+	fundSource: String,
 	selfOrFamily: String,
 	orderType: ObjectId, 
 	orderNo: Number, 
 	orderFor: ObjectId,
 	dateOfOrder: Date,
 	remarks: String,
+	status: String,
+	orderFile: String, //file
 	createdAt: {
 		type: Date, 
 		default: Date.now

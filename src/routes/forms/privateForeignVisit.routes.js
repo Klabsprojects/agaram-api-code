@@ -1,8 +1,8 @@
 module.exports = (app) => {
-    const value = require("../../controllers/forms/privateVisit.controller");
+    const value = require("../../controllers/forms/privateForeignVisit.controller");
    //const { joi, cache } = require("../../helpers/index.helper");
    //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
-
+   const upload = require("../../middlewares/upload")
    app.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
@@ -12,12 +12,13 @@ module.exports = (app) => {
   });
 
   app.get(
-    "/getPrivateVisit",
-    value.getPrivateVisit
+    "/getPrivateForeignVisit",
+    value.getPrivateForeignVisit
   );
 
   app.post(
-    "/addPrivateVisit",
-    value.addPrivateVisit
+    "/addPrivateForeignVisit",
+    upload.single('orderFile'),
+    value.addPrivateForeignVisit
   );
 }
