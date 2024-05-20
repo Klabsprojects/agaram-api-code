@@ -19,9 +19,13 @@ module.exports = (app) => {
 
   app.post(
     "/addVisit",
-    upload.single('politicalClearance'),
-    
-    //upload.single('fcraClearance'),
+    //upload.single('politicalClearance'),
+    upload.fields([
+      { name: 'politicalClearance', maxCount: 1 }, 
+      { name: 'fcraClearance', maxCount: 1 },
+      { name: 'orderFile', maxCount: 1 }
+  ]),
+
     value.addVisit
   );
 }

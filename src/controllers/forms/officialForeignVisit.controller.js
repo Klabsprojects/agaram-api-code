@@ -7,30 +7,46 @@ exports.addVisit = async (req, res) => {
         console.log('try create foreignVisit');
         const query = req.body;
         console.log(query);
-        //console.log('Uploaded file path:', req.file.path);
-        console.log(req.file);
-        /*if(req.file){
-            query.politicalClearance = req.file.path
-            //query.fcraClearance = req.file.path
-            console.log('Uploaded file path:', req.file.path);
-        }*/
-        if (req.file) {
+        console.log('REQ.FILE => ',req.file);
+        /*if (req.file) {
+            console.log('REQ.FILE INSIDE => ',req.file);
             query.politicalClearance = req.file.path;
             console.log('Uploaded file path:', req.file.path);
         } else {
             throw new Error('File upload failed: No file uploaded');
+        }*/
+        if (req.files && req.files['politicalClearance'] && req.files['politicalClearance'].length > 0) {
+            // If politicalClearance file exists
+            query.politicalClearance = req.files['politicalClearance'][0].path; // Assuming only one file is uploaded
+            console.log('politicalClearance resume file path:', req.files['politicalClearance'][0].path);
+        } else {
+            throw new Error('politicalClearance upload failed: No resume file uploaded');
         }
+        
+        if (req.files && req.files['fcraClearance'] && req.files['fcraClearance'].length > 0) {
+            // If fcraClearance file exists
+            query.fcraClearance = req.files['fcraClearance'][0].path; // Assuming only one file is uploaded
+            console.log('Uploaded fcraClearance file path:', req.files['fcraClearance'][0].path);
+        } else {
+            throw new Error('fcraClearance upload failed: No certificate file uploaded');
+        }
+
+        if (req.files && req.files['orderFile'] && req.files['orderFile'].length > 0) {
+            // If orderFile file exists
+            query.orderFile = req.files['orderFile'][0].path; // Assuming only one file is uploaded
+            console.log('Uploaded orderFile file path:', req.files['orderFile'][0].path);
+        } else {
+            throw new Error('orderFile upload failed: No certificate file uploaded');
+        }
+        
         const data = await foreignVisit.create(query);
-        //res.json(data);
         successRes(res, data, 'foreignVisit created Successfully');
     } catch (error) {
         console.log('catch create foreignVisit');
-        //res.json(error);
         if (req.fileValidationError) {
             console.log(req.fileValidationError);
             throw req.fileValidationError;
         }
-        //throw error;
         errorRes(res, error, "Error on creating foreignVisit");
     }
     }
