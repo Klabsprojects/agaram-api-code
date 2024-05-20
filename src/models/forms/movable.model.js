@@ -2,30 +2,34 @@ const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
 const Schema = mongoose.Schema;
 
-const immovableMovableSchema = new Schema({
-    officer_name: String,
+const movableSchema = new Schema({
+    officerName: String,
 	employeeProfileId: ObjectId,
 	designation: String,
 	designationId: ObjectId,
 	department: String,
 	departmentId: ObjectId,
-	details: String,
+	typeOfMovableProperty: String,
+	detailsOfMovableProperty: String,
 	sourceOfFunding: String,
 	totalCostOfProperty: Number,
-	previousSanctionOrder: String,
+	boughtFromName: String,
+	boughtFromContactNumber: Number,
+	boughtFromAddress: String,
+	propertyShownInIpr: Boolean,
 	selfOrFamily: String,
-	propertyShownInIpr: String,
+	remarks: String,
+	movableDateOfOrder: Date,
+	previousSanctionOrder: String,
 	orderType: ObjectId, 
 	orderNo: Number, 
 	orderFor: ObjectId,
 	dateOfOrder: Date,
-	remarks: String,
-	propertyType: String,
-	typeOfMovableProperty: String,
+	orderFile: String, //file
 	createdAt: {
 		type: Date, 
 		default: Date.now
 	},
 });
 
-module.exports = mongoose.model('immovableMovable', immovableMovableSchema);
+module.exports = mongoose.model('movable', movableSchema);

@@ -4,7 +4,7 @@ const { successRes, errorRes } = require("../../middlewares/response.middleware"
 // privateVisit creation
 exports.addPrivateForeignVisit = async (req, res) => {
     try {
-        console.log('try create privateVisit');
+        console.log('try create privateVisit', req.body);
         const query = req.body;
         //console.log('Uploaded file path:', req.file.path);
         if (req.file) {

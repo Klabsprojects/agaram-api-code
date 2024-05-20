@@ -4,7 +4,7 @@ const { successRes, errorRes } = require("../../middlewares/response.middleware"
 // Degree creation
 exports.addVisit = async (req, res) => {
     try {
-        console.log('try create foreignVisit');
+        console.log('try create foreignVisit', req.body);
         const query = req.body;
         console.log(query);
         console.log('REQ.FILE => ',req.file);

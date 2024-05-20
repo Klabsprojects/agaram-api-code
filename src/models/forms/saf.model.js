@@ -3,7 +3,7 @@ const { ObjectId } = require('mongodb');
 const Schema = mongoose.Schema;
 
 const safSchema = new Schema({
-    officer_name: String,
+    officerName: String,
 	employeeProfileId: ObjectId,
 	designation: String,
 	designationId: ObjectId,
