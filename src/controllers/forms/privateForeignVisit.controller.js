@@ -17,7 +17,7 @@ exports.addPrivateForeignVisit = async (req, res) => {
         //res.json(data);
         successRes(res, data, 'privateVisit created Successfully');
     } catch (error) {
-        console.log('catch create privateVisit');
+        console.log('catch create privateVisit', error);
         //res.json(error);
         errorRes(res, error, "Error on creating privateVisit");
     }
