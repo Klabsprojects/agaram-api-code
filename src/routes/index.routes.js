@@ -12,6 +12,7 @@ require("./forms/privateForeignVisit.routes")(app);
 require("./forms/movable.routes")(app);
 require("./forms/immovable.routes")(app);
 require("./forms/officersTour.routes")(app);
+require("./forms/medicalReimbursement.routes")(app);
 require("./login/login.route")(app);
 require("./forms/ltc.routes")(app);
 module.exports = app;

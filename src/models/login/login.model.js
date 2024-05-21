@@ -16,8 +16,11 @@ const loginSchema = new Schema({
     type: String,
     required: true
   },
-	roles: String,
-	rights: String,
+	/*activeStatus: {
+    type: Boolean,
+    required: true
+  },
+  role: ObjectId,*/
 	createdAt: {
 		type: Date, 
 		default: Date.now

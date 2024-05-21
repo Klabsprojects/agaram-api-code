@@ -46,8 +46,15 @@ exports.register = async (req, res) => {
         const data = await login.create(inputQuery);
         successRes(res, data, 'Login registered successfully');
     } catch (error) {
-        console.log('catch', error);
-        errorRes(res, error, "Error on Login Registration");
+        if (error.code === 11000) {
+            // Duplicate key error
+            const duplicatedKey = Object.keys(error.keyValue)[0];
+            const errorMessage = `The ${duplicatedKey} '${error.keyValue[duplicatedKey]}' is already exist.`;
+            errorRes(res, error, errorMessage);
+        }else{
+            console.log('catch', error);
+            errorRes(res, error, "Error on Login Registration");
+        }
     }
     }
 
