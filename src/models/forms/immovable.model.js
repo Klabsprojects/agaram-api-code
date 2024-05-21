@@ -16,7 +16,7 @@ const immovableSchema = new Schema({
 	boughtFromName: String,
 	boughtFromContactNumber: Number,
 	boughtFromAddress: String,
-	propertyShownInIpr: Boolean,
+	propertyShownInIpr: String,
 	selfOrFamily: String,
 	remarks: String,
 	immovableDateOfOrder: Date,

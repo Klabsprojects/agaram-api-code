@@ -16,7 +16,7 @@ const movableSchema = new Schema({
 	boughtFromName: String,
 	boughtFromContactNumber: Number,
 	boughtFromAddress: String,
-	propertyShownInIpr: Boolean,
+	propertyShownInIpr: String,
 	selfOrFamily: String,
 	remarks: String,
 	movableDateOfOrder: Date,
