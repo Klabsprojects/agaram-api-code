@@ -14,6 +14,7 @@ require("./forms/immovable.routes")(app);
 require("./forms/officersTour.routes")(app);
 require("./forms/medicalReimbursement.routes")(app);
 require("./forms/education.routes")(app);
+require("./forms/intimation.routes")(app);
 require("./login/login.route")(app);
 require("./forms/ltc.routes")(app);
 module.exports = app;
