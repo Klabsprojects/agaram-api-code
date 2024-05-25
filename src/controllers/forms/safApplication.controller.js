@@ -32,3 +32,29 @@ exports.getSafApplication = async (req, res) => {
             errorRes(res, error, "Error on listing safApplication");
         }
     }
+
+// safApplication updation
+exports.updateSafApplication = async (req, res) => {
+    try {
+        console.log('try update safApplication');
+        const query = req.body;
+        let update = {};
+        if(query.waitingPeriod){
+            update.waitingPeriod = query.waitingPeriod;
+        }
+        let filter = {
+            _id : query.id
+        }
+        console.log('update ', update);
+        console.log('filter ', filter);
+
+        const data = await safApplication.findOneAndUpdate(filter, update, {
+            new: true
+          });
+        console.log('data updated ', data);
+        successRes(res, data, 'safApplication waiting period updated Successfully');
+    } catch (error) {
+        console.log('catch update safApplication waiting period updation', error);
+        errorRes(res, error, "Error on safApplication waiting period updation");
+    }
+    }

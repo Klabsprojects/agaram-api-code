@@ -17,4 +17,9 @@ module.exports = (app) => {
     "/addSafApplication",
     value.addSafApplication
   );
+
+  app.put(
+    "/updateSafApplication",
+    value.updateSafApplication
+  );
 }
