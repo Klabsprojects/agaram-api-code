@@ -18,5 +18,6 @@ require("./forms/intimation.routes")(app);
 require("./login/login.route")(app);
 require("./forms/ltc.routes")(app);
 require("./forms/safApplication.routes")(app);
+require("./forms/block.routes")(app);
 module.exports = app;
 

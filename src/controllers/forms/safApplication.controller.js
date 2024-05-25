@@ -39,20 +39,31 @@ exports.updateSafApplication = async (req, res) => {
         console.log('try update safApplication');
         const query = req.body;
         let update = {};
+        let filter;
         if(query.waitingPeriod){
             update.waitingPeriod = query.waitingPeriod;
         }
-        let filter = {
-            _id : query.id
+        if(query.id){
+            filter = {
+                _id : query.id
+            }
         }
+        else
+            throw 'pls provide id field';
         console.log('update ', update);
         console.log('filter ', filter);
-
-        const data = await safApplication.findOneAndUpdate(filter, update, {
-            new: true
-          });
-        console.log('data updated ', data);
-        successRes(res, data, 'safApplication waiting period updated Successfully');
+        // Check if the update object is empty or not
+        if (Object.keys(update).length > 0) {
+            console.log('value got');
+            const data = await safApplication.findOneAndUpdate(filter, update, {
+                new: true
+            });
+            console.log('data updated ', data);
+            successRes(res, data, 'safApplication waiting period updated Successfully');
+        } else {
+            console.log('empty');
+            throw 'Update value missing';
+        }
     } catch (error) {
         console.log('catch update safApplication waiting period updation', error);
         errorRes(res, error, "Error on safApplication waiting period updation");
