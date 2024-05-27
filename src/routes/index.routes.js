@@ -19,5 +19,6 @@ require("./login/login.route")(app);
 require("./forms/ltc.routes")(app);
 require("./forms/safApplication.routes")(app);
 require("./forms/block.routes")(app);
+require("./forms/safAllocation.routes")(app);
 module.exports = app;
 
