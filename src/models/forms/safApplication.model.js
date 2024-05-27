@@ -42,7 +42,12 @@ const safApplicationSchema = new Schema({
 		unique: true
 	},
 	waitingPeriod: {
-		type: Number
+		type: Number,
+		default: 0
+	},
+	applicationStatus: {
+		type: String,
+		default: "open"
 	},
 	createdAt: {
 		type: Date, 
@@ -74,5 +79,23 @@ function getCurrentTime() {
 	const seconds = now.getSeconds().toString().padStart(2, '0');
 	return `${hours}:${minutes}:${seconds}`;
   }
+
+// Function to update waiting period daily
+async function updateWaitingPeriod() {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1); // Increment current date by 1 to get tomorrow
+    const applications = await this.constructor.find().exec();
+    applications.forEach(async (application) => {
+        const creationDate = new Date(application.createdAt);
+        const millisecondsInADay = 1000 * 60 * 60 * 24;
+        const daysSinceCreation = Math.floor((today - creationDate) / millisecondsInADay); // Calculate the number of days since creation
+        application.waitingPeriod = daysSinceCreation; // Update waiting period
+        await application.save(); // Save the updated application
+    });
+}
+
+// Function to call updateWaitingPeriod() daily
+setInterval(updateWaitingPeriod, 1000 * 60 * 60 * 24); // Run the function every 24 hours
 
 module.exports = mongoose.model('safApplication', safApplicationSchema);

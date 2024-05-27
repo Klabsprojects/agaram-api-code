@@ -4,6 +4,7 @@ const { TIME } = require('sequelize');
 const { number } = require('joi');
 const Schema = mongoose.Schema;
 const block = require('../../models/forms/block.model');
+const application = require('../../models/forms/safApplication.model');
 
 const safAllocationSchema = new Schema({
     officerName: {
@@ -34,6 +35,10 @@ const safAllocationSchema = new Schema({
 	blockId: {
 			type: mongoose.Schema.Types.ObjectId,
         	ref: 'block' // This references the AllocatedBlock model
+		},
+	applicationId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'application' // This references the AllocatedBlock model
 		},
 	dateOfAccomodation: Date,
 	dateOfVacating: Date,

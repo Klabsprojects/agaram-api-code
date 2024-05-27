@@ -16,7 +16,11 @@ const blockSchema = new Schema({
 		type: Boolean,
     	required: true
 	},
-	allocationTo: ObjectId,
+	//allocationTo: ObjectId,
+	allocationTo: {
+        type: mongoose.Schema.Types.Mixed,
+        default: null
+    },
 	createdAt: {
 		type: Date, 
 		default: Date.now
