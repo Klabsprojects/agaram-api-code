@@ -42,6 +42,7 @@ const safAllocationSchema = new Schema({
 		},
 	dateOfAccomodation: Date,
 	dateOfVacating: Date,
+	employeeId: String,
 	remarks: String,
 	orderType: ObjectId, 
 	orderNo: Number, 

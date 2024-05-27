@@ -6,8 +6,19 @@ exports.addSafApplication = async (req, res) => {
     try {
         console.log('try create safApplication', req.body);
         const query = req.body;
-        const data = await safApplication.create(query);
-        successRes(res, data, 'safApplication created Successfully');
+         // Check if an application already exists for the given employee
+         const existingApplication = await safApplication.findOne({ 
+            employeeProfileId: query.employeeProfileId,
+            applicationStatus: "open" });
+        console.log('exist ', existingApplication);
+         if (existingApplication) {
+             // If an application exists, return the application info
+             successRes(res, existingApplication, 'Application already exists for this employee');
+         } else {
+             // If no application exists, create a new application
+            const data = await safApplication.create(query);
+            successRes(res, data, 'safApplication created Successfully');
+         }
     } catch (error) {
         console.log('catch create safApplication', error);
         errorRes(res, error, "Error on creating safApplication");

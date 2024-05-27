@@ -55,6 +55,8 @@ const safApplicationSchema = new Schema({
 	},
 });
 
+const safApplicationModel = mongoose.model('safApplication', safApplicationSchema);
+
 // Pre-save hook to generate a unique seniority number
 safApplicationSchema.pre('save', async function(next) {
 	try {
@@ -82,20 +84,44 @@ function getCurrentTime() {
 
 // Function to update waiting period daily
 async function updateWaitingPeriod() {
+	console.log('waiting period calculation');
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1); // Increment current date by 1 to get tomorrow
-    const applications = await this.constructor.find().exec();
+    const applications = await safApplicationModel.find().exec();
+	console.log('waiting period calculation applications', applications);
     applications.forEach(async (application) => {
-        const creationDate = new Date(application.createdAt);
-        const millisecondsInADay = 1000 * 60 * 60 * 24;
-        const daysSinceCreation = Math.floor((today - creationDate) / millisecondsInADay); // Calculate the number of days since creation
-        application.waitingPeriod = daysSinceCreation; // Update waiting period
-        await application.save(); // Save the updated application
+		if (application.applicationStatus != 'closed') {
+			
+			console.log('waiting period calculation applications q', application.waitingPeriod);
+			const creationDate = new Date(application.createdAt);
+			const millisecondsInADay = 1000 * 60 * 60 * 24;
+			const daysSinceCreation = Math.floor((today - creationDate) / millisecondsInADay); // Calculate the number of days since creation
+			console.log('daysSinceCreation', daysSinceCreation);
+			//const daysSinceCreation1 = Math.floor((tomorrow - creationDate) / millisecondsInADay); // Calculate the number of days since creation
+			//console.log('daysSinceCreation1', daysSinceCreation1);
+			application.waitingPeriod = daysSinceCreation; // Update waiting period
+			//console.log('wp', application.waitingPeriod);
+			await application.save(); // Save the updated application
+		}
     });
 }
 
-// Function to call updateWaitingPeriod() daily
-setInterval(updateWaitingPeriod, 1000 * 60 * 60 * 24); // Run the function every 24 hours
+// Function to calculate the time until the next 12:30 AM in milliseconds
+function timeUntilNext1230AM() {
+    const now = new Date();
+    const next1230AM = new Date(now);
+    next1230AM.setDate(next1230AM.getDate() + 1); // Increment current date by 1 to get tomorrow
+    next1230AM.setHours(0, 0, 0, 0); // Set the time to 12:30:00 AM
+    return next1230AM - now; // Calculate the difference in milliseconds
+}
 
-module.exports = mongoose.model('safApplication', safApplicationSchema);
+// Function to call updateWaitingPeriod() daily at 12:30 AM
+setTimeout(function runUpdate() {
+    updateWaitingPeriod(); // Call the function
+    const next1230AMInMillis = timeUntilNext1230AM(); // Calculate time until 12:30 AM
+    setInterval(updateWaitingPeriod, 1000 * 60 * 60 * 24); // Run updateWaitingPeriod() daily
+}, timeUntilNext1230AM());
+
+// Export the model
+module.exports = safApplicationModel;
