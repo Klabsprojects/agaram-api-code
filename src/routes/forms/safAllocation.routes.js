@@ -20,8 +20,8 @@ module.exports = (app) => {
     value.addSafAllocation
   );
 
-  /*app.put(
-    "/updateSafApplication",
-    value.updateSafApplication
-  );*/
+  app.put(
+    "/updateSafAllocation",
+    value.updateSafAllocation
+  );
 }

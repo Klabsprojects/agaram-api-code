@@ -3,6 +3,7 @@ const { ObjectId } = require('mongodb');
 const { TIME } = require('sequelize');
 const { number } = require('joi');
 const Schema = mongoose.Schema;
+const block = require('../../models/forms/block.model');
 
 const safAllocationSchema = new Schema({
     officerName: {
@@ -29,7 +30,11 @@ const safAllocationSchema = new Schema({
 		type: ObjectId, 
 		required: true
 	},
-	blockId: ObjectId,
+	//blockId: ObjectId,
+	blockId: {
+			type: mongoose.Schema.Types.ObjectId,
+        	ref: 'block' // This references the AllocatedBlock model
+		},
 	dateOfAccomodation: Date,
 	dateOfVacating: Date,
 	remarks: String,
@@ -42,6 +47,10 @@ const safAllocationSchema = new Schema({
 		type: Date, 
 		default: Date.now
 	},
+	/*allocatedBlock: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'AllocatedBlock' // This references the AllocatedBlock model
+    }*/
 });
 
 module.exports = mongoose.model('safAllocation', safAllocationSchema);
