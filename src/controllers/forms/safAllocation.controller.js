@@ -18,13 +18,37 @@ exports.addSafAllocation = async (req, res) => {
 
         if(req.body.blockId && Object.keys(data).length > 0)
             await block.updateOne({ _id: req.body.blockId }, { $set: { allocationStatus: true, allocationTo: data.employeeProfileId } });
-
-        successRes(res, data, 'safAllocation created Successfully');
+        if(req.body.dateOfAccomodation){
+            if(req.body.dateOfAccomodation){
+                const today = new Date();
+                const dateOfAccomodation = new Date(req.body.dateOfAccomodation);
+                const millisecondsInADay = 1000 * 60 * 60 * 24;
+                const daysDifference = Math.floor((dateOfAccomodation - today) / millisecondsInADay);
+    
+                // Update waiting period count
+                await updateWaitingPeriodCount(daysDifference);
+                successRes(res, data, 'safAllocation created Successfully');
+            }
+        }
+        
     } catch (error) {
         console.log('catch create safAllocation', error);
         errorRes(res, error, "Error on creating safAllocation");
     }
     }
+
+// Function to update waiting period count
+async function updateWaitingPeriodCount(daysDifference) {
+    const applications = await safApplication.find().exec();
+    applications.forEach(async (application) => {
+        if (application.applicationStatus != 'closed') {
+            const currentCount = application.waitingPeriod || 0;
+            application.waitingPeriod = currentCount + daysDifference;
+            application.applicationStatus = "alloted"
+            await application.save();
+        }
+    });
+}
 
 // Get safAllocation
 exports.getSafAllocation = async (req, res) => {
@@ -66,7 +90,7 @@ exports.getSafAllocation = async (req, res) => {
     }
 
     // safAllocation1 updation
-exports.updateSafAllocation1 = async (req, res) => {
+/*exports.updateSafAllocation1 = async (req, res) => {
     try {
         console.log('try update safAllocation', req.body);
         const query = req.body;
@@ -150,7 +174,7 @@ exports.updateSafAllocation1 = async (req, res) => {
         errorRes(res, error, error);
     }
     }
-
+*/
 
 // safAllocation updation
 exports.updateSafAllocation = async (req, res) => {

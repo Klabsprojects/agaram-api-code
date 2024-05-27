@@ -9,7 +9,8 @@ exports.addSafApplication = async (req, res) => {
          // Check if an application already exists for the given employee
          const existingApplication = await safApplication.findOne({ 
             employeeProfileId: query.employeeProfileId,
-            applicationStatus: "open" });
+            applicationStatus: { $in: ["open", "alloted"] } });
+            //applicationStatus: "open" });
         console.log('exist ', existingApplication);
          if (existingApplication) {
              // If an application exists, return the application info
