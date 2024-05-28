@@ -13,6 +13,7 @@ const safApplicationSchema = new Schema({
 		type: ObjectId, 
 		required: true
 	},
+	employeeId: String,
 	designation: {
 		type: String, 
 		required: true
