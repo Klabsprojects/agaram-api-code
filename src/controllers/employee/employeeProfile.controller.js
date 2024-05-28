@@ -11,7 +11,7 @@ const { ObjectId, ObjectID } = require('mongodb');
 exports.addEmployeeProfile = async (req, res) => {
     try {
         console.log('DEMO');
-        console.log('try create employeeProfile');
+        console.log('try create employeeProfile', req.body);
         const query = req.body;
         query.photo = Buffer.from(query.photo.split(",")[1], 'base64')
         const data = await employeeProfile.create(query);

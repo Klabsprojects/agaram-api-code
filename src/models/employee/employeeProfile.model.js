@@ -18,8 +18,19 @@ const employeeProfileSchema = new Schema({
 	caste: String,
 	religion: ObjectId,
 	degreeData : [{
-		degree : ObjectId,
-		stream : String
+		//degree : ObjectId,
+		//stream : String
+		courseLevel: String,
+		specialisation: String,
+		instituteName: String,
+		locationState: String,
+		locationCountry: String,
+		durationOfCourse: Number,
+		fund: String,
+		fees: Number,
+		courseCompletedYear: Number,
+		courseCompletedDate: Date,
+		addedBy: String
 		 }],
 	promotionGrade: ObjectId,
 	payscale: String,
