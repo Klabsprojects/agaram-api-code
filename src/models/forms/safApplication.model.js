@@ -56,7 +56,6 @@ const safApplicationSchema = new Schema({
 	},
 });
 
-const safApplicationModel = mongoose.model('safApplication', safApplicationSchema);
 
 // Pre-save hook to generate a unique seniority number
 safApplicationSchema.pre('save', async function(next) {
@@ -72,6 +71,9 @@ safApplicationSchema.pre('save', async function(next) {
 	  next(error);
 	}
   });
+
+const safApplicationModel = mongoose.model('safApplication', safApplicationSchema);
+
 
   
 // Function to get current time in "HH:mm:ss" format
