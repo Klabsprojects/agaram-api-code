@@ -10,6 +10,7 @@ const trainingSchema = new Schema({
 	nameOfInstitute: String,
 	fromDate: Date,
 	endDate: Date,
+	foreignVisitOrDeftCountry: String,
 	remarks: String,
 	orderType: ObjectId, 
 	orderNo: Number, 
