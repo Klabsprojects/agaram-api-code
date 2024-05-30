@@ -14,7 +14,16 @@ exports.addEducation = async (req, res) => {
         } else {
             throw new Error('File upload failed: No file uploaded');
         }*/
-        const data = await education.create(query);
+        //const data = await education.create(query);
+        if (query.degreeData && Array.isArray(query.degreeData)) {
+            // Iterate over each degree qualification
+            for (const degree of query.degreeData) {
+                // Create an education record for each qualification
+                await education.create(degree);
+            }
+        } else {
+            throw new Error('Invalid degreeData: Expected an array');
+        }
         for(let data of query.degreeData){
             const newDegreeData = {
                 courseLevel: data.courseLevel,
