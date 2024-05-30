@@ -8,12 +8,12 @@ exports.addEducation = async (req, res) => {
         console.log('try create education', req.body);
         const query = req.body;
         //console.log('Uploaded file path:', req.file.path);
-        if (req.file) {
+        /*if (req.file) {
             query.orderFile = req.file.path;
             console.log('Uploaded file path:', req.file.path);
         } else {
             throw new Error('File upload failed: No file uploaded');
-        }
+        }*/
         const data = await education.create(query);
         for(let data of query.degreeData){
             const newDegreeData = {

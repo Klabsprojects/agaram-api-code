@@ -18,7 +18,7 @@ module.exports = (app) => {
 
   app.post(
     "/addEducation",
-    upload.single('orderFile'),
+    //upload.single('orderFile'),
     value.addEducation
   );
 }
