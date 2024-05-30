@@ -7,6 +7,8 @@ exports.addEducation = async (req, res) => {
     try {
         console.log('try create education', req.body);
         const query = req.body;
+        let data;
+        console.log('query ', query);
         //console.log('Uploaded file path:', req.file.path);
         /*if (req.file) {
             query.orderFile = req.file.path;
@@ -19,7 +21,7 @@ exports.addEducation = async (req, res) => {
             // Iterate over each degree qualification
             for (const degree of query.degreeData) {
                 // Create an education record for each qualification
-                await education.create(degree);
+                data = await education.create(degree);
             }
         } else {
             throw new Error('Invalid degreeData: Expected an array');
