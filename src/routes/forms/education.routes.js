@@ -3,6 +3,10 @@ module.exports = (app) => {
    //const { joi, cache } = require("../../helpers/index.helper");
    //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
    const upload = require("../../middlewares/upload")
+   const multer = require('multer');
+// Set up multer for form data parsing
+const upload1 = multer();
+
    app.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
@@ -18,6 +22,7 @@ module.exports = (app) => {
 
   app.post(
     "/addEducation",
+    upload1.none(),
     //upload.single('orderFile'),
     value.addEducation
   );
