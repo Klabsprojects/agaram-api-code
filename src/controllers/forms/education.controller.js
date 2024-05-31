@@ -10,13 +10,13 @@ exports.addEducation = async (req, res) => {
         let data;
         console.log('query ', query);
         const { officerName, department, designation, orderType, orderNo, orderFor, dateOfOrder, remarks, degreeData } = req.body;
-        //console.log('Uploaded file path:', req.file.path);
-        /*if (req.file) {
+        console.log('Uploaded file path:', req.file.path);
+        if (req.file) {
             query.orderFile = req.file.path;
             console.log('Uploaded file path:', req.file.path);
         } else {
             throw new Error('File upload failed: No file uploaded');
-        }*/
+        }
         //const data = await education.create(query);
             // Check if degreeData exists and is an array
             if (degreeData && Array.isArray(degreeData)) {

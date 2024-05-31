@@ -22,8 +22,8 @@ const upload1 = multer();
 
   app.post(
     "/addEducation",
-    upload1.none(),
-    //upload.single('orderFile'),
+    //upload1.none(),
+    upload.single('orderFile'),
     value.addEducation
   );
 }
