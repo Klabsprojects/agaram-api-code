@@ -7,6 +7,9 @@ const app = express();
 require("dotenv").config({ path: path.join(__dirname, ".env") });
 const routes = require('./src/routes/index.routes');
 
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 const port = process.env.PORT;
 const MONGO_URI = 'mongodb://127.0.0.1:27017/agaram';
 //const MONGO_URI = 'mongodb://localhost:27017/agaram';
