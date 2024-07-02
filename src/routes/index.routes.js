@@ -16,6 +16,7 @@ require("./forms/medicalReimbursement.routes")(app);
 require("./forms/education.routes")(app);
 require("./forms/intimation.routes")(app);
 require("./login/login.route")(app);
+require("./login/role.route")(app);
 require("./forms/ltc.routes")(app);
 require("./forms/safApplication.routes")(app);
 require("./forms/block.routes")(app);
