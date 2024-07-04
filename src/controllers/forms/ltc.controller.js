@@ -1,5 +1,6 @@
 const ltc = require('../../models/forms/ltc.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
+const whatsapp = require('../whatsapp/whatsapp.controller');
 
 // Ltc creation
 exports.addLtc = async (req, res) => {
@@ -14,6 +15,14 @@ exports.addLtc = async (req, res) => {
             console.log('Uploaded file path:', req.file.path);
         }
         const data = await ltc.create(query);
+        let reqest = {}
+        reqest.body = {
+            phone: req.body.phone,
+            module: req.body.module,
+            date: req.body.dateOfOrder,
+            fileName: req.file.filename
+        }
+        const goSent = await whatsapp.sendWhatsapp(reqest, res);
         //res.json(data);
         successRes(res, data, 'ltc created Successfully');
     } catch (error) {

@@ -1,5 +1,6 @@
 const medicalReimbursement = require('../../models/forms/medicalReimbursement.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
+const whatsapp = require('../whatsapp/whatsapp.controller');
 
 // medicalReimbursement creation
 exports.addMedicalReimbursement = async (req, res) => {
@@ -13,6 +14,14 @@ exports.addMedicalReimbursement = async (req, res) => {
         } else {
             throw new Error('File upload failed: No file uploaded');
         }
+        let reqest = {}
+        reqest.body = {
+            phone: req.body.phone,
+            module: req.body.module,
+            date: req.body.dateOfOrder,
+            fileName: req.file.filename
+        }
+        const goSent = await whatsapp.sendWhatsapp(reqest, res);
         const data = await medicalReimbursement.create(query);
         successRes(res, data, 'medicalReimbursement created Successfully');
     } catch (error) {

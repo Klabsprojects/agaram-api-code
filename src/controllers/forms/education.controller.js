@@ -1,6 +1,7 @@
 const education = require('../../models/forms/education.model');
 const employeeProfile = require('../../models/employee/employeeProfile.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
+const whatsapp = require('../whatsapp/whatsapp.controller');
 
 // education creation
 exports.addEducation = async (req, res) => {
@@ -40,7 +41,14 @@ exports.addEducation = async (req, res) => {
                         { _id: query.employeeProfileId }, // Specify the document by _id
                         { $push: { degreeData: newDegreeData } } // Use $push to add new degree data
                       );
-                  
+                      let reqest = {}
+                      reqest.body = {
+                        phone: req.body.phone,
+                        module: req.body.module,
+                        date: req.body.dateOfOrder,
+                        fileName: req.file.filename
+                    }
+                    const goSent = await whatsapp.sendWhatsapp(reqest, res);
                       console.log('Update successful:', result, 'document(s) updated.');
                       
                 }

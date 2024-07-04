@@ -23,5 +23,6 @@ require("./forms/block.routes")(app);
 require("./forms/safAllocation.routes")(app);
 require("./employee/leave.routes")(app);
 require("./employee/training.routes")(app);
+require("./whatsapp/whatsapp.route")(app);
 module.exports = app;
 

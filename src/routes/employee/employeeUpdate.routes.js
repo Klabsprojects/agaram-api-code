@@ -25,6 +25,7 @@ module.exports = (app) => {
 
   app.post(
     "/addTransferOrPostingManyEmployees",
+    upload.single('orderFile'),
     value.addTransferOrPostingManyEmployees
   );
 

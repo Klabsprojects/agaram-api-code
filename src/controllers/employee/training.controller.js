@@ -1,6 +1,6 @@
 const training = require('../../models/employee/training.model');
-const employeeProfile = require('../../models/employee/employeeProfile.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
+const whatsapp = require('../whatsapp/whatsapp.controller');
 
 // training creation
 exports.addTraining = async (req, res) => {
@@ -15,6 +15,14 @@ exports.addTraining = async (req, res) => {
             throw new Error('File upload failed: No file uploaded');
         }
         const data = await training.create(query);
+        let reqest = {}
+        reqest.body = {
+            phone: req.body.phone,
+            module: req.body.module,
+            date: req.body.dateOfOrder,
+            fileName: req.file.filename
+        }
+        const goSent = await whatsapp.sendWhatsapp(reqest, res);
         successRes(res, data, 'training created Successfully');
     } catch (error) {
         console.log('catch create training', error);

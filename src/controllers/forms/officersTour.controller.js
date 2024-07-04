@@ -1,5 +1,6 @@
 const officersTour = require('../../models/forms/officersTour.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
+const whatsapp = require('../whatsapp/whatsapp.controller');
 
 // officersTour creation
 exports.addOfficersTour = async (req, res) => {
@@ -8,6 +9,14 @@ exports.addOfficersTour = async (req, res) => {
         const query = req.body;
         //console.log('Uploaded file path:', req.file.path);
         const data = await officersTour.create(query);
+        let reqest = {}
+        reqest.body = {
+            phone: req.body.phone,
+            module: req.body.module,
+            date: req.body.dateOfOrder,
+            fileName: req.file.filename
+        }
+        const goSent = await whatsapp.sendWhatsapp(reqest, res);
         //res.json(data);
         successRes(res, data, 'officersTour created Successfully');
     } catch (error) {

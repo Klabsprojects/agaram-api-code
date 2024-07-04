@@ -1,6 +1,6 @@
 const employeeUpdate = require('../../models/employee/employeeUpdate.model');
-
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
+const whatsapp = require('../whatsapp/whatsapp.controller');
 
 // employeeUpdate creation
 exports.addEmployeeUpdate = async (req, res) => {
@@ -22,13 +22,29 @@ exports.addEmployeeUpdate = async (req, res) => {
 
 exports.addTransferOrPostingManyEmployees = async (req, res) => {
     try {
-            console.log('try create bulk employees transfer/posting');
+            console.log('try create bulk employees transfer/posting', req.body);
             let query = {};
+            let phoneArr = [];
             if(req.body.transferOrPostingEmployeesList){
                 console.log('yes');
                 query = req.body;
+                for(let x of req.body.transferOrPostingEmployeesList){
+                    console.log(x);
+                    console.log(parseInt(x.phone, 10));
+                    phoneArr.push(parseInt(x.phone, 10)); 
+                }
             }
+            console.log('phoneArr', phoneArr);
+            let reqest = {}
+            reqest.body = {
+                phone: phoneArr,
+                module: req.body.module,
+                date: req.body.dateOfOrder,
+                fileName: req.file.filename
+            }
+            console.log('request ', reqest);
             const data = await employeeUpdate.create(query);
+            const goSent = await whatsapp.sendWhatsapp(reqest, res);
             successRes(res, data, 'Bulk Employees transfer/posting Added successfully');
     } catch (error) {
             console.log('catch create employeeUpdate', error);

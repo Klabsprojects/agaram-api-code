@@ -2,6 +2,7 @@ const safAllocation = require('../../models/forms/safAllocation.model');
 const block = require('../../models/forms/block.model');
 const safApplication = require('../../models/forms/safApplication.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
+const whatsapp = require('../whatsapp/whatsapp.controller');
 
 // safAllocation creation
 exports.addSafAllocation = async (req, res) => {
@@ -15,7 +16,14 @@ exports.addSafAllocation = async (req, res) => {
             throw new Error('File upload failed: No file uploaded');
         }
         const data = await safAllocation.create(query);
-
+        let reqest = {}
+        reqest.body = {
+            phone: req.body.phone,
+            module: req.body.module,
+            date: req.body.dateOfOrder,
+            fileName: req.file.filename
+        }
+        const goSent = await whatsapp.sendWhatsapp(reqest, res);
         if(req.body.blockId && Object.keys(data).length > 0)
             await block.updateOne({ _id: req.body.blockId }, { $set: { allocationStatus: true, allocationTo: data.employeeProfileId } });
         if(req.body.dateOfAccomodation){

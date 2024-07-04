@@ -16,11 +16,12 @@ const loginSchema = new Schema({
     type: String,
     required: true
   },
-	/*activeStatus: {
+	activeStatus: {
     type: Boolean,
     required: true
   },
-  role: ObjectId,*/
+  //role: ObjectId,
+  role: { type: Schema.Types.ObjectId, ref: 'role' }, // Reference to Role collection
 	createdAt: {
 		type: Date, 
 		default: Date.now

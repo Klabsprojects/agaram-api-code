@@ -1,5 +1,6 @@
 const movable = require('../../models/forms/movable.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
+const whatsapp = require('../whatsapp/whatsapp.controller');
 
 // Movable creation
 exports.addMovable = async (req, res) => {
@@ -14,6 +15,14 @@ exports.addMovable = async (req, res) => {
             throw new Error('File upload failed: No file uploaded');
         }
         const data = await movable.create(query);
+        let reqest = {}
+        reqest.body = {
+            phone: req.body.phone,
+            module: req.body.module,
+            date: req.body.dateOfOrder,
+            fileName: req.file.filename
+        }
+        const goSent = await whatsapp.sendWhatsapp(reqest, res);
         //res.json(data);
         successRes(res, data, 'movable created Successfully');
     } catch (error) {
