@@ -7,6 +7,11 @@ exports.register = async (req, res) => {
     try {
         console.log('try');
         console.log(req.body);
+        let inputQuery = req.body;
+        data = await role.insertMany(inputQuery, { fields: ['roleName', 'menu', 'allAccess', 'entryAccess', 'viewAccess', 'approvalAccess'] });
+        successRes(res, data, 'Role registered successfully');
+
+        /*console.log(req.body);
         let data;
         let roleName; let menu; let allAccess; let entryAccess; let viewAccess; let approvalAccess;
         if(req.body.roleName && req.body.menu && req.body.allAccess && req.body.entryAccess && req.body.viewAccess && req.body.approvalAccess){
@@ -18,16 +23,15 @@ exports.register = async (req, res) => {
                 viewAccess : req.body.viewAccess,
                 approvalAccess : req.body.approvalAccess
             }
-            data = await role.create(inputQuery);
-            successRes(res, data, 'Role registered successfully');
-        }
+            data = await role.create(inputQuery);*/
+        /*}
         else{
             console.log('Pls provide valid inputs');
             throw 'Pls provide valid inputs';
-        }
+        }*/
     } catch (error) {
         console.log('catch', error);
-        errorRes(res, error, "Error on Login Registration");
+        errorRes(res, error, "Error on Role Registration");
     }
 }
 
