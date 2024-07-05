@@ -109,14 +109,17 @@ exports.getUserTypesFromLogin = async (req, res) => {
             data = await login.aggregate([
                 {
                     $group: {
-                        _id: '$loginAs'
+                        _id: { loginAs: '$loginAs', username: '$username', activeStatus: '$activeStatus' },
                     }
                 },
                 {
                     $project: {
                         _id: 0, // Exclude the default _id field
-                        loginAs: '$_id', // Rename _id field to categoryName
+                        loginAs: '$_id.loginAs', // Rename _id.loginAs to loginAs
+                        activeStatus: '$_id.activeStatus', // Rename _id.status to activeStatus
+                        username: '$_id.username', // Rename _id.status to username
                         count: 1 // Include the count field
+
                     }
                 }
             ]).exec((err, userTypes) => {
@@ -134,8 +137,8 @@ exports.getUserTypesFromLogin = async (req, res) => {
     }
 }
 
-        // password Edit
-/*exports.update = async (req, res) => {
+        // ActiveStatus Edit
+exports.update = async (req, res) => {
     try {
         let query = {};
         let password = req.body.password;
@@ -152,4 +155,3 @@ exports.getUserTypesFromLogin = async (req, res) => {
         errorRes(res, error, message, file);
     }
 }
-*/
