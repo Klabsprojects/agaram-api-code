@@ -1,4 +1,4 @@
-//const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
+const {  ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
 const login = require('../../models/login/login.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const bcrypt = require('bcryptjs');
@@ -98,6 +98,41 @@ exports.register = async (req, res) => {
         errorRes(res, error, "Login failed");
     }
     }
+
+    // Get getUserTypes
+exports.getUserTypesFromLogin = async (req, res) => {
+    console.log('helo from getUserTypes controller', req.query);
+    try {
+        let query = {};
+        let data;
+            query.where = req.query;
+            data = await login.aggregate([
+                {
+                    $group: {
+                        _id: '$loginAs'
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0, // Exclude the default _id field
+                        loginAs: '$_id', // Rename _id field to categoryName
+                        count: 1 // Include the count field
+                    }
+                }
+            ]).exec((err, userTypes) => {
+                if (err) {
+                    console.error('Error:', err);
+                    throw err;
+                }
+                console.log('userTypes:', userTypes);
+                successRes(res, userTypes, 'User types listed Successfully');
+            });
+    } catch (error) {
+        console.log('error', error);
+        const message = error.message ? error.message : ERRORS.LISTED;
+        errorRes(res, error, message);
+    }
+}
 
         // password Edit
 /*exports.update = async (req, res) => {

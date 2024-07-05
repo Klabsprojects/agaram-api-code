@@ -29,4 +29,7 @@ module.exports = (app) => {
 
   app.route("/login")
     .post(value.login)
+
+  app.route("/getUserTypesFromLogin")
+    .get(value.getUserTypesFromLogin)
 }
