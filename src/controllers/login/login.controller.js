@@ -33,16 +33,17 @@ exports.register = async (req, res) => {
     try {
         console.log('try');
         console.log(req.body);
-        let username; let password; let loginAs; let inputQuery;
+        let username; let password; let loginAs; let inputQuery; let activeStatus;
         username = req.body.username;
         loginAs = req.body.loginAs;
+        activeStatus = req.body.activeStatus;
         const salt = await bcrypt.genSalt(10);
         // Hash the password with the salt
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
         // Replace the plain text password with the hashed password
         password = hashedPassword;
         console.log(password);
-        inputQuery = { username, password: password, loginAs: loginAs };
+        inputQuery = { username, password: password, loginAs: loginAs, activeStatus: activeStatus };
         const data = await login.create(inputQuery);
         successRes(res, data, 'Login registered successfully');
     } catch (error) {
