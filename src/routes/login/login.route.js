@@ -21,15 +21,19 @@ module.exports = (app) => {
     value.register
   );
   
-  /*app.put(
-    "/updatePassword",
+  app.put(
+    "/updateActiveStatus",
     //[jwt.verifyToken],
     value.update
-  );*/
+  );
 
   app.route("/login")
     .post(value.login)
 
   app.route("/getUserTypesFromLogin")
     .get(value.getUserTypesFromLogin)
+
+  app.route("/getUniqueUserTypesFromLogin")
+    .get(value.getUniqueUserTypesFromLogin)
+
 }

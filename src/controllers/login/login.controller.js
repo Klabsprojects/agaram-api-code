@@ -99,7 +99,7 @@ exports.register = async (req, res) => {
     }
     }
 
-    // Get getUserTypes
+    // Get getUserTypesFromLogin
 exports.getUserTypesFromLogin = async (req, res) => {
     console.log('helo from getUserTypes controller', req.query);
     try {
@@ -137,18 +137,93 @@ exports.getUserTypesFromLogin = async (req, res) => {
     }
 }
 
+    // Get getUniqueUserTypesFromLogin
+    exports.getUniqueUserTypesFromLogin = async (req, res) => {
+        console.log('helo from getUserTypes controller', req.query);
+        try {
+            let query = {};
+            let data;
+                query.where = req.query;
+                data = await login.aggregate([
+                    {
+                        $group: {
+                            _id: { loginAs: '$loginAs'},
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: 0, // Exclude the default _id field
+                            loginAs: '$_id.loginAs', // Rename _id.loginAs to loginAs
+                            count: 1 // Include the count field
+    
+                        }
+                    }
+                ]).exec((err, userTypes) => {
+                    if (err) {
+                        console.error('Error:', err);
+                        throw err;
+                    }
+                    console.log('userTypes:', userTypes);
+                    successRes(res, userTypes, 'User types listed Successfully');
+                });
+        } catch (error) {
+            console.log('error', error);
+            const message = error.message ? error.message : ERRORS.LISTED;
+            errorRes(res, error, message);
+        }
+}
+
         // ActiveStatus Edit
 exports.update = async (req, res) => {
     try {
-        let query = {};
-        let password = req.body.password;
-        //const hashedPassword = await bcrypt.hash(password, 10);
-        query.body = { password: password}
-        query.where = {id: req.body.id};
+        const query = req.body;
+        let filter;
+        let update = {};
+        if(query.loginAs && query.username){
+            //update.loginAs = query.loginAs;
+            //update.username = query.username;
+            update = { $set: { username : query.username } }; 
+        }
+        else
+        throw 'pls provide loginAs,username fields';
+
+        console.log('update ', update);
+        if(query.activeStatus != undefined){
+            console.log('coming');
+            filter = {
+                activeStatus : query.activeStatus,
+            }
+        }
+        else
+            throw 'pls provide activeStatus field';
+        console.log('filter ', filter);
+        // Check if the update object is empty or not
+        if (Object.keys(update).length > 0) {
+            console.log('value got');
+            const data = await login.findOneAndUpdate(filter, update, {
+                new: true
+              });
+            console.log('data updated ', data);
+            successRes(res, data, 'login activeStatus updated Successfully');
+        } else {
+            console.log('empty');
+            throw 'Update value missing';
+        }
+
+
         
+        /*console.log('try activeStatus update controller', query);
+        query.body = {
+            activeStatus : req.body.activeStatus,
+        }
+        query.where = {
+            loginAs : req.body.loginAs,
+            username : req.body.username
+        };
+        console.log('query =>', query);
         const results = await commonService.update(db.login, query);
         console.log('results => ', results);
-        successRes(res, results, SUCCESS.UPDATED);
+        successRes(res, results, SUCCESS.UPDATED);*/
     } catch (error) {
         console.log('error => ', error);
         const message = error.message ? error.message : ERRORS.UPDATED;

@@ -1,7 +1,7 @@
 const designations = require('../../models/categories/designation.model');
 //const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
-
+const {  ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
 // Designations creation
 exports.addDesignations = async (req, res) => {
     try {
@@ -13,7 +13,7 @@ exports.addDesignations = async (req, res) => {
     } catch (error) {
         console.log('catch create departments');
         //res.json(error);
-        const message = error.message ? error.message : ERRORS.UPDATED;
+        const message = error.message ? error.message : ERRORS.CREATED;
         errorRes(res, error, message);
     }
     }
@@ -35,7 +35,7 @@ exports.getDesignations = async (req, res) => {
         } catch (error) {
             console.log('error', error);
             //res.json(error);
-            const message = error.message ? error.message : ERRORS.UPDATED;
+            const message = error.message ? error.message : ERRORS.LISTED;
             errorRes(res, error, message);
         }
     }
