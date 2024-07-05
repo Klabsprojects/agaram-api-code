@@ -17,7 +17,7 @@ module.exports = (app) => {
 
   app.post(
     "/loginRegister",
-    [jwt.verifyToken],
+    //[jwt.verifyToken],
     value.register
   );
   
