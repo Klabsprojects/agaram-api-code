@@ -20,12 +20,6 @@ module.exports = (app) => {
     //[jwt.verifyToken],
     value.register
   );
-  
-  app.put(
-    "/updateActiveStatus",
-    //[jwt.verifyToken],
-    value.update
-  );
 
   app.route("/login")
     .post(value.login)
@@ -35,5 +29,8 @@ module.exports = (app) => {
 
   app.route("/getUniqueUserTypesFromLogin")
     .get(value.getUniqueUserTypesFromLogin)
+
+  app.route("/updateActiveStatus")
+    .put(value.updateActiveStatus)
 
 }

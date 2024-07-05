@@ -101,7 +101,7 @@ exports.register = async (req, res) => {
 
     // Get getUserTypesFromLogin
 exports.getUserTypesFromLogin = async (req, res) => {
-    console.log('helo from getUserTypes controller', req.query);
+    console.log('helo from getUserTypesFromLogin controller', req.query);
     try {
         let query = {};
         let data;
@@ -139,7 +139,7 @@ exports.getUserTypesFromLogin = async (req, res) => {
 
     // Get getUniqueUserTypesFromLogin
     exports.getUniqueUserTypesFromLogin = async (req, res) => {
-        console.log('helo from getUserTypes controller', req.query);
+        console.log('helo from getUniqueUserTypesFromLogin controller', req.query);
         try {
             let query = {};
             let data;
@@ -173,29 +173,25 @@ exports.getUserTypesFromLogin = async (req, res) => {
         }
 }
 
-        // ActiveStatus Edit
-exports.update = async (req, res) => {
+// block updation
+exports.updateActiveStatus = async (req, res) => {
     try {
+        console.log('try update block');
         const query = req.body;
         let filter;
         let update = {};
-        if(query.loginAs && query.username){
-            //update.loginAs = query.loginAs;
-            //update.username = query.username;
-            update = { $set: { username : query.username } }; 
-        }
-        else
-        throw 'pls provide loginAs,username fields';
-
-        console.log('update ', update);
         if(query.activeStatus != undefined){
-            console.log('coming');
+            update.activeStatus = query.activeStatus;
+        }
+        if(query.loginAs && query.username){
             filter = {
-                activeStatus : query.activeStatus,
+                loginAs: query.loginAs,
+                username : query.username
             }
         }
         else
-            throw 'pls provide activeStatus field';
+            throw 'pls provide loginAs and username field';
+        console.log('update ', update);
         console.log('filter ', filter);
         // Check if the update object is empty or not
         if (Object.keys(update).length > 0) {
@@ -204,29 +200,13 @@ exports.update = async (req, res) => {
                 new: true
               });
             console.log('data updated ', data);
-            successRes(res, data, 'login activeStatus updated Successfully');
+            successRes(res, data, 'activeStatus updated Successfully');
         } else {
             console.log('empty');
             throw 'Update value missing';
         }
-
-
-        
-        /*console.log('try activeStatus update controller', query);
-        query.body = {
-            activeStatus : req.body.activeStatus,
-        }
-        query.where = {
-            loginAs : req.body.loginAs,
-            username : req.body.username
-        };
-        console.log('query =>', query);
-        const results = await commonService.update(db.login, query);
-        console.log('results => ', results);
-        successRes(res, results, SUCCESS.UPDATED);*/
     } catch (error) {
-        console.log('error => ', error);
-        const message = error.message ? error.message : ERRORS.UPDATED;
-        errorRes(res, error, message, file);
+        console.log('catch activeStatus updation', error);
+        errorRes(res, error, "Error on activeStatus updation");
     }
-}
+    }
