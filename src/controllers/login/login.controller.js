@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 let file = "login.controller";
 let Jkey = process.env.JWT_SECRET_KEY;
 const expire = process.env.EXPIRE;
+const { response } = require("express");
+const role = require('../../models/login/role.model');
 
 exports.getLogin = async (req, res) => {
     console.log('helo from login controller');
@@ -137,8 +139,8 @@ exports.getUserTypesFromLogin = async (req, res) => {
     }
 }
 
-    // Get getUniqueUserTypesFromLogin
-    exports.getUniqueUserTypesFromLogin = async (req, res) => {
+// Get getUniqueUserTypesFromLogin
+exports.getUniqueUserTypesFromLogin = async (req, res) => {
         console.log('helo from getUniqueUserTypesFromLogin controller', req.query);
         try {
             let query = {};
@@ -210,3 +212,80 @@ exports.updateActiveStatus = async (req, res) => {
         errorRes(res, error, "Error on activeStatus updation");
     }
     }
+
+// Get getUniqueUserTypesFromLogin
+exports.getUniqueUserTypesWithoutRole = async (req, res) => {
+    console.log('helo from getUniqueUserTypesFromLogin controller', req.query);
+    try {
+            let request = {}
+            request.body = {}
+            const roleData = await this.getUserTypes(req, res);
+            console.log('roleData Login', roleData);
+            let data;
+            
+            data = await login.aggregate([
+                {
+                    $match: {
+                        loginAs: { $nin: roleData } // Exclude documents where loginAs is in the excludedLoginAs array
+                    }
+                },
+                {
+                    $group: {
+                        _id: { loginAs: '$loginAs'},
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0, // Exclude the default _id field
+                        loginAs: '$_id.loginAs', // Rename _id.loginAs to loginAs
+                        count: 1 // Include the count field
+
+                    }
+                }
+            ]).exec((err, userTypes) => {
+                if (err) {
+                    console.error('Error Login:', err);
+                    throw err;
+                }
+                console.log('userTypes Login:', userTypes);
+                successRes(res, userTypes, 'User types listed Successfully');
+            });
+            //});
+    } catch (error) {
+        console.log('error', error);
+        const message = error.message ? error.message : ERRORS.LISTED;
+        errorRes(res, error, message);
+    }
+}
+
+
+// Get getUserTypes
+exports.getUserTypes = async (req, res) => {
+    console.log('helo from getUserTypes function', req.query);
+    try {
+        const userTypes = await role.aggregate([
+            {
+                $group: {
+                    _id: '$roleName'
+                }
+            },
+            {
+                $project: {
+                    _id: 0, // Exclude the default _id field
+                    roleName: '$_id', // Rename _id field to roleName
+                    count: 1 // Include the count field
+                }
+            }
+        ]).exec();
+
+        console.log('userTypes roles', userTypes);
+
+        // Extract role names into an array
+        const roleArray = userTypes.map(data => data.roleName);
+
+        return roleArray;
+    } catch (error) {
+        console.error('Error fetching user types:', error);
+        throw error; // Throw error for handling in the caller
+    }
+};

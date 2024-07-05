@@ -33,4 +33,7 @@ module.exports = (app) => {
   app.route("/updateActiveStatus")
     .put(value.updateActiveStatus)
 
+  app.route("/getUniqueUserTypesWithoutRole")
+    .get(value.getUniqueUserTypesWithoutRole)
+
 }
