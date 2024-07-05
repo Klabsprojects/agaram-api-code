@@ -30,8 +30,8 @@ exports.addTransferOrPostingManyEmployees = async (req, res) => {
                 query = req.body;
                 for(let x of req.body.transferOrPostingEmployeesList){
                     console.log(x);
-                    console.log(parseInt(x.phone, 10));
-                    phoneArr.push(parseInt(x.phone, 10)); 
+                    //console.log(parseInt(x.phone, 10));
+                    phoneArr.push(x); 
                 }
             }
             console.log('phoneArr', phoneArr);

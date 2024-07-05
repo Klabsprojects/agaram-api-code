@@ -2,7 +2,7 @@ const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
 const role = require('../../models/login/role.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 let file = "role.controller";
- 
+
 exports.register = async (req, res) => {
     try {
         console.log('try');
@@ -40,31 +40,47 @@ exports.update = async (req, res) => {
         console.log('try');
         console.log(req.body);
         let query = req.body;
-        let data;
-        let update = {};
-        if(req.body.entryAccess){
-            console.log('entryAccess coming ', req.body.entryAccess);
-            update.entryAccess = req.body.entryAccess;
-        }
-        if(req.body.allAccess){
-            console.log('allAccess coming ', req.body.allAccess);
-            update.allAccess = req.body.allAccess;
-        }
-        if(req.body.viewAccess){
-            console.log('viewAccess coming ', req.body.viewAccess);
-            update.viewAccess = req.body.viewAccess;
-        }
-        let filter = {
-            _id : query.id
-        }
-        console.log('update ', update);
-        console.log('filter ', filter);
+        let result = [];
+        for(let input = 0; input < query.length; input++){
+            console.log('query[input] ', query[input]);
+            console.log('query[input] ', query[input].entryAccess);
+            console.log('query[input] ', query[input].allAccess);
+            console.log('query[input] ', query[input].viewAccess);
+            console.log('query[input] ', query[input].approvalAccess);
 
-        data = await role.findOneAndUpdate(filter, update, {
-            new: true
-          });
-        console.log('data updated ', data);
-        successRes(res, data, SUCCESS.UPDATED);
+            let data;
+            let update = {};
+            if(query[input].entryAccess != undefined){
+                console.log('entryAccess coming ', query[input].entryAccess);
+                update.entryAccess = query[input].entryAccess;
+            }
+            if(query[input].allAccess != undefined){
+                console.log('allAccess coming ', query[input].allAccess);
+                update.allAccess = query[input].allAccess;
+            }
+            if(query[input].viewAccess != undefined){
+                console.log('viewAccess coming ', query[input].viewAccess);
+                update.viewAccess = query[input].viewAccess;
+            }
+            if(query[input].approvalAccess != undefined){
+                console.log('approvalAccess coming ', query[input].approvalAccess);
+                update.approvalAccess = query[input].approvalAccess;
+            }
+            let filter = {
+                _id : query[input].id
+            }
+            console.log('update ', update);
+            console.log('filter ', filter);
+            data = await role.findOneAndUpdate(filter, update, {
+                new: true
+              });
+            console.log('data updated ', data);
+            result.push(data);
+            if (input === query.length - 1) {
+                console.log('last loop ');
+                successRes(res, result, SUCCESS.UPDATED);
+            }
+        }
     } catch (error) {
         console.log('error => ', error);
         const message = error.message ? error.message : ERRORS.UPDATED;
@@ -88,5 +104,40 @@ exports.getRole = async (req, res) => {
     } catch (error) {
         console.log('error', error);
         errorRes(res, error, ERRORS.LISTED);
+    }
+}
+
+// Get getUserTypes
+exports.getUserTypes = async (req, res) => {
+    console.log('helo from getUserTypes controller', req.query);
+    try {
+        let query = {};
+        let data;
+            query.where = req.query;
+            data = await role.aggregate([
+                {
+                    $group: {
+                        _id: '$roleName'
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0, // Exclude the default _id field
+                        roleName: '$_id', // Rename _id field to categoryName
+                        count: 1 // Include the count field
+                    }
+                }
+            ]).exec((err, userTypes) => {
+                if (err) {
+                    console.error('Error:', err);
+                    throw err;
+                }
+                console.log('userTypes:', userTypes);
+                successRes(res, userTypes, 'User types listed Successfully');
+            });
+    } catch (error) {
+        console.log('error', error);
+        const message = error.message ? error.message : ERRORS.LISTED;
+        errorRes(res, error, message);
     }
 }

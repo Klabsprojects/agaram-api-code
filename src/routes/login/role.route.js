@@ -23,4 +23,7 @@ module.exports = (app) => {
 
   app.route("/getRole")
     .get(value.getRole)
+
+  app.route("/getUserTypes")
+    .get(value.getUserTypes)
 }
