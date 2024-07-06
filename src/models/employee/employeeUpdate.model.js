@@ -32,7 +32,7 @@ const employeeUpdateSchema = new Schema({
 		additionalCharge: String,
 		postTypeCategoryCode: ObjectId,
 		locationChangeCategoryId: ObjectId,
-		//phone: Number
+		phone: Number
 	}],
 	orderFile: String,
 	remarks: String,
