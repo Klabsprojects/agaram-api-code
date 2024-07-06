@@ -31,20 +31,20 @@ exports.addTransferOrPostingManyEmployees = async (req, res) => {
                 for(let x of req.body.transferOrPostingEmployeesList){
                     console.log(x);
                     //console.log(parseInt(x.phone, 10));
-                    phoneArr.push(x); 
+                    //phoneArr.push(x); 
                 }
             }
             console.log('phoneArr', phoneArr);
-            let reqest = {}
+            /*let reqest = {}
             reqest.body = {
                 phone: phoneArr,
                 module: req.body.module,
                 date: req.body.dateOfOrder,
                 fileName: req.file.filename
             }
-            console.log('request ', reqest);
+            console.log('request ', reqest);*/
             const data = await employeeUpdate.create(query);
-            const goSent = await whatsapp.sendWhatsapp(reqest, res);
+            //const goSent = await whatsapp.sendWhatsapp(reqest, res);
             successRes(res, data, 'Bulk Employees transfer/posting Added successfully');
     } catch (error) {
             console.log('catch create employeeUpdate', error);
