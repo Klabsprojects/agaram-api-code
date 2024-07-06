@@ -25,6 +25,11 @@ exports.addTransferOrPostingManyEmployees = async (req, res) => {
             console.log('try create bulk employees transfer/posting', req.body);
             let query = {};
             let phoneArr = [];
+            if(req.file){
+                req.body.orderFile = req.file.path
+                //query.fcraClearance = req.file.path
+                console.log('Uploaded file path:', req.file.path);
+            }
             if(req.body.transferOrPostingEmployeesList){
                 console.log('yes');
                 query = req.body;
