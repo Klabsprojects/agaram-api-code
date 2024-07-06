@@ -107,6 +107,91 @@ exports.getRole = async (req, res) => {
     }
 }
 
+// Get getRoleClassified
+exports.getRoleClassified = async (req, res) => {
+    console.log('helo from role controller', req.query);
+    try {
+        let query = {};
+        let data;
+            query.where = req.query;
+            data = await role.aggregate([
+                {
+                    $group: {
+                        _id: { roleName: '$roleName', menu: '$menu', 
+                            allAccess: '$allAccess', 
+                            entryAccess: '$entryAccess',
+                            viewAccess: '$viewAccess',
+                            approvalAccess: '$approvalAccess'
+                        },
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0, // Exclude the default _id field
+                        roleName: '$_id.roleName', // Rename _id.loginAs to loginAs
+                        menu: '$_id.menu', // Rename _id.status to activeStatus
+                        allAccess: '$_id.allAccess', // Rename _id.status to username
+                        entryAccess: '$_id.entryAccess', // Rename _id.status to username
+                        viewAccess: '$_id.viewAccess', // Rename _id.status to username
+                        approvalAccess: '$_id.approvalAccess', // Rename _id.status to username
+                        count: 1 // Include the count field
+
+                    }
+                }
+            ]).exec((err, userTypes) => {
+                if (err) {
+                    console.error('Error:', err);
+                    throw err;
+                }
+                console.log('userTypes:', userTypes);
+                let data = userTypes;
+                // Function to transform the data
+function transformData(data) {
+    // Use an object to store results temporarily
+    let result = {};
+
+    // Iterate over each document in the original data
+    data.forEach(item => {
+        // Check if roleName already exists in result
+        if (result[item.roleName]) {
+            // If exists, push the menu object into the existing roleName
+            result[item.roleName].menu.push({ menu: item.menu, 
+                allAccess: item.allAccess,
+                entryAccess: item.entryAccess,
+                viewAccess: item.viewAccess,
+                approvalAccess: item.approvalAccess
+             });
+        } else {
+            // If not exists, create a new roleName entry with an array containing the first menu object
+            result[item.roleName] = {
+                roleName: item.roleName,
+                menu: [{ menu: item.menu, 
+                allAccess: item.allAccess,
+                entryAccess: item.entryAccess,
+                viewAccess: item.viewAccess,
+                approvalAccess: item.approvalAccess
+                }]
+            };
+        }
+    });
+
+    // Convert result object to an array of values
+    return Object.values(result);
+}
+
+// Call the function to transform the data
+let transformedData = transformData(data);
+
+// Output the transformed data
+console.log(transformedData);
+                successRes(res, transformedData, 'User types listed Successfully');
+            });
+    } catch (error) {
+        console.log('error', error);
+        errorRes(res, error, ERRORS.LISTED);
+    }
+}
+
 // Get getUserTypes
 exports.getUserTypes = async (req, res) => {
     console.log('helo from getUserTypes controller', req.query);
