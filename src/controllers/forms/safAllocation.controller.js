@@ -3,6 +3,7 @@ const block = require('../../models/forms/block.model');
 const safApplication = require('../../models/forms/safApplication.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const whatsapp = require('../whatsapp/whatsapp.controller');
+const employeeProfile = require('../../models/employee/employeeProfile.model');
 
 // safAllocation creation
 exports.addSafAllocation = async (req, res) => {
@@ -75,6 +76,11 @@ exports.getSafAllocation = async (req, res) => {
                     path: 'applicationId',
                     model: 'safApplication', // Model of the application collection
                     //select: 'fieldA fieldB' // Fields to select from the application collection
+                }) 
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
                 })  
                 .exec();
             }
@@ -88,7 +94,12 @@ exports.getSafAllocation = async (req, res) => {
                     path: 'applicationId',
                     model: 'safApplication', // Model of the application collection
                     //select: 'fieldA fieldB' // Fields to select from the application collection
-                })            
+                })  
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })    
                 .exec();
             successRes(res, data, 'safAllocation listed Successfully');
         } catch (error) {

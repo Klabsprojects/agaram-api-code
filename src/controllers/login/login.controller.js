@@ -39,6 +39,18 @@ exports.register = async (req, res) => {
         username = req.body.username;
         loginAs = req.body.loginAs;
         activeStatus = req.body.activeStatus;
+        //check role exist or not
+        let roleQuery = {
+            roleName: loginAs
+        }
+        let roleData = await role.find(roleQuery).exec();
+        if(roleData.length > 0){
+            console.log('role already available');
+
+        }
+        else
+            console.log('role not available');
+
         const salt = await bcrypt.genSalt(10);
         // Hash the password with the salt
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
@@ -70,6 +82,7 @@ exports.register = async (req, res) => {
         let query = {};
         query = {
             username: req.body.username,
+            activeStatus: true
         };
         console.log('query ', query);
        let user = [];
@@ -86,9 +99,16 @@ exports.register = async (req, res) => {
         if(bcrypt.compareSync(req.body.password, user[0].password)){
             const token = jwt.sign({ username: req.body.username,
             password: req.body.password }, Jkey, { expiresIn: expire });
+            let roleQuery = {
+                roleName: user[0].loginAs
+            }
+            let roleData = await role.find(roleQuery).exec();
+            console.log('roleData ', roleData);
+            //data = await role.find(req.query).exec();
             let result = {
                 data: user,
-                token: token
+                token: token,
+                roleData: roleData
             }
             successRes(res, result, 'Login success');
         }

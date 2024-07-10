@@ -1,5 +1,6 @@
 const safApplication = require('../../models/forms/safApplication.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
+const employeeProfile = require('../../models/employee/employeeProfile.model');
 
 // safApplication creation
 exports.addSafApplication = async (req, res) => {
@@ -34,10 +35,24 @@ exports.getSafApplication = async (req, res) => {
             let data;
             if(req.query){
                 query.where = req.query;
-                data = await safApplication.find(req.query).exec();
+                //data = await education.find(req.query).exec();
+                data = await safApplication.find(req.query)
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })  
+                .exec();
             }
             else
-                data = await safApplication.find();
+                //data = await education.find();
+                data = await safApplication.find()
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })  
+                .exec();
             successRes(res, data, 'safApplication listed Successfully');
         } catch (error) {
             console.log('error', error);

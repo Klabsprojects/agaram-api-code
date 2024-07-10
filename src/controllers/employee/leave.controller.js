@@ -1,6 +1,7 @@
 const leave = require('../../models/employee/leave.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const whatsapp = require('../whatsapp/whatsapp.controller');
+const employeeProfile = require('../../models/employee/employeeProfile.model');
 
 // leave creation
 exports.addLeave = async (req, res) => {
@@ -39,10 +40,24 @@ exports.getLeave = async (req, res) => {
             let data;
             if(req.query){
                 query.where = req.query;
-                data = await leave.find(req.query).exec();
+                //data = await education.find(req.query).exec();
+                data = await leave.find(req.query)
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })  
+                .exec();
             }
             else
-                data = await leave.find();
+                //data = await education.find();
+                data = await leave.find()
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })  
+                .exec();
             successRes(res, data, 'leave listed Successfully');
         } catch (error) {
             console.log('error', error);

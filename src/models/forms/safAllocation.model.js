@@ -6,14 +6,20 @@ const Schema = mongoose.Schema;
 const block = require('../../models/forms/block.model');
 const application = require('../../models/forms/safApplication.model');
 
+const profile = require('../employee/employeeProfile.model');
+
 const safAllocationSchema = new Schema({
     officerName: {
 		type: String, 
 		required: true
 	},
-	employeeProfileId: {
+	/*employeeProfileId: {
 		type: ObjectId, 
 		required: true
+	},*/
+	employeeProfileId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'profile' // This references the AllocatedBlock model
 	},
 	designation: {
 		type: String, 

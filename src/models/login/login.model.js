@@ -21,7 +21,7 @@ const loginSchema = new Schema({
     required: true
   },
   //role: ObjectId,
-  role: { type: Schema.Types.ObjectId, ref: 'role' }, // Reference to Role collection
+  //role: { type: Schema.Types.ObjectId, ref: 'role' }, // Reference to Role collection
 	createdAt: {
 		type: Date, 
 		default: Date.now

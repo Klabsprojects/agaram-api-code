@@ -2,10 +2,16 @@ const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
 const Schema = mongoose.Schema;
 
+const profile = require('../employee/employeeProfile.model');
+
 const leaveSchema = new Schema({
 	employeeId: String,
 	fullName: String,
-	employeeProfileId: ObjectId,
+	//employeeProfileId: ObjectId,
+	employeeProfileId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'profile' // This references the AllocatedBlock model
+	},
 	typeOfLeave: String,
 	fromDate: Date,
 	endDate: Date,

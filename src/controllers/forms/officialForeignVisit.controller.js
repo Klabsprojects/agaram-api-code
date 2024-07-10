@@ -1,5 +1,6 @@
 const foreignVisit = require('../../models/forms/officialForeignVisit.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
+const employeeProfile = require('../../models/employee/employeeProfile.model');
 
 // Degree creation
 exports.addVisit = async (req, res) => {
@@ -59,10 +60,24 @@ exports.getVisit = async (req, res) => {
             let data;
             if(req.query){
                 query.where = req.query;
-                data = await foreignVisit.find(req.query).exec();
+                //data = await education.find(req.query).exec();
+                data = await foreignVisit.find(req.query)
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })  
+                .exec();
             }
             else
-                data = await foreignVisit.find();
+                //data = await education.find();
+                data = await foreignVisit.find()
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })  
+                .exec();
             //res.json(data);
             successRes(res, data, 'foreignVisit listed Successfully');
         } catch (error) {

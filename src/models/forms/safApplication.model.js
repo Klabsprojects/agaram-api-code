@@ -4,14 +4,20 @@ const { TIME } = require('sequelize');
 const { number } = require('joi');
 const Schema = mongoose.Schema;
 
+const profile = require('../employee/employeeProfile.model');
+
 const safApplicationSchema = new Schema({
     officerName: {
 		type: String, 
 		required: true
 	},
-	employeeProfileId: {
+	/*employeeProfileId: {
 		type: ObjectId, 
 		required: true
+	},*/
+	employeeProfileId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'profile' // This references the AllocatedBlock model
 	},
 	employeeId: String,
 	designation: {

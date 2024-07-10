@@ -1164,11 +1164,74 @@ exports.getEmployeeHistory = async (req, res) => {
                     "pincode": employee.pincode,
                     "employeeId": employee.employeeId,
                     "ifhrmsId": employee.ifhrmsId,
-                    "photo": employee.photo,
+                    //"photo": employee.photo,
                 }
                 data.update = queryUpdate;
+                /*queryUpdate = {
+                        transferOrPostingEmployeesList: {
+                            $elemMatch: { empProfileId: { $in: employee._id } }
+                        }
+                }
+                
                 dataUpdate = await employeeUpdate.find(queryUpdate).sort({ dateOfOrder: 'asc' }).exec();
-                resJson.employeeHistory = dataUpdate;
+                resJson.employeeHistory = dataUpdate;*/
+
+                const dataResArray  = await employeeUpdate.find({
+                    'transferOrPostingEmployeesList.empProfileId': employee._id
+                })
+                .populate({
+                    path: 'transferOrPostingEmployeesList.empProfileId',
+                    model: 'employeeProfile', // Ensure the model name matches exactly
+                    select: 'orderNumber' // Specify the fields you want to include from EmployeeProfile
+                })
+                .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
+                .exec();
+                console.log(dataResArray);
+                let dataArra = [];
+                const employeeId = employee._id.toString();
+                if (dataResArray && dataResArray.length > 0) {
+                    dataResArray.forEach(dataRes => {
+                        console.log('dataResArray.dateOfOrder ', dataRes.dateOfOrder);
+                        let json = {
+                            _id: dataRes._id,
+                            updateType: dataRes.updateType,
+                            orderTypeCategoryCode: dataRes.orderTypeCategoryCode,
+                            orderNumber: dataRes.orderNumber,
+                            orderForCategoryCode: dataRes.orderForCategoryCode,
+                            dateOfOrder: dataRes.dateOfOrder,
+                            remarks: dataRes.remarks,
+                            orderFile: dataRes.orderFile,
+                        }
+                        if (dataRes.transferOrPostingEmployeesList.length > 0) {
+                            const matchedItem = dataRes.transferOrPostingEmployeesList.find(item => 
+                                item.empProfileId._id.toString() === employeeId
+                            );
+                
+                            if (matchedItem) {
+                                const matchedEmpProfileId = {
+                                    _id: matchedItem.empProfileId._id,
+                                    orderNumber: matchedItem.empProfileId.orderNumber
+                                    // Add more fields from employeeProfile as needed
+                                };
+                
+                                //console.log('Matched empProfileId:', matchedItem);
+                                //dataArra.push(matchedItem)
+                                json.transferOrPostingEmployeesList = matchedItem;
+                                dataArra.push(json);
+                                
+                            } else {
+                                console.log('No matching empProfileId object found in transferOrPostingEmployeesList');
+                            }
+                        } else {
+                            console.log('transferOrPostingEmployeesList is empty for this document');
+                        }
+                    });
+                } else {
+                    console.log('No matching data found in employeeUpdate');
+                }
+                resJson.employeeHistory = dataArra;
+                //return data;
+
                 resArray.push(resJson);
             }
 

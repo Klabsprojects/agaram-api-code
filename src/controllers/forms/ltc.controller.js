@@ -1,6 +1,7 @@
 const ltc = require('../../models/forms/ltc.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const whatsapp = require('../whatsapp/whatsapp.controller');
+const employeeProfile = require('../../models/employee/employeeProfile.model');
 
 // Ltc creation
 exports.addLtc = async (req, res) => {
@@ -40,10 +41,24 @@ exports.getLtc = async (req, res) => {
             let data;
             if(req.query){
                 query.where = req.query;
-                data = await ltc.find(req.query).exec();
+                //data = await education.find(req.query).exec();
+                data = await ltc.find(req.query)
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })  
+                .exec();
             }
             else
-                data = await ltc.find();
+                //data = await education.find();
+                data = await ltc.find()
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })  
+                .exec();
             //res.json(data);
             successRes(res, data, 'ltc listed Successfully');
         } catch (error) {
