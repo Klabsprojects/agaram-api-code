@@ -71,10 +71,24 @@ exports.getEducation = async (req, res) => {
             let data;
             if(req.query){
                 query.where = req.query;
-                data = await education.find(req.query).exec();
+                //data = await education.find(req.query).exec();
+                data = await education.find(req.query)
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })  
+                .exec();
             }
             else
-                data = await education.find();
+                //data = await education.find();
+                data = await education.find()
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })  
+                .exec();
             successRes(res, data, 'education listed Successfully');
         } catch (error) {
             console.log('error', error);
