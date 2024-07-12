@@ -1791,3 +1791,86 @@ exports.getEmployeeUpdateFilter = async(input) => {
     console.log('Unique by latest date of order:', uniqueArray);
     return uniqueArray;
 }
+
+// Get EmployeeCurrentPosting
+exports.getEmployeeCurrentPosting = async (req, res) => {
+    console.log('helo from getEmployeeCurrentPosting', req.query);
+    try {
+        let query = {};
+        if(req.query)
+            query = req.query;
+        let queryUpdate = {};
+        let data;
+        let dataUpdate;
+        let resJson = {};
+        let resArray = [];
+        data = await employeeProfile.find(query).exec();
+            for(let employee of data){
+                queryUpdate = {
+                    empProfileId: employee._id
+                }
+                resJson = {
+                    "personalEmail": employee.personalEmail,
+                    "_id": employee._id,
+                    "fullName": employee.fullName,
+                }
+                data.update = queryUpdate;
+                const dataResArray  = await employeeUpdate.find({
+                    'transferOrPostingEmployeesList.empProfileId': employee._id
+                })
+                .populate({
+                    path: 'transferOrPostingEmployeesList.empProfileId',
+                    model: 'employeeProfile', // Ensure the model name matches exactly
+                    select: 'orderNumber' // Specify the fields you want to include from EmployeeProfile
+                })
+                .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
+                .exec();
+                console.log(dataResArray);
+                let dataArra = [];
+                const employeeId = employee._id.toString();
+                if (dataResArray && dataResArray.length > 0) {
+                    dataResArray.forEach(dataRes => {
+                        console.log('dataResArray.dateOfOrder ', dataRes.dateOfOrder);
+                        let json = {
+                            _id: dataRes._id,
+                            updateType: dataRes.updateType,
+                            orderTypeCategoryCode: dataRes.orderTypeCategoryCode,
+                            orderNumber: dataRes.orderNumber,
+                            orderForCategoryCode: dataRes.orderForCategoryCode,
+                            dateOfOrder: dataRes.dateOfOrder,
+                            remarks: dataRes.remarks,
+                            orderFile: dataRes.orderFile,
+                        }
+                        if (dataRes.transferOrPostingEmployeesList.length > 0) {
+                            const matchedItem = dataRes.transferOrPostingEmployeesList.find(item => 
+                                item.empProfileId._id.toString() === employeeId
+                            );
+                
+                            if (matchedItem) {
+                                const matchedEmpProfileId = {
+                                    _id: matchedItem.empProfileId._id,
+                                    orderNumber: matchedItem.empProfileId.orderNumber
+                                };
+                                json.transferOrPostingEmployeesList = matchedItem;
+                                dataArra.push(json);
+                                
+                            } else {
+                                console.log('No matching empProfileId object found in transferOrPostingEmployeesList');
+                            }
+                        } else {
+                            console.log('transferOrPostingEmployeesList is empty for this document');
+                        }
+                    });
+                } else {
+                    console.log('No matching data found in employeeUpdate');
+                }
+                resJson.employeeHistory = dataArra[0];
+                resArray.push(resJson);
+            }
+
+        successRes(res, resArray, 'Employee profile with history listed Successfully');
+    } catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing employee profile with history");
+    }
+}

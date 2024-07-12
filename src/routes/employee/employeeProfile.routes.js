@@ -81,4 +81,9 @@ module.exports = (app) => {
     value.getEmployeeSearch
   );
 
+  app.get(
+    "/getEmployeeCurrentPosting",
+    value.getEmployeeCurrentPosting
+  );
+
 }
