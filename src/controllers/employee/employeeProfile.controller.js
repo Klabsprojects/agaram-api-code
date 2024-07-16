@@ -379,6 +379,7 @@ exports.getEmployeeUpdate = async(empId) => {
     secretariatDetails =  await employeeUpdate.find({
         empProfileId: empId
     })
+    console.log('secretariatDetails ', secretariatDetails);
     const uniqueNamesByLatestDateOfOrder = secretariatDetails
       .sort((a, b) => new Date(b.dateOfOrder) - new Date(a.dateOfOrder)) // Sort by latest date first
       .reduce((acc, curr) => {
@@ -387,10 +388,28 @@ exports.getEmployeeUpdate = async(empId) => {
         }
         return acc;
       }, {});
-    
+      console.log('uniqueNamesByLatestDateOfOrder ', uniqueNamesByLatestDateOfOrder);
     const uniqueArray = Object.values(uniqueNamesByLatestDateOfOrder);
     console.log('Unique by latest date of order:', uniqueArray);
     return uniqueArray;
+}
+
+exports.getEmployeeUpdateChange = async(empId) => {
+    console.log('inside getEmployeeUpdate function')
+
+    const dataResArray  = await employeeUpdate.find({
+        'transferOrPostingEmployeesList.empProfileId': empId
+    })
+    .populate({
+        path: 'transferOrPostingEmployeesList.empProfileId',
+        model: 'employeeProfile', // Ensure the model name matches exactly
+        select: 'orderNumber' // Specify the fields you want to include from EmployeeProfile
+    })
+    .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
+    .exec();
+    console.log(dataResArray);
+    console.log('Unique by latest date of order:', dataResArray);
+    return dataResArray;
 }
 
     // Get MaleEmployees
@@ -414,21 +433,21 @@ exports.getMaleEmployees = async (req, res) => {
         };
         data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
         for(let employee of data){
-            uniqueArray = await this.getEmployeeUpdate(employee._id);
+            uniqueArray = await this.getEmployeeUpdateChange(employee._id);
             console.log('length ==> ', uniqueArray.length);
             if(uniqueArray.length == 1){
                 let dataAll = {
-                    toPostingInCategoryCode: uniqueArray[0].toPostingInCategoryCode,
-                    toDepartmentId: uniqueArray[0].toDepartmentId,
-                    toDesignationId: uniqueArray[0].toDesignationId,
-                    postTypeCategoryCode: uniqueArray[0].postTypeCategoryCode,
-                    locationChangeCategoryId: uniqueArray[0].locationChangeCategoryId,
-                    remarks: uniqueArray[0].remarks,
-                    updateType: uniqueArray[0].updateType,
-                    orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
-                    orderNumber: uniqueArray[0].orderNumber,
-                    orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                    dateOfOrder: uniqueArray[0].dateOfOrder,
+                    toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                    toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                    toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                    postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                    locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                    remarks: uniqueArray[0].transferOrPostingEmployeesList[0].remarks,
+                    updateType: uniqueArray[0].transferOrPostingEmployeesList[0].updateType,
+                    orderTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderTypeCategoryCode,
+                    orderNumber: uniqueArray[0].transferOrPostingEmployeesList[0].orderNumber,
+                    orderForCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderForCategoryCode,
+                    dateOfOrder: uniqueArray[0].transferOrPostingEmployeesList[0].dateOfOrder,
                     personalEmail: employee.personalEmail,
                     _id: employee._id,
                     fullName: employee.fullName,
@@ -592,21 +611,21 @@ exports.getActiveEmployees = async (req, res) => {
         };
         data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
          for(let employee of data){
-                uniqueArray = await this.getEmployeeUpdate(employee._id);
+                uniqueArray = await this.getEmployeeUpdateChange(employee._id);
                 console.log('length ==> ', uniqueArray.length);
                 if(uniqueArray.length == 1){
                     let dataAll = {
-                        toPostingInCategoryCode: uniqueArray[0].toPostingInCategoryCode,
-                        toDepartmentId: uniqueArray[0].toDepartmentId,
-                        toDesignationId: uniqueArray[0].toDesignationId,
-                        postTypeCategoryCode: uniqueArray[0].postTypeCategoryCode,
-                        locationChangeCategoryId: uniqueArray[0].locationChangeCategoryId,
-                        remarks: uniqueArray[0].remarks,
-                        updateType: uniqueArray[0].updateType,
-                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
-                        orderNumber: uniqueArray[0].orderNumber,
-                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                        dateOfOrder: uniqueArray[0].dateOfOrder,
+                        toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                        toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                        toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                        postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                        locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                        remarks: uniqueArray[0].transferOrPostingEmployeesList[0].remarks,
+                        updateType: uniqueArray[0].transferOrPostingEmployeesList[0].updateType,
+                        orderTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderTypeCategoryCode,
+                        orderNumber: uniqueArray[0].transferOrPostingEmployeesList[0].orderNumber,
+                        orderForCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderForCategoryCode,
+                        dateOfOrder: uniqueArray[0].transferOrPostingEmployeesList[0].dateOfOrder,
                         personalEmail: employee.personalEmail,
                         _id: employee._id,
                         fullName: employee.fullName,
@@ -679,21 +698,21 @@ exports.getRetiredEmployees = async (req, res) => {
         };
         data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
         for(let employee of data){
-            uniqueArray = await this.getEmployeeUpdate(employee._id);
+            uniqueArray = await this.getEmployeeUpdateChange(employee._id);
             console.log('length ==> ', uniqueArray.length);
             if(uniqueArray.length == 1){
                 let dataAll = {
-                    toPostingInCategoryCode: uniqueArray[0].toPostingInCategoryCode,
-                    toDepartmentId: uniqueArray[0].toDepartmentId,
-                    toDesignationId: uniqueArray[0].toDesignationId,
-                    postTypeCategoryCode: uniqueArray[0].postTypeCategoryCode,
-                    locationChangeCategoryId: uniqueArray[0].locationChangeCategoryId,
-                    remarks: uniqueArray[0].remarks,
-                    updateType: uniqueArray[0].updateType,
-                    orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
-                    orderNumber: uniqueArray[0].orderNumber,
-                    orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                    dateOfOrder: uniqueArray[0].dateOfOrder,
+                    toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                    toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                    toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                    postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                    locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                    remarks: uniqueArray[0].transferOrPostingEmployeesList[0].remarks,
+                    updateType: uniqueArray[0].transferOrPostingEmployeesList[0].updateType,
+                    orderTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderTypeCategoryCode,
+                    orderNumber: uniqueArray[0].transferOrPostingEmployeesList[0].orderNumber,
+                    orderForCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderForCategoryCode,
+                    dateOfOrder: uniqueArray[0].transferOrPostingEmployeesList[0].dateOfOrder,
                     personalEmail: employee.personalEmail,
                     _id: employee._id,
                     fullName: employee.fullName,
