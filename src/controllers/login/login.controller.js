@@ -82,7 +82,7 @@ exports.register = async (req, res) => {
         let query = {};
         query = {
             username: req.body.username,
-            activeStatus: true
+            // activeStatus: true
         };
         console.log('query ', query);
        let user = [];
@@ -92,10 +92,12 @@ exports.register = async (req, res) => {
            console.log(user);
        }
     if (user.length == 0) {
-        errorRes(res, user, "Authentication failed user not exist");
+        throw 'Authentication failed user not exist';
     }
     else if(user.length == 1){
         console.log('else => ',user);
+        if(user[0].activeStatus == false)
+            throw 'Authentication failed user not active';
         if(bcrypt.compareSync(req.body.password, user[0].password)){
             const token = jwt.sign({ username: req.body.username,
             password: req.body.password }, Jkey, { expiresIn: expire });
@@ -113,11 +115,11 @@ exports.register = async (req, res) => {
             successRes(res, result, 'Login success');
         }
         else 
-            errorRes(res, user, "Password wrong");
+            throw 'Password wrong';
     }
     } catch (error) {
         console.log('catch', error);
-        errorRes(res, error, "Login failed");
+        errorRes(res, error, error);
     }
     }
 
