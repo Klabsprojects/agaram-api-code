@@ -12,6 +12,9 @@ module.exports = (app) => {
     next();
   });
 
+  
+app.use(upload.none()); // Use this if you're not uploading files
+
   app.get(
     "/getEmployeeUpdate",
     value.getEmployeeUpdate
@@ -29,5 +32,9 @@ module.exports = (app) => {
     value.addTransferOrPostingManyEmployees
   );
 
+  app.put(
+    "/updateTransferPosting",
+    value.updateTransferPosting
+  );
 
 }

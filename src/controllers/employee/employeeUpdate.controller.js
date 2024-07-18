@@ -80,3 +80,53 @@ exports.getEmployeeUpdate = async (req, res) => {
             errorRes(res, error, "Error on listing employee Update");
         }
     }
+
+
+    // if(query.approvedBy && query.approvedDate){
+    //     update.approvedBy = query.approvedBy;
+    //     update.approvedDate = query.approvedDate;
+    // } 
+    // posting/promotion/transfer updation
+exports.updateTransferPosting = async (req, res) => {
+    try {
+        console.log('try update block', req.body);
+        const query = req.body;
+        if(req.file){
+            req.body.orderFile = req.file.path
+            query.orderFile = req.file.path
+            console.log('Uploaded file path:', req.file.path);
+        }
+        let filter;
+        let update = {};
+        update = req.body;
+        if(query.id){
+            console.log('id coming');
+            console.log(query.id);
+            filter = {
+                _id : query.id
+            }
+        }
+        else{
+            console.log('id coming');
+            throw 'pls provide id field';
+        }
+            
+        console.log('update ', update);
+        console.log('filter ', filter);
+        // Check if the update object is empty or not
+        if (Object.keys(update).length > 0) {
+            console.log('value got');
+            const data = await employeeUpdate.findOneAndUpdate(filter, update, {
+                new: true
+              });
+            console.log('data updated ', data);
+            successRes(res, data, 'data updated Successfully');
+        } else {
+            console.log('empty');
+            throw 'Update value missing';
+        }
+    } catch (error) {
+        console.log('catch update', error);
+        errorRes(res, error, "Error on updation");
+    }
+    }
