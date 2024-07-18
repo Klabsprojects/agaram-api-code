@@ -520,21 +520,21 @@ exports.getMaleEmployees = async (req, res) => {
             };
             data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
             for(let employee of data){
-                uniqueArray = await this.getEmployeeUpdate(employee._id);
+                uniqueArray = await this.getEmployeeUpdateChange(employee._id);
                 console.log('length ==> ', uniqueArray.length);
                 if(uniqueArray.length == 1){
                     let dataAll = {
-                        toPostingInCategoryCode: uniqueArray[0].toPostingInCategoryCode,
-                        toDepartmentId: uniqueArray[0].toDepartmentId,
-                        toDesignationId: uniqueArray[0].toDesignationId,
-                        postTypeCategoryCode: uniqueArray[0].postTypeCategoryCode,
-                        locationChangeCategoryId: uniqueArray[0].locationChangeCategoryId,
-                        remarks: uniqueArray[0].remarks,
-                        updateType: uniqueArray[0].updateType,
-                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
-                        orderNumber: uniqueArray[0].orderNumber,
-                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                        dateOfOrder: uniqueArray[0].dateOfOrder,
+                        toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                        toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                        toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                        postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                        locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                        remarks: uniqueArray[0].transferOrPostingEmployeesList[0].remarks,
+                        updateType: uniqueArray[0].transferOrPostingEmployeesList[0].updateType,
+                        orderTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderTypeCategoryCode,
+                        orderNumber: uniqueArray[0].transferOrPostingEmployeesList[0].orderNumber,
+                        orderForCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderForCategoryCode,
+                        dateOfOrder: uniqueArray[0].transferOrPostingEmployeesList[0].dateOfOrder,
                         personalEmail: employee.personalEmail,
                         _id: employee._id,
                         fullName: employee.fullName,
@@ -785,21 +785,21 @@ exports.getByLocation = async (req, res) => {
 
         data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
         for(let employee of data){
-            uniqueArray = await this.getEmployeeUpdate(employee._id);
+            uniqueArray = await this.getEmployeeUpdateChange(employee._id);
             console.log('length ==> ', uniqueArray.length);
             if(uniqueArray.length == 1){
                 let dataAll = {
-                    toPostingInCategoryCode: uniqueArray[0].toPostingInCategoryCode,
-                    toDepartmentId: uniqueArray[0].toDepartmentId,
-                    toDesignationId: uniqueArray[0].toDesignationId,
-                    postTypeCategoryCode: uniqueArray[0].postTypeCategoryCode,
-                    locationChangeCategoryId: uniqueArray[0].locationChangeCategoryId,
-                    remarks: uniqueArray[0].remarks,
-                    updateType: uniqueArray[0].updateType,
-                    orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
-                    orderNumber: uniqueArray[0].orderNumber,
-                    orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                    dateOfOrder: uniqueArray[0].dateOfOrder,
+                    toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                    toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                    toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                    postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                    locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                    remarks: uniqueArray[0].transferOrPostingEmployeesList[0].remarks,
+                    updateType: uniqueArray[0].transferOrPostingEmployeesList[0].updateType,
+                    orderTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderTypeCategoryCode,
+                    orderNumber: uniqueArray[0].transferOrPostingEmployeesList[0].orderNumber,
+                    orderForCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderForCategoryCode,
+                    dateOfOrder: uniqueArray[0].transferOrPostingEmployeesList[0].dateOfOrder,
                     personalEmail: employee.personalEmail,
                     _id: employee._id,
                     fullName: employee.fullName,
@@ -866,41 +866,54 @@ exports.getBySecretariat = async (req, res) => {
         })
         console.log('categoryDetails', categoryDetails[0]._id);
         categoryId = categoryDetails[0]._id.toString();
-        secretariatDetails =  await employeeUpdate.find({})
-          const uniqueNamesByLatestDateOfOrder = secretariatDetails
-            .sort((a, b) => new Date(b.dateOfOrder) - new Date(a.dateOfOrder)) // Sort by latest date first
-            .reduce((acc, curr) => {
-              if (!acc[curr.empProfileId]) { // Check if name already exists in accumulator
-                acc[curr.empProfileId] = curr; // If not, add the current item
-              }
-              return acc;
-            }, {});
+        // secretariatDetails =  await employeeUpdate.find({})
+        //   const uniqueNamesByLatestDateOfOrder = secretariatDetails
+        //     .sort((a, b) => new Date(b.dateOfOrder) - new Date(a.dateOfOrder)) // Sort by latest date first
+        //     .reduce((acc, curr) => {
+        //       if (!acc[curr.empProfileId]) { // Check if name already exists in accumulator
+        //         console.log('acc profile id => ', acc[curr.empProfileId]);
+        //         acc[curr.empProfileId] = curr; // If not, add the current item
+        //       }
+        //       return acc;
+        //     }, {});
           
-          const uniqueArray = Object.values(uniqueNamesByLatestDateOfOrder);
-          console.log('Unique by latest date of order:', uniqueArray);
+        //   const uniqueArray = Object.values(uniqueNamesByLatestDateOfOrder);
+        //   console.log('Unique by latest date of order:', uniqueArray.transferOrPostingEmployeesList);
+
+        const uniqueArray  = await employeeUpdate.find()
+        .populate({
+            path: 'transferOrPostingEmployeesList.empProfileId',
+            model: 'employeeProfile', // Ensure the model name matches exactly
+            select: 'orderNumber' // Specify the fields you want to include from EmployeeProfile
+        })
+        .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
+        .exec();
+        // console.log(uniqueArray);
+        // console.log('Unique by latest date of order:', uniqueArray);
+          
           if(req.query.secretariat == 'yes'){
             let lastIndex = -1;
             for(let data of uniqueArray){
-                
-                console.log('toPostingInCategoryCode => ', data.toPostingInCategoryCode);
+                console.log('fullname => ', data.transferOrPostingEmployeesList[0].fullName, data._id);
+                console.log('toPostingInCategoryCode => ', data.transferOrPostingEmployeesList[0].toPostingInCategoryCode);
                 console.log('categoryId => ', categoryId);
-                if(data.toPostingInCategoryCode == categoryId)
+                if(data.transferOrPostingEmployeesList[0].toPostingInCategoryCode == categoryId)
                 {
                     console.log('true');
                     let getQueryJson = {
-                        _id: data.empProfileId
+                        _id: data.transferOrPostingEmployeesList[0].empProfileId
                     } 
                     console.log(getQueryJson);
                     const profileData = await employeeProfile.find(getQueryJson).exec();
-                    console.log('profileData ', profileData);
+                    // console.log('profileData ', profileData);
                     if(profileData.length > 0){
                         resJson = {
-                            employeeId : data.employeeId,
-                            fullName: data.fullName,
-                            toPostingInCategoryCode: data.toPostingInCategoryCode , 
-                            toDepartmentId: data.toDepartmentId ,
-                            toDesignationId: data.toDesignationId ,
-                            postTypeCategoryCode: data.postTypeCategoryCode ,
+                            employeeId : data.transferOrPostingEmployeesList[0].employeeId,
+                            fullName: data.transferOrPostingEmployeesList[0].fullName,
+                            toPostingInCategoryCode: data.transferOrPostingEmployeesList[0].toPostingInCategoryCode , 
+                            toDepartmentId: data.transferOrPostingEmployeesList[0].toDepartmentId ,
+                            toDesignationId: data.transferOrPostingEmployeesList[0].toDesignationId ,
+                            postTypeCategoryCode: data.transferOrPostingEmployeesList[0].postTypeCategoryCode ,
                             dateOfOrder: data.dateOfOrder ,
                             orderForCategoryCode: data.orderForCategoryCode ,
                             orderTypeCategoryCode: data.orderTypeCategoryCode,
@@ -911,9 +924,9 @@ exports.getBySecretariat = async (req, res) => {
                             city: profileData[0].city
                         }
                         
-                    console.log('resJson ', resJson);
+                    // console.log('resJson ', resJson);
                     resData.push(resJson);
-                    console.log('resData ', resData);
+                    // console.log('resData ', resData);
                     }
                     lastIndex++;
                 }
@@ -926,25 +939,25 @@ exports.getBySecretariat = async (req, res) => {
           else{
             let lastIndex = -1;
             for(let data of uniqueArray){
-                console.log('toPostingInCategoryCode => ', data.toPostingInCategoryCode);
+                console.log('toPostingInCategoryCode => ', data.transferOrPostingEmployeesList[0].toPostingInCategoryCode);
                 console.log('categoryId => ', categoryId);
-                if(data.toPostingInCategoryCode != categoryId)
+                if(data.transferOrPostingEmployeesList[0].toPostingInCategoryCode != categoryId)
                 {
                     console.log('true');
                     let getQueryJson = {
-                        _id: data.empProfileId
+                        _id: data.transferOrPostingEmployeesList[0].empProfileId
                     } 
-                    console.log(getQueryJson);
+                    // console.log(getQueryJson);
                     const profileData = await employeeProfile.find(getQueryJson).exec();
-                    console.log('profileData ', profileData._doc);
+                    // console.log('profileData ', profileData._doc);
                     if(profileData.length > 0){
                         resJson = {
-                            employeeId : data.employeeId,
+                            employeeId : data.transferOrPostingEmployeesList[0].employeeId,
                             //fullName: data.fullName,
-                            toPostingInCategoryCode: data.toPostingInCategoryCode , 
-                            toDepartmentId: data.toDepartmentId ,
-                            toDesignationId: data.toDesignationId ,
-                            postTypeCategoryCode: data.postTypeCategoryCode ,
+                            toPostingInCategoryCode: data.transferOrPostingEmployeesList[0].toPostingInCategoryCode , 
+                            toDepartmentId: data.transferOrPostingEmployeesList[0].toDepartmentId ,
+                            toDesignationId: data.transferOrPostingEmployeesList[0].toDesignationId ,
+                            postTypeCategoryCode: data.transferOrPostingEmployeesList[0].postTypeCategoryCode ,
                             dateOfOrder: data.dateOfOrder ,
                             orderForCategoryCode: data.orderForCategoryCode ,
                             orderTypeCategoryCode: data.orderTypeCategoryCode,
@@ -957,9 +970,9 @@ exports.getBySecretariat = async (req, res) => {
                             fullName: profileData[0].fullName,
                             _id: profileData[0]._id
                         }
-                        console.log('resJson ', resJson);
+                        // console.log('resJson ', resJson);
                         resData.push(resJson);
-                        console.log('resData ', resData);
+                        // console.log('resData ', resData);
                     }
                     
                     lastIndex++;
@@ -971,7 +984,7 @@ exports.getBySecretariat = async (req, res) => {
             }
           }
           for(let i=0; i< resData.length; i++){
-            console.log('resData name==> ', resData[i]);
+            // console.log('resData name==> ', resData[i]);
         }
         let result = {
             empCount: resData.length,
@@ -1008,11 +1021,11 @@ exports.getByDesignation = async (req, res) => {
                 designationDetails = await designations.find({
                     "designation_name": desig1
                 })
-                console.log('designationDetails', designationDetails);
+                // console.log('designationDetails', designationDetails);
                 designationDetails2 = await designations.find({
                     "designation_name": desig2
                 })
-                console.log('designationDetails2', designationDetails2);
+                // console.log('designationDetails2', designationDetails2);
 
             }
         }
@@ -1023,43 +1036,55 @@ exports.getByDesignation = async (req, res) => {
             designationId2 = designationDetails2[0]._id.toString();
         }
         
-        secretariatDetails =  await employeeUpdate.find({})
-          const uniqueNamesByLatestDateOfOrder = secretariatDetails
-            .sort((a, b) => new Date(b.dateOfOrder) - new Date(a.dateOfOrder)) // Sort by latest date first
-            .reduce((acc, curr) => {
-              if (!acc[curr.empProfileId]) { // Check if name already exists in accumulator
-                acc[curr.empProfileId] = curr; // If not, add the current item
-              }
-              return acc;
-            }, {});
+        // secretariatDetails =  await employeeUpdate.find({})
+        //   const uniqueNamesByLatestDateOfOrder = secretariatDetails
+        //     .sort((a, b) => new Date(b.dateOfOrder) - new Date(a.dateOfOrder)) // Sort by latest date first
+        //     .reduce((acc, curr) => {
+        //       if (!acc[curr.empProfileId]) { // Check if name already exists in accumulator
+        //         acc[curr.empProfileId] = curr; // If not, add the current item
+        //       }
+        //       return acc;
+        //     }, {});
           
-          const uniqueArray = Object.values(uniqueNamesByLatestDateOfOrder);
-          console.log('Unique by latest date of order:', uniqueArray);
+        //   const uniqueArray = Object.values(uniqueNamesByLatestDateOfOrder);
+        //   console.log('Unique by latest date of order:', uniqueArray);
+
+        const uniqueArray  = await employeeUpdate.find()
+        .populate({
+            path: 'transferOrPostingEmployeesList.empProfileId',
+            model: 'employeeProfile', // Ensure the model name matches exactly
+            select: 'orderNumber' // Specify the fields you want to include from EmployeeProfile
+        })
+        .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
+        .exec();
+        // console.log(uniqueArray);
+        // console.log('Unique by latest date of order:', uniqueArray);
+
             let lastIndex = -1;
             for(let data of uniqueArray){
                 
-                console.log('toDesignationId => ', data.toDesignationId);
+                console.log('toDesignationId => ', data.transferOrPostingEmployeesList[0].toDesignationId);
                 console.log('designationId1 => ', designationId1);
                 console.log('designationId2 => ', designationId2);
                 if(req.query.designation == "Additional Collector"){
-                    if(data.toDesignationId == designationId1 || data.toDesignationId == designationId2){
-                        if(data.toDesignationId == designationId1)
+                    if(data.transferOrPostingEmployeesList[0].toDesignationId == designationId1 || data.transferOrPostingEmployeesList[0].toDesignationId == designationId2){
+                        if(data.transferOrPostingEmployeesList[0].toDesignationId == designationId1)
                         {
                             console.log('true');
                             let getQueryJson = {
-                                _id: data.empProfileId
+                                _id: data.transferOrPostingEmployeesList[0].empProfileId
                             } 
                             console.log(getQueryJson);
                             const profileData = await employeeProfile.find(getQueryJson).exec();
                             console.log('profileData ', profileData);
                             if(profileData.length > 0){
                                 resJson = {
-                                    employeeId : data.employeeId,
-                                    fullName: data.fullName,
-                                    toPostingInCategoryCode: data.toPostingInCategoryCode , 
-                                    toDepartmentId: data.toDepartmentId ,
-                                    toDesignationId: data.toDesignationId ,
-                                    postTypeCategoryCode: data.postTypeCategoryCode ,
+                                    employeeId : data.transferOrPostingEmployeesList[0].employeeId,
+                                    fullName: data.transferOrPostingEmployeesList[0].fullName,
+                                    toPostingInCategoryCode: data.transferOrPostingEmployeesList[0].toPostingInCategoryCode , 
+                                    toDepartmentId: data.transferOrPostingEmployeesList[0].toDepartmentId ,
+                                    toDesignationId: data.transferOrPostingEmployeesList[0].toDesignationId ,
+                                    postTypeCategoryCode: data.transferOrPostingEmployeesList[0].postTypeCategoryCode ,
                                     dateOfOrder: data.dateOfOrder ,
                                     orderForCategoryCode: data.orderForCategoryCode ,
                                     orderTypeCategoryCode: data.orderTypeCategoryCode,
@@ -1081,23 +1106,23 @@ exports.getByDesignation = async (req, res) => {
                     }
                 }
                 else {
-                    if(data.toDesignationId == designationId1)
+                    if(data.transferOrPostingEmployeesList[0].toDesignationId == designationId2)
                     {
-                        console.log('true');
+                        console.log(' else true');
                         let getQueryJson = {
-                            _id: data.empProfileId
+                            _id: data.transferOrPostingEmployeesList[0].empProfileId
                         } 
                         console.log(getQueryJson);
                         const profileData = await employeeProfile.find(getQueryJson).exec();
                         console.log('profileData ', profileData);
                         if(profileData.length > 0){
                             resJson = {
-                                employeeId : data.employeeId,
-                                fullName: data.fullName,
-                                toPostingInCategoryCode: data.toPostingInCategoryCode , 
-                                toDepartmentId: data.toDepartmentId ,
-                                toDesignationId: data.toDesignationId ,
-                                postTypeCategoryCode: data.postTypeCategoryCode ,
+                                employeeId : data.transferOrPostingEmployeesList[0].employeeId,
+                                fullName: data.transferOrPostingEmployeesList[0].fullName,
+                                toPostingInCategoryCode: data.transferOrPostingEmployeesList[0].toPostingInCategoryCode , 
+                                toDepartmentId: data.transferOrPostingEmployeesList[0].toDepartmentId ,
+                                toDesignationId: data.transferOrPostingEmployeesList[0].toDesignationId ,
+                                postTypeCategoryCode: data.transferOrPostingEmployeesList[0].postTypeCategoryCode ,
                                 dateOfOrder: data.dateOfOrder ,
                                 orderForCategoryCode: data.orderForCategoryCode ,
                                 orderTypeCategoryCode: data.orderTypeCategoryCode,
