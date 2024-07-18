@@ -37,4 +37,9 @@ app.use(upload.none()); // Use this if you're not uploading files
     value.updateTransferPosting
   );
 
+  app.put(
+    "/updateApprovalStatus",
+    value.updateApprovalStatus
+  );
+
 }
