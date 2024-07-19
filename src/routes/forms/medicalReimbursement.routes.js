@@ -21,4 +21,15 @@ module.exports = (app) => {
     upload.single('orderFile'),
     value.addMedicalReimbursement
   );
+
+    
+  app.put(
+    "/updateMedicalReimbursement",
+    value.updateMedicalReimbursement
+  );
+
+  app.put(
+    "/updateMedicalReimbursementApprovalStatus",
+    value.updateMedicalReimbursementApprovalStatus
+  );
 }

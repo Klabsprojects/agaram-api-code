@@ -21,4 +21,14 @@ module.exports = (app) => {
     upload.single('orderFile'),
     value.addImmovable
   );
+    
+  app.put(
+    "/updateImmovable",
+    value.updateImmovable
+  );
+
+  app.put(
+    "/updateImmovableApprovalStatus",
+    value.updateImmovableApprovalStatus
+  );
 }

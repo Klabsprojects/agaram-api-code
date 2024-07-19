@@ -21,4 +21,14 @@ module.exports = (app) => {
     upload.single('orderFile'),
     value.addPrivateForeignVisit
   );
+ 
+  app.put(
+    "/updatePrivateVisit",
+    value.updatePrivateVisit
+  );
+
+  app.put(
+    "/updatePrivateVisitApprovalStatus",
+    value.updatePrivateVisitApprovalStatus
+  );
 }

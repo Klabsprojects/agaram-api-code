@@ -137,6 +137,8 @@ exports.updateTransferPosting = async (req, res) => {
                 update.approvalStatus = true;
                 update.approvedDate = currentDate;
             } 
+            else    
+                throw 'Pls provide inputs';
             let filter;
             if(query.id){
                 console.log('id coming');
@@ -166,6 +168,6 @@ exports.updateTransferPosting = async (req, res) => {
             }
         } catch (error) {
             console.log('catch update', error);
-            errorRes(res, error, "Error on updation");
+            errorRes(res, error, error);
         }
         }

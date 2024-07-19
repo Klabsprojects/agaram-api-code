@@ -24,4 +24,14 @@ module.exports = (app) => {
     "/updateSafAllocation",
     value.updateSafAllocation
   );
+
+  app.put(
+    "/editSafAllocation",
+    value.editSafAllocation
+  );
+
+  app.put(
+    "/updateSafAllocationApprovalStatus",
+    value.updateSafAllocationApprovalStatus
+  );
 }

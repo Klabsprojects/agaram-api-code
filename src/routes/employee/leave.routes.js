@@ -21,4 +21,14 @@ module.exports = (app) => {
     upload.single('orderFile'),
     value.addLeave
   );
+  
+  app.put(
+    "/updateLeave",
+    value.updateLeave
+  );
+
+  app.put(
+    "/updateLeaveApprovalStatus",
+    value.updateApprovalStatus
+  );
 }

@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
 const Schema = mongoose.Schema;
 
+const login = require('../login/login.model');
+
 const privateVisitSchema = new Schema({
     officerName: String,
 	employeeProfileId: ObjectId,
@@ -21,6 +23,21 @@ const privateVisitSchema = new Schema({
 	remarks: String,
 	status: String,
 	orderFile: String, //file
+	submittedBy: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'login' // This references the AllocatedBlock model
+	},
+	approvedBy: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'login' // This references the AllocatedBlock model
+	},
+	approvalStatus: {
+		type: Boolean,
+		default: false
+	},
+	approvedDate: {
+		type: Date
+	},
 	createdAt: {
 		type: Date, 
 		default: Date.now

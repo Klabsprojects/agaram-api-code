@@ -28,4 +28,14 @@ module.exports = (app) => {
 
     value.addVisit
   );
+    
+  app.put(
+    "/updateVisit",
+    value.updateVisit
+  );
+
+  app.put(
+    "/updateVisitApprovalStatus",
+    value.updateVisitApprovalStatus
+  );
 }

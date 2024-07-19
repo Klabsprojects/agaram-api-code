@@ -21,4 +21,14 @@ module.exports = (app) => {
     upload.single('orderFile'),
     value.addMovable
   );
+    
+  app.put(
+    "/updateMovable",
+    value.updateMovable
+  );
+
+  app.put(
+    "/updateMovableApprovalStatus",
+    value.updateMovableApprovalStatus
+  );
 }

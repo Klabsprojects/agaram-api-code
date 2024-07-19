@@ -23,4 +23,14 @@ module.exports = (app) => {
     //upload.single('fcraClearance'),
     value.addLtc
   );
+
+  app.put(
+    "/updateLtc",
+    value.updateLtc
+  );
+
+  app.put(
+    "/updateLtcApprovalStatus",
+    value.updateLtcApprovalStatus
+  );
 }
