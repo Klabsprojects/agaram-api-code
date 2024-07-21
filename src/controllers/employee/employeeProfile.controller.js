@@ -442,12 +442,12 @@ exports.getMaleEmployees = async (req, res) => {
                     toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
                     postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
                     locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                    remarks: uniqueArray[0].transferOrPostingEmployeesList[0].remarks,
-                    updateType: uniqueArray[0].transferOrPostingEmployeesList[0].updateType,
-                    orderTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderTypeCategoryCode,
-                    orderNumber: uniqueArray[0].transferOrPostingEmployeesList[0].orderNumber,
-                    orderForCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderForCategoryCode,
-                    dateOfOrder: uniqueArray[0].transferOrPostingEmployeesList[0].dateOfOrder,
+                    remarks: uniqueArray[0].remarks,
+                    updateType: uniqueArray[0].updateType,
+                    orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                    orderNumber: uniqueArray[0].orderNumber,
+                    orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                    dateOfOrder: uniqueArray[0].dateOfOrder,
                     personalEmail: employee.personalEmail,
                     _id: employee._id,
                     fullName: employee.fullName,
@@ -529,12 +529,12 @@ exports.getMaleEmployees = async (req, res) => {
                         toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
                         postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
                         locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                        remarks: uniqueArray[0].transferOrPostingEmployeesList[0].remarks,
-                        updateType: uniqueArray[0].transferOrPostingEmployeesList[0].updateType,
-                        orderTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderTypeCategoryCode,
-                        orderNumber: uniqueArray[0].transferOrPostingEmployeesList[0].orderNumber,
-                        orderForCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderForCategoryCode,
-                        dateOfOrder: uniqueArray[0].transferOrPostingEmployeesList[0].dateOfOrder,
+                        remarks: uniqueArray[0].remarks,
+                        updateType: uniqueArray[0].updateType,
+                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                        orderNumber: uniqueArray[0].orderNumber,
+                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                        dateOfOrder: uniqueArray[0].dateOfOrder,
                         personalEmail: employee.personalEmail,
                         _id: employee._id,
                         fullName: employee.fullName,
@@ -620,12 +620,12 @@ exports.getActiveEmployees = async (req, res) => {
                         toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
                         postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
                         locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                        remarks: uniqueArray[0].transferOrPostingEmployeesList[0].remarks,
-                        updateType: uniqueArray[0].transferOrPostingEmployeesList[0].updateType,
-                        orderTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderTypeCategoryCode,
-                        orderNumber: uniqueArray[0].transferOrPostingEmployeesList[0].orderNumber,
-                        orderForCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderForCategoryCode,
-                        dateOfOrder: uniqueArray[0].transferOrPostingEmployeesList[0].dateOfOrder,
+                        remarks: uniqueArray[0].remarks,
+                        updateType: uniqueArray[0].updateType,
+                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                        orderNumber: uniqueArray[0].orderNumber,
+                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                        dateOfOrder: uniqueArray[0].dateOfOrder,
                         personalEmail: employee.personalEmail,
                         _id: employee._id,
                         fullName: employee.fullName,
@@ -707,12 +707,12 @@ exports.getRetiredEmployees = async (req, res) => {
                     toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
                     postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
                     locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                    remarks: uniqueArray[0].transferOrPostingEmployeesList[0].remarks,
-                    updateType: uniqueArray[0].transferOrPostingEmployeesList[0].updateType,
-                    orderTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderTypeCategoryCode,
-                    orderNumber: uniqueArray[0].transferOrPostingEmployeesList[0].orderNumber,
-                    orderForCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderForCategoryCode,
-                    dateOfOrder: uniqueArray[0].transferOrPostingEmployeesList[0].dateOfOrder,
+                    remarks: uniqueArray[0].remarks,
+                    updateType: uniqueArray[0].updateType,
+                    orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                    orderNumber: uniqueArray[0].orderNumber,
+                    orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                    dateOfOrder: uniqueArray[0].dateOfOrder,
                     personalEmail: employee.personalEmail,
                     _id: employee._id,
                     fullName: employee.fullName,
@@ -794,12 +794,12 @@ exports.getByLocation = async (req, res) => {
                     toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
                     postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
                     locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                    remarks: uniqueArray[0].transferOrPostingEmployeesList[0].remarks,
-                    updateType: uniqueArray[0].transferOrPostingEmployeesList[0].updateType,
-                    orderTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderTypeCategoryCode,
-                    orderNumber: uniqueArray[0].transferOrPostingEmployeesList[0].orderNumber,
-                    orderForCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].orderForCategoryCode,
-                    dateOfOrder: uniqueArray[0].transferOrPostingEmployeesList[0].dateOfOrder,
+                    remarks: uniqueArray[0].remarks,
+                    updateType: uniqueArray[0].updateType,
+                    orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                    orderNumber: uniqueArray[0].orderNumber,
+                    orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                    dateOfOrder: uniqueArray[0].dateOfOrder,
                     personalEmail: employee.personalEmail,
                     _id: employee._id,
                     fullName: employee.fullName,
@@ -1625,19 +1625,21 @@ exports.byProfile = async(input, by) =>{
         else if(by == "department" || by == "period" || by == "postingIn"
         || by == 'dePe' || by == 'dePo' || by == 'pePo' || by == 'dePePo')
             data = await employeeProfile.find().sort({ dateOfJoining: 'asc' }).exec();
+            
         for(let employee of data){
             updateQueryJson = {
                 empId: employee._id
             }
             uniqueArray = await this.getEmployeeUpdateFilter(updateQueryJson);
             console.log('length ==> ', uniqueArray.length);
-            if(uniqueArray.length == 1){
+            if(uniqueArray.length > 0){
+                console.log('len ', uniqueArray.length);
                 let dataAll = {
-                    toPostingInCategoryCode: uniqueArray[0].toPostingInCategoryCode,
-                    toDepartmentId: uniqueArray[0].toDepartmentId,
-                    toDesignationId: uniqueArray[0].toDesignationId,
-                    postTypeCategoryCode: uniqueArray[0].postTypeCategoryCode,
-                    locationChangeCategoryId: uniqueArray[0].locationChangeCategoryId,
+                    toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                    toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                    toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                    postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                    locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
                     remarks: uniqueArray[0].remarks,
                     updateType: uniqueArray[0].updateType,
                     orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
@@ -1676,7 +1678,7 @@ exports.byProfile = async(input, by) =>{
                 }
                 if(by == 'department' || by == 'naDe' || by == "baDe" || by == 'naBaDe'){
                     console.log('yes dept ');
-                    if(uniqueArray[0].toDepartmentId == input.department){
+                    if(uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId == input.department){
                         resultData.push(dataAll);
                     }
                 }
@@ -1701,9 +1703,9 @@ exports.byProfile = async(input, by) =>{
                 }
                 if(by == 'postingIn' || by == 'naPo' || by == "baPo" || by == 'naBaPo'){
                     console.log('yes posting ');
-                    if(uniqueArray[0].toPostingInCategoryCode){
+                    if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode){
                         {console.log('yes toposting avail')
-                        if(uniqueArray[0].toPostingInCategoryCode == input.postingIn)
+                        if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode == input.postingIn)
                             {
                                 console.log('yes posting matched')
                                 resultData.push(dataAll);
@@ -1725,15 +1727,15 @@ exports.byProfile = async(input, by) =>{
                     console.log('to',to);
                     if(uniqueArray[0].dateOfOrder >= from &&
                     uniqueArray[0].dateOfOrder <= to && 
-                    uniqueArray[0].toDepartmentId == input.department){
+                    uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId == input.department){
                         resultData.push(dataAll);
                     }
                 }
                 else if(by == 'dePo' || by == 'naDePo' || by == 'baDePo' || by == 'naBaDePo'){
-                    if(uniqueArray[0].toDepartmentId == input.department){
-                        if(uniqueArray[0].toPostingInCategoryCode){
+                    if(uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId == input.department){
+                        if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode){
                             console.log('yes toposting avail')
-                            if(uniqueArray[0].toPostingInCategoryCode == input.postingIn)
+                            if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode == input.postingIn)
                             {
                                 console.log('yes posting matched')
                                 resultData.push(dataAll);
@@ -1755,9 +1757,9 @@ exports.byProfile = async(input, by) =>{
                     console.log('to',to);
                     if(uniqueArray[0].dateOfOrder >= from &&
                     uniqueArray[0].dateOfOrder <= to){
-                        if(uniqueArray[0].toPostingInCategoryCode){
+                        if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode){
                             console.log('yes toposting avail')
-                            if(uniqueArray[0].toPostingInCategoryCode == input.postingIn)
+                            if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode == input.postingIn)
                             {
                                 console.log('yes posting matched')
                                 resultData.push(dataAll);
@@ -1766,7 +1768,7 @@ exports.byProfile = async(input, by) =>{
                     }
                 }
                 else if(by == "all" || by == 'dePePo' || by == 'naDePePo' || by == 'baDePePo'){
-                    if(uniqueArray[0].toDepartmentId == input.department){
+                    if(uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId == input.department){
                         console.log('yes period ');
                     let per = input.period;
                     console.log('input.period', input.period);
@@ -1780,9 +1782,9 @@ exports.byProfile = async(input, by) =>{
                     console.log('to',to);
                     if(uniqueArray[0].dateOfOrder >= from &&
                     uniqueArray[0].dateOfOrder <= to){
-                        if(uniqueArray[0].toPostingInCategoryCode){
+                        if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode){
                             console.log('yes toposting avail')
-                            if(uniqueArray[0].toPostingInCategoryCode == input.postingIn)
+                            if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode == input.postingIn)
                             {
                                 console.log('yes posting matched')
                                 resultData.push(dataAll);
@@ -1797,7 +1799,11 @@ exports.byProfile = async(input, by) =>{
                 }
                 //else 
                     //resultData = [];
-            }/*else{
+            }
+            else{
+                console.log('len else ', uniqueArray.length);
+            }
+            /*else{
                 resultData.push(employee);
                 console.log('employee => ', employee);
             }  */
@@ -1819,21 +1825,35 @@ exports.byProfile = async(input, by) =>{
 exports.getEmployeeUpdateFilter = async(input) => {
     console.log('inside getEmployeeUpdate function')
     let secretariatDetails;
-    secretariatDetails =  await employeeUpdate.find({
-        empProfileId: input.empId
-    })
-    const uniqueNamesByLatestDateOfOrder = secretariatDetails
-      .sort((a, b) => new Date(b.dateOfOrder) - new Date(a.dateOfOrder)) // Sort by latest date first
-      .reduce((acc, curr) => {
-        if (!acc[curr.empProfileId]) { // Check if name already exists in accumulator
-          acc[curr.empProfileId] = curr; // If not, add the current item
-        }
-        return acc;
-      }, {});
+    // secretariatDetails =  await employeeUpdate.find({
+    //     empProfileId: input.empId
+    // })
+    // const uniqueNamesByLatestDateOfOrder = secretariatDetails
+    //   .sort((a, b) => new Date(b.dateOfOrder) - new Date(a.dateOfOrder)) // Sort by latest date first
+    //   .reduce((acc, curr) => {
+    //     if (!acc[curr.empProfileId]) { // Check if name already exists in accumulator
+    //       acc[curr.empProfileId] = curr; // If not, add the current item
+    //     }
+    //     return acc;
+    //   }, {});
     
-    const uniqueArray = Object.values(uniqueNamesByLatestDateOfOrder);
-    console.log('Unique by latest date of order:', uniqueArray);
-    return uniqueArray;
+    // const uniqueArray = Object.values(uniqueNamesByLatestDateOfOrder);
+    // console.log('Unique by latest date of order:', uniqueArray);
+    // return uniqueArray;
+
+    const dataResArray  = await employeeUpdate.find({
+        'transferOrPostingEmployeesList.empProfileId': input.empId
+    })
+    .populate({
+        path: 'transferOrPostingEmployeesList.empProfileId',
+        model: 'employeeProfile', // Ensure the model name matches exactly
+        select: 'orderNumber' // Specify the fields you want to include from EmployeeProfile
+    })
+    .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
+    .exec();
+    console.log(dataResArray);
+    console.log('Unique by latest date of order:', dataResArray);
+    return dataResArray;
 }
 
 // Get EmployeeCurrentPosting
