@@ -98,7 +98,7 @@ exports.getLtc = async (req, res) => {
                     }
             resultData.push(dataAll);
                 }
-        successRes(res, resultData, 'safApplication listed Successfully');
+        successRes(res, resultData, 'ltc listed Successfully');
             }
             else
                 {
