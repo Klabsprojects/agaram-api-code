@@ -1,6 +1,7 @@
 const intimation = require('../../models/forms/intimation.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const whatsapp = require('../whatsapp/whatsapp.controller');
+const empProfile = require('../employee/employeeProfile.controller');
 
 // intimation creation
 exports.addIntimation = async (req, res) => {
@@ -36,13 +37,66 @@ exports.getIntimation = async (req, res) => {
         try {
             let query = {};
             let data;
+            let resultData = [];
             if(req.query){
                 query.where = req.query;
                 data = await intimation.find(req.query).exec();
+                let updateQueryJson = {
+                    empId: data[0].employeeProfileId
+                }
+                uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                console.log('length ==> ', uniqueArray.length);
+                if(uniqueArray.length > 0){
+                    console.log('alert')
+                    console.log('data => ', data[0]);
+                    let dataAll = {
+                        toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                        toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                        toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                        postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                        locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                        remarks: uniqueArray[0].remarks,
+                        updateType: uniqueArray[0].updateType,
+                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                        orderNumber: uniqueArray[0].orderNumber,
+                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                        
+                        degreeData : data[0].degreeData,
+                        submittedBy: data[0].submittedBy,
+                        approvedBy: data[0].approvedBy,
+                        approvalStatus: data[0].approvalStatus,
+                        approvedDate: data[0].approvedDate,
+                        approvalStatus: data[0].approvalStatus,
+                        approvalStatus: data[0].approvalStatus,
+                        _id: data[0]._id,
+                        officerName: data[0].officer_name,
+                        employeeProfileId: data[0].employeeProfileId,
+                        designation: data[0].designation,
+                        designationId: data[0].designationId,
+                        department: data[0].department,
+                        departmentId: data[0].departmentId,
+                        selfOrFamily: data[0].selfOrFamily,
+                        detailsOfIntimation: data[0].detailsOfIntimation,
+	                    fundSource: data[0].fundSource,
+	                    typeOfIntimation: data[0].typeOfIntimation,
+	                    previousSanctionOrder: data[0].previousSanctionOrder,
+	                    selfOrFamily: data[0].selfOrFamily,
+                        dateOfOrder: data[0].dateOfOrder,
+                        orderType: data[0].orderType,
+                        orderNo: data[0].orderNo,
+                        orderFor: data[0].orderFor,
+                        remarks: data[0].remarks,
+                        orderFile: data[0].orderFile,
+                    }
+            resultData.push(dataAll);
+                }
+        successRes(res, resultData, 'movable listed Successfully');
             }
-            else
+            else{
                 data = await intimation.find();
             successRes(res, data, 'intimation listed Successfully');
+            }
+                
         } catch (error) {
             console.log('error', error);
             errorRes(res, error, "Error on listing intimation");
