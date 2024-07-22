@@ -1,6 +1,7 @@
 const immovable = require('../../models/forms/immovable.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const whatsapp = require('../whatsapp/whatsapp.controller');
+const empProfile = require('../employee/employeeProfile.controller');
 
 // Immovable creation
 exports.addImmovable = async (req, res) => {
@@ -38,14 +39,71 @@ exports.getImmovable = async (req, res) => {
         try {
             let query = {};
             let data;
+            let resultData = [];
             if(req.query){
                 query.where = req.query;
                 data = await immovable.find(req.query).exec();
+                let updateQueryJson = {
+                    empId: data[0].employeeProfileId
+                }
+                uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                console.log('length ==> ', uniqueArray.length);
+                if(uniqueArray.length > 0){
+                    console.log('alert')
+                    console.log('data => ', data[0]);
+                    let dataAll = {
+                        toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                        toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                        toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                        postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                        locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                        remarks: uniqueArray[0].remarks,
+                        updateType: uniqueArray[0].updateType,
+                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                        orderNumber: uniqueArray[0].orderNumber,
+                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                        dateOfOrder: uniqueArray[0].dateOfOrder,
+                        approvalStatus: data[0].approvalStatus,
+                        _id: data[0]._id,
+                        officerName: data[0].officer_name,
+                        employeeProfileId: data[0].employeeProfileId,
+                        designation: data[0].designation,
+                        designationId: data[0].designationId,
+                        department: data[0].department,
+                        departmentId: data[0].departmentId,
+                        selfOrFamily: data[0].selfOrFamily,
+                        dateOfOrder: data[0].dateOfOrder,
+                        orderType: data[0].orderType,
+                        orderNo: data[0].orderNo,
+                        orderFor: data[0].orderFor,
+                        remarks: data[0].remarks,
+                        orderFile: data[0].orderFile,
+                        proposedCountry: data[0].proposedCountry,
+                        fromDate: data[0].fromDate,
+                        toDate: data[0].toDate,
+                        fundSource: data[0].fundSource,
+                        status: data[0].status,
+                        typeOfImmovableProperty: data[0].typeOfImmovableProperty,
+                        detailsOfImovableProperty: data[0].detailsOfImovableProperty,
+                        sourceOfFunding: data[0].sourceOfFunding,
+                        totalCostOfProperty: data[0].totalCostOfProperty,
+                        boughtFromName: data[0].boughtFromName,
+                        boughtFromContactNumber: data[0].boughtFromContactNumber,
+                        boughtFromAddress: data[0].boughtFromAddress,
+                        propertyShownInIpr: data[0].propertyShownInIpr,
+                        immovableDateOfOrder: data[0].immovableDateOfOrder,
+                        previousSanctionOrder: data[0].previousSanctionOrder,
+                    }
+            resultData.push(dataAll);
+                }
+        successRes(res, resultData, 'immovable listed Successfully');
             }
-            else
+            else{
                 data = await immovable.find();
             //res.json(data);
             successRes(res, data, 'immovable listed Successfully');
+            }
+                
         } catch (error) {
             console.log('error', error);
             //res.json(error);
