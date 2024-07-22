@@ -51,54 +51,59 @@ exports.getLtc = async (req, res) => {
                     select: 'batch' // Fields to select from the application collection
                 })  
                 .exec();
-
-                updateQueryJson = {
-                    empId: data[0].employeeProfileId
-                }
-                uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
-                console.log('length ==> ', uniqueArray.length);
-                if(uniqueArray.length > 0){
-                    console.log('alert')
-                    console.log('data => ', data[0]);
-                    let dataAll = {
-                        toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
-                        toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
-                        toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
-                        postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
-                        locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                        remarks: uniqueArray[0].remarks,
-                        updateType: uniqueArray[0].updateType,
-                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
-                        orderNumber: uniqueArray[0].orderNumber,
-                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                        dateOfOrder: uniqueArray[0].dateOfOrder,
-                        approvalStatus: data[0].approvalStatus,
-                        _id: data[0]._id,
-                        officer_name: data[0].officer_name,
-                        employeeProfileId: data[0].employeeProfileId,
-                        designation: data[0].designation,
-                        designationId: data[0].designationId,
-                        fromDate: data[0].fromDate,
-                        toDate: data[0].toDate,
-                        department: data[0].department,
-                        departmentId: data[0].departmentId,
-                        proposedPlaceOfVisit: data[0].proposedPlaceOfVisit,
-                        fromDate: data[0].fromDate,
-                        toDate: data[0].toDate,
-                        blockYear: data[0].blockYear,
-                        selfOrFamily: data[0].selfOrFamily,
-                        fromPlace: data[0].fromPlace,
-                        toPlace: data[0].toPlace,
-                        dateOfOrder: data[0].dateOfOrder,
-                        orderType: data[0].orderType,
-                        orderNo: data[0].orderNo,
-                        orderFor: data[0].orderFor,
-                        remarks: data[0].remarks,
-                        orderFile: data[0].orderFile,
+                if(data.length > 0){
+                    updateQueryJson = {
+                        empId: data[0].employeeProfileId
                     }
-            resultData.push(dataAll);
+                    uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                    console.log('length ==> ', uniqueArray.length);
+                    if(uniqueArray.length > 0){
+                        console.log('alert')
+                        console.log('data => ', data[0]);
+                        let dataAll = {
+                            toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                            toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                            toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                            postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                            locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                            remarks: uniqueArray[0].remarks,
+                            updateType: uniqueArray[0].updateType,
+                            orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                            orderNumber: uniqueArray[0].orderNumber,
+                            orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                            dateOfOrder: uniqueArray[0].dateOfOrder,
+                            approvalStatus: data[0].approvalStatus,
+                            _id: data[0]._id,
+                            officer_name: data[0].officer_name,
+                            employeeProfileId: data[0].employeeProfileId,
+                            designation: data[0].designation,
+                            designationId: data[0].designationId,
+                            fromDate: data[0].fromDate,
+                            toDate: data[0].toDate,
+                            department: data[0].department,
+                            departmentId: data[0].departmentId,
+                            proposedPlaceOfVisit: data[0].proposedPlaceOfVisit,
+                            fromDate: data[0].fromDate,
+                            toDate: data[0].toDate,
+                            blockYear: data[0].blockYear,
+                            selfOrFamily: data[0].selfOrFamily,
+                            fromPlace: data[0].fromPlace,
+                            toPlace: data[0].toPlace,
+                            dateOfOrder: data[0].dateOfOrder,
+                            orderType: data[0].orderType,
+                            orderNo: data[0].orderNo,
+                            orderFor: data[0].orderFor,
+                            remarks: data[0].remarks,
+                            orderFile: data[0].orderFile,
+                        }
+                resultData.push(dataAll);
+                    }
+            successRes(res, resultData, 'ltc listed Successfully');
                 }
-        successRes(res, resultData, 'ltc listed Successfully');
+                else
+                {
+                    successRes(res, [], 'ltc listed Successfully');
+                }
             }
             else
                 {
