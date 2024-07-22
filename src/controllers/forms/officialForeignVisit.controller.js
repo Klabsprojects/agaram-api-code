@@ -73,7 +73,7 @@ exports.getVisit = async (req, res) => {
                 // for(let employee of data){
                     // console.log('data => ', employee);
                     updateQueryJson = {
-                        empId: "6616598194a82a15b465ba41"
+                        empId: data[0].employeeProfileId
                     }
                     uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
                     console.log('length ==> ', uniqueArray.length);
