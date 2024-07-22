@@ -1627,6 +1627,7 @@ exports.byProfile = async(input, by) =>{
             data = await employeeProfile.find().sort({ dateOfJoining: 'asc' }).exec();
             
         for(let employee of data){
+            console.log('for data => ', employee);
             updateQueryJson = {
                 empId: employee._id
             }
@@ -1634,171 +1635,178 @@ exports.byProfile = async(input, by) =>{
             console.log('length ==> ', uniqueArray.length);
             if(uniqueArray.length > 0){
                 console.log('len ', uniqueArray.length);
-                let dataAll = {
-                    toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
-                    toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
-                    toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
-                    postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
-                    locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                    remarks: uniqueArray[0].remarks,
-                    updateType: uniqueArray[0].updateType,
-                    orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
-                    orderNumber: uniqueArray[0].orderNumber,
-                    orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                    dateOfOrder: uniqueArray[0].dateOfOrder,
-                    personalEmail: employee.personalEmail,
-                    _id: employee._id,
-                    fullName: employee.fullName,
-                    gender: employee.gender,
-                    dateOfBirth: employee.dateOfBirth,
-                    dateOfJoining: employee.dateOfJoining,
-                    dateOfRetirement: employee.dateOfRetirement,
-                    state: employee.state,
-                    batch: employee.batch,
-                    recruitmentType: employee.recruitmentType,
-                    serviceStatus: employee.serviceStatus,
-                    qualification1: employee.qualification1,
-                    qualification2: employee.qualification2,
-                    community: employee.community,
-                    degreeData: employee.degreeData,
-                    caste: employee.caste,
-                    religion: employee.religion,
-                    promotionGrade: employee.promotionGrade,
-                    payscale: employee.payscale,
-                    officeEmail: employee.officeEmail,
-                    mobileNo1: employee.mobileNo1,
-                    mobileNo2: employee.mobileNo2,
-                    mobileNo3: employee.mobileNo3,
-                    addressLine: employee.addressLine,
-                    city: employee.city,
-                    pincode: employee.pincode,
-                    employeeId: employee.employeeId,
-                    ifhrmsId: employee.ifhrmsId,
-                    //photo: employee.photo
-                }
-                if(by == 'department' || by == 'naDe' || by == "baDe" || by == 'naBaDe'){
-                    console.log('yes dept ');
-                    if(uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId == input.department){
-                        resultData.push(dataAll);
-                    }
-                }
-                if( by == "period" || by == 'naPe' || by == 'baPe' || by == 'naBaPe'){
-                    console.log('yes period ');
-                    let per = input.period;
-                    console.log('input.period', input.period);
-                    console.log('per', per);
-                    console.log('per.fromDate ', per.fromDate);
-                    console.log('per.toDate', per.toDate);
-                    //dateToCheck >= fromDate && dateToCheck <= toDate
-                    let from = new Date(per.fromDate)
-                    let to = new Date(per.toDate)
-                    console.log('from',from);
-                    console.log('to',to);
-                    if(uniqueArray[0].dateOfOrder >= from &&
-                    uniqueArray[0].dateOfOrder <= to){
-                        // && uniqueArray[0].dateOfOrder < input.period.toDate){
-                        console.log('date matched')
-                        resultData.push(dataAll);
-                    }else console.log('date not matched');
-                }
-                if(by == 'postingIn' || by == 'naPo' || by == "baPo" || by == 'naBaPo'){
-                    console.log('yes posting ');
-                    if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode){
-                        {console.log('yes toposting avail')
-                        if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode == input.postingIn)
-                            {
-                                console.log('yes posting matched')
-                                resultData.push(dataAll);
-                            }
-                    }
-                    }
-                }
-                else if(by == 'dePe' || by == 'naDePe' || by == 'baDePe' || by == 'naBaDePe'){
-                    console.log('yes period ');
-                    let per = input.period;
-                    console.log('input.period', input.period);
-                    console.log('per', per);
-                    console.log('per.fromDate ', per.fromDate);
-                    console.log('per.toDate', per.toDate);
-                    //dateToCheck >= fromDate && dateToCheck <= toDate
-                    let from = new Date(per.fromDate)
-                    let to = new Date(per.toDate)
-                    console.log('from',from);
-                    console.log('to',to);
-                    if(uniqueArray[0].dateOfOrder >= from &&
-                    uniqueArray[0].dateOfOrder <= to && 
-                    uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId == input.department){
-                        resultData.push(dataAll);
-                    }
-                }
-                else if(by == 'dePo' || by == 'naDePo' || by == 'baDePo' || by == 'naBaDePo'){
-                    if(uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId == input.department){
-                        if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode){
-                            console.log('yes toposting avail')
-                            if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode == input.postingIn)
-                            {
-                                console.log('yes posting matched')
+                for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                    console.log('Check ', transferOrPostingEmployeesList.empProfileId._id.toString(), employee._id.toString());
+                    if(transferOrPostingEmployeesList.empProfileId._id.toString() === employee._id.toString()){
+                        console.log('Matched ');
+                        let dataAll = {
+                            toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                            toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                            toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                            postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                            locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                            remarks: uniqueArray[0].remarks,
+                            updateType: uniqueArray[0].updateType,
+                            orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                            orderNumber: uniqueArray[0].orderNumber,
+                            orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                            dateOfOrder: uniqueArray[0].dateOfOrder,
+                            personalEmail: employee.personalEmail,
+                            _id: employee._id,
+                            fullName: employee.fullName,
+                            gender: employee.gender,
+                            dateOfBirth: employee.dateOfBirth,
+                            dateOfJoining: employee.dateOfJoining,
+                            dateOfRetirement: employee.dateOfRetirement,
+                            state: employee.state,
+                            batch: employee.batch,
+                            recruitmentType: employee.recruitmentType,
+                            serviceStatus: employee.serviceStatus,
+                            qualification1: employee.qualification1,
+                            qualification2: employee.qualification2,
+                            community: employee.community,
+                            degreeData: employee.degreeData,
+                            caste: employee.caste,
+                            religion: employee.religion,
+                            promotionGrade: employee.promotionGrade,
+                            payscale: employee.payscale,
+                            officeEmail: employee.officeEmail,
+                            mobileNo1: employee.mobileNo1,
+                            mobileNo2: employee.mobileNo2,
+                            mobileNo3: employee.mobileNo3,
+                            addressLine: employee.addressLine,
+                            city: employee.city,
+                            pincode: employee.pincode,
+                            employeeId: employee.employeeId,
+                            ifhrmsId: employee.ifhrmsId,
+                            //photo: employee.photo
+                        }
+                        if(by == 'department' || by == 'naDe' || by == "baDe" || by == 'naBaDe'){
+                            console.log('yes dept ');
+                            if(transferOrPostingEmployeesList.toDepartmentId == input.department){
                                 resultData.push(dataAll);
                             }
                         }
-                    }
-                }
-                else if(by == 'pePo' || by == 'naPePo' || by == 'baPePo' || by == 'naBaPePo'){
-                    console.log('yes period ');
-                    let per = input.period;
-                    console.log('input.period', input.period);
-                    console.log('per', per);
-                    console.log('per.fromDate ', per.fromDate);
-                    console.log('per.toDate', per.toDate);
-                    //dateToCheck >= fromDate && dateToCheck <= toDate
-                    let from = new Date(per.fromDate)
-                    let to = new Date(per.toDate)
-                    console.log('from',from);
-                    console.log('to',to);
-                    if(uniqueArray[0].dateOfOrder >= from &&
-                    uniqueArray[0].dateOfOrder <= to){
-                        if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode){
-                            console.log('yes toposting avail')
-                            if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode == input.postingIn)
-                            {
-                                console.log('yes posting matched')
+                        if( by == "period" || by == 'naPe' || by == 'baPe' || by == 'naBaPe'){
+                            console.log('yes period ');
+                            let per = input.period;
+                            console.log('input.period', input.period);
+                            console.log('per', per);
+                            console.log('per.fromDate ', per.fromDate);
+                            console.log('per.toDate', per.toDate);
+                            //dateToCheck >= fromDate && dateToCheck <= toDate
+                            let from = new Date(per.fromDate)
+                            let to = new Date(per.toDate)
+                            console.log('from',from);
+                            console.log('to',to);
+                            if(uniqueArray[0].dateOfOrder >= from &&
+                            uniqueArray[0].dateOfOrder <= to){
+                                // && uniqueArray[0].dateOfOrder < input.period.toDate){
+                                console.log('date matched')
+                                resultData.push(dataAll);
+                            }else console.log('date not matched');
+                        }
+                        if(by == 'postingIn' || by == 'naPo' || by == "baPo" || by == 'naBaPo'){
+                            console.log('yes posting ');
+                            if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+                                {console.log('yes toposting avail')
+                                if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+                                    {
+                                        console.log('yes posting matched')
+                                        resultData.push(dataAll);
+                                    }
+                            }
+                            }
+                        }
+                        else if(by == 'dePe' || by == 'naDePe' || by == 'baDePe' || by == 'naBaDePe'){
+                            console.log('yes period ');
+                            let per = input.period;
+                            console.log('input.period', input.period);
+                            console.log('per', per);
+                            console.log('per.fromDate ', per.fromDate);
+                            console.log('per.toDate', per.toDate);
+                            //dateToCheck >= fromDate && dateToCheck <= toDate
+                            let from = new Date(per.fromDate)
+                            let to = new Date(per.toDate)
+                            console.log('from',from);
+                            console.log('to',to);
+                            if(uniqueArray[0].dateOfOrder >= from &&
+                            uniqueArray[0].dateOfOrder <= to && 
+                            transferOrPostingEmployeesList.toDepartmentId == input.department){
                                 resultData.push(dataAll);
                             }
                         }
-                    }
-                }
-                else if(by == "all" || by == 'dePePo' || by == 'naDePePo' || by == 'baDePePo'){
-                    if(uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId == input.department){
-                        console.log('yes period ');
-                    let per = input.period;
-                    console.log('input.period', input.period);
-                    console.log('per', per);
-                    console.log('per.fromDate ', per.fromDate);
-                    console.log('per.toDate', per.toDate);
-                    //dateToCheck >= fromDate && dateToCheck <= toDate
-                    let from = new Date(per.fromDate)
-                    let to = new Date(per.toDate)
-                    console.log('from',from);
-                    console.log('to',to);
-                    if(uniqueArray[0].dateOfOrder >= from &&
-                    uniqueArray[0].dateOfOrder <= to){
-                        if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode){
-                            console.log('yes toposting avail')
-                            if(uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode == input.postingIn)
-                            {
-                                console.log('yes posting matched')
-                                resultData.push(dataAll);
+                        else if(by == 'dePo' || by == 'naDePo' || by == 'baDePo' || by == 'naBaDePo'){
+                            if(transferOrPostingEmployeesList.toDepartmentId == input.department){
+                                if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+                                    console.log('yes toposting avail')
+                                    if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+                                    {
+                                        console.log('yes posting matched')
+                                        resultData.push(dataAll);
+                                    }
+                                }
                             }
                         }
-                    }
+                        else if(by == 'pePo' || by == 'naPePo' || by == 'baPePo' || by == 'naBaPePo'){
+                            console.log('yes period ');
+                            let per = input.period;
+                            console.log('input.period', input.period);
+                            console.log('per', per);
+                            console.log('per.fromDate ', per.fromDate);
+                            console.log('per.toDate', per.toDate);
+                            //dateToCheck >= fromDate && dateToCheck <= toDate
+                            let from = new Date(per.fromDate)
+                            let to = new Date(per.toDate)
+                            console.log('from',from);
+                            console.log('to',to);
+                            if(uniqueArray[0].dateOfOrder >= from &&
+                            uniqueArray[0].dateOfOrder <= to){
+                                if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+                                    console.log('yes toposting avail')
+                                    if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+                                    {
+                                        console.log('yes posting matched')
+                                        resultData.push(dataAll);
+                                    }
+                                }
+                            }
+                        }
+                        else if(by == "all" || by == 'dePePo' || by == 'naDePePo' || by == 'baDePePo'){
+                            if(transferOrPostingEmployeesList.toDepartmentId == input.department){
+                                console.log('yes period ');
+                            let per = input.period;
+                            console.log('input.period', input.period);
+                            console.log('per', per);
+                            console.log('per.fromDate ', per.fromDate);
+                            console.log('per.toDate', per.toDate);
+                            //dateToCheck >= fromDate && dateToCheck <= toDate
+                            let from = new Date(per.fromDate)
+                            let to = new Date(per.toDate)
+                            console.log('from',from);
+                            console.log('to',to);
+                            if(uniqueArray[0].dateOfOrder >= from &&
+                            uniqueArray[0].dateOfOrder <= to){
+                                if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+                                    console.log('yes toposting avail')
+                                    if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+                                    {
+                                        console.log('yes posting matched')
+                                        resultData.push(dataAll);
+                                    }
+                                }
+                            }
+                            }
+                        }
+                        else if(by == 'name' || by == 'batch' || by == 'naBa'){
+                            console.log('dataAll => ', dataAll);
+                            resultData.push(dataAll);
+                        }
+                        //else 
+                            //resultData = [];
                     }
                 }
-                else if(by == 'name' || by == 'batch' || by == 'naBa'){
-                    console.log('dataAll => ', dataAll);
-                    resultData.push(dataAll);
-                }
-                //else 
-                    //resultData = [];
+                
             }
             else{
                 console.log('len else ', uniqueArray.length);
@@ -1823,7 +1831,7 @@ exports.byProfile = async(input, by) =>{
 }
 
 exports.getEmployeeUpdateFilter = async(input) => {
-    console.log('inside getEmployeeUpdate function')
+    console.log('inside getEmployeeUpdate function', input)
     let secretariatDetails;
     // secretariatDetails =  await employeeUpdate.find({
     //     empProfileId: input.empId
@@ -1851,8 +1859,8 @@ exports.getEmployeeUpdateFilter = async(input) => {
     })
     .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
     .exec();
-    console.log(dataResArray);
-    console.log('Unique by latest date of order:', dataResArray);
+    console.log('dataResArray ==> ', dataResArray);
+    // console.log('Unique by latest date of order:', dataResArray);
     return dataResArray;
 }
 
@@ -1869,6 +1877,7 @@ exports.getEmployeeCurrentPosting = async (req, res) => {
         let resJson = {};
         let resArray = [];
         data = await employeeProfile.find(query).exec();
+        console.log('data ', data);
             for(let employee of data){
                 queryUpdate = {
                     empProfileId: employee._id
