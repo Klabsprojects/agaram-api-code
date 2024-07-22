@@ -4,6 +4,7 @@ const safApplication = require('../../models/forms/safApplication.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const whatsapp = require('../whatsapp/whatsapp.controller');
 const employeeProfile = require('../../models/employee/employeeProfile.model');
+const empProfile = require('../employee/employeeProfile.controller');
 
 // safAllocation creation
 exports.addSafAllocation = async (req, res) => {
@@ -65,6 +66,7 @@ exports.getSafAllocation = async (req, res) => {
         try {
             let query = {};
             let data;
+            let resultData = [];
             if(req.query){
                 query.where = req.query;
                 data = await safAllocation.find(req.query)
@@ -83,8 +85,52 @@ exports.getSafAllocation = async (req, res) => {
                     select: 'batch' // Fields to select from the application collection
                 })  
                 .exec();
+                console.log('data[0] ', data[0]);
+                updateQueryJson = {
+                    empId: data[0].employeeProfileId
+                }
+                uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                console.log('length ==> ', uniqueArray.length);
+                if(uniqueArray.length > 0){
+                    console.log('alert')
+                    console.log('data => ', data[0]);
+                    let dataAll = {
+                        toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                        toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                        toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                        postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                        locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                        remarks: uniqueArray[0].remarks,
+                        updateType: uniqueArray[0].updateType,
+                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                        orderNumber: uniqueArray[0].orderNumber,
+                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                        dateOfOrder: uniqueArray[0].dateOfOrder,
+
+                            approvalStatus: data[0].approvalStatus,
+                            _id: data[0]._id,
+                            officerName: data[0].officerName,
+                            employeeProfileId: data[0].employeeProfileId,
+                            designation: data[0].designation,
+                            designationId: data[0].designationId,
+                            department: data[0].department,
+                            departmentId: data[0].departmentId,
+                            blockId: data[0].blockId,
+                            dateOfAccomodation: data[0].dateOfAccomodation,
+                            remarks: data[0].remarks,
+                            orderType: data[0].orderType,
+                            orderNo: data[0].orderNo,
+                            orderFor: data[0].orderFor,
+                            dateOfOrder: data[0].dateOfOrder,
+                            applicationId: data[0].applicationId,
+                            orderFile: data[0].orderFile,
+                            dateOfVacating: data[0].dateOfVacating
+                    }
+            resultData.push(dataAll);
+                }
+        successRes(res, resultData, 'safAllocation listed Successfully');
             }
-            else
+            else{
                 data = await safAllocation.find()
                 .populate({
                     path: 'blockId',
@@ -102,6 +148,8 @@ exports.getSafAllocation = async (req, res) => {
                 })    
                 .exec();
             successRes(res, data, 'safAllocation listed Successfully');
+            }
+                
         } catch (error) {
             console.log('error', error);
             errorRes(res, error, "Error on listing safAllocation");
