@@ -94,10 +94,12 @@ exports.getVisit = async (req, res) => {
                             dateOfOrder: uniqueArray[0].dateOfOrder,
                             approvalStatus: data[0].approvalStatus,
                             _id: data[0]._id,
-                            officer_name: data[0].officer_name,
+                            officerName: data[0].officerName,
                             employeeProfileId: data[0].employeeProfileId,
                             designation: data[0].designation,
                             designationId: data[0].designationId,
+                            department: data[0].department,
+                            departmentId: data[0].departmentId,
                             proposedCountry: data[0].proposedCountry,
                             fromDate: data[0].fromDate,
                             toDate: data[0].toDate,
@@ -113,6 +115,8 @@ exports.getVisit = async (req, res) => {
                             orderFor: data[0].orderFor,
                             dateOfOrderofFaxMessage: data[0].dateOfOrderofFaxMessage,
                             politicalClearance: data[0].politicalClearance,
+                            orderFile: data[0].orderFile,
+                            fcraClearance: data[0].fcraClearance,
                         }
                 resultData.push(dataAll);
                     }
