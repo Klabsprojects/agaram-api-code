@@ -2,6 +2,8 @@ const { ObjectID, ObjectId, BSON } = require('mongodb');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const degree = require('../employee/degree.model');
+
 const employeeProfileSchema = new Schema({
     fullName: String,
 	gender: ObjectId,
@@ -18,10 +20,12 @@ const employeeProfileSchema = new Schema({
 	caste: String,
 	religion: ObjectId,
 	degreeData : [{
-		//degree : ObjectId,
-		//stream : String
 		courseLevel: String,
 		specialisation: String,
+		degree: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'degree' // This references the degree model
+		},
 		instituteName: String,
 		locationState: String,
 		locationCountry: String,
