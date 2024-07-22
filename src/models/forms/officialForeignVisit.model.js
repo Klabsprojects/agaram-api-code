@@ -14,6 +14,8 @@ const officialForeignVisitSchema = new Schema({
 	},
 	designation: String,
 	designationId: ObjectId,
+	department: String,
+	departmentId: ObjectId,
 	proposedCountry: String,
 	fromDate: Date,
 	toDate: Date,
