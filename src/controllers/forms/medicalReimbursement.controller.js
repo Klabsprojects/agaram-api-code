@@ -38,9 +38,10 @@ exports.getMedicalReimbursement = async (req, res) => {
             let query = {};
             let data;
             let resultData = [];
-            if(req.query){
+            if(Object.keys(req.query).length >0){
                 query.where = req.query;
                 data = await medicalReimbursement.find(req.query).exec();
+                if(data.length > 0){
                 updateQueryJson = {
                     empId: data[0].employeeProfileId
                 }
@@ -60,8 +61,8 @@ exports.getMedicalReimbursement = async (req, res) => {
                         orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                         orderNumber: uniqueArray[0].orderNumber,
                         orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                        dateOfOrder: uniqueArray[0].dateOfOrder,
-                        approvalStatus: data[0].approvalStatus,
+
+                        
                         _id: data[0]._id,
                         officerName: data[0].officer_name,
                         employeeProfileId: data[0].employeeProfileId,
@@ -69,22 +70,31 @@ exports.getMedicalReimbursement = async (req, res) => {
                         designationId: data[0].designationId,
                         department: data[0].department,
                         departmentId: data[0].departmentId,
+                        detailsOfMedicalReimbursement: data[0].detailsOfMedicalReimbursement,
+                        totalCostOfMedicalReimbursement: data[0].totalCostOfMedicalReimbursement,
+                        dmeConcurranceStatus: data[0].dmeConcurranceStatus,
                         selfOrFamily: data[0].selfOrFamily,
+                        dateOfApplication: data[0].dateOfApplication,
+                        nameOfTheHospital: data[0].nameOfTheHospital,
+                        treatmentTakenFor: data[0].treatmentTakenFor,
                         dateOfOrder: data[0].dateOfOrder,
                         orderType: data[0].orderType,
                         orderNo: data[0].orderNo,
                         orderFor: data[0].orderFor,
                         remarks: data[0].remarks,
                         orderFile: data[0].orderFile,
-                        detailsOfMedicalReimbursement: data[0].detailsOfMedicalReimbursement,
-                        totalCostOfMedicalReimbursement: data[0].totalCostOfMedicalReimbursement,
-                        dmeConcurranceStatus: data[0].dmeConcurranceStatus,
-                        dateOfApplication: data[0].dateOfApplication,
-                        nameOfTheHospital: data[0].nameOfTheHospital,
-                        treatmentTakenFor: data[0].treatmentTakenFor,
+                        submittedBy: data[0].submittedBy,
+                        approvedBy: data[0].approvedBy,
+                        approvedDate: data[0].approvedDate,
+                        approvalStatus: data[0].approvalStatus,
                     }
             resultData.push(dataAll);
                 }
+            }
+            else
+            {
+                resultData = [];
+            }
         successRes(res, resultData, 'medicalReimbursement listed Successfully');
             }
             else{
