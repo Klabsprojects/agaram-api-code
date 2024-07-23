@@ -45,7 +45,7 @@ exports.getSafApplication = async (req, res) => {
                     select: 'batch' // Fields to select from the application collection
                 })  
                 .exec();
-
+                if(data.length > 0){
                 updateQueryJson = {
                     empId: data[0].employeeProfileId
                 }
@@ -68,27 +68,28 @@ exports.getSafApplication = async (req, res) => {
                         dateOfOrder: uniqueArray[0].dateOfOrder,
                         approvalStatus: data[0].approvalStatus,
                         _id: data[0]._id,
-                        officer_name: data[0].officer_name,
+                        officerName: data[0].officerName,
                         employeeProfileId: data[0].employeeProfileId,
+                        employeeId: data[0].employeeId,
                         designation: data[0].designation,
                         designationId: data[0].designationId,
-                        proposedCountry: data[0].proposedCountry,
-                        fromDate: data[0].fromDate,
-                        toDate: data[0].toDate,
-                        otherDelegates: data[0].otherDelegates,
-                        presentStatus: data[0].presentStatus,
-                        rejectReason: data[0].rejectReason,
-                        faxMessageLetterNo: data[0].faxMessageLetterNo,
-                        dateOfOrder: data[0].dateOfOrder,
-                        fundsSanctionedBy: data[0].fundsSanctionedBy,
-                        fundsSanctioned: data[0].fundsSanctioned,
-                        orderType: data[0].orderType,
-                        orderNo: data[0].orderNo,
-                        orderFor: data[0].orderFor,
-                        dateOfOrderofFaxMessage: data[0].dateOfOrderofFaxMessage,
-                        politicalClearance: data[0].politicalClearance,
+                        department: data[0].department,
+                        departmentId: data[0].departmentId,
+                        appliedOn: data[0].appliedOn,
+                        appliedTime: data[0].appliedTime,
+                        seniorityNumber: data[0].seniorityNumber,
+                        waitingPeriod: data[0].waitingPeriod,
+                        applicationStatus: data[0].applicationStatus,
+                        submittedBy: data[0].submittedBy,
+                        approvedBy: data[0].approvedBy,
+                        approvedDate: data[0].approvedDate,
                     }
             resultData.push(dataAll);
+                }
+            }
+            else
+                {
+                    successRes(res, [], 'safApplication listed Successfully');
                 }
         successRes(res, resultData, 'safApplication listed Successfully');
             }
