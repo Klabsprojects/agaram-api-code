@@ -40,9 +40,10 @@ exports.getMovable = async (req, res) => {
             let query = {};
             let data;
             let resultData = [];
-            if(req.query){
+            if(Object.keys(req.query).length >0){
                 query.where = req.query;
                 data = await movable.find(req.query).exec();
+                if(data.length > 0){
                 let updateQueryJson = {
                     empId: data[0].employeeProfileId
                 }
@@ -62,9 +63,6 @@ exports.getMovable = async (req, res) => {
                         orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                         orderNumber: uniqueArray[0].orderNumber,
                         orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                        dateOfOrder: uniqueArray[0].dateOfOrder,
-
-                        approvalStatus: data[0].approvalStatus,
                         _id: data[0]._id,
                         officerName: data[0].officer_name,
                         employeeProfileId: data[0].employeeProfileId,
@@ -73,12 +71,6 @@ exports.getMovable = async (req, res) => {
                         department: data[0].department,
                         departmentId: data[0].departmentId,
                         selfOrFamily: data[0].selfOrFamily,
-                        dateOfOrder: data[0].dateOfOrder,
-                        orderType: data[0].orderType,
-                        orderNo: data[0].orderNo,
-                        orderFor: data[0].orderFor,
-                        remarks: data[0].remarks,
-                        orderFile: data[0].orderFile,
                         propertyShownInIpr: data[0].propertyShownInIpr,
                         previousSanctionOrder: data[0].previousSanctionOrder,
                         sourceOfFunding: data[0].sourceOfFunding,
@@ -89,9 +81,25 @@ exports.getMovable = async (req, res) => {
                         boughtFromContactNumber: data[0].boughtFromContactNumber,
                         boughtFromAddress: data[0].boughtFromAddress,
                         dateOfOrderAdditional: data[0].dateOfOrderAdditional,
+                        movableDateOfOrder: data[0].movableDateOfOrder,
+                        dateOfOrder: data[0].dateOfOrder,
+                        orderType: data[0].orderType,
+                        orderNo: data[0].orderNo,
+                        orderFor: data[0].orderFor,
+                        remarks: data[0].remarks,
+                        orderFile: data[0].orderFile,
+                        submittedBy: data[0].submittedBy,
+                        approvedBy: data[0].approvedBy,
+                        approvedDate: data[0].approvedDate,
+                        approvalStatus: data[0].approvalStatus,
                     }
             resultData.push(dataAll);
                 }
+            }
+            else
+            {
+                resultData = [];
+            }
         successRes(res, resultData, 'movable listed Successfully');
             }
             else{
