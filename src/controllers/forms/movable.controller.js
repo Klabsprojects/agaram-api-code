@@ -109,7 +109,13 @@ exports.getMovable = async (req, res) => {
         successRes(res, resultData, 'movable listed Successfully');
             }
             else{
-                data = await movable.find();
+                data = await movable.find()
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })  
+                .exec();
             //res.json(data);
             successRes(res, data, 'movable listed Successfully');
             }

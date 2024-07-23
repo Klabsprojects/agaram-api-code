@@ -40,7 +40,13 @@ exports.getIntimation = async (req, res) => {
             let resultData = [];
             if(Object.keys(req.query).length >0){
                 query.where = req.query;
-                data = await intimation.find(req.query).exec();
+                data = await intimation.find(req.query)
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })
+                .exec();
                 if(data.length > 0){
                 let updateQueryJson = {
                     empId: data[0].employeeProfileId
@@ -95,7 +101,13 @@ exports.getIntimation = async (req, res) => {
         successRes(res, resultData, 'intimation listed Successfully');
             }
             else{
-                data = await intimation.find();
+                data = await intimation.find()
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })
+                .exec();
             successRes(res, data, 'intimation listed Successfully');
             }
                 

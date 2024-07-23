@@ -104,7 +104,13 @@ exports.getPrivateForeignVisit = async (req, res) => {
         successRes(res, resultData, 'privateVisit listed Successfully');
             }
             else{
-                data = await privateVisit.find();
+                data = await privateVisit.find()
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })  
+                .exec();
             //res.json(data);
             successRes(res, data, 'privateVisit listed Successfully');
             }

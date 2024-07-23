@@ -114,7 +114,13 @@ exports.getImmovable = async (req, res) => {
         successRes(res, resultData, 'immovable listed Successfully');
             }
             else{
-                data = await immovable.find();
+                data = await immovable.find()
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                })  
+                .exec();
             //res.json(data);
             successRes(res, data, 'immovable listed Successfully');
             }
