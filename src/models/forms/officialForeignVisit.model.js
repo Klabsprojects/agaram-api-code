@@ -7,7 +7,6 @@ const login = require('../login/login.model');
 
 const officialForeignVisitSchema = new Schema({
     officerName: String,
-	//employeeProfileId: ObjectId,
 	employeeProfileId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'profile' // This references the AllocatedBlock model

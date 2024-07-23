@@ -60,7 +60,8 @@ exports.getVisit = async (req, res) => {
             let query = {};
             let data;
             let resultData = [];
-            if(req.query){
+            if(Object.keys(req.query).length >0){
+                console.log('true');
                 query.where = req.query;
                 data = await foreignVisit.find(req.query)
                 .populate({
@@ -69,9 +70,7 @@ exports.getVisit = async (req, res) => {
                     select: 'batch' // Fields to select from the application collection
                 })  
                 .exec();
-
-                // for(let employee of data){
-                    // console.log('data => ', employee);
+                if(data.length > 0){
                     updateQueryJson = {
                         empId: data[0].employeeProfileId
                     }
@@ -91,8 +90,6 @@ exports.getVisit = async (req, res) => {
                             orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                             orderNumber: uniqueArray[0].orderNumber,
                             orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                            dateOfOrder: uniqueArray[0].dateOfOrder,
-                            approvalStatus: data[0].approvalStatus,
                             _id: data[0]._id,
                             officerName: data[0].officerName,
                             employeeProfileId: data[0].employeeProfileId,
@@ -107,31 +104,42 @@ exports.getVisit = async (req, res) => {
                             presentStatus: data[0].presentStatus,
                             rejectReason: data[0].rejectReason,
                             faxMessageLetterNo: data[0].faxMessageLetterNo,
-                            dateOfOrder: data[0].dateOfOrder,
                             fundsSanctionedBy: data[0].fundsSanctionedBy,
                             fundsSanctioned: data[0].fundsSanctioned,
+                            dateOfOrderofFaxMessage: data[0].dateOfOrderofFaxMessage,
+                            politicalClearance: data[0].politicalClearance,
+                            fcraClearance: data[0].fcraClearance,
+                            dateOfOrder: data[0].dateOfOrder,
                             orderType: data[0].orderType,
                             orderNo: data[0].orderNo,
                             orderFor: data[0].orderFor,
-                            dateOfOrderofFaxMessage: data[0].dateOfOrderofFaxMessage,
-                            politicalClearance: data[0].politicalClearance,
+                            remarks: data[0].remarks,
                             orderFile: data[0].orderFile,
-                            fcraClearance: data[0].fcraClearance,
+                            submittedBy: data[0].submittedBy,
+                            approvedBy: data[0].approvedBy,
+                            approvedDate: data[0].approvedDate,
+                            approvalStatus: data[0].approvalStatus,
                         }
                 resultData.push(dataAll);
                     }
+                }
+                else
+                {
+                    resultData = [];
+                }
             successRes(res, resultData, 'foreignVisit listed Successfully');
             }
             else{
+                console.log('false');
                 data = await foreignVisit.find()
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
                     select: 'batch' // Fields to select from the application collection
                 })  
-                .exec();
-            successRes(res, data, 'foreignVisit listed Successfully');
+                successRes(res, data, 'foreignVisit listed Successfully');
             }
+            
         } catch (error) {
             console.log('error', error);
             //res.json(error);

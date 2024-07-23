@@ -35,7 +35,7 @@ exports.getSafApplication = async (req, res) => {
             let query = {};
             let data;
             let resultData = [];
-            if(req.query){
+            if(Object.keys(req.query).length >0){
                 query.where = req.query;
                 //data = await education.find(req.query).exec();
                 data = await safApplication.find(req.query)
@@ -83,14 +83,14 @@ exports.getSafApplication = async (req, res) => {
                         approvedDate: data[0].approvedDate,
                         approvalStatus: data[0].approvalStatus,
                     }
-            resultData.push(dataAll);
+                        resultData.push(dataAll);
+                    }
                 }
-            }
-            else
+                else
                 {
-                    successRes(res, [], 'safApplication listed Successfully');
+                    resultData = [];
                 }
-        successRes(res, resultData, 'safApplication listed Successfully');
+                successRes(res, resultData, 'ltc listed Successfully');
             }
             else{
 //data = await education.find();

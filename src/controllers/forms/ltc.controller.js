@@ -41,7 +41,7 @@ exports.getLtc = async (req, res) => {
             let query = {};
             let data;
             let resultData = [];
-            if(req.query){
+            if(Object.keys(req.query).length >0){
                 query.where = req.query;
                 //data = await education.find(req.query).exec();
                 data = await ltc.find(req.query)
@@ -98,12 +98,12 @@ exports.getLtc = async (req, res) => {
                         }
                 resultData.push(dataAll);
                     }
-            successRes(res, resultData, 'ltc listed Successfully');
                 }
                 else
                 {
-                    successRes(res, [], 'ltc listed Successfully');
+                    resultData = [];
                 }
+                successRes(res, resultData, 'ltc listed Successfully');
             }
             else
                 {
