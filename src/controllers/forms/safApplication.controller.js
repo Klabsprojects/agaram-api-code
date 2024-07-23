@@ -65,8 +65,6 @@ exports.getSafApplication = async (req, res) => {
                         orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                         orderNumber: uniqueArray[0].orderNumber,
                         orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                        dateOfOrder: uniqueArray[0].dateOfOrder,
-                        approvalStatus: data[0].approvalStatus,
                         _id: data[0]._id,
                         officerName: data[0].officerName,
                         employeeProfileId: data[0].employeeProfileId,
@@ -83,6 +81,7 @@ exports.getSafApplication = async (req, res) => {
                         submittedBy: data[0].submittedBy,
                         approvedBy: data[0].approvedBy,
                         approvedDate: data[0].approvedDate,
+                        approvalStatus: data[0].approvalStatus,
                     }
             resultData.push(dataAll);
                 }
