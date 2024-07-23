@@ -38,9 +38,10 @@ exports.getIntimation = async (req, res) => {
             let query = {};
             let data;
             let resultData = [];
-            if(req.query){
+            if(Object.keys(req.query).length >0){
                 query.where = req.query;
                 data = await intimation.find(req.query).exec();
+                if(data.length > 0){
                 let updateQueryJson = {
                     empId: data[0].employeeProfileId
                 }
@@ -60,14 +61,7 @@ exports.getIntimation = async (req, res) => {
                         orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                         orderNumber: uniqueArray[0].orderNumber,
                         orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                        
                         degreeData : data[0].degreeData,
-                        submittedBy: data[0].submittedBy,
-                        approvedBy: data[0].approvedBy,
-                        approvalStatus: data[0].approvalStatus,
-                        approvedDate: data[0].approvedDate,
-                        approvalStatus: data[0].approvalStatus,
-                        approvalStatus: data[0].approvalStatus,
                         _id: data[0]._id,
                         officerName: data[0].officer_name,
                         employeeProfileId: data[0].employeeProfileId,
@@ -80,17 +74,25 @@ exports.getIntimation = async (req, res) => {
 	                    fundSource: data[0].fundSource,
 	                    typeOfIntimation: data[0].typeOfIntimation,
 	                    previousSanctionOrder: data[0].previousSanctionOrder,
-	                    selfOrFamily: data[0].selfOrFamily,
                         dateOfOrder: data[0].dateOfOrder,
                         orderType: data[0].orderType,
                         orderNo: data[0].orderNo,
                         orderFor: data[0].orderFor,
                         remarks: data[0].remarks,
                         orderFile: data[0].orderFile,
+                        submittedBy: data[0].submittedBy,
+                        approvedBy: data[0].approvedBy,
+                        approvedDate: data[0].approvedDate,
+                        approvalStatus: data[0].approvalStatus,
                     }
             resultData.push(dataAll);
                 }
-        successRes(res, resultData, 'movable listed Successfully');
+            }
+            else
+            {
+                resultData = [];
+            }
+        successRes(res, resultData, 'intimation listed Successfully');
             }
             else{
                 data = await intimation.find();
