@@ -42,7 +42,13 @@ exports.getMovable = async (req, res) => {
             let resultData = [];
             if(Object.keys(req.query).length >0){
                 query.where = req.query;
-                data = await movable.find(req.query).exec();
+                data = await movable.find(req.query)
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                }) 
+                .exec();
                 if(data.length > 0){
                 let updateQueryJson = {
                     empId: data[0].employeeProfileId

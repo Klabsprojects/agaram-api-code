@@ -42,7 +42,13 @@ exports.getImmovable = async (req, res) => {
             let resultData = [];
             if(Object.keys(req.query).length >0){
                 query.where = req.query;
-                data = await immovable.find(req.query).exec();
+                data = await immovable.find(req.query)
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                }) 
+                .exec();
                 if(data.length > 0){
                 let updateQueryJson = {
                     empId: data[0].employeeProfileId
@@ -58,24 +64,34 @@ exports.getImmovable = async (req, res) => {
                         toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
                         postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
                         locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                        remarks: uniqueArray[0].remarks,
                         updateType: uniqueArray[0].updateType,
                         orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                         orderNumber: uniqueArray[0].orderNumber,
                         orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                        dateOfOrder: uniqueArray[0].dateOfOrder,
-                        approvalStatus: data[0].approvalStatus,
+                        
+                        
+	
+                        
                         _id: data[0]._id,
-                        officerName: data[0].officer_name,
+                        officerName: data[0].officerName,
                         employeeProfileId: data[0].employeeProfileId,
                         designation: data[0].designation,
                         designationId: data[0].designationId,
                         department: data[0].department,
                         departmentId: data[0].departmentId,
+                        typeOfImmovableProperty: data[0].typeOfImmovableProperty,
+                        detailsOfImovableProperty: data[0].detailsOfImovableProperty,
+                        sourceOfFunding: data[0].sourceOfFunding,
+                        totalCostOfProperty: data[0].totalCostOfProperty,
+                        boughtFromName: data[0].boughtFromName,
+                        boughtFromContactNumber: data[0].boughtFromContactNumber,
+                        boughtFromAddress: data[0].boughtFromAddress,
+                        propertyShownInIpr: data[0].propertyShownInIpr,
+                        immovableDateOfOrder: data[0].immovableDateOfOrder,
+                        previousSanctionOrder: data[0].previousSanctionOrder,
                         detailsOfIntimation: data[0].detailsOfIntimation,
                         fundSource: data[0].fundSource,
                         typeOfIntimation: data[0].typeOfIntimation,
-                        previousSanctionOrder: data[0].previousSanctionOrder,
                         selfOrFamily: data[0].selfOrFamily,
                         dateOfOrder: data[0].dateOfOrder,
                         orderType: data[0].orderType,

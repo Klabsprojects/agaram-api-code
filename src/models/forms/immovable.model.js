@@ -3,10 +3,15 @@ const { ObjectId } = require('mongodb');
 const Schema = mongoose.Schema;
 
 const login = require('../login/login.model');
+const profile = require('../employee/employeeProfile.model');
 
 const immovableSchema = new Schema({
     officerName: String,
-	employeeProfileId: ObjectId,
+	// employeeProfileId: ObjectId,
+	employeeProfileId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'profile' // This references the AllocatedBlock model
+	},
 	designation: String,
 	designationId: ObjectId,
 	department: String,
