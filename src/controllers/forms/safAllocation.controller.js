@@ -67,7 +67,7 @@ exports.getSafAllocation = async (req, res) => {
             let query = {};
             let data;
             let resultData = [];
-            if(req.query){
+            if(Object.keys(req.query).length >0){
                 query.where = req.query;
                 data = await safAllocation.find(req.query)
                 .populate({
@@ -86,6 +86,7 @@ exports.getSafAllocation = async (req, res) => {
                 })  
                 .exec();
                 console.log('data[0] ', data[0]);
+                if(data.length > 0){
                 updateQueryJson = {
                     empId: data[0].employeeProfileId
                 }
@@ -105,29 +106,36 @@ exports.getSafAllocation = async (req, res) => {
                         orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                         orderNumber: uniqueArray[0].orderNumber,
                         orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                        dateOfOrder: uniqueArray[0].dateOfOrder,
-
-                            approvalStatus: data[0].approvalStatus,
                             _id: data[0]._id,
                             officerName: data[0].officerName,
                             employeeProfileId: data[0].employeeProfileId,
+                            employeeId: data[0].employeeId,
                             designation: data[0].designation,
                             designationId: data[0].designationId,
                             department: data[0].department,
                             departmentId: data[0].departmentId,
                             blockId: data[0].blockId,
+                            applicationId: data[0].applicationId,
                             dateOfAccomodation: data[0].dateOfAccomodation,
-                            remarks: data[0].remarks,
+                            dateOfVacating: data[0].dateOfVacating,
+                            dateOfOrder: data[0].dateOfOrder,
                             orderType: data[0].orderType,
                             orderNo: data[0].orderNo,
                             orderFor: data[0].orderFor,
-                            dateOfOrder: data[0].dateOfOrder,
-                            applicationId: data[0].applicationId,
+                            remarks: data[0].remarks,
                             orderFile: data[0].orderFile,
-                            dateOfVacating: data[0].dateOfVacating
+                            submittedBy: data[0].submittedBy,
+                            approvedBy: data[0].approvedBy,
+                            approvedDate: data[0].approvedDate,
+                            approvalStatus: data[0].approvalStatus,
                     }
             resultData.push(dataAll);
                 }
+            }
+            else
+            {
+                resultData = [];
+            }
         successRes(res, resultData, 'safAllocation listed Successfully');
             }
             else{
