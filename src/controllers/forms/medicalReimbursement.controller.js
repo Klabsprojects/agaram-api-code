@@ -40,7 +40,13 @@ exports.getMedicalReimbursement = async (req, res) => {
             let resultData = [];
             if(Object.keys(req.query).length >0){
                 query.where = req.query;
-                data = await medicalReimbursement.find(req.query).exec();
+                data = await medicalReimbursement.find(req.query)
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: 'batch' // Fields to select from the application collection
+                }) 
+                .exec();
                 if(data.length > 0){
                 updateQueryJson = {
                     empId: data[0].employeeProfileId
