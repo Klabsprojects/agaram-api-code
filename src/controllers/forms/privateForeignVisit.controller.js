@@ -40,9 +40,10 @@ exports.getPrivateForeignVisit = async (req, res) => {
             let query = {};
             let data;
             let resultData = [];
-            if(req.query){
+            if(Object.keys(req.query).length >0){
                 query.where = req.query;
                 data = await privateVisit.find(req.query).exec();
+                if(data.length > 0){
                 let updateQueryJson = {
                     empId: data[0].employeeProfileId
                 }
@@ -63,17 +64,18 @@ exports.getPrivateForeignVisit = async (req, res) => {
                         orderNumber: uniqueArray[0].orderNumber,
                         orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
                         dateOfOrder: uniqueArray[0].dateOfOrder,
-
-
-
-                        approvalStatus: data[0].approvalStatus,
                         _id: data[0]._id,
-                        officer_name: data[0].officer_name,
+                        officerName: data[0].officerName,
                         employeeProfileId: data[0].employeeProfileId,
                         designation: data[0].designation,
                         designationId: data[0].designationId,
                         department: data[0].department,
                         departmentId: data[0].departmentId,
+                        proposedCountry: data[0].proposedCountry,
+                        fromDate: data[0].fromDate,
+                        toDate: data[0].toDate,
+                        fundSource: data[0].fundSource,
+                        status: data[0].status,
                         selfOrFamily: data[0].selfOrFamily,
                         dateOfOrder: data[0].dateOfOrder,
                         orderType: data[0].orderType,
@@ -81,14 +83,18 @@ exports.getPrivateForeignVisit = async (req, res) => {
                         orderFor: data[0].orderFor,
                         remarks: data[0].remarks,
                         orderFile: data[0].orderFile,
-                        proposedCountry: data[0].proposedCountry,
-                        fromDate: data[0].fromDate,
-                        toDate: data[0].toDate,
-                        fundSource: data[0].fundSource,
-                        status: data[0].status,
+                        submittedBy: data[0].submittedBy,
+                        approvedBy: data[0].approvedBy,
+                        approvedDate: data[0].approvedDate,
+                        approvalStatus: data[0].approvalStatus,
                     }
             resultData.push(dataAll);
                 }
+            }
+            else
+            {
+                resultData = [];
+            }
         successRes(res, resultData, 'privateVisit listed Successfully');
             }
             else{
