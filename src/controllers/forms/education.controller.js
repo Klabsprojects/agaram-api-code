@@ -71,7 +71,7 @@ exports.getEducation = async (req, res) => {
             let query = {};
             let data;
             let resultData = [];
-            if(req.query){
+            if(Object.keys(req.query).length >0){
                 query.where = req.query;
                 //data = await education.find(req.query).exec();
                 data = await education.find(req.query)
@@ -81,6 +81,7 @@ exports.getEducation = async (req, res) => {
                     select: 'batch' // Fields to select from the application collection
                 })  
                 .exec();
+                if(data.length > 0){
                 let updateQueryJson = {
                     empId: data[0].employeeProfileId
                 }
@@ -95,33 +96,36 @@ exports.getEducation = async (req, res) => {
                         toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
                         postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
                         locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                        remarks: uniqueArray[0].remarks,
                         updateType: uniqueArray[0].updateType,
                         orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                         orderNumber: uniqueArray[0].orderNumber,
                         orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                        degreeData : data[0].degreeData,
-                        submittedBy: data[0].submittedBy,
-                        approvedBy: data[0].approvedBy,
-                        approvalStatus: data[0].approvalStatus,
-                        approvedDate: data[0].approvedDate,
-                        approvalStatus: data[0].approvalStatus,
                         officerName: data[0].officer_name,
                         employeeProfileId: data[0].employeeProfileId,
                         designation: data[0].designation,
                         designationId: data[0].designationId,
                         department: data[0].department,
                         departmentId: data[0].departmentId,
+                        degreeData : data[0].degreeData,
                         dateOfOrder: data[0].dateOfOrder,
                         orderType: data[0].orderType,
                         orderNo: data[0].orderNo,
                         orderFor: data[0].orderFor,
                         remarks: data[0].remarks,
                         orderFile: data[0].orderFile,
+                        submittedBy: data[0].submittedBy,
+                        approvedBy: data[0].approvedBy,
+                        approvedDate: data[0].approvedDate,
+                        approvalStatus: data[0].approvalStatus,
                     }
             resultData.push(dataAll);
                 }
-        successRes(res, resultData, 'movable listed Successfully');
+            }
+            else
+            {
+                resultData = [];
+            }
+        successRes(res, resultData, 'education listed Successfully');
             }
             else{
                 //data = await education.find();
