@@ -70,7 +70,7 @@ exports.getMovable = async (req, res) => {
                         orderNumber: uniqueArray[0].orderNumber,
                         orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
                         _id: data[0]._id,
-                        officerName: data[0].officer_name,
+                        officerName: data[0].officerName,
                         employeeProfileId: data[0].employeeProfileId,
                         designation: data[0].designation,
                         designationId: data[0].designationId,
