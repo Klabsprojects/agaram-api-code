@@ -998,6 +998,7 @@ exports.getBySecretariat = async (req, res) => {
     }
 }
 
+
 // Get Employees by Designation
 exports.getByDesignation = async (req, res) => {
     try{
@@ -1946,4 +1947,932 @@ exports.getEmployeeCurrentPosting = async (req, res) => {
         console.log('error', error);
         errorRes(res, error, "Error on listing employee profile with history");
     }
+}
+
+exports.getEmployeeAdvancedSearch = async (req, res) => {
+    console.log('helo from getEmployeeAdvancedSearch controller', req.query);
+    try {
+            let result = [];
+            const count = Object.keys(req.body).length;
+            console.log(`Number of parameters: ${count}`);
+            if(count == 0){
+                successRes(res, result, 'No employee matched');
+            }
+            else if(count == 1){
+                result = await this.oneParameterAdvanced(req.body);
+                console.log('getEmployeeAdvancedSearch', result)
+                successRes(res, result, 'Employee listed -> one param Successfully');
+            }
+            else if(count == 2){
+                result = await this.twoParameterAdvanced(req.body);
+                console.log('getEmployeeAdvancedSearch', result)
+                successRes(res, result, 'Employee listed -> 2 params Successfully');
+            }
+            // else if(count == 3){
+            //     result = await this.threeParameterAdvanced(req.body);
+            //     console.log('getEmployeeAdvancedSearch', result)
+            //     successRes(res, result, 'Employee listed -> 3 params Successfully');
+            // }
+            // else if(count == 4){
+            //     result = await this.fourParameterAdvanced(req.body);
+            //     console.log('getEmployeeAdvancedSearch', result)
+            //     successRes(res, result, 'Employee listed -> 4 params Successfully');
+            // }
+            // else if(count == 5){
+            //     result = await this.fiveParameterAdvanced(req.body);
+            //     console.log('getEmployeeAdvancedSearch', result)
+            //     successRes(res, result, 'Employee listed -> 5 params Successfully');
+            // }
+            // else if(count == 6){
+            //     result = await this.sixParameterAdvanced(req.body);
+            //     console.log('getEmployeeAdvancedSearch', result)
+            //     successRes(res, result, 'Employee listed -> 6 param Successfully');
+            // }
+            // else if(count == 7){
+            //     result = await this.sevenParameterAdvanced(req.body);
+            //     console.log('getEmployeeAdvancedSearch', result)
+            //     successRes(res, result, 'Employee listed -> 7 params Successfully');
+            // }
+            // else if(count == 8){
+            //     result = await this.eightParameterAdvanced(req.body);
+            //     console.log('getEmployeeAdvancedSearch', result)
+            //     successRes(res, result, 'Employee listed -> 8 params Successfully');
+            // }
+            // else if(count == 9){
+            //     result = await this.nineParameterAdvanced(req.body);
+            //     console.log('getEmployeeAdvancedSearch', result)
+            //     successRes(res, result, 'Employee listed -> 9 params Successfully');
+            // }
+            // else if(count == 10){
+            //     result = await this.tenParameterAdvanced(req.body);
+            //     console.log('getEmployeeAdvancedSearch', result)
+            //     successRes(res, result, 'Employee listed -> 10 params Successfully');
+            // }
+            // else if(count == 11){
+            //     result = await this.elevenParameterAdvanced(req.body);
+            //     console.log('getEmployeeAdvancedSearch', result)
+            //     successRes(res, result, 'Employee listed -> 11 params Successfully');
+            // }
+        } 
+        catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing employee profile with history");
+        }
+}
+
+exports.oneParameterAdvanced = async(input) => {
+    console.log('inside oneParameterAdvanced function', input);
+    let result;
+    if(input.dateOfBirth){
+        console.log('dateOfBirth present');
+        result = await this.byProfileAdvanced(input, "dateOfBirth");
+        console.log('oneParameter dateOfBirth ', result);
+        return result;
+    }
+    else if(input.state){
+        console.log('state present');
+        result = await this.byProfileAdvanced(input, "state");
+        console.log('oneParameter state ', result);
+        return result;
+    }
+    else if(input.community){
+        console.log('community present');
+        result = await this.byProfileAdvanced(input, "community");
+        console.log('oneParameter community ', result);
+        return result;
+    }
+    else if(input.degree){
+        console.log('degree present');
+        result = await this.byProfileAdvanced(input, "degree");
+        console.log('oneParameter degree ', result);
+        return result;
+    }
+    else if(input.dateOfJoining){
+        console.log('dateOfJoining present');
+        result = await this.byProfileAdvanced(input, "dateOfJoining");
+        console.log('oneParameter dateOfJoining ', result);
+        return result;
+    }
+    else if(input.dateOfRetirement){
+        console.log('dateOfRetirement present');
+        result = await this.byProfileAdvanced(input, "dateOfRetirement");
+        console.log('oneParameter dateOfRetirement ', result);
+        return result;
+    }
+    else if(input.recruitmentType){
+        console.log('recruitmentType present');
+        result = await this.byProfileAdvanced(input, "recruitmentType");
+        console.log('oneParameter recruitmentType ', result);
+        return result;
+    }
+    else if(input.postingIn){
+        console.log('postingIn present');
+        result = await this.byProfileAdvanced(input, "postingIn");
+        console.log('oneParameter posting ', result);
+        return result;
+    }
+    else if(input.department){
+        console.log('department present');
+        result = await this.byProfileAdvanced(input, "department");
+        console.log('oneParameter department ', result);
+        return result;
+    }
+    else if(input.designation){
+        console.log('designation present');
+        result = await this.byProfileAdvanced(input, "designation");
+        console.log('oneParameter designation ', result);
+        return result;
+    }
+    let oneResult = [];
+    return oneResult;
+}
+
+
+exports.twoParameterAdvanced = async(input) => {
+    console.log('inside twoParameterAdvanced function', input);
+    let result;
+    if(input.dateOfBirth && input.state 
+        && !input.community && !input.degree && !input.dateOfJoining && !input.dateOfRetirement
+        && !input.recruitmentType && !input.postingIn && !input.department && !input.designation){
+        console.log('dateOfBirth, state present');
+        result = await this.byProfileAdvanced(input, "dobSta");
+        console.log('twoParameter dateOfBirth, state ', result);
+        return result;
+    }
+    else if(input.dateOfBirth && input.community
+        && !input.state && !input.degree && !input.dateOfJoining && !input.dateOfRetirement
+        && !input.recruitmentType && !input.postingIn && !input.department && !input.designation
+    ){
+        console.log('dateOfBirth, community present');
+        result = await this.byProfileAdvanced(input, "dobCom");
+        console.log('twoParameter dateOfBirth, community ', result);
+        return result;
+    }
+    else if(input.dateOfBirth && input.degree
+        && !input.community && !input.state && !input.dateOfJoining && !input.dateOfRetirement
+        && !input.recruitmentType && !input.postingIn && !input.department && !input.designation
+    ){
+        console.log('dateOfBirth, degree present');
+        result = await this.byProfileAdvanced(input, "dobDeg");
+        console.log('twoParameter dateOfBirth, degree ', result);
+        return result;
+    }
+    else if(input.dateOfBirth && input.dateOfJoining
+        && !input.degree && !input.community && !input.state && !input.dateOfRetirement
+        && !input.recruitmentType && !input.postingIn && !input.department && !input.designation
+    ){
+        console.log('dateOfBirth, dateOfJoining present');
+        result = await this.byProfileAdvanced(input, "dobDoj");
+        console.log('twoParameter dateOfBirth, dateOfJoining ', result);
+        return result;
+    }
+    else if(input.dateOfBirth && input.dateOfRetirement
+        && !input.degree && !input.community && !input.state && !input.dateOfJoining
+        && !input.recruitmentType && !input.postingIn && !input.department && !input.designation
+    ){
+        console.log('dateOfBirth, dateOfRetirement present');
+        result = await this.byProfileAdvanced(input, "dobDor");
+        console.log('twoParameter dateOfBirth, dateOfRetirement ', result);
+        return result;
+    }
+    else if(input.dateOfBirth && input.recruitmentType){
+        console.log('dateOfBirth, recruitmentType present');
+        result = await this.byProfileAdvanced(input, "dobRec");
+        console.log('twoParameter dateOfBirth, recruitmentType ', result);
+        return result;
+    }
+    else if(input.dateOfBirth && input.postingIn){
+        console.log('dateOfBirth, postingIn present');
+        result = await this.byProfileAdvanced(input, "dobPos");
+        console.log('twoParameter dateOfBirth, postingIn ', result);
+        return result;
+    }
+    else if(input.dateOfBirth && input.department){
+        console.log('dateOfBirth, department present');
+        result = await this.byProfileAdvanced(input, "dobDep");
+        console.log('twoParameter dateOfBirth, department ', result);
+        return result;
+    }
+    else if(input.dateOfBirth && input.designation){
+        console.log('dateOfBirth, designation present');
+        result = await this.byProfileAdvanced(input, "dobDes");
+        console.log('twoParameter dateOfBirth, designation ', result);
+        return result;
+    }
+    /////
+    else if(input.state && input.community){
+        console.log('state, community present');
+        result = await this.byProfileAdvanced(input, "staCom");
+        console.log('twoParameter state, community ', result);
+        return result;
+    }
+    else if(input.state && input.degree){
+        console.log('state, degree present');
+        result = await this.byProfileAdvanced(input, "staDeg");
+        console.log('twoParameter state, degree ', result);
+        return result;
+    }
+    else if(input.state && input.dateOfJoining){
+        console.log('state, dateOfJoining present');
+        result = await this.byProfileAdvanced(input, "staDoj");
+        console.log('twoParameter state, dateOfJoining ', result);
+        return result;
+    }
+    else if(input.state && input.dateOfRetirement){
+        console.log('state, dateOfRetirement present');
+        result = await this.byProfileAdvanced(input, "staDor");
+        console.log('twoParameter state, dateOfRetirement ', result);
+        return result;
+    }
+    else if(input.state && input.recruitmentType){
+        console.log('state, recruitmentType present');
+        result = await this.byProfileAdvanced(input, "staRec");
+        console.log('twoParameter state, recruitmentType ', result);
+        return result;
+    }
+    else if(input.state && input.postingIn){
+        console.log('state, postingIn present');
+        result = await this.byProfileAdvanced(input, "staPos");
+        console.log('twoParameter state, postingIn ', result);
+        return result;
+    }
+    else if(input.state && input.department){
+        console.log('state, department present');
+        result = await this.byProfileAdvanced(input, "staDep");
+        console.log('twoParameter state, department ', result);
+        return result;
+    }
+    else if(input.state && input.designation){
+        console.log('state, designation present');
+        result = await this.byProfileAdvanced(input, "staDes");
+        console.log('twoParameter state, designation ', result);
+        return result;
+    }
+    ////
+    else if(input.community && input.degree){
+        console.log('community, degree present');
+        result = await this.byProfileAdvanced(input, "comDeg");
+        console.log('twoParameter community, degree ', result);
+        return result;
+    }
+    else if(input.community && input.dateOfJoining){
+        console.log('community, dateOfJoining present');
+        result = await this.byProfileAdvanced(input, "comDoj");
+        console.log('twoParameter community, dateOfJoining ', result);
+        return result;
+    }
+    else if(input.community && input.dateOfRetirement){
+        console.log('community, dateOfRetirement present');
+        result = await this.byProfileAdvanced(input, "comDor");
+        console.log('twoParameter community, dateOfRetirement ', result);
+        return result;
+    }
+    else if(input.community && input.recruitmentType){
+        console.log('community, recruitmentType present');
+        result = await this.byProfileAdvanced(input, "comRec");
+        console.log('twoParameter community, recruitmentType ', result);
+        return result;
+    }
+    else if(input.community && input.postingIn){
+        console.log('community, postingIn present');
+        result = await this.byProfileAdvanced(input, "comPos");
+        console.log('twoParameter community, postingIn ', result);
+        return result;
+    }
+    else if(input.community && input.department){
+        console.log('community, department present');
+        result = await this.byProfileAdvanced(input, "comDep");
+        console.log('twoParameter community, department ', result);
+        return result;
+    }
+    else if(input.community && input.designation){
+        console.log('community, designation present');
+        result = await this.byProfileAdvanced(input, "comDes");
+        console.log('twoParameter community, designation ', result);
+        return result;
+    }
+
+    ////
+    else if(input.degree && input.dateOfJoining){
+        console.log('degree, dateOfJoining present');
+        result = await this.byProfileAdvanced(input, "degDoj");
+        console.log('twoParameter degree, dateOfJoining ', result);
+        return result;
+    }
+    else if(input.degree && input.dateOfRetirement){
+        console.log('degree, dateOfRetirement present');
+        result = await this.byProfileAdvanced(input, "degDor");
+        console.log('twoParameter degree, dateOfRetirement ', result);
+        return result;
+    }
+    else if(input.degree && input.recruitmentType){
+        console.log('degree, recruitmentType present');
+        result = await this.byProfileAdvanced(input, "degRec");
+        console.log('twoParameter degree, recruitmentType ', result);
+        return result;
+    }
+    else if(input.degree && input.postingIn){
+        console.log('degree, postingIn present');
+        result = await this.byProfileAdvanced(input, "degPos");
+        console.log('twoParameter degree, postingIn ', result);
+        return result;
+    }
+    else if(input.degree && input.department){
+        console.log('degree, department present');
+        result = await this.byProfileAdvanced(input, "degDep");
+        console.log('twoParameter degree, department ', result);
+        return result;
+    }
+    else if(input.degree && input.designation){
+        console.log('degree, designation present');
+        result = await this.byProfileAdvanced(input, "degDes");
+        console.log('twoParameter degree, designation ', result);
+        return result;
+    }
+
+    //////
+    else if(input.dateOfJoining && input.dateOfRetirement){
+        console.log('dateOfJoining, dateOfRetirement present');
+        result = await this.byProfileAdvanced(input, "dojDor");
+        console.log('twoParameter dateOfJoining, dateOfRetirement ', result);
+        return result;
+    }
+    else if(input.dateOfJoining && input.recruitmentType){
+        console.log('dateOfJoining, recruitmentType present');
+        result = await this.byProfileAdvanced(input, "dojRec");
+        console.log('twoParameter dateOfJoining, recruitmentType ', result);
+        return result;
+    }
+    else if(input.dateOfJoining && input.postingIn){
+        console.log('dateOfJoining, postingIn present');
+        result = await this.byProfileAdvanced(input, "dojPos");
+        console.log('twoParameter dateOfJoining, postingIn ', result);
+        return result;
+    }
+    else if(input.dateOfJoining && input.department){
+        console.log('dateOfJoining, department present');
+        result = await this.byProfileAdvanced(input, "dojDep");
+        console.log('twoParameter dateOfJoining, department ', result);
+        return result;
+    }
+    else if(input.dateOfJoining && input.designation){
+        console.log('dateOfJoining, designation present');
+        result = await this.byProfileAdvanced(input, "dojDes");
+        console.log('twoParameter dateOfJoining, recruitmentType ', result);
+        return result;
+    }
+
+    /////////
+else if(input.dateOfRetirement && input.recruitmentType){
+    console.log('dateOfRetirement, recruitmentType present');
+    result = await this.byProfileAdvanced(input, "dorRec");
+    console.log('twoParameter dateOfRetirement, recruitmentType ', result);
+    return result;
+}
+else if(input.dateOfRetirement && input.postingIn){
+    console.log('dateOfRetirement, postingIn present');
+    result = await this.byProfileAdvanced(input, "dorPos");
+    console.log('twoParameter dateOfRetirement, postingIn ', result);
+    return result;
+}
+else if(input.dateOfRetirement && input.department){
+    console.log('dateOfRetirement, department present');
+    result = await this.byProfileAdvanced(input, "dorDep");
+    console.log('twoParameter dateOfRetirement, department ', result);
+    return result;
+}
+else if(input.dateOfRetirement && input.designation){
+    console.log('dateOfRetirement, designation present');
+    result = await this.byProfileAdvanced(input, "dorDes");
+    console.log('twoParameter dateOfRetirement, designation ', result);
+    return result;
+}
+
+else if(input.recruitmentType && input.postingIn){
+    console.log('recruitmentType, postingIn present');
+    result = await this.byProfileAdvanced(input, "recPos");
+    console.log('twoParameter recruitmentType, postingIn ', result);
+    return result;
+}
+else if(input.recruitmentType && input.department){
+    console.log('recruitmentType, department present');
+    result = await this.byProfileAdvanced(input, "recDep");
+    console.log('twoParameter recruitmentType, department ', result);
+    return result;
+}
+else if(input.recruitmentType && input.designation){
+    console.log('recruitmentType, designation present');
+    result = await this.byProfileAdvanced(input, "recDes");
+    console.log('twoParameter recruitmentType, designation ', result);
+    return result;
+}
+
+/////
+else if(input.postingIn && input.department){
+    console.log('postingIn, department present');
+    result = await this.byProfileAdvanced(input, "posDep");
+    console.log('twoParameter postingIn, department ', result);
+    return result;
+}
+else if(input.postingIn && input.designation){
+    console.log('postingIn, designation present');
+    result = await this.byProfileAdvanced(input, "posDes");
+    console.log('twoParameter postingIn, designation ', result);
+    return result;
+}
+
+/////
+else if(input.department && input.designation){
+    console.log('department, designation present');
+    result = await this.byProfileAdvanced(input, "DepDes");
+    console.log('twoParameter department, designation ', result);
+    return result;
+}
+
+
+    let twoResult = [];
+    return twoResult;
+}
+
+exports.byProfileAdvanced = async(input, by) =>{
+    try{
+        //let batch = input;
+        let updateQueryJson;
+        console.log('input => ', input+' by => ', by);
+        let getQueryJson;
+        ////, , , , 
+        let uniqueArray = [];
+        let resultData = [];
+        let dataAll;
+        if(by == "dateOfBirth"){
+            // || by == 'naDePe' || by == 'naDePo' || by == 'naPePo' || by == 'naDePePo'){
+            console.log("if true - by ", by);
+            const startDate = new Date(input.dateOfBirth); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                }
+            } 
+        }
+        else if(by == "dateOfJoining"){
+            console.log("if true - by ", by);
+            const startDate = new Date(input.dateOfJoining); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfJoining: {
+                    $gte: startDate,
+                    $lt: endDate
+                }
+            } 
+        }
+        else if(by == "dateOfRetirement"){
+            console.log("if true - by ", by);
+            const startDate = new Date(input.dateOfRetirement); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+                getQueryJson = {
+                    dateOfRetirement: {
+                        $gte: startDate,
+                        $lt: endDate
+                    }
+                }
+        }
+        else if(by == "community"){
+                console.log("if true - by ", by);
+                getQueryJson = {
+                    community: input.community
+                }
+        }
+        else if(by == "degree"){
+            console.log("if true - by ", by);
+            getQueryJson = {
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                }
+            }
+        }
+        else if(by == "recruitmentType"){
+                console.log("if true - by ", by);
+                getQueryJson = {
+                    recruitmentType: input.recruitmentType
+                }
+        }
+        else if(by == "state"){
+                console.log("if true - by ", by);
+                getQueryJson = {
+                    state: input.state
+                }
+        }
+        else if(by == 'dobSta'){
+            const startDate = new Date(input.dateOfBirth); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                    state: input.state
+                } 
+        }
+        else if(by == 'dobCom'){
+            const startDate = new Date(input.dateOfBirth); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                community: input.community
+            } 
+        }
+        else if(by == 'dobDeg'){
+            const startDate = new Date(input.dateOfBirth); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                }
+            } 
+        }
+
+        console.log(getQueryJson);
+        if(by == "dateOfBirth" || by == "dateOfJoining" || by == "dateOfRetirement" ||
+        by == "community" || by == "recruitmentType" || by == "state"  || by == "degree" || 
+        by == "dobSta" || by == "dobCom" || by == "dobDeg")
+            data = await employeeProfile.find(getQueryJson).sort({ dateOfJoining: 'asc' }).exec();
+        else if(by == "department" || by == "postingIn" || by == "designation")
+            data = await employeeProfile.find().sort({ dateOfJoining: 'asc' }).exec();
+        // else if(by == "degree")
+        //     data = await employeeProfile.find(
+                
+        // ).sort({ dateOfJoining: 'asc' }).exec();
+        console.log("data returned from employeeProfile ", data);
+        for(let employee of data){
+            console.log('for data => ', employee);
+            updateQueryJson = {
+                empId: employee._id
+            }
+            console.log('updateQueryJson ', updateQueryJson);
+            if(by == "dateOfBirth" || by == "dateOfJoining" || by == "dateOfRetirement" ||
+                by == "community" || by == "recruitmentType" || by == "state"  || by == "degree" || 
+                by == "dobSta" || by == "dobCom" || by == "dobDeg"){
+                    dataAll = {
+                        personalEmail: employee.personalEmail,
+                        _id: employee._id,
+                        fullName: employee.fullName,
+                        gender: employee.gender,
+                        dateOfBirth: employee.dateOfBirth,
+                        dateOfJoining: employee.dateOfJoining,
+                        dateOfRetirement: employee.dateOfRetirement,
+                        state: employee.state,
+                        batch: employee.batch,
+                        recruitmentType: employee.recruitmentType,
+                        serviceStatus: employee.serviceStatus,
+                        qualification1: employee.qualification1,
+                        qualification2: employee.qualification2,
+                        community: employee.community,
+                        degreeData: employee.degreeData,
+                        caste: employee.caste,
+                        religion: employee.religion,
+                        promotionGrade: employee.promotionGrade,
+                        payscale: employee.payscale,
+                        officeEmail: employee.officeEmail,
+                        mobileNo1: employee.mobileNo1,
+                        mobileNo2: employee.mobileNo2,
+                        mobileNo3: employee.mobileNo3,
+                        addressLine: employee.addressLine,
+                        city: employee.city,
+                        pincode: employee.pincode,
+                        employeeId: employee.employeeId,
+                        ifhrmsId: employee.ifhrmsId,
+                        // photo: employee.photo
+                    }
+                }
+            
+            console.log('dataAll ', dataAll);
+            uniqueArray = await this.getEmployeeUpdateFilter(updateQueryJson);
+            console.log('length ==> ', uniqueArray.length);
+            if(uniqueArray.length > 0){
+                console.log('len ', uniqueArray.length);
+                for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                    console.log('Check ', transferOrPostingEmployeesList.empProfileId._id.toString(), employee._id.toString());
+                    if(transferOrPostingEmployeesList.empProfileId._id.toString() === employee._id.toString()){
+                        console.log('Matched ');
+                        dataAll = {
+                            toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                            toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                            toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                            postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                            locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                            remarks: uniqueArray[0].remarks,
+                            updateType: uniqueArray[0].updateType,
+                            orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                            orderNumber: uniqueArray[0].orderNumber,
+                            orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                            dateOfOrder: uniqueArray[0].dateOfOrder,
+                            personalEmail: employee.personalEmail,
+                            _id: employee._id,
+                            fullName: employee.fullName,
+                            gender: employee.gender,
+                            dateOfBirth: employee.dateOfBirth,
+                            dateOfJoining: employee.dateOfJoining,
+                            dateOfRetirement: employee.dateOfRetirement,
+                            state: employee.state,
+                            batch: employee.batch,
+                            recruitmentType: employee.recruitmentType,
+                            serviceStatus: employee.serviceStatus,
+                            qualification1: employee.qualification1,
+                            qualification2: employee.qualification2,
+                            community: employee.community,
+                            degreeData: employee.degreeData,
+                            caste: employee.caste,
+                            religion: employee.religion,
+                            promotionGrade: employee.promotionGrade,
+                            payscale: employee.payscale,
+                            officeEmail: employee.officeEmail,
+                            mobileNo1: employee.mobileNo1,
+                            mobileNo2: employee.mobileNo2,
+                            mobileNo3: employee.mobileNo3,
+                            addressLine: employee.addressLine,
+                            city: employee.city,
+                            pincode: employee.pincode,
+                            employeeId: employee.employeeId,
+                            ifhrmsId: employee.ifhrmsId,
+                            // photo: employee.photo
+                        }
+                        if(by == 'postingIn'){
+                            console.log('yes posting ');
+                            if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+                                {console.log('yes toposting avail')
+                                if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+                                    {
+                                        console.log('yes posting matched')
+                                        resultData.push(dataAll);
+                                    }
+                            }
+                            }
+                        }
+                        if(by == 'department'){
+                            console.log('yes dept ');
+                            if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+                                console.log('yes dept avail')
+                                if(transferOrPostingEmployeesList.toDepartmentId == input.department){
+                                    resultData.push(dataAll);
+                                }
+                            } 
+                        }
+                        if(by == 'designation'){
+                            console.log('yes designation ');
+                            if(transferOrPostingEmployeesList.toDesignationId){
+                                console.log('yes designation avail')
+                                if(transferOrPostingEmployeesList.toDesignationId == input.designation){
+                                    resultData.push(dataAll);
+                                }
+                            } 
+                        }
+                        else if(by == 'dePe' || by == 'naDePe' || by == 'baDePe' || by == 'naBaDePe'){
+                            console.log('yes period ');
+                            let per = input.period;
+                            console.log('input.period', input.period);
+                            console.log('per', per);
+                            console.log('per.fromDate ', per.fromDate);
+                            console.log('per.toDate', per.toDate);
+                            //dateToCheck >= fromDate && dateToCheck <= toDate
+                            let from = new Date(per.fromDate)
+                            let to = new Date(per.toDate)
+                            console.log('from',from);
+                            console.log('to',to);
+                            if(uniqueArray[0].dateOfOrder >= from &&
+                            uniqueArray[0].dateOfOrder <= to && 
+                            transferOrPostingEmployeesList.toDepartmentId == input.department){
+                                resultData.push(dataAll);
+                            }
+                        }
+                        else if(by == 'dePo' || by == 'naDePo' || by == 'baDePo' || by == 'naBaDePo'){
+                            if(transferOrPostingEmployeesList.toDepartmentId == input.department){
+                                if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+                                    console.log('yes toposting avail')
+                                    if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+                                    {
+                                        console.log('yes posting matched')
+                                        resultData.push(dataAll);
+                                    }
+                                }
+                            }
+                        }
+                        else if(by == 'pePo' || by == 'naPePo' || by == 'baPePo' || by == 'naBaPePo'){
+                            console.log('yes period ');
+                            let per = input.period;
+                            console.log('input.period', input.period);
+                            console.log('per', per);
+                            console.log('per.fromDate ', per.fromDate);
+                            console.log('per.toDate', per.toDate);
+                            //dateToCheck >= fromDate && dateToCheck <= toDate
+                            let from = new Date(per.fromDate)
+                            let to = new Date(per.toDate)
+                            console.log('from',from);
+                            console.log('to',to);
+                            if(uniqueArray[0].dateOfOrder >= from &&
+                            uniqueArray[0].dateOfOrder <= to){
+                                if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+                                    console.log('yes toposting avail')
+                                    if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+                                    {
+                                        console.log('yes posting matched')
+                                        resultData.push(dataAll);
+                                    }
+                                }
+                            }
+                        }
+                        else if(by == "all" || by == 'dePePo' || by == 'naDePePo' || by == 'baDePePo'){
+                            if(transferOrPostingEmployeesList.toDepartmentId == input.department){
+                                console.log('yes period ');
+                            let per = input.period;
+                            console.log('input.period', input.period);
+                            console.log('per', per);
+                            console.log('per.fromDate ', per.fromDate);
+                            console.log('per.toDate', per.toDate);
+                            //dateToCheck >= fromDate && dateToCheck <= toDate
+                            let from = new Date(per.fromDate)
+                            let to = new Date(per.toDate)
+                            console.log('from',from);
+                            console.log('to',to);
+                            if(uniqueArray[0].dateOfOrder >= from &&
+                            uniqueArray[0].dateOfOrder <= to){
+                                if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+                                    console.log('yes toposting avail')
+                                    if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+                                    {
+                                        console.log('yes posting matched')
+                                        resultData.push(dataAll);
+                                    }
+                                }
+                            }
+                            }
+                        }
+                        else if(by == 'dateOfBirth' || by == 'dateOfJoining' || by == 'dateOfRetirement' ||
+                            by == "community" || by == 'recruitmentType' || by == "state" || by == "degree" ||
+                            by == "dobSta" || by == "dobCom" || by == "dobDeg"){
+                            console.log('dataAll => ', dataAll);
+                            resultData.push(dataAll);
+                        }
+                    }
+                }
+                ///here
+                
+                
+            }
+            else{
+                console.log('len else ', uniqueArray.length);
+            }
+            // if(by == 'department' || by == 'naDe' || by == "baDe" || by == 'naBaDe'){
+            //     console.log('yes dept ');
+            //     if(transferOrPostingEmployeesList.toDepartmentId == input.department){
+            //         resultData.push(dataAll);
+            //     }
+            // }
+            // if( by == "period" || by == 'naPe' || by == 'baPe' || by == 'naBaPe'){
+            //     console.log('yes period ');
+            //     let per = input.period;
+            //     console.log('input.period', input.period);
+            //     console.log('per', per);
+            //     console.log('per.fromDate ', per.fromDate);
+            //     console.log('per.toDate', per.toDate);
+            //     //dateToCheck >= fromDate && dateToCheck <= toDate
+            //     let from = new Date(per.fromDate)
+            //     let to = new Date(per.toDate)
+            //     console.log('from',from);
+            //     console.log('to',to);
+            //     if(uniqueArray[0].dateOfOrder >= from &&
+            //     uniqueArray[0].dateOfOrder <= to){
+            //         // && uniqueArray[0].dateOfOrder < input.period.toDate){
+            //         console.log('date matched')
+            //         resultData.push(dataAll);
+            //     }else console.log('date not matched');
+            // }
+            // if(by == 'postingIn' || by == 'naPo' || by == "baPo" || by == 'naBaPo'){
+            //     console.log('yes posting ');
+            //     if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+            //         {console.log('yes toposting avail')
+            //         if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+            //             {
+            //                 console.log('yes posting matched')
+            //                 resultData.push(dataAll);
+            //             }
+            //     }
+            //     }
+            // }
+            // else if(by == 'dePe' || by == 'naDePe' || by == 'baDePe' || by == 'naBaDePe'){
+            //     console.log('yes period ');
+            //     let per = input.period;
+            //     console.log('input.period', input.period);
+            //     console.log('per', per);
+            //     console.log('per.fromDate ', per.fromDate);
+            //     console.log('per.toDate', per.toDate);
+            //     //dateToCheck >= fromDate && dateToCheck <= toDate
+            //     let from = new Date(per.fromDate)
+            //     let to = new Date(per.toDate)
+            //     console.log('from',from);
+            //     console.log('to',to);
+            //     if(uniqueArray[0].dateOfOrder >= from &&
+            //     uniqueArray[0].dateOfOrder <= to && 
+            //     transferOrPostingEmployeesList.toDepartmentId == input.department){
+            //         resultData.push(dataAll);
+            //     }
+            // }
+            // else if(by == 'dePo' || by == 'naDePo' || by == 'baDePo' || by == 'naBaDePo'){
+            //     if(transferOrPostingEmployeesList.toDepartmentId == input.department){
+            //         if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+            //             console.log('yes toposting avail')
+            //             if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+            //             {
+            //                 console.log('yes posting matched')
+            //                 resultData.push(dataAll);
+            //             }
+            //         }
+            //     }
+            // }
+            // else if(by == 'pePo' || by == 'naPePo' || by == 'baPePo' || by == 'naBaPePo'){
+            //     console.log('yes period ');
+            //     let per = input.period;
+            //     console.log('input.period', input.period);
+            //     console.log('per', per);
+            //     console.log('per.fromDate ', per.fromDate);
+            //     console.log('per.toDate', per.toDate);
+            //     //dateToCheck >= fromDate && dateToCheck <= toDate
+            //     let from = new Date(per.fromDate)
+            //     let to = new Date(per.toDate)
+            //     console.log('from',from);
+            //     console.log('to',to);
+            //     if(uniqueArray[0].dateOfOrder >= from &&
+            //     uniqueArray[0].dateOfOrder <= to){
+            //         if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+            //             console.log('yes toposting avail')
+            //             if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+            //             {
+            //                 console.log('yes posting matched')
+            //                 resultData.push(dataAll);
+            //             }
+            //         }
+            //     }
+            // }
+            // else if(by == "all" || by == 'dePePo' || by == 'naDePePo' || by == 'baDePePo'){
+            //     if(transferOrPostingEmployeesList.toDepartmentId == input.department){
+            //         console.log('yes period ');
+            //     let per = input.period;
+            //     console.log('input.period', input.period);
+            //     console.log('per', per);
+            //     console.log('per.fromDate ', per.fromDate);
+            //     console.log('per.toDate', per.toDate);
+            //     //dateToCheck >= fromDate && dateToCheck <= toDate
+            //     let from = new Date(per.fromDate)
+            //     let to = new Date(per.toDate)
+            //     console.log('from',from);
+            //     console.log('to',to);
+            //     if(uniqueArray[0].dateOfOrder >= from &&
+            //     uniqueArray[0].dateOfOrder <= to){
+            //         if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+            //             console.log('yes toposting avail')
+            //             if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+            //             {
+            //                 console.log('yes posting matched')
+            //                 resultData.push(dataAll);
+            //             }
+            //         }
+            //     }
+            //     }
+            // }
+            // else if(by == 'dateOfBirth' || by == 'dateOfJoining' || by == 'dateOfRetirement' ||
+            //     by == 'naBa' || by == "community" || by == 'recruitmentType' || by == "state"){
+            //     console.log('dataAll => ', dataAll);
+            //     resultData.push(dataAll);
+            // }
+        }
+        console.log('Unique by latest date of order: 2', uniqueArray);
+        let resData = {
+            empCount : resultData.length,
+            empList: resultData
+        }
+        console.log('resDate =====> ', resData);
+        return resData;
+    }
+    catch (error) {
+        console.log('error', error);
+        return [];
+        }
 }
