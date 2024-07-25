@@ -3994,9 +3994,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'staDorPos' || by == 'staRecPos' || by == 'comDojPos' || by == 'staDegPos' ||
                             by == 'comDorPos' || by == 'comRecPos' || by == 'degDojPos' || by == 'degDorPos' ||
                             by == 'degRecPos' || by == 'dojDorPos' || by == 'dojRecPos' || by == 'comDegPos' ||
-                            by == 'dorRecPos'
+                            by == 'dorRecPos' || by == 'dorRecPos' || by == 'dojRecPos' || by == 'dojDorPos'
                             ){
-                            console.log('yes posting ' || by == 'dorRecPos' || by == 'dojRecPos' || by == 'dojDorPos');
+                            console.log('yes posting ');
                             if(transferOrPostingEmployeesList.toPostingInCategoryCode){
                                 {console.log('yes toposting avail')
                                 if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
@@ -4026,7 +4026,7 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'staDegDes' || by == 'staDojDes' || by == 'staDorDes' || by == 'staRecDes' ||
                             by == 'comDegDes' || by == 'comDojDes' || by == 'comDorDes' || by == 'comRecDes' ||
                             by == 'degDojDes' || by == 'degDorDes' || by == 'degRecDes' || by == 'dojDorDes' ||
-                            by == 'dojRecDes' || by == 'dorRecDes'
+                            by == 'dojRecDes' || by == 'dorRecDes' 
                         ){
                             console.log('yes designation ');
                             if(transferOrPostingEmployeesList.toDesignationId){
@@ -4036,8 +4036,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                                 }
                             } 
                         }
-                        else if(by == 'posDep' || by == 'dobPosDep' || by == 'staPosDep' || by == 'comPosDep' || by == 'degPosDep'
-                            || by == 'dojPosDep' || by == 'dorPosDep' || by == 'recPosDep'
+                        else if(by == 'posDep' || by == 'dobPosDep' || by == 'staPosDep' || by == 'dorPosDep' ||
+                            by == 'comPosDep' || by == 'degPosDep' || by == 'dojPosDep' || by == 'recPosDep'
                         ){
                             if(transferOrPostingEmployeesList.toDepartmentId == input.department){
                                 if(transferOrPostingEmployeesList.toPostingInCategoryCode){
@@ -4050,7 +4050,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                                 }
                             }
                         }
-                        else if(by == 'posDes' || by == 'dobPosDes' || by == 'staPosDes' || by == 'comPosDes' || by == 'degPosDes' ||
+                        else if(by == 'posDes' || by == 'dobPosDes' || by == 'staPosDes' || by == 'comPosDes' 
+                            || by == 'degPosDes' ||
                             by == 'dojPosDes' || by == 'dorPosDes' || by == 'recPosDes'
                         ){
                             if(transferOrPostingEmployeesList.toDesignationId == input.designation){
@@ -4079,32 +4080,6 @@ exports.byProfileAdvanced = async(input, by) =>{
                             }
                         }
                         
-                        else if(by == "all" || by == 'dePePo' || by == 'naDePePo' || by == 'baDePePo'){
-                            if(transferOrPostingEmployeesList.toDepartmentId == input.department){
-                                console.log('yes period ');
-                            let per = input.period;
-                            console.log('input.period', input.period);
-                            console.log('per', per);
-                            console.log('per.fromDate ', per.fromDate);
-                            console.log('per.toDate', per.toDate);
-                            //dateToCheck >= fromDate && dateToCheck <= toDate
-                            let from = new Date(per.fromDate)
-                            let to = new Date(per.toDate)
-                            console.log('from',from);
-                            console.log('to',to);
-                            if(uniqueArray[0].dateOfOrder >= from &&
-                            uniqueArray[0].dateOfOrder <= to){
-                                if(transferOrPostingEmployeesList.toPostingInCategoryCode){
-                                    console.log('yes toposting avail')
-                                    if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
-                                    {
-                                        console.log('yes posting matched')
-                                        resultData.push(dataAll);
-                                    }
-                                }
-                            }
-                            }
-                        }
                         else if(by == "dateOfBirth" || by == "dateOfJoining" || by == "dateOfRetirement" ||
                             by == "community" || by == "recruitmentType" || by == "state"  || by == "degree" || 
                             by == "dobSta" || by == "dobCom" || by == "dobDeg"|| 
@@ -4116,12 +4091,20 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == "dobDor" || by == "dobRec" || by == "staCom" || by == "staDeg" || by == "staDoj" ||
                             by == "staDor" || by == "staRec" || by == "comDeg" || by == "comDoj" || by == "comDor" ||
                             by == "comRec" || by == "degDoj" || by == "degDor" || by == "degRec" || by == "dojDor" ||
-                            by == "dojRec" || by == "dorRec" ||
-                            by == "dobStaCom"){
-                            console.log('dataAll => ', dataAll);
+                            by == "dojRec" || by == "dorRec" || by == "dobStaCom" || by == "dobStaDeg" || by == "dobStaDoj" ||
+                            by == "dobStaDor" || by == "dobStaRec" || by == "dobComDeg" || by == "dobComDoj" || 
+                            by == "dobComDor" || by == "dobComRec" || by == "dobDegDoj" || by == "dobDegDor" || 
+                            by == "dobDegRec"  || by == "dobDojDor" || by == "dobDojRec" || by == "dobDorRec" || 
+                            by == "staComDoj" || by == "staDojDor" || by == "staDojRec" || by == "comDegDoj" ||
+                            by == "comDojDor" || by == "comDojRec" || by == "degDojRec" || by == "dojDorRec" 
+                            || by == "staComDor" || by == "staDegDor" || by == "comDegDor" || by == "comDorRec" 
+                            || by == "degDojDor" || by == "degDorRec" || by == "staComRec" || by == "staComDeg"
+                            || by == "staDorRec" || by == "comDegRec" || by == "staDegDoj"|| by == "staDegRec"
+                            || by == "comDegDep" ){
+                            // console.log('dataAll => ', dataAll);
                             
                             resultData.push(dataAll);
-                            console.log('resultData end => ', resultData);
+                            // console.log('resultData end => ', resultData);
                         }
                     }
                 }
@@ -4139,7 +4122,7 @@ exports.byProfileAdvanced = async(input, by) =>{
             empCount : resultData.length,
             empList: resultData
         }
-        console.log('resDate =====> ', resData);
+        // console.log('resDate =====> ', resData);
         return resData;
     }
     catch (error) {
