@@ -355,6 +355,12 @@ exports.updateEmployeeProfile = async (req, res) => {
         if(query.personalEmail){
             update.personalEmail = query.personalEmail;
         }
+        // if(query.personalEmail){
+        //     update.personalEmail = query.personalEmail;
+        // }
+        // if(query.personalEmail){
+        //     update.personalEmail = query.personalEmail;
+        // }
         let filter = {
             _id : query.id
         }
@@ -1970,59 +1976,37 @@ exports.getEmployeeAdvancedSearch = async (req, res) => {
             }
             else if(count == 3){
                 result = await this.threeParameterAdvanced(req.body);
-                console.log('getEmployeeAdvancedSearch RESSSSSSS ', result)
+                console.log('getEmployeeAdvancedSearch ', result)
                 successRes(res, result, 'Employee listed -> 3 params Successfully');
             }
-            // else if(count == 3){
-            //     result = await this.threeParameterAdvanced(req.body);
-            //     console.log('getEmployeeAdvancedSearch', result)
-            //     successRes(res, result, 'Employee listed -> 3 params Successfully');
-            // }
-            // else if(count == 4){
-            //     result = await this.fourParameterAdvanced(req.body);
-            //     console.log('getEmployeeAdvancedSearch', result)
-            //     successRes(res, result, 'Employee listed -> 4 params Successfully');
-            // }
-            // else if(count == 5){
-            //     result = await this.fiveParameterAdvanced(req.body);
-            //     console.log('getEmployeeAdvancedSearch', result)
-            //     successRes(res, result, 'Employee listed -> 5 params Successfully');
-            // }
-            // else if(count == 6){
-            //     result = await this.sixParameterAdvanced(req.body);
-            //     console.log('getEmployeeAdvancedSearch', result)
-            //     successRes(res, result, 'Employee listed -> 6 param Successfully');
-            // }
-            // else if(count == 7){
-            //     result = await this.sevenParameterAdvanced(req.body);
-            //     console.log('getEmployeeAdvancedSearch', result)
-            //     successRes(res, result, 'Employee listed -> 7 params Successfully');
-            // }
-            // else if(count == 8){
-            //     result = await this.eightParameterAdvanced(req.body);
-            //     console.log('getEmployeeAdvancedSearch', result)
-            //     successRes(res, result, 'Employee listed -> 8 params Successfully');
-            // }
-            // else if(count == 9){
-            //     result = await this.nineParameterAdvanced(req.body);
-            //     console.log('getEmployeeAdvancedSearch', result)
-            //     successRes(res, result, 'Employee listed -> 9 params Successfully');
-            // }
-            // else if(count == 10){
-            //     result = await this.tenParameterAdvanced(req.body);
-            //     console.log('getEmployeeAdvancedSearch', result)
-            //     successRes(res, result, 'Employee listed -> 10 params Successfully');
-            // }
-            // else if(count == 11){
-            //     result = await this.elevenParameterAdvanced(req.body);
-            //     console.log('getEmployeeAdvancedSearch', result)
-            //     successRes(res, result, 'Employee listed -> 11 params Successfully');
-            // }
+            else if(count == 4){
+                result = await this.fourParameterAdvanced(req.body);
+                console.log('getEmployeeAdvancedSearch ', result)
+                successRes(res, result, 'Employee listed -> 4 params Successfully');
+            }
+            else if(count == 5){
+                result = await this.fiveParameterAdvanced(req.body);
+                console.log('getEmployeeAdvancedSearch ', result)
+                successRes(res, result, 'Employee listed -> 5 params Successfully');
+            }
+            else if(count == 6){
+                result = await this.sixParameterAdvanced(req.body);
+                console.log('getEmployeeAdvancedSearch ', result)
+                successRes(res, result, 'Employee listed -> 6 params Successfully');
+            }  
         } 
         catch (error) {
         console.log('error', error);
         errorRes(res, error, "Error on listing employee profile with history");
         }
+}
+
+exports.fiveParameterAdvanced = async(input) => {
+    console.log('inside fiveParameterAdvanced function', input); 
+}
+
+exports.sixParameterAdvanced = async(input) => {
+    console.log('inside sixParameterAdvanced function', input); 
 }
 
 exports.oneParameterAdvanced = async(input) => {
@@ -2716,6 +2700,257 @@ exports.threeParameterAdvanced = async (input) => {
     }
 };
 
+exports.fourParameterAdvanced = async (input) => {
+    try {
+        console.log('inside fourParameterAdvanced function', input);
+
+        const combinations = [
+            { fields: ['dateOfBirth', 'state', 'community', 'degree'], action: 'dobStaComDeg' },
+            { fields: ['dateOfBirth', 'state', 'community', 'dateOfJoining'], action: 'dobStaComDoj' },
+            { fields: ['dateOfBirth', 'state', 'community', 'dateOfRetirement'], action: 'dobStaComDor' },
+            { fields: ['dateOfBirth', 'state', 'community', 'recruitmentType'], action: 'dobStaComRec' },
+            { fields: ['dateOfBirth', 'state', 'community', 'postingIn'], action: 'dobStaComPos' },
+            { fields: ['dateOfBirth', 'state', 'community', 'department'], action: 'dobStaComDep' },
+            { fields: ['dateOfBirth', 'state', 'community', 'designation'], action: 'dobStaComDes' },
+            { fields: ['dateOfBirth', 'state', 'degree', 'dateOfJoining'], action: 'dobStaDegDoj' },
+            { fields: ['dateOfBirth', 'state', 'degree', 'dateOfRetirement'], action: 'dobStaDegDor' },
+            { fields: ['dateOfBirth', 'state', 'degree', 'recruitmentType'], action: 'dobStaDegRec' },
+            { fields: ['dateOfBirth', 'state', 'degree', 'postingIn'], action: 'dobStaDegPos' },
+            { fields: ['dateOfBirth', 'state', 'degree', 'department'], action: 'dobStaDegDep' },
+            { fields: ['dateOfBirth', 'state', 'degree', 'designation'], action: 'dobStaDegDes' },
+            { fields: ['dateOfBirth', 'state', 'dateOfJoining', 'dateOfRetirement'], action: 'dobStaDojDor' },
+            { fields: ['dateOfBirth', 'state', 'dateOfJoining', 'recruitmentType'], action: 'dobStaDojRec' },
+            { fields: ['dateOfBirth', 'state', 'dateOfJoining', 'postingIn'], action: 'dobStaDojPos' },
+            { fields: ['dateOfBirth', 'state', 'dateOfJoining', 'department'], action: 'dobStaDojDep' },
+            { fields: ['dateOfBirth', 'state', 'dateOfJoining', 'designation'], action: 'dobStaDojDes' },
+            { fields: ['dateOfBirth', 'state', 'dateOfRetirement', 'recruitmentType'], action: 'dobStaDorRec' },
+            { fields: ['dateOfBirth', 'state', 'dateOfRetirement', 'postingIn'], action: 'dobStaDorPos' },
+            { fields: ['dateOfBirth', 'state', 'dateOfRetirement', 'department'], action: 'dobStaDorDep' },
+            { fields: ['dateOfBirth', 'state', 'dateOfRetirement', 'designation'], action: 'dobStaDorDes' },
+            { fields: ['dateOfBirth', 'state', 'recruitmentType', 'postingIn'], action: 'dobStaRecPos' },
+            { fields: ['dateOfBirth', 'state', 'recruitmentType', 'department'], action: 'dobStaRecDep' },
+            { fields: ['dateOfBirth', 'state', 'recruitmentType', 'designation'], action: 'dobStaRecDes' },
+            { fields: ['dateOfBirth', 'state', 'postingIn', 'department'], action: 'dobStaPosDep' },
+            { fields: ['dateOfBirth', 'state', 'postingIn', 'designation'], action: 'dobStaPosDes' },
+            { fields: ['dateOfBirth', 'state', 'department', 'designation'], action: 'dobStaDepDes' },
+            { fields: ['dateOfBirth', 'community', 'degree', 'dateOfJoining'], action: 'dobComDegDoj' },
+            { fields: ['dateOfBirth', 'community', 'degree', 'dateOfRetirement'], action: 'dobComDegDor' },
+            { fields: ['dateOfBirth', 'community', 'degree', 'recruitmentType'], action: 'dobComDegRec' },
+            { fields: ['dateOfBirth', 'community', 'degree', 'postingIn'], action: 'dobComDegPos' },
+            { fields: ['dateOfBirth', 'community', 'degree', 'department'], action: 'dobComDegDep' },
+            { fields: ['dateOfBirth', 'community', 'degree', 'designation'], action: 'dobComDegDes' },
+            { fields: ['dateOfBirth', 'community', 'dateOfJoining', 'dateOfRetirement'], action: 'dobComDojDor' },
+            { fields: ['dateOfBirth', 'community', 'dateOfJoining', 'recruitmentType'], action: 'dobComDojRec' },
+            { fields: ['dateOfBirth', 'community', 'dateOfJoining', 'postingIn'], action: 'dobComDojPos' },
+            { fields: ['dateOfBirth', 'community', 'dateOfJoining', 'department'], action: 'dobComDojDep' },
+            { fields: ['dateOfBirth', 'community', 'dateOfJoining', 'designation'], action: 'dobComDojDes' },
+            { fields: ['dateOfBirth', 'community', 'dateOfRetirement', 'recruitmentType'], action: 'dobComDorRec' },
+            { fields: ['dateOfBirth', 'community', 'dateOfRetirement', 'postingIn'], action: 'dobComDorPos' },
+            { fields: ['dateOfBirth', 'community', 'dateOfRetirement', 'department'], action: 'dobComDorDep' },
+            { fields: ['dateOfBirth', 'community', 'dateOfRetirement', 'designation'], action: 'dobComDorDes' },
+            { fields: ['dateOfBirth', 'community', 'recruitmentType', 'postingIn'], action: 'dobComRecPos' },
+            { fields: ['dateOfBirth', 'community', 'recruitmentType', 'department'], action: 'dobComRecDep' },
+            { fields: ['dateOfBirth', 'community', 'recruitmentType', 'designation'], action: 'dobComRecDes' },
+            { fields: ['dateOfBirth', 'community', 'postingIn', 'department'], action: 'dobComPosDep' },
+            { fields: ['dateOfBirth', 'community', 'postingIn', 'designation'], action: 'dobComPosDes' },
+            { fields: ['dateOfBirth', 'community', 'department', 'designation'], action: 'dobComDepDes' },
+            { fields: ['dateOfBirth', 'degree', 'dateOfJoining', 'dateOfRetirement'], action: 'dobDegDojDor' },
+            { fields: ['dateOfBirth', 'degree', 'dateOfJoining', 'recruitmentType'], action: 'dobDegDojRec' },
+            { fields: ['dateOfBirth', 'degree', 'dateOfJoining', 'postingIn'], action: 'dobDegDojPos' },
+            { fields: ['dateOfBirth', 'degree', 'dateOfJoining', 'department'], action: 'dobDegDojDep' },
+            { fields: ['dateOfBirth', 'degree', 'dateOfJoining', 'designation'], action: 'dobDegDojDes' },
+            { fields: ['dateOfBirth', 'degree', 'dateOfRetirement', 'recruitmentType'], action: 'dobDegDorRec' },
+            { fields: ['dateOfBirth', 'degree', 'dateOfRetirement', 'postingIn'], action: 'dobDegDorPos' },
+            { fields: ['dateOfBirth', 'degree', 'dateOfRetirement', 'department'], action: 'dobDegDorDep' },
+            { fields: ['dateOfBirth', 'degree', 'dateOfRetirement', 'designation'], action: 'dobDegDorDes' },
+            { fields: ['dateOfBirth', 'degree', 'recruitmentType', 'postingIn'], action: 'dobDegRecPos' },
+            { fields: ['dateOfBirth', 'degree', 'recruitmentType', 'department'], action: 'dobDegRecDep' },
+            { fields: ['dateOfBirth', 'degree', 'recruitmentType', 'designation'], action: 'dobDegRecDes' },
+            { fields: ['dateOfBirth', 'degree', 'postingIn', 'department'], action: 'dobDegPosDep' },
+            { fields: ['dateOfBirth', 'degree', 'postingIn', 'designation'], action: 'dobDegPosDes' },
+            { fields: ['dateOfBirth', 'degree', 'department', 'designation'], action: 'dobDegDepDes' },
+            { fields: ['dateOfBirth', 'dateOfJoining', 'dateOfRetirement', 'recruitmentType'], action: 'dobDojDorRec' },
+            { fields: ['dateOfBirth', 'dateOfJoining', 'dateOfRetirement', 'postingIn'], action: 'dobDojDorPos' },
+            { fields: ['dateOfBirth', 'dateOfJoining', 'dateOfRetirement', 'department'], action: 'dobDojDorDep' },
+            { fields: ['dateOfBirth', 'dateOfJoining', 'dateOfRetirement', 'designation'], action: 'dobDojDorDes' },
+            { fields: ['dateOfBirth', 'dateOfJoining', 'recruitmentType', 'postingIn'], action: 'dobDojRecPos' },
+            { fields: ['dateOfBirth', 'dateOfJoining', 'recruitmentType', 'department'], action: 'dobDojRecDep' },
+            { fields: ['dateOfBirth', 'dateOfJoining', 'recruitmentType', 'designation'], action: 'dobDojRecDes' },
+            { fields: ['dateOfBirth', 'dateOfJoining', 'postingIn', 'department'], action: 'dobDojPosDep' },
+            { fields: ['dateOfBirth', 'dateOfJoining', 'postingIn', 'designation'], action: 'dobDojPosDes' },
+            { fields: ['dateOfBirth', 'dateOfJoining', 'department', 'designation'], action: 'dobDojDepDes' },
+            { fields: ['dateOfBirth', 'dateOfRetirement', 'recruitmentType', 'postingIn'], action: 'dobDorRecPos' },
+            { fields: ['dateOfBirth', 'dateOfRetirement', 'recruitmentType', 'department'], action: 'dobDorRecDep' },
+            { fields: ['dateOfBirth', 'dateOfRetirement', 'recruitmentType', 'designation'], action: 'dobDorRecDes' },
+            { fields: ['dateOfBirth', 'dateOfRetirement', 'postingIn', 'department'], action: 'dobDorPosDep' },
+            { fields: ['dateOfBirth', 'dateOfRetirement', 'postingIn', 'designation'], action: 'dobDorPosDes' },
+            { fields: ['dateOfBirth', 'dateOfRetirement', 'department', 'designation'], action: 'dobDorDepDes' },
+            { fields: ['dateOfBirth', 'recruitmentType', 'postingIn', 'department'], action: 'dobRecPosDep' },
+            { fields: ['dateOfBirth', 'recruitmentType', 'postingIn', 'designation'], action: 'dobRecPosDes' },
+            { fields: ['dateOfBirth', 'recruitmentType', 'department', 'designation'], action: 'dobRecDepDes' },
+            { fields: ['dateOfBirth', 'postingIn', 'department', 'designation'], action: 'dobPosDepDes' },
+            { fields: ['state', 'community', 'degree', 'dateOfJoining'], action: 'staComDegDoj' },
+            { fields: ['state', 'community', 'degree', 'dateOfRetirement'], action: 'staComDegDor' },
+            { fields: ['state', 'community', 'degree', 'recruitmentType'], action: 'staComDegRec' },
+            { fields: ['state', 'community', 'degree', 'postingIn'], action: 'staComDegPos' },
+            { fields: ['state', 'community', 'degree', 'department'], action: 'staComDegDep' },
+            { fields: ['state', 'community', 'degree', 'designation'], action: 'staComDegDes' },
+            { fields: ['state', 'community', 'dateOfJoining', 'dateOfRetirement'], action: 'staComDojDor' },
+            { fields: ['state', 'community', 'dateOfJoining', 'recruitmentType'], action: 'staComDojRec' },
+            { fields: ['state', 'community', 'dateOfJoining', 'postingIn'], action: 'staComDojPos' },
+            { fields: ['state', 'community', 'dateOfJoining', 'department'], action: 'staComDojDep' },
+            { fields: ['state', 'community', 'dateOfJoining', 'designation'], action: 'staComDojDes' },
+            { fields: ['state', 'community', 'dateOfRetirement', 'recruitmentType'], action: 'staComDorRec' },
+            { fields: ['state', 'community', 'dateOfRetirement', 'postingIn'], action: 'staComDorPos' },
+            { fields: ['state', 'community', 'dateOfRetirement', 'department'], action: 'staComDorDep' },
+            { fields: ['state', 'community', 'dateOfRetirement', 'designation'], action: 'staComDorDes' },
+            { fields: ['state', 'community', 'recruitmentType', 'postingIn'], action: 'staComRecPos' },
+            { fields: ['state', 'community', 'recruitmentType', 'department'], action: 'staComRecDep' },
+            { fields: ['state', 'community', 'recruitmentType', 'designation'], action: 'staComRecDes' },
+            { fields: ['state', 'community', 'postingIn', 'department'], action: 'staComPosDep' },
+            { fields: ['state', 'community', 'postingIn', 'designation'], action: 'staComPosDes' },
+            { fields: ['state', 'community', 'department', 'designation'], action: 'staComDepDes' },
+            { fields: ['state', 'degree', 'dateOfJoining', 'dateOfRetirement'], action: 'staDegDojDor' },
+            { fields: ['state', 'degree', 'dateOfJoining', 'recruitmentType'], action: 'staDegDojRec' },
+            { fields: ['state', 'degree', 'dateOfJoining', 'postingIn'], action: 'staDegDojPos' },
+            { fields: ['state', 'degree', 'dateOfJoining', 'department'], action: 'staDegDojDep' },
+            { fields: ['state', 'degree', 'dateOfJoining', 'designation'], action: 'staDegDojDes' },
+            { fields: ['state', 'degree', 'dateOfRetirement', 'recruitmentType'], action: 'staDegDorRec' },
+            { fields: ['state', 'degree', 'dateOfRetirement', 'postingIn'], action: 'staDegDorPos' },
+            { fields: ['state', 'degree', 'dateOfRetirement', 'department'], action: 'staDegDorDep' },
+            { fields: ['state', 'degree', 'dateOfRetirement', 'designation'], action: 'staDegDorDes' },
+            { fields: ['state', 'degree', 'recruitmentType', 'postingIn'], action: 'staDegRecPos' },
+            { fields: ['state', 'degree', 'recruitmentType', 'department'], action: 'staDegRecDep' },
+            { fields: ['state', 'degree', 'recruitmentType', 'designation'], action: 'staDegRecDes' },
+            { fields: ['state', 'degree', 'postingIn', 'department'], action: 'staDegPosDep' },
+            { fields: ['state', 'degree', 'postingIn', 'designation'], action: 'staDegPosDes' },
+            { fields: ['state', 'degree', 'department', 'designation'], action: 'staDegDepDes' },
+            { fields: ['state', 'dateOfJoining', 'dateOfRetirement', 'recruitmentType'], action: 'staDojDorRec' },
+            { fields: ['state', 'dateOfJoining', 'dateOfRetirement', 'postingIn'], action: 'staDojDorPos' },
+            { fields: ['state', 'dateOfJoining', 'dateOfRetirement', 'department'], action: 'staDojDorDep' },
+            { fields: ['state', 'dateOfJoining', 'dateOfRetirement', 'designation'], action: 'staDojDorDes' },
+            { fields: ['state', 'dateOfJoining', 'recruitmentType', 'postingIn'], action: 'staDojRecPos' },
+            { fields: ['state', 'dateOfJoining', 'recruitmentType', 'department'], action: 'staDojRecDep' },
+            { fields: ['state', 'dateOfJoining', 'recruitmentType', 'designation'], action: 'staDojRecDes' },
+            { fields: ['state', 'dateOfJoining', 'postingIn', 'department'], action: 'staDojPosDep' },
+            { fields: ['state', 'dateOfJoining', 'postingIn', 'designation'], action: 'staDojPosDes' },
+            { fields: ['state', 'dateOfJoining', 'department', 'designation'], action: 'staDojDepDes' },
+            { fields: ['state', 'dateOfRetirement', 'recruitmentType', 'postingIn'], action: 'staDorRecPos' },
+            { fields: ['state', 'dateOfRetirement', 'recruitmentType', 'department'], action: 'staDorRecDep' },
+            { fields: ['state', 'dateOfRetirement', 'recruitmentType', 'designation'], action: 'staDorRecDes' },
+            { fields: ['state', 'dateOfRetirement', 'postingIn', 'department'], action: 'staDorPosDep' },
+            { fields: ['state', 'dateOfRetirement', 'postingIn', 'designation'], action: 'staDorPosDes' },
+            { fields: ['state', 'dateOfRetirement', 'department', 'designation'], action: 'staDorDepDes' },
+            { fields: ['state', 'recruitmentType', 'postingIn', 'department'], action: 'staRecPosDep' },
+            { fields: ['state', 'recruitmentType', 'postingIn', 'designation'], action: 'staRecPosDes' },
+            { fields: ['state', 'recruitmentType', 'department', 'designation'], action: 'staRecDepDes' },
+            { fields: ['state', 'postingIn', 'department', 'designation'], action: 'staPosDepDes' },
+            { fields: ['community', 'degree', 'dateOfJoining', 'dateOfRetirement'], action: 'comDegDojDor' },
+            { fields: ['community', 'degree', 'dateOfJoining', 'recruitmentType'], action: 'comDegDojRec' },
+            { fields: ['community', 'degree', 'dateOfJoining', 'postingIn'], action: 'comDegDojPos' },
+            { fields: ['community', 'degree', 'dateOfJoining', 'department'], action: 'comDegDojDep' },
+            { fields: ['community', 'degree', 'dateOfJoining', 'designation'], action: 'comDegDojDes' },
+            { fields: ['community', 'degree', 'dateOfRetirement', 'recruitmentType'], action: 'comDegDorRec' },
+            { fields: ['community', 'degree', 'dateOfRetirement', 'postingIn'], action: 'comDegDorPos' },
+            { fields: ['community', 'degree', 'dateOfRetirement', 'department'], action: 'comDegDorDep' },
+            { fields: ['community', 'degree', 'dateOfRetirement', 'designation'], action: 'comDegDorDes' },
+            { fields: ['community', 'degree', 'recruitmentType', 'postingIn'], action: 'comDegRecPos' },
+            { fields: ['community', 'degree', 'recruitmentType', 'department'], action: 'comDegRecDep' },
+            { fields: ['community', 'degree', 'recruitmentType', 'designation'], action: 'comDegRecDes' },
+            { fields: ['community', 'degree', 'postingIn', 'department'], action: 'comDegPosDep' },
+            { fields: ['community', 'degree', 'postingIn', 'designation'], action: 'comDegPosDes' },
+            { fields: ['community', 'degree', 'department', 'designation'], action: 'comDegDepDes' },
+            { fields: ['community', 'dateOfJoining', 'dateOfRetirement', 'recruitmentType'], action: 'comDojDorRec' },
+            { fields: ['community', 'dateOfJoining', 'dateOfRetirement', 'postingIn'], action: 'comDojDorPos' },
+            { fields: ['community', 'dateOfJoining', 'dateOfRetirement', 'department'], action: 'comDojDorDep' },
+            { fields: ['community', 'dateOfJoining', 'dateOfRetirement', 'designation'], action: 'comDojDorDes' },
+            { fields: ['community', 'dateOfJoining', 'recruitmentType', 'postingIn'], action: 'comDojRecPos' },
+            { fields: ['community', 'dateOfJoining', 'recruitmentType', 'department'], action: 'comDojRecDep' },
+            { fields: ['community', 'dateOfJoining', 'recruitmentType', 'designation'], action: 'comDojRecDes' },
+            { fields: ['community', 'dateOfJoining', 'postingIn', 'department'], action: 'comDojPosDep' },
+            { fields: ['community', 'dateOfJoining', 'postingIn', 'designation'], action: 'comDojPosDes' },
+            { fields: ['community', 'dateOfJoining', 'department', 'designation'], action: 'comDojDepDes' },
+            { fields: ['community', 'dateOfRetirement', 'recruitmentType', 'postingIn'], action: 'comDorRecPos' },
+            { fields: ['community', 'dateOfRetirement', 'recruitmentType', 'department'], action: 'comDorRecDep' },
+            { fields: ['community', 'dateOfRetirement', 'recruitmentType', 'designation'], action: 'comDorRecDes' },
+            { fields: ['community', 'dateOfRetirement', 'postingIn', 'department'], action: 'comDorPosDep' },
+            { fields: ['community', 'dateOfRetirement', 'postingIn', 'designation'], action: 'comDorPosDes' },
+            { fields: ['community', 'dateOfRetirement', 'department', 'designation'], action: 'comDorDepDes' },
+            { fields: ['community', 'recruitmentType', 'postingIn', 'department'], action: 'comRecPosDep' },
+            { fields: ['community', 'recruitmentType', 'postingIn', 'designation'], action: 'comRecPosDes' },
+            { fields: ['community', 'recruitmentType', 'department', 'designation'], action: 'comRecDepDes' },
+            { fields: ['community', 'postingIn', 'department', 'designation'], action: 'comPosDepDes' },
+            { fields: ['degree', 'dateOfJoining', 'dateOfRetirement', 'recruitmentType'], action: 'degDojDorRec' },
+            { fields: ['degree', 'dateOfJoining', 'dateOfRetirement', 'postingIn'], action: 'degDojDorPos' },
+            { fields: ['degree', 'dateOfJoining', 'dateOfRetirement', 'department'], action: 'degDojDorDep' },
+            { fields: ['degree', 'dateOfJoining', 'dateOfRetirement', 'designation'], action: 'degDojDorDes' },
+            { fields: ['degree', 'dateOfJoining', 'recruitmentType', 'postingIn'], action: 'degDojRecPos' },
+            { fields: ['degree', 'dateOfJoining', 'recruitmentType', 'department'], action: 'degDojRecDep' },
+            { fields: ['degree', 'dateOfJoining', 'recruitmentType', 'designation'], action: 'degDojRecDes' },
+            { fields: ['degree', 'dateOfJoining', 'postingIn', 'department'], action: 'degDojPosDep' },
+            { fields: ['degree', 'dateOfJoining', 'postingIn', 'designation'], action: 'degDojPosDes' },
+            { fields: ['degree', 'dateOfJoining', 'department', 'designation'], action: 'degDojDepDes' },
+            { fields: ['degree', 'dateOfRetirement', 'recruitmentType', 'postingIn'], action: 'degDorRecPos' },
+            { fields: ['degree', 'dateOfRetirement', 'recruitmentType', 'department'], action: 'degDorRecDep' },
+            { fields: ['degree', 'dateOfRetirement', 'recruitmentType', 'designation'], action: 'degDorRecDes' },
+            { fields: ['degree', 'dateOfRetirement', 'postingIn', 'department'], action: 'degDorPosDep' },
+            { fields: ['degree', 'dateOfRetirement', 'postingIn', 'designation'], action: 'degDorPosDes' },
+            { fields: ['degree', 'dateOfRetirement', 'department', 'designation'], action: 'degDorDepDes' },
+            { fields: ['degree', 'recruitmentType', 'postingIn', 'department'], action: 'degRecPosDep' },
+            { fields: ['degree', 'recruitmentType', 'postingIn', 'designation'], action: 'degRecPosDes' },
+            { fields: ['degree', 'recruitmentType', 'department', 'designation'], action: 'degRecDepDes' },
+            { fields: ['degree', 'postingIn', 'department', 'designation'], action: 'degPosDepDes' },
+            { fields: ['dateOfJoining', 'dateOfRetirement', 'recruitmentType', 'postingIn'], action: 'dojDorRecPos' },
+            { fields: ['dateOfJoining', 'dateOfRetirement', 'recruitmentType', 'department'], action: 'dojDorRecDep' },
+            { fields: ['dateOfJoining', 'dateOfRetirement', 'recruitmentType', 'designation'], action: 'dojDorRecDes' },
+            { fields: ['dateOfJoining', 'dateOfRetirement', 'postingIn', 'department'], action: 'dojDorPosDep' },
+            { fields: ['dateOfJoining', 'dateOfRetirement', 'postingIn', 'designation'], action: 'dojDorPosDes' },
+            { fields: ['dateOfJoining', 'dateOfRetirement', 'department', 'designation'], action: 'dojDorDepDes' },
+            { fields: ['dateOfJoining', 'recruitmentType', 'postingIn', 'department'], action: 'dojRecPosDep' },
+            { fields: ['dateOfJoining', 'recruitmentType', 'postingIn', 'designation'], action: 'dojRecPosDes' },
+            { fields: ['dateOfJoining', 'recruitmentType', 'department', 'designation'], action: 'dojRecDepDes' },
+            { fields: ['dateOfJoining', 'postingIn', 'department', 'designation'], action: 'dojPosDepDes' },
+            { fields: ['dateOfRetirement', 'recruitmentType', 'postingIn', 'department'], action: 'dorRecPosDep' },
+            { fields: ['dateOfRetirement', 'recruitmentType', 'postingIn', 'designation'], action: 'dorRecPosDes' },
+            { fields: ['dateOfRetirement', 'recruitmentType', 'department', 'designation'], action: 'dorRecDepDes' },
+            { fields: ['dateOfRetirement', 'postingIn', 'department', 'designation'], action: 'dorPosDepDes' },
+            { fields: ['recruitmentType', 'postingIn', 'department', 'designation'], action: 'recPosDepDes' },
+        ]
+
+        // Function to check combinations
+        async function checkCombinations(input) {
+            for (const combo of combinations) {
+                const { fields, action } = combo;
+                const match = fields.every(field => input[field] !== undefined); // Check if all fields in combo are present
+
+                if (match) {
+                    console.log(`${fields.join(', ')} present, by ${action}`);
+                    return action; // Return action once found
+                }
+            }
+
+            console.log('No matching combination found');
+            return null; // Return null if no matching combination found
+        }
+
+        // Call the function to determine action
+        const action = await checkCombinations(input);
+
+        if (action) {
+            console.log('Final Action:', action);
+            const result = await this.byProfileAdvanced(input, action);
+            console.log('Result:', result);
+            return result; // Return result
+        } else {
+            console.log('No valid action found');
+            return null; // Return null if no valid action found
+        }
+    } catch (error) {
+        console.error('Error in threeParameterAdvanced:', error);
+        throw error;
+    }
+};
+
 exports.byProfileAdvanced = async(input, by) =>{
     try{
         //let batch = input;
@@ -2739,7 +2974,8 @@ exports.byProfileAdvanced = async(input, by) =>{
         endDateR.setDate(startDateR.getDate() + 1);
 
         if(by == "dateOfBirth"
-            || by == 'dobPos' || by == 'dobDep' || by == 'dobDes'){
+            || by == 'dobPos' || by == 'dobDep' || by == 'dobDes' ||
+            by == 'dobPosDepDes'){
             console.log("if true - by ", by);
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
@@ -2752,7 +2988,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             } 
         }
         else if(by == "state"
-            || by == "staPos" || by == "staDep" || by == "staDes"
+            || by == "staPos" || by == "staDep" || by == "staDes" || 
+            by == 'staPosDepDes'
         ){
                 console.log("if true - by ", by);
                 getQueryJson = {
@@ -2760,7 +2997,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
         }
         else if(by == "community"
-            || by == "comPos" || by == "comDep" || by == "comDes"
+            || by == "comPos" || by == "comDep" || by == "comDes" || 
+            by == 'comPosDepDes'
         ){
                 console.log("if true - by ", by);
                 getQueryJson = {
@@ -2768,7 +3006,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
         }
         else if(by == "degree"
-            || by == "degPos" || by == "degDep" || by == "degDes"
+            || by == "degPos" || by == "degDep" || by == "degDes" || 
+            by == 'degPosDepDes'
         ) {
             console.log("if true - by ", by);
             getQueryJson = {
@@ -2780,7 +3019,9 @@ exports.byProfileAdvanced = async(input, by) =>{
             }
         }
         else if(by == "dateOfJoining"
-            || by == "dojPos" || by == "dojDep" || by == "dojDes"){
+            || by == "dojPos" || by == "dojDep" || by == "dojDes" || 
+            by == 'dojPosDepDes'
+        ){
             console.log("if true - by ", by);
             const startDate = new Date(input.dateOfJoining); // Start of the day
             const endDate = new Date(startDate);
@@ -2793,7 +3034,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             } 
         }
         else if(by == "dateOfRetirement"
-            || by == "dorPos" || by == "dorDep" || by == "dorDes"
+            || by == "dorPos" || by == "dorDep" || by == "dorDes" || 
+            by == 'dorPosDepDes'
         ){
             console.log("if true - by ", by);
             const startDate = new Date(input.dateOfRetirement); // Start of the day
@@ -2807,7 +3049,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
         }
         else if(by == "recruitmentType"
-            || by == "recPos" || by == "recDep" || by == "recDes"
+            || by == "recPos" || by == "recDep" || by == "recDes" || 
+            by == 'recPosDepDes'
         ){
                 console.log("if true - by ", by);
                 getQueryJson = {
@@ -2815,7 +3058,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
         }
 
-        else if(by == 'dobSta'){
+        else if(by == 'dobSta' ||
+        by == 'dobStaPosDep' || by == 'dobStaPosDes' || by == 'dobStaDepDes'){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + 1);
@@ -2827,7 +3071,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                     state: input.state
                 } 
         }
-        else if(by == 'dobCom'){
+        else if(by == 'dobCom' ||
+        by == 'dobComPos'|| by == 'dobComPosDes'){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + 1);
@@ -2839,7 +3084,11 @@ exports.byProfileAdvanced = async(input, by) =>{
                 community: input.community
             } 
         }
-        else if(by == 'dobDeg'){
+        else if(by == 'dobComDeg' ||
+        // by == 'dobComDegDoj' || by == 'dobComDegDor' || by == 'dobComDegRec' || 
+        by == 'dobComDegPos' || by == 'dobComDegDep' || by == 'dobComDegDes' ||
+        by == 'comDegPosDep' || by == 'comDegPosDes' || by == 'comDegDepDes'
+        ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + 1);
@@ -2852,10 +3101,228 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $elemMatch: {
                         degree: input.degree
                     }
+                },
+                community: input.community
+            } 
+        }
+        else if(by == 'dobComDegDor'
+            ){
+                getQueryJson = {
+                    dateOfBirth: {
+                        $gte: startDate,
+                        $lt: endDate
+                    },
+                    community: input.community,
+                    degreeData: {
+                        $elemMatch: {
+                            degree: input.degree
+                        }
+                    },
+                    dateOfRetirement: {
+                        $gte: startDateR,
+                        $lt: endDateR
+                    },
+                } 
+            }
+        else if(by == 'dobComDojDor'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                community: input.community,
+                dateOfJoining: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+            } 
+        }
+        else if(by == 'dobComDojRec'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                community: input.community,
+                dateOfJoining: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                recruitmentType: input.recruitmentType
+            } 
+        }
+        else if(by == 'dobComDegRec'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                community: input.community,
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                recruitmentType: input.recruitmentType
+            } 
+        }
+        else if(by == 'dobComDegDoj'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                community: input.community,
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                dateOfJoining: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+            } 
+        }
+        else if(by == 'dobComDor' ||
+            // by == 'dobComDorRec'
+            by == 'dobComDorPos' || by == 'dobComDorDep' || by == 'dobComDorDes'
+        ){
+            const startDate = new Date(input.dateOfBirth); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                community: input.community,
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
                 }
             } 
         }
-        else if(by == 'dobDoj'){
+        else if(by == 'dobComDorRec'
+        ){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                community: input.community,
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType
+            } 
+        }
+        else if(by == 'dobComRec' ||
+            by == 'dobComRecPos' || by == 'dobComRecDep' || by == 'dobComRecDes'
+        ){
+            const startDate = new Date(input.dateOfBirth); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                community: input.community,
+                recruitmentType: input.recruitmentType
+            } 
+        }
+        else if(by == 'dobDeg' ||
+            by == 'dobDegPosDep' || by == 'dobDegPosDes' || by == 'dobDegDepDes'
+        ){
+            const startDate = new Date(input.dateOfBirth); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+            } 
+        }
+        else if(by == 'dobDegDoj' ||
+            // by == 'dobDegDojDor' || by == 'dobDegDojRec' || 
+            by == 'dobDegDojPos' || by == 'dobDegDojDep' || by == 'dobDegDojDes'
+        ){
+            const startDate = new Date(input.dateOfBirth); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                dateOfJoining: {
+                    $gte: startDate,
+                    $lt: endDate
+                }
+            } 
+        }
+        else if(by == 'dobDegDor' ||
+        //    by == 'dobDegDorRec' || 
+           by == 'dobDegDorPos' || by == 'dobDegDorDep' || by == 'dobDegDorDes'
+        ){
+            const startDate = new Date(input.dateOfBirth); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                }
+            } 
+        }
+        else if(by == 'dobDegRec' ||
+          by == 'dobDegRecPos' || by == 'dobDegRecDep' || by == 'dobDegRecDes' 
+        ){
+            const startDate = new Date(input.dateOfBirth); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                recruitmentType: input.recruitmentType
+            } 
+        }
+        else if(by == 'dobDoj' ||
+            by == 'dobDojPosDep' || by == 'dobDojPosDes' || by == 'dobDojDepDes'
+        ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + 1);
@@ -2873,7 +3340,45 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             } 
         }
-        else if(by == 'dobDor'){
+        else if(by == 'dobDojDor' ||
+            // by == 'dobDojDorRec' || 
+            by == 'dobDojDorPos' || by == 'dobDojDorDep' || by == 'dobDojDorDes'){
+            
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                }
+            } 
+        }
+        else if(by == 'dobDojRec' ||
+            // by == 'dobDojDorRec' || 
+            by == 'dobDojRecPos' || by == 'dobDojRecDep' || by == 'dobDojRecDes' 
+            ){
+            
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                recruitmentType: input.recruitmentType
+            } 
+        }
+        else if(by == 'dobDor' ||
+            by == 'dobDorPosDep' || by == 'dobDorPosDes' || by == 'dobDorDepDes'
+        ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + 1);
@@ -2891,7 +3396,27 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             } 
         }
-        else if(by == 'dobRec'){
+        else if(by == 'dobDorRec' ||
+            by == 'dobDorRecPos' || by == 'dobDorRecDep' || by == 'dobDorRecDes' ||
+            by == 'dorRecPosDep' || by == 'dorRecPosDes' || by == 'dorRecDepDes'
+        ){
+
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType
+            } 
+        }
+
+        else if(by == 'dobRec' || 
+            by == 'dobRecPosDep' || by == 'dobRecPosDes' || by == 'dobRecDepDes'
+        ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + 1);
@@ -2903,14 +3428,18 @@ exports.byProfileAdvanced = async(input, by) =>{
                 recruitmentType: input.recruitmentType
             } 
         }
-        else if(by == "staCom"){
+        else if(by == "staCom" || 
+            by == 'staComPosDep' || by == 'staComPosDes' || by == 'staComDepDes'
+        ){
                 console.log("if true - by ", by);
                 getQueryJson = {
                     state: input.state,
                     community: input.community
                 }
         }
-        else if(by == "staDeg"){
+        else if(by == "staDeg" ||
+            by == 'staDegPosDep' || by == 'staDegPosDes' || by == 'staDegDepDes'
+        ){
             console.log("if true - by ", by);
             getQueryJson = {
                 state: input.state,
@@ -2921,7 +3450,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             }
         }
-        else if(by == "staDoj"){
+        else if(by == "staDoj" ||
+            by == 'staDojPosDep' || by == 'staDojPosDes' || by == 'staDojDepDes'
+        ){
             console.log("if true - by ", by);
             const startDateJ = new Date(input.dateOfJoining); // Start of the day
             const endDateJ = new Date(startDateJ);
@@ -2934,7 +3465,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             }
         }
-        else if(by == "staDor"){
+        else if(by == "staDor" ||
+            by == 'staDorPosDep' || by == 'staDorPosDes' || by == 'staDorDepDes'
+        ){
             console.log("if true - by ", by);
             const startDateR = new Date(input.dateOfRetirement); // Start of the day
             const endDateR = new Date(startDateR);
@@ -2947,7 +3480,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             }
         }
-        else if(by == "staRec"){
+        else if(by == "staRec" ||
+            by == 'staRecPosDep' || by == 'staRecPosDes' || by == 'staRecDepDes'
+        ){
             console.log("if true - by ", by);
             getQueryJson = {
                 state: input.state,
@@ -2965,7 +3500,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     }
                 }
         }
-        else if(by == "comDoj"){
+        else if(by == "comDoj" ||
+            by == 'comDojPosDep' || by == 'comDojPosDes' || by == 'comDojDepDes'
+        ){
             console.log("if true - by ", by);
             const startDateJ = new Date(input.dateOfJoining); // Start of the day
             const endDateJ = new Date(startDateJ);
@@ -2978,7 +3515,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             }
         }
-        else if(by == "comDor"){
+        else if(by == "comDor" ||
+            by == 'comDorPosDep' || by == 'comDorPosDes' || by == 'comDorDepDes'
+        ){
             console.log("if true - by ", by);
             const startDateR = new Date(input.dateOfRetirement); // Start of the day
             const endDateR = new Date(startDateR);
@@ -2991,14 +3530,18 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             }
         }
-        else if(by == "comRec"){
+        else if(by == "comRec" ||
+            by == 'comRecPosDep' || by == 'comRecPosDes' || by == 'comRecDepDes'
+        ){
             console.log("if true - by ", by);
             getQueryJson = {
                 community: input.community,
                 recruitmentType: input.recruitmentType
             }
         }
-        else if(by == "degDoj"){
+        else if(by == "degDoj" ||
+            by == 'degDojPosDep' || by == 'degDojPosDes' || by == 'degDojDepDes'
+        ){
             console.log("if true - by ", by);
             const startDateJ = new Date(input.dateOfJoining); // Start of the day
             const endDateJ = new Date(startDateJ);
@@ -3015,7 +3558,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             }
         }
-        else if(by == "degDor"){
+        else if(by == "degDor" ||
+            by == 'degDorPosDep' || by == 'degDorPosDes' || by == 'degDorDepDes'
+        ){
             console.log("if true - by ", by);
             const startDateR = new Date(input.dateOfRetirement); // Start of the day
             const endDateR = new Date(startDateR);
@@ -3032,7 +3577,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             }
         }
-        else if(by == "degRec"){
+        else if(by == "degRec" ||
+            by == 'degRecPosDep' || by == 'degRecPosDes' || by == 'degRecDepDes'
+        ){
             console.log("if true - by ", by);
             getQueryJson = {
                 degreeData: {
@@ -3043,7 +3590,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 recruitmentType: input.recruitmentType
             }
         }
-        else if(by == "dojDor"){
+        else if(by == "dojDor" ||
+            by == 'dojDorPosDep' || by == 'dojDorPosDes' || by == 'dojDorDepDes'
+        ){
             console.log("if true - by ", by);
             const startDateJ = new Date(input.dateOfJoining); // Start of the day
             const endDateJ = new Date(startDateJ);
@@ -3062,7 +3611,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             }
         }
-        else if(by == "dojRec"){
+        else if(by == "dojRec" ||
+            by == 'dojRecPosDep' || by == 'dojRecPosDes' || by == 'dojRecDepDes'
+        ){
             console.log("if true - by ", by);
             const startDateJ = new Date(input.dateOfJoining); // Start of the day
             const endDateJ = new Date(startDateJ);
@@ -3088,7 +3639,10 @@ exports.byProfileAdvanced = async(input, by) =>{
                 recruitmentType: input.recruitmentType
             }
         }
-        else if (by === 'dobStaCom') {
+        else if (by === 'dobStaCom'|| 
+            by == 'dobStaComPos' || by == 'dobStaComDep' || by == 'dobStaComDes'
+            //by == 'dobStaComDeg' || by == 'dobStaComDoj' || by == 'dobStaComDor' || by == 'dobStaComRec' 
+        ) {
             getQueryJson = {
                 dateOfBirth: {
                     $gte: startDate,
@@ -3097,7 +3651,75 @@ exports.byProfileAdvanced = async(input, by) =>{
                 state: input.state,
                 community: input.community
             };
-        } else if (by === 'staComDeg') {
+        } 
+        else if (by === 'dobStaDeg'|| 
+            by == 'dobStaDegPos' || by == 'dobStaDegDep' || by == 'dobStaDegDes'
+        //    || by == 'dobStaDegDoj' || by == 'dobStaDegDor' || by == 'dobStaDegRec'
+        ) {
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                state: input.state,
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                }
+            };
+        }
+        else if (by === 'dobStaDoj'|| 
+            by == 'dobStaDojDor' || by == 'dobStaDojRec' 
+        //    || by == 'dobStaDojPos' || by == 'dobStaDojDep' || by == 'dobStaDojDes'
+        ) {
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                state: input.state,
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+            };
+        }
+        else if (by === 'dobStaDor'|| 
+           by == 'dobStaDorRec' 
+        //    || by == 'dobStaDorPos' || by == 'dobStaDorDep' || by == 'dobStaDorDes'
+        ) {
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                state: input.state,
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+            };
+        }
+        else if (by === 'dobStaRec'|| 
+           by == 'dobStaRecPos' || by == 'dobStaRecDep' || by == 'dobStaRecDes'
+        ) {
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                state: input.state,
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+            };
+        }
+        else if (by === 'staComDeg' ||
+            // by == 'staComDegDoj' || by == 'staComDegDor' || by == 'staComDegRec' || 
+            by == 'staComDegPos' || by == 'staComDegDep' || by == 'staComDegDes'
+        ) {
             getQueryJson = {
                 state: input.state,
                 community: input.community,
@@ -3107,7 +3729,10 @@ exports.byProfileAdvanced = async(input, by) =>{
                     }
                 }
             };
-        } else if (by === 'staComDoj') {
+        } else if (by === 'staComDoj'||
+            // by == 'staComDojDor' || by == 'staComDojRec' ||
+            by == 'staComDojPos' || by == 'staComDojDep' || by == 'staComDojDes'
+        ) {
             getQueryJson = {
                 state: input.state,
                 community: input.community,
@@ -3116,7 +3741,10 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $lt: endDateJ
                 }
             };
-        } else if (by === 'staComDor') {
+        } else if (by === 'staComDor' ||
+            // by == 'staComDorRec' ||
+            by == 'staComDorPos' || by == 'staComDorDep' || by == 'staComDorDes'
+        ) {
             getQueryJson = {
                 state: input.state,
                 community: input.community,
@@ -3125,7 +3753,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $lt: endDateR
                 }
             };
-        } else if (by === 'staComRec') {
+        } else if (by === 'staComRec' ||
+            by == 'staComRecPos' || by == 'staComRecDep' || by == 'staComRecDes'
+        ) {
             getQueryJson = {
                 state: input.state,
                 community: input.community,
@@ -3146,7 +3776,10 @@ exports.byProfileAdvanced = async(input, by) =>{
                 state: input.state,
                 community: input.community,
             };
-        } else if (by === 'staDegDoj') {
+        } else if (by === 'staDegDoj' ||
+            // by == 'staDegDojDor' || by == 'staDegDojRec' || by == 'staDegDojPos'
+            by == 'staDegDojPos' || by == 'staDegDojDep' || by == 'staDegDojDes'
+        ) {
             getQueryJson = {
                 state: input.state,
                 degreeData: {
@@ -3159,7 +3792,10 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $lt: endDateJ
                 }
             };
-        } else if (by === 'staDegDor') {
+        } else if (by === 'staDegDor' ||
+            // by == 'staDegDorRec' || 
+            by == 'staDegDorPos' || by == 'staDegDorDep' || by == 'staDegDorDes'
+        ) {
             getQueryJson = {
                 state: input.state,
                 degreeData: {
@@ -3172,7 +3808,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $lt: endDateR
                 }
             };
-        } else if (by === 'staDegRec') {
+        } else if (by === 'staDegRec' ||
+            by == 'staDegRecPos' || by == 'staDegRecDep' || by == 'staDegRecDes'
+        ) {
             getQueryJson = {
                 state: input.state,
                 degreeData: {
@@ -3182,7 +3820,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
                 recruitmentType: input.recruitmentType
             };
-        } else if (by === 'staDegPos') {
+        } else if (by === 'staDegPos' ||
+            by == 'staDegPosDep' || by == 'staDegPosDes'
+        ) {
             getQueryJson = {
                 state: input.state,
                 degreeData: {
@@ -3191,7 +3831,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     }
                 },
             };
-        } else if (by === 'staDegDep') {
+        } else if (by === 'staDegDep' ||
+            by == 'staDegDepDes'
+        ) {
             getQueryJson = {
                 state: input.state,
                 degreeData: {
@@ -3209,7 +3851,10 @@ exports.byProfileAdvanced = async(input, by) =>{
                     }
                 },
             };
-        } else if (by === 'staDojDor') {
+        } else if (by === 'staDojDor' ||
+            // by == 'staDojDorRec' || 
+            by == 'staDojDorPos' || by == 'staDojDorDep' || by == 'staDojDorDes'
+        ) {
             getQueryJson = {
                 state: input.state,
                 dateOfJoining: {
@@ -3221,7 +3866,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $lt: endDateR
                 }
             };
-        } else if (by === 'staDojRec') {
+        } else if (by === 'staDojRec' || 
+            by == 'staDojRecPos' || by == 'staDojRecDep' || by == 'staDojRecDes'
+        ) {
             getQueryJson = {
                 state: input.state,
                 dateOfJoining: {
@@ -3255,7 +3902,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $lt: endDateJ
                 },
             };
-        } else if (by === 'staDorRec') {
+        } else if (by === 'staDorRec' ||
+            by == 'staDorRecPos' || by == 'staDorRecDep' || by == 'staDorRecDes'
+        ) {
             getQueryJson = {
                 state: input.state,
                 dateOfRetirement: {
@@ -3315,7 +3964,10 @@ exports.byProfileAdvanced = async(input, by) =>{
             getQueryJson = {
                 state: input.state,
             };
-        } else if (by === 'comDegDoj') {
+        } else if (by === 'comDegDoj' || 
+            // by == 'comDegDojDor' || by == 'comDegDojRec' || 
+            by == 'comDegDojPos' || by == 'comDegDojDep' || by == 'comDegDojDes'
+        ) {
             getQueryJson = {
                 community: input.community,
                 degreeData: {
@@ -3328,7 +3980,10 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $lt: endDateJ
                 }
             };
-        } else if (by === 'comDegDor') {
+        } else if (by === 'comDegDor' ||
+            // by == 'comDegDorRec' || 
+            by == 'comDegDorPos' || by == 'comDegDorDep' || by == 'comDegDorDes'
+        ) {
             getQueryJson = {
                 community: input.community,
                 degreeData: {
@@ -3341,7 +3996,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $lt: endDateR
                 }
             };
-        } else if (by === 'comDegRec') {
+        } else if (by === 'comDegRec' ||
+            by == 'comDegRecPos' || by == 'comDegRecDep' || by == 'comDegRecDes'
+        ) {
             getQueryJson = {
                 community: input.community,
                 degreeData: {
@@ -3351,7 +4008,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
                 recruitmentType: input.recruitmentType
             };
-        } else if (by === 'comDegPos') {
+        } else if (by === 'comDegPos' ||
+            by == 'comDegPosDep' || by == 'comDegPosDes'
+        ) {
             getQueryJson = {
                 community: input.community,
                 degreeData: {
@@ -3360,7 +4019,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     }
                 },
             };
-        } else if (by === 'comDegDep') {
+        } else if (by === 'comDegDep' ||
+            by == 'comDegDepDes'
+        ) {
             getQueryJson = {
                 community: input.community,
                 degreeData: {
@@ -3378,7 +4039,10 @@ exports.byProfileAdvanced = async(input, by) =>{
                     }
                 },
             };
-        } else if (by === 'comDojDor') {
+        } else if (by === 'comDojDor' ||
+            // by == 'comDojDorRec' ||
+            by == 'comDojDorPos' || by == 'comDojDorDep' || by == 'comDojDorDes'
+        ) {
             getQueryJson = {
                 community: input.community,
                 dateOfJoining: {
@@ -3390,7 +4054,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $lt: endDateR
                 }
             };
-        } else if (by === 'comDojRec') {
+        } else if (by === 'comDojRec' ||
+            by == 'comDojRecPos' || by == 'comDojRecDep' || by == 'comDojRecDes'
+        ) {
             getQueryJson = {
                 community: input.community,
                 dateOfJoining: {
@@ -3399,7 +4065,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
                 recruitmentType: input.recruitmentType
             };
-        } else if (by === 'comDojPos') {
+        } else if (by === 'comDojPos' || 
+            by == 'comDojPosDep' || by == 'comDojPosDes'
+        ) {
             getQueryJson = {
                 community: input.community,
                 dateOfJoining: {
@@ -3407,7 +4075,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $lt: endDateJ
                 },
             };
-        } else if (by === 'comDojDep') {
+        } else if (by === 'comDojDep' ||
+            by == 'comDojDepDes'
+        ) {
             getQueryJson = {
                 community: input.community,
                 dateOfJoining: {
@@ -3423,7 +4093,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $lt: endDateJ
                 },
             };
-        } else if (by === 'comDorRec') {
+        } else if (by === 'comDorRec' ||
+            by == 'comDorRecPos' || by == 'comDorRecDep' || by == 'comDorRecDes'
+        ) {
             getQueryJson = {
                 community: input.community,
                 dateOfRetirement: {
@@ -3483,7 +4155,10 @@ exports.byProfileAdvanced = async(input, by) =>{
             getQueryJson = {
                 community: input.community,
             };
-        } else if (by === 'degDojDor') {
+        } else if (by === 'degDojDor' ||
+            // by == 'degDojDorRec' || 
+            by == 'degDojDorPos' || by == 'degDojDorDep' || by == 'degDojDorDes'
+        ) {
             getQueryJson = {
                 degreeData: {
                     $elemMatch: {
@@ -3499,7 +4174,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $lt: endDateR
                 }
             };
-        } else if (by === 'degDojRec') {
+        } else if (by === 'degDojRec' ||
+            by == 'degDojRecPos' || by == 'degDojRecDep' || by == 'degDojRecDes'
+        ) {
             getQueryJson = {
                 degreeData: {
                     $elemMatch: {
@@ -3548,7 +4225,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $lt: endDateJ
                 },
             };
-        } else if (by === 'degDorRec') {
+        } else if (by === 'degDorRec' ||
+            by == 'degDorRecPos' || by == 'degDorRecDep' || by == 'degDorRecDes'
+        ) {
             getQueryJson = {
                 degreeData: {
                     $elemMatch: {
@@ -3648,7 +4327,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                     }
                 },
             };
-        } else if (by === 'dojDorRec') {
+        } else if (by === 'dojDorRec' ||
+            by == 'dojDorRecPos' || by == 'dojDorRecDep' || by == 'dojDorRecDes'
+        ) {
             getQueryJson = {
                 dateOfJoining: {
                     $gte: startDateJ,
@@ -3840,7 +4521,68 @@ exports.byProfileAdvanced = async(input, by) =>{
         by == "dojPosDep" || by == "dojPosDes" || by == "dojDepDes" || by == "dorRecPos" || 
         by == "dorRecDep" || by == "dorRecDes" || by == "dorPosDep" || 
         by == "dorPosDes" || by == "dorDepDes" || by == "recPosDep" || by == "recPosDes" || 
-        by == "recDepDes"
+        by == "recDepDes" ||
+        by == 'dobStaComDeg' || by == 'dobStaComDoj' || by == 'dobStaComDor' || by == 'dobStaComRec' ||
+        by == 'dobStaComPos' || by == 'dobStaComDep' || by == 'dobStaComDes' || by == 'dobStaDegDoj' ||
+        by == 'dobStaDegDor' || by == 'dobStaDegRec' || by == 'dobStaDegPos' || by == 'dobStaDegDep' ||
+        by == 'dobStaDegDes' || by == 'dobStaDojDor' || by == 'dobStaDojRec' || by == 'dobStaDojPos' ||
+        by == 'dobStaDojDep' || by == 'dobStaDojDes' || by == 'dobStaDorRec' || by == 'dobStaDorPos' ||
+        by == 'dobStaDorDep' || by == 'dobStaDorDes' || by == 'dobStaRecPos' || by == 'dobStaRecDep' ||
+        by == 'dobStaRecDes' || by == 'dobStaPosDep' || by == 'dobStaPosDes' || by == 'dobStaDepDes' ||
+        by == 'dobComDegDoj' || by == 'dobComDegDor' || by == 'dobComDegRec' || by == 'dobComDegPos' ||
+        by == 'dobComDegDep' || by == 'dobComDegDes' || by == 'dobComDojDor' || by == 'dobComDojRec' ||
+        by == 'dobComDojPos' || by == 'dobComDojDep' || by == 'dobComDojDes' || by == 'dobComDorRec' ||
+        by == 'dobComDorPos' || by == 'dobComDorDep' || by == 'dobComDorDes' || by == 'dobComRecPos' ||
+        by == 'dobComRecDep' || by == 'dobComRecDes' || by == 'dobComPosDep' || by == 'dobComPosDes' ||
+        by == 'dobComDepDes' || by == 'dobDegDojDor' || by == 'dobDegDojRec' || by == 'dobDegDojPos' ||
+        by == 'dobDegDojDep' || by == 'dobDegDojDes' || by == 'dobDegDorRec' || by == 'dobDegDorPos' ||
+        by == 'dobDegDorDep' || by == 'dobDegDorDes' || by == 'dobDegRecPos' || by == 'dobDegRecDep' ||
+        by == 'dobDegRecDes' || by == 'dobDegPosDep' || by == 'dobDegPosDes' || by == 'dobDegDepDes' ||
+        by == 'dobDojDorRec' || by == 'dobDojDorPos' || by == 'dobDojDorDep' || by == 'dobDojDorDes' ||
+        by == 'dobDojRecPos' || by == 'dobDojRecDep' || by == 'dobDojRecDes' || by == 'dobDojPosDep' ||
+        by == 'dobDojPosDes' || by == 'dobDojDepDes' || by == 'dobDorRecPos' || by == 'dobDorRecDep' || 
+        by == 'dobDorRecDes' || by == 'dobDorPosDep' || by == 'dobDorPosDes' || by == 'dobDorDepDes' ||
+        by == 'dobRecPosDep' || by == 'dobRecPosDes' || by == 'dobRecDepDes' || by == 'dobPosDepDes' ||
+
+        by == 'staComDegDoj' || by == 'staComDegDor' || by == 'staComDegRec' || by == 'staComDegPos' ||
+        by == 'staComDegDep' || by == 'staComDegDes' || by == 'staComDojDor' || by == 'staComDojRec' ||
+        by == 'staComDojPos' || by == 'staComDojDep' || by == 'staComDojDes' || by == 'staComDorRec' ||
+        by == 'staComDorPos' || by == 'staComDorDep' || by == 'staComDorDes' || by == 'staComRecPos' ||
+        by == 'staComRecDep' || by == 'staComRecDes' || by == 'staComPosDep' || by == 'staComPosDes' ||
+        by == 'staComDepDes' || by == 'staDegDojDor' || by == 'staDegDojRec' || by == 'staDegDojPos' ||
+        by == 'staDegDojDep' || by == 'staDegDojDes' || by == 'staDegDorRec' || by == 'staDegDorPos' ||
+        by == 'staDegDorDep' || by == 'staDegDorDes' || by == 'staDegRecPos' || by == 'staDegRecDep' ||
+        by == 'staDegRecDes' || by == 'staDegPosDep' || by == 'staDegPosDes' || by == 'staDegDepDes' ||
+        by == 'staDojDorRec' || by == 'staDojDorPos' || by == 'staDojDorDep' || by == 'staDojDorDes' ||
+        by == 'staDojRecPos' || by == 'staDojRecDep' || by == 'staDojRecDes' || by == 'staDojPosDep' ||
+        by == 'staDojPosDes' || by == 'staDojDepDes' || by == 'staDorRecPos' || by == 'staDorRecDep' ||
+        by == 'staDorRecDes' || by == 'staDorPosDep' || by == 'staDorPosDes' || by == 'staDorDepDes' ||
+        by == 'staRecPosDep' || by == 'staRecPosDes' || by == 'staRecDepDes' || by == 'staPosDepDes' ||
+
+        by == 'comDegDojDor' || by == 'comDegDojRec' || by == 'comDegDojPos' || by == 'comDegDojDep' ||
+        by == 'comDegDojDes' || by == 'comDegDorRec' || by == 'comDegDorPos' || by == 'comDegDorDep' ||
+        by == 'comDegDorDes' || by == 'comDegRecPos' || by == 'comDegRecDep' || by == 'comDegRecDes' ||
+        by == 'comDegPosDep' || by == 'comDegPosDes' || by == 'comDegDepDes' || by == 'comDojDorRec' ||
+        by == 'comDojDorPos' || by == 'comDojDorDep' || by == 'comDojDorDes' || by == 'comDojRecPos' ||
+        by == 'comDojRecDep' || by == 'comDojRecDes' || by == 'comDojPosDep' || by == 'comDojPosDes' ||
+        by == 'comDojDepDes' || by == 'comDorRecPos' || by == 'comDorRecDep' || by == 'comDorRecDes' ||
+        by == 'comDorPosDep' || by == 'comDorPosDes' || by == 'comDorDepDes' || by == 'comRecPosDep' ||
+        by == 'comRecPosDes' || by == 'comRecDepDes' || by == 'comPosDepDes' ||
+
+        by == 'degDojDorRec' || by == 'degDojDorPos' || by == 'degDojDorDep' || by == 'degDojDorDes' ||
+        by == 'degDojRecPos' || by == 'degDojRecDep' || by == 'degDojRecDes' || by == 'degDojPosDep' || 
+        by == 'degDojPosDes' || by == 'degDojDepDes' || by == 'degDorRecPos' || by == 'degDorRecDep' || 
+        by == 'degDorRecDes' || by == 'degDorPosDep' || by == 'degDorPosDes' || by == 'degDorDepDes' || 
+        by == 'degRecPosDep' || by == 'degRecPosDes' || by == 'degRecDepDes' || by == 'degPosDepDes' || 
+        
+        by == 'dojDorRecPos' || by == 'dojDorRecDep' || by == 'dojDorRecDes' || by == 'dojDorPosDep' || 
+        by == 'dojDorPosDes' || by == 'dojDorDepDes' || by == 'dojRecPosDep' || by == 'dojRecPosDes' || 
+        by == 'dojRecDepDes' || by == 'dojPosDepDes' ||
+        
+        by == 'dorRecPosDep' || by == 'dorRecPosDes' || by == 'dorRecDepDes' || by == 'dorPosDepDes' ||
+        
+        by == 'recPosDepDes'
+
     )
             data = await employeeProfile.find(getQueryJson).sort({ dateOfJoining: 'asc' }).exec();
         else if(by == "department" || by == "postingIn" || by == "designation" || 
@@ -3899,7 +4641,68 @@ exports.byProfileAdvanced = async(input, by) =>{
                 by == "dojPosDep" || by == "dojPosDes" || by == "dojDepDes" || by == "dorRecPos" || 
                 by == "dorRecDep" || by == "dorRecDes" || by == "dorPosDep" || 
                 by == "dorPosDes" || by == "dorDepDes" || by == "recPosDep" || by == "recPosDes" || 
-                by == "recDepDes"){
+                by == "recDepDes" ||
+                by == 'dobStaComDeg' || by == 'dobStaComDoj' || by == 'dobStaComDor' || by == 'dobStaComRec' ||
+                by == 'dobStaComPos' || by == 'dobStaComDep' || by == 'dobStaComDes' || by == 'dobStaDegDoj' ||
+                by == 'dobStaDegDor' || by == 'dobStaDegRec' || by == 'dobStaDegPos' || by == 'dobStaDegDep' ||
+                by == 'dobStaDegDes' || by == 'dobStaDojDor' || by == 'dobStaDojRec' || by == 'dobStaDojPos' ||
+                by == 'dobStaDojDep' || by == 'dobStaDojDes' || by == 'dobStaDorRec' || by == 'dobStaDorPos' ||
+                by == 'dobStaDorDep' || by == 'dobStaDorDes' || by == 'dobStaRecPos' || by == 'dobStaRecDep' ||
+                by == 'dobStaRecDes' || by == 'dobStaPosDep' || by == 'dobStaPosDes' || by == 'dobStaDepDes' ||
+                by == 'dobComDegDoj' || by == 'dobComDegDor' || by == 'dobComDegRec' || by == 'dobComDegPos' ||
+                by == 'dobComDegDep' || by == 'dobComDegDes' || by == 'dobComDojDor' || by == 'dobComDojRec' ||
+                by == 'dobComDojPos' || by == 'dobComDojDep' || by == 'dobComDojDes' || by == 'dobComDorRec' ||
+                by == 'dobComDorPos' || by == 'dobComDorDep' || by == 'dobComDorDes' || by == 'dobComRecPos' ||
+                by == 'dobComRecDep' || by == 'dobComRecDes' || by == 'dobComPosDep' || by == 'dobComPosDes' ||
+                by == 'dobComDepDes' || by == 'dobDegDojDor' || by == 'dobDegDojRec' || by == 'dobDegDojPos' ||
+                by == 'dobDegDojDep' || by == 'dobDegDojDes' || by == 'dobDegDorRec' || by == 'dobDegDorPos' ||
+                by == 'dobDegDorDep' || by == 'dobDegDorDes' || by == 'dobDegRecPos' || by == 'dobDegRecDep' ||
+                by == 'dobDegRecDes' || by == 'dobDegPosDep' || by == 'dobDegPosDes' || by == 'dobDegDepDes' ||
+                by == 'dobDojDorRec' || by == 'dobDojDorPos' || by == 'dobDojDorDep' || by == 'dobDojDorDes' ||
+                by == 'dobDojRecPos' || by == 'dobDojRecDep' || by == 'dobDojRecDes' || by == 'dobDojPosDep' ||
+                by == 'dobDojPosDes' || by == 'dobDojDepDes' || by == 'dobDorRecPos' || by == 'dobDorRecDep' || 
+                by == 'dobDorRecDes' || by == 'dobDorPosDep' || by == 'dobDorPosDes' || by == 'dobDorDepDes' ||
+                by == 'dobRecPosDep' || by == 'dobRecPosDes' || by == 'dobRecDepDes' || by == 'dobPosDepDes' ||
+
+                by == 'staComDegDoj' || by == 'staComDegDor' || by == 'staComDegRec' || by == 'staComDegPos' ||
+                by == 'staComDegDep' || by == 'staComDegDes' || by == 'staComDojDor' || by == 'staComDojRec' ||
+                by == 'staComDojPos' || by == 'staComDojDep' || by == 'staComDojDes' || by == 'staComDorRec' ||
+                by == 'staComDorPos' || by == 'staComDorDep' || by == 'staComDorDes' || by == 'staComRecPos' ||
+                by == 'staComRecDep' || by == 'staComRecDes' || by == 'staComPosDep' || by == 'staComPosDes' ||
+                by == 'staComDepDes' || by == 'staDegDojDor' || by == 'staDegDojRec' || by == 'staDegDojPos' ||
+                by == 'staDegDojDep' || by == 'staDegDojDes' || by == 'staDegDorRec' || by == 'staDegDorPos' ||
+                by == 'staDegDorDep' || by == 'staDegDorDes' || by == 'staDegRecPos' || by == 'staDegRecDep' ||
+                by == 'staDegRecDes' || by == 'staDegPosDep' || by == 'staDegPosDes' || by == 'staDegDepDes' ||
+                by == 'staDojDorRec' || by == 'staDojDorPos' || by == 'staDojDorDep' || by == 'staDojDorDes' ||
+                by == 'staDojRecPos' || by == 'staDojRecDep' || by == 'staDojRecDes' || by == 'staDojPosDep' ||
+                by == 'staDojPosDes' || by == 'staDojDepDes' || by == 'staDorRecPos' || by == 'staDorRecDep' ||
+                by == 'staDorRecDes' || by == 'staDorPosDep' || by == 'staDorPosDes' || by == 'staDorDepDes' ||
+                by == 'staRecPosDep' || by == 'staRecPosDes' || by == 'staRecDepDes' || by == 'staPosDepDes' ||
+
+                by == 'comDegDojDor' || by == 'comDegDojRec' || by == 'comDegDojPos' || by == 'comDegDojDep' ||
+                by == 'comDegDojDes' || by == 'comDegDorRec' || by == 'comDegDorPos' || by == 'comDegDorDep' ||
+                by == 'comDegDorDes' || by == 'comDegRecPos' || by == 'comDegRecDep' || by == 'comDegRecDes' ||
+                by == 'comDegPosDep' || by == 'comDegPosDes' || by == 'comDegDepDes' || by == 'comDojDorRec' ||
+                by == 'comDojDorPos' || by == 'comDojDorDep' || by == 'comDojDorDes' || by == 'comDojRecPos' ||
+                by == 'comDojRecDep' || by == 'comDojRecDes' || by == 'comDojPosDep' || by == 'comDojPosDes' ||
+                by == 'comDojDepDes' || by == 'comDorRecPos' || by == 'comDorRecDep' || by == 'comDorRecDes' ||
+                by == 'comDorPosDep' || by == 'comDorPosDes' || by == 'comDorDepDes' || by == 'comRecPosDep' ||
+                by == 'comRecPosDes' || by == 'comRecDepDes' || by == 'comPosDepDes' ||
+
+                by == 'degDojDorRec' || by == 'degDojDorPos' || by == 'degDojDorDep' || by == 'degDojDorDes' ||
+                by == 'degDojRecPos' || by == 'degDojRecDep' || by == 'degDojRecDes' || by == 'degDojPosDep' || 
+                by == 'degDojPosDes' || by == 'degDojDepDes' || by == 'degDorRecPos' || by == 'degDorRecDep' || 
+                by == 'degDorRecDes' || by == 'degDorPosDep' || by == 'degDorPosDes' || by == 'degDorDepDes' || 
+                by == 'degRecPosDep' || by == 'degRecPosDes' || by == 'degRecDepDes' || by == 'degPosDepDes' || 
+                
+                by == 'dojDorRecPos' || by == 'dojDorRecDep' || by == 'dojDorRecDes' || by == 'dojDorPosDep' || 
+                by == 'dojDorPosDes' || by == 'dojDorDepDes' || by == 'dojRecPosDep' || by == 'dojRecPosDes' || 
+                by == 'dojRecDepDes' || by == 'dojPosDepDes' ||
+                
+                by == 'dorRecPosDep' || by == 'dorRecPosDes' || by == 'dorRecDepDes' || by == 'dorPosDepDes' ||
+                
+                by == 'recPosDepDes'
+            ){
                     dataAll = {
                         personalEmail: employee.personalEmail,
                         _id: employee._id,
