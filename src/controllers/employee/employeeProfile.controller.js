@@ -3490,8 +3490,7 @@ exports.byProfileAdvanced = async(input, by) =>{
             } 
         }
         else if(by == 'dobComDojRec' || 
-            by == 'dobComDojRecPos' || by == 'dobComDojRecDep' || by == 'dobComDojRecDes' ||
-            
+            by == 'dobComDojRecPos' || by == 'dobComDojRecDep' || by == 'dobComDojRecDes'
         ){
             getQueryJson = {
                 dateOfBirth: {
