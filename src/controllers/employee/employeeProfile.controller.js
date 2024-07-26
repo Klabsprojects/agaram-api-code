@@ -3348,7 +3348,8 @@ exports.byProfileAdvanced = async(input, by) =>{
 
         else if(by == 'dobSta' ||
             by == 'dobStaPos' || by == 'dobStaDep' || by == 'dobStaDes'||
-            by == 'dobStaPosDep' || by == 'dobStaPosDes' || by == 'dobStaDepDes'){
+            by == 'dobStaPosDep' || by == 'dobStaPosDes' || by == 'dobStaDepDes' ||
+            by == 'dobStaPosDepDes'){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + 1);
@@ -3361,7 +3362,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 } 
         }
         else if(by == 'dobCom' ||
-        by == 'dobComPos'|| by == 'dobComPosDes'){
+        by == 'dobComPos'|| by == 'dobComPosDes' ||
+        by == 'dobComPosDepDes'){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + 1);
@@ -3376,7 +3378,8 @@ exports.byProfileAdvanced = async(input, by) =>{
         else if(by == 'dobComDeg' ||
         // by == 'dobComDegDoj' || by == 'dobComDegDor' || 
         by == 'dobComDegPos' || by == 'dobComDegDep' || by == 'dobComDegDes' ||
-        by == 'comDegPosDep' || by == 'comDegPosDes' || by == 'comDegDepDes'
+        by == 'comDegPosDep' || by == 'comDegPosDes' || by == 'comDegDepDes' ||
+        by == 'dobComDegPosDep' || by == 'dobComDegPosDes' || by == 'dobComDegDepDes'
         ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
@@ -3394,7 +3397,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 community: input.community
             } 
         }
-        else if(by == 'dobComDoj'){
+        else if(by == 'dobComDoj' ||
+            by == 'dobComDojPosDep' || by == 'dobComDojPosDes' || by == 'dobComDojDepDes'
+        ){
             getQueryJson = {
                 dateOfBirth: {
                     $gte: startDate,
@@ -3407,7 +3412,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             } 
         }
-        else if(by == 'dobComDegDor'
+        else if(by == 'dobComDegDor' ||
+            by == 'dobComDegDorPos' || by == 'dobComDegDorDep' || by == 'dobComDegDorDes'
             ){
                 getQueryJson = {
                     dateOfBirth: {
@@ -3426,7 +3432,29 @@ exports.byProfileAdvanced = async(input, by) =>{
                     },
                 } 
             }
-        else if(by == 'dobComDojDor'){
+            else if(by == 'dobComDegDorRec'
+                ){
+                    getQueryJson = {
+                        dateOfBirth: {
+                            $gte: startDate,
+                            $lt: endDate
+                        },
+                        community: input.community,
+                        degreeData: {
+                            $elemMatch: {
+                                degree: input.degree
+                            }
+                        },
+                        dateOfRetirement: {
+                            $gte: startDateR,
+                            $lt: endDateR
+                        },
+                        recruitmentType: input.recruitmentType
+                    } 
+                }
+        else if(by == 'dobComDojDor' ||
+            by == 'dobComDojDorPos' || by == 'dobComDojDorDep' || by == 'dobComDojDorDes'
+        ){
             getQueryJson = {
                 dateOfBirth: {
                     $gte: startDate,
@@ -3443,7 +3471,28 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             } 
         }
-        else if(by == 'dobComDojRec'){
+        else if(by == 'dobComDojDorRec'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                community: input.community,
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType
+            } 
+        }
+        else if(by == 'dobComDojRec' || 
+            by == 'dobComDojRecPos' || by == 'dobComDojRecDep' || by == 'dobComDojRecDes' ||
+            
+        ){
             getQueryJson = {
                 dateOfBirth: {
                     $gte: startDate,
@@ -3457,7 +3506,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 recruitmentType: input.recruitmentType
             } 
         }
-        else if(by == 'dobComDegRec'){
+        else if(by == 'dobComDegRec' ||
+                by == 'dobComDegRecPos' || by == 'dobComDegRecDep' || by == 'dobComDegRecDes'
+        ){
             getQueryJson = {
                 dateOfBirth: {
                     $gte: startDate,
@@ -3472,7 +3523,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 recruitmentType: input.recruitmentType
             } 
         }
-        else if(by == 'dobComDegDoj'){
+        else if(by == 'dobComDegDoj' ||
+            by == 'dobComDegDojPos' || by == 'dobComDegDojDep'
+        ){
             getQueryJson = {
                 dateOfBirth: {
                     $gte: startDate,
@@ -3488,10 +3541,52 @@ exports.byProfileAdvanced = async(input, by) =>{
                     $gte: startDateJ,
                     $lt: endDateJ
                 },
+            } 
+        }
+        else if(by == 'dobComDegDojDor'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                community: input.community,
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+            } 
+        }
+        else if(by == 'dobComDegDojRec'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                community: input.community,
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                recruitmentType: input.recruitmentType
             } 
         }
         else if(by == 'dobComDor' ||
-            by == 'dobComDorPos' || by == 'dobComDorDep' || by == 'dobComDorDes'
+            by == 'dobComDorPos' || by == 'dobComDorDep' || by == 'dobComDorDes' ||
+            by == 'dobComDorPosDep' || by == 'dobComDorPosDes' || by == 'dobComDorDepDes'
         ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
@@ -3508,7 +3603,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             } 
         }
-        else if(by == 'dobComDorRec'
+        else if(by == 'dobComDorRec' || 
+            by == 'dobComDorRecPos' || by == 'dobComDorRecDep' || by == 'dobComDorRecDes'
         ){
             getQueryJson = {
                 dateOfBirth: {
@@ -3524,7 +3620,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             } 
         }
         else if(by == 'dobComRec' ||
-            by == 'dobComRecPos' || by == 'dobComRecDep' || by == 'dobComRecDes'
+            by == 'dobComRecPos' || by == 'dobComRecDep' || by == 'dobComRecDes' ||
+            by == 'dobComRecPosDep' || by == 'dobComRecPosDes' || by == 'dobComRecDepDes'
         ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
@@ -3539,7 +3636,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             } 
         }
         else if(by == 'dobDeg' ||
-            by == 'dobDegPosDep' || by == 'dobDegPosDes' || by == 'dobDegDepDes'
+            by == 'dobDegPosDep' || by == 'dobDegPosDes' || by == 'dobDegDepDes' ||
+            by == 'dobDegPosDepDes'
         ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
@@ -3556,9 +3654,55 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             } 
         }
+        else if(by == 'dobDegDor' ||
+                by == 'dobDegDorPosDep' || by == 'dobDegDorPosDes' || by == 'dobDegDorDepDes'
+        ){
+            const startDate = new Date(input.dateOfBirth); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+            } 
+        }
+        else if(by == 'dobDegDorRec' ||
+            by == 'dobDegDorRecPos' || by == 'dobDegDorRecDep' || by == 'dobDegDorRecDes'
+        ){
+            const startDate = new Date(input.dateOfBirth); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType 
+            } 
+        }
         else if(by == 'dobDegDoj' ||
             // by == 'dobDegDojDor' || by == 'dobDegDojRec' || 
-            by == 'dobDegDojPos' || by == 'dobDegDojDep' || by == 'dobDegDojDes'
+            by == 'dobDegDojPos' || by == 'dobDegDojDep' || by == 'dobDegDojDes' ||
+            by == 'dobDegDojPosDep' || by == 'dobDegDojPosDes' || by == 'dobDegDojDepDes'
         ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
@@ -3579,7 +3723,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             } 
         }
-        else if(by == 'dobDegDojDor'
+        else if(by == 'dobDegDojDor' ||
+            by == 'dobDegDojDorPos' || by == 'dobDegDojDorDep' || by == 'dobDegDojDorDes'
         ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
@@ -3604,7 +3749,35 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             } 
         }
-        else if(by == 'dobDegDojRec'
+        else if(by == 'dobDegDojDorRec'
+        ){
+            const startDate = new Date(input.dateOfBirth); // Start of the day
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType
+            } 
+        }
+
+        else if(by == 'dobDegDojRec' ||
+            by == 'dobDegDojRecPos' || by == 'dobDegDojRecDep' || by == 'dobDegDojRecDes'
         ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
@@ -3627,7 +3800,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             } 
         }
         else if(by == 'dobDegRec' ||
-          by == 'dobDegRecPos' || by == 'dobDegRecDep' || by == 'dobDegRecDes' 
+          by == 'dobDegRecPos' || by == 'dobDegRecDep' || by == 'dobDegRecDes' ||
+          by == 'dobDegRecPosDep' || by == 'dobDegRecPosDes' || by == 'dobDegRecDepDes'
         ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
@@ -4302,7 +4476,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         }
         else if (by === 'dobStaDoj'||
-           by == 'dobStaDojPos' || by == 'dobStaDojDep' || by == 'dobStaDojDes'
+           by == 'dobStaDojPos' || by == 'dobStaDojDep' || by == 'dobStaDojDes' ||
+           by == 'dobStaDojPosDep' || by == 'dobStaDojPosDes' || by == 'dobStaDojDepDes'
         ) {
             getQueryJson = {
                 dateOfBirth: {
@@ -4316,7 +4491,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             };
         }
-        else if (by === 'dobStaDojDor'
+        else if (by == 'dobStaDojDor' ||
+            by == 'dobStaDojDorPos' || by == 'dobStaDojDorDep' || by == 'dobStaDojDorDes' 
         ) {
             getQueryJson = {
                 dateOfBirth: {
@@ -4353,7 +4529,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 recruitmentType: input.recruitmentType
             };
         }
-        else if (by === 'dobStaDojRec'
+        else if (by === 'dobStaDojRec' ||
+            by == 'dobStaDojRecPos' || by == 'dobStaDojRecDep' || by == 'dobStaDojRecDes'
         ) {
             getQueryJson = {
                 dateOfBirth: {
@@ -4369,7 +4546,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         }
         else if (by === 'dobStaDor'||
-           by == 'dobStaDorPos' || by == 'dobStaDorDep' || by == 'dobStaDorDes'
+           by == 'dobStaDorPos' || by == 'dobStaDorDep' || by == 'dobStaDorDes' ||
+           by == 'dobStaDorPosDep' || by == 'dobStaDorPosDes' || by == 'dobStaDorDepDes'
         ) {
             getQueryJson = {
                 dateOfBirth: {
@@ -4383,7 +4561,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             };
         }
-        else if (by === 'dobStaDorRec'
+        else if (by === 'dobStaDorRec' ||
+            by == 'dobStaDorRecPos' || by == 'dobStaDorRecDep' || by == 'dobStaDorRecDes'
             ) {
                 getQueryJson = {
                     dateOfBirth: {
@@ -4399,7 +4578,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 };
             }
         else if (by === 'dobStaRec'|| 
-           by == 'dobStaRecPos' || by == 'dobStaRecDep' || by == 'dobStaRecDes'
+           by == 'dobStaRecPos' || by == 'dobStaRecDep' || by == 'dobStaRecDes' ||
+            by == 'dobStaRecPosDep' || by == 'dobStaRecPosDes' || by == 'dobStaRecDepDes'
         ) {
             getQueryJson = {
                 dateOfBirth: {
