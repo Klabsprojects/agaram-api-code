@@ -3819,7 +3819,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             } 
         }
         else if(by == 'dobDoj' ||
-            by == 'dobDojPosDep' || by == 'dobDojPosDes' || by == 'dobDojDepDes'
+            by == 'dobDojPosDep' || by == 'dobDojPosDes' || by == 'dobDojDepDes' ||
+            by == 'dobDojPosDepDes'
         ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
@@ -3839,7 +3840,9 @@ exports.byProfileAdvanced = async(input, by) =>{
             } 
         }
         else if(by == 'dobDojDor' ||
-            by == 'dobDojDorPos' || by == 'dobDojDorDep' || by == 'dobDojDorDes'){
+            by == 'dobDojDorPos' || by == 'dobDojDorDep' || by == 'dobDojDorDes' ||
+            by == 'dobDojDorPosDep' || by == 'dobDojDorPosDes' || by == 'dobDojDorDepDes'
+            ){
             
             getQueryJson = {
                 dateOfBirth: {
@@ -3856,7 +3859,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             } 
         }
-        else if(by == 'dobDojDorRec'){
+        else if(by == 'dobDojDorRec' ||
+            by == 'dobDojDorRecPos' || by == 'dobDojDorRecDep' || by == 'dobDojDorRecDes'
+        ){
             
             getQueryJson = {
                 dateOfBirth: {
@@ -3892,7 +3897,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             } 
         }
         else if(by == 'dobDor' ||
-            by == 'dobDorPosDep' || by == 'dobDorPosDes' || by == 'dobDorDepDes'
+            by == 'dobDorPosDep' || by == 'dobDorPosDes' || by == 'dobDorDepDes' ||
+            by == 'dobDorPosDepDes'
         ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
@@ -3913,7 +3919,8 @@ exports.byProfileAdvanced = async(input, by) =>{
         }
         else if(by == 'dobDorRec' ||
             by == 'dobDorRecPos' || by == 'dobDorRecDep' || by == 'dobDorRecDes' ||
-            by == 'dorRecPosDep' || by == 'dorRecPosDes' || by == 'dorRecDepDes'
+            by == 'dorRecPosDep' || by == 'dorRecPosDes' || by == 'dorRecDepDes' ||
+            by == 'dobDorRecPosDep' || by == 'dobDorRecPosDes' || by == 'dobDorRecDepDes'
         ){
 
             getQueryJson = {
@@ -3930,7 +3937,8 @@ exports.byProfileAdvanced = async(input, by) =>{
         }
 
         else if(by == 'dobRec' || 
-            by == 'dobRecPosDep' || by == 'dobRecPosDes' || by == 'dobRecDepDes'
+            by == 'dobRecPosDep' || by == 'dobRecPosDes' || by == 'dobRecDepDes' ||
+            by == 'dobRecPosDepDes'
         ){
             const startDate = new Date(input.dateOfBirth); // Start of the day
             const endDate = new Date(startDate);
@@ -3953,7 +3961,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
         }
         else if(by == "staDeg" ||
-            by == 'staDegPosDep' || by == 'staDegPosDes' || by == 'staDegDepDes'
+            by == 'staDegPosDep' || by == 'staDegPosDes' || by == 'staDegDepDes' ||
+            by == 'staDegPosDepDes'
         ){
             console.log("if true - by ", by);
             getQueryJson = {
@@ -3966,7 +3975,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             }
         }
         else if(by == "staDoj" ||
-            by == 'staDojPosDep' || by == 'staDojPosDes' || by == 'staDojDepDes'
+            by == 'staDojPosDep' || by == 'staDojPosDes' || by == 'staDojDepDes' ||
+            by == 'staDojPosDepDes'
         ){
             console.log("if true - by ", by);
             const startDateJ = new Date(input.dateOfJoining); // Start of the day
@@ -3981,7 +3991,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             }
         }
         else if(by == "staDor" ||
-            by == 'staDorPosDep' || by == 'staDorPosDes' || by == 'staDorDepDes'
+            by == 'staDorPosDep' || by == 'staDorPosDes' || by == 'staDorDepDes' ||
+            by == 'staDorPosDepDes'
         ){
             console.log("if true - by ", by);
             const startDateR = new Date(input.dateOfRetirement); // Start of the day
@@ -3996,7 +4007,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             }
         }
         else if(by == "staRec" ||
-            by == 'staRecPosDep' || by == 'staRecPosDes' || by == 'staRecDepDes'
+            by == 'staRecPosDep' || by == 'staRecPosDes' || by == 'staRecDepDes' ||
+            by == 'staRecPosDepDes'
         ){
             console.log("if true - by ", by);
             getQueryJson = {
@@ -4004,7 +4016,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                 recruitmentType: input.recruitmentType
             }
         }
-        else if(by == "comDeg"){
+        else if(by == "comDeg" ||
+            by == 'comDegPosDepDes'
+        ){
                 console.log("if true - by ", by);
                 getQueryJson = {
                     community: input.community,
@@ -4016,7 +4030,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
         }
         else if(by == "comDoj" ||
-            by == 'comDojPosDep' || by == 'comDojPosDes' || by == 'comDojDepDes'
+            by == 'comDojPosDep' || by == 'comDojPosDes' || by == 'comDojDepDes' ||
+            by == 'comDojPosDepDes'
         ){
             console.log("if true - by ", by);
             const startDateJ = new Date(input.dateOfJoining); // Start of the day
@@ -4031,7 +4046,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             }
         }
         else if(by == "comDor" ||
-            by == 'comDorPosDep' || by == 'comDorPosDes' || by == 'comDorDepDes'
+            by == 'comDorPosDep' || by == 'comDorPosDes' || by == 'comDorDepDes' ||
+            by == 'comDorPosDepDes'
         ){
             console.log("if true - by ", by);
             const startDateR = new Date(input.dateOfRetirement); // Start of the day
@@ -4046,7 +4062,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             }
         }
         else if(by == "comRec" ||
-            by == 'comRecPosDep' || by == 'comRecPosDes' || by == 'comRecDepDes'
+            by == 'comRecPosDep' || by == 'comRecPosDes' || by == 'comRecDepDes' ||
+            by == 'comRecPosDepDes'
         ){
             console.log("if true - by ", by);
             getQueryJson = {
@@ -4055,7 +4072,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             }
         }
         else if(by == "degDoj" ||
-            by == 'degDojPosDep' || by == 'degDojPosDes' || by == 'degDojDepDes'
+            by == 'degDojPosDep' || by == 'degDojPosDes' || by == 'degDojDepDes' ||
+            by == 'degDojPosDepDes'
         ){
             console.log("if true - by ", by);
             const startDateJ = new Date(input.dateOfJoining); // Start of the day
@@ -4074,7 +4092,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             }
         }
         else if(by == "degDor" ||
-            by == 'degDorPosDep' || by == 'degDorPosDes' || by == 'degDorDepDes'
+            by == 'degDorPosDep' || by == 'degDorPosDes' || by == 'degDorDepDes' ||
+            by == 'degDorPosDepDes'
         ){
             console.log("if true - by ", by);
             const startDateR = new Date(input.dateOfRetirement); // Start of the day
@@ -4093,7 +4112,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             }
         }
         else if(by == "degRec" ||
-            by == 'degRecPosDep' || by == 'degRecPosDes' || by == 'degRecDepDes'
+            by == 'degRecPosDep' || by == 'degRecPosDes' || by == 'degRecDepDes' ||
+            by == 'degRecPosDepDes'
         ){
             console.log("if true - by ", by);
             getQueryJson = {
@@ -4106,7 +4126,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             }
         }
         else if(by == "dojDor" ||
-            by == 'dojDorPosDep' || by == 'dojDorPosDes' || by == 'dojDorDepDes'
+            by == 'dojDorPosDep' || by == 'dojDorPosDes' || by == 'dojDorDepDes' ||
+            by == 'dojDorPosDepDes'
         ){
             console.log("if true - by ", by);
             const startDateJ = new Date(input.dateOfJoining); // Start of the day
@@ -4127,7 +4148,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             }
         }
         else if(by == "dojRec" ||
-            by == 'dojRecPosDep' || by == 'dojRecPosDes' || by == 'dojRecDepDes'
+            by == 'dojRecPosDep' || by == 'dojRecPosDes' || by == 'dojRecDepDes' ||
+            by == 'dojRecPosDepDes'
         ){
             console.log("if true - by ", by);
             const startDateJ = new Date(input.dateOfJoining); // Start of the day
@@ -4242,7 +4264,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         }
         else if (by === 'dobStaComDoj' ||
-            by == 'dobStaComDojPos' || by == 'dobStaComDojDep' || by == 'dobStaComDojDes'
+            by == 'dobStaComDojPos' || by == 'dobStaComDojDep' || by == 'dobStaComDojDes' ||
+            by == 'staComDojPosDep' || by == 'staComDojPosDes' || by == 'staComDojDepDes'
         ) {
             getQueryJson = {
                 dateOfBirth: {
@@ -4590,7 +4613,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         }
         else if (by === 'staComDeg' ||
-            by == 'staComDegPos' || by == 'staComDegDep' || by == 'staComDegDes'
+            by == 'staComDegPos' || by == 'staComDegDep' || by == 'staComDegDes' ||
+            by == 'staComDegPosDep' || by == 'staComDegPosDes' || by == 'staComDegDepDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4602,7 +4626,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             };
         } 
-        else if (by === 'staComDegDoj'
+        else if (by === 'staComDegDoj' ||
+                by == 'staComDegDojPos' || by == 'staComDegDojDep' || by == 'staComDegDojDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4618,7 +4643,77 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             };
         }
-        else if (by === 'staComDegDor'
+        else if (by === 'staComDegDojDor'
+    ) {
+        getQueryJson = {
+            state: input.state,
+            community: input.community,
+            degreeData: {
+                $elemMatch: {
+                    degree: input.degree
+                }
+            },
+            dateOfJoining: {
+                $gte: startDateJ,
+                $lt: endDateJ
+            },
+            dateOfRetirement: {
+                $gte: startDateR,
+                $lt: endDateR
+            },
+        };
+    }
+    else if (by === 'staComDegDojRec'
+    ) {
+        getQueryJson = {
+            state: input.state,
+            community: input.community,
+            degreeData: {
+                $elemMatch: {
+                    degree: input.degree
+                }
+            },
+            dateOfJoining: {
+                $gte: startDateJ,
+                $lt: endDateJ
+            },
+            recruitmentType: input.recruitmentType
+        };
+    }
+        else if (by === 'staComDegDojDor'
+        ) {
+            getQueryJson = {
+                state: input.state,
+                community: input.community,
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+            };
+        }
+        else if (by === 'staComDegDojRec'
+        ) {
+            getQueryJson = {
+                state: input.state,
+                community: input.community,
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+            };
+        }
+        else if (by === 'staComDegDor' || 
+            by == 'staComDegDorPos' || by == 'staComDegDorDep' || by == 'staComDegDorDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4634,7 +4729,26 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             };
         }
-        else if (by === 'staComDegRec'
+        else if (by === 'staComDegDorRec'
+        ) {
+            getQueryJson = {
+                state: input.state,
+                community: input.community,
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType
+            };
+        }
+        
+        else if (by === 'staComDegRec' ||
+            by == 'staComDegRecPos' || by == 'staComDegRecDep' || by == 'staComDegRecDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4660,7 +4774,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             };
         } 
-        else if (by === 'staComDojDor'
+        else if (by === 'staComDojDor' ||
+            by == 'staComDojDorPos' || by == 'staComDojDorDep' || by == 'staComDojDorDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4675,7 +4790,25 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             };
         }
-        else if (by === 'staComDojRec'
+        else if (by === 'staComDojDorRec'
+        ) {
+            getQueryJson = {
+                state: input.state,
+                community: input.community,
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType
+            };
+        }
+        
+        else if (by === 'staComDojRec' ||
+            by == 'staComDojRecPos' || by == 'staComDojRecDep' || by == 'staComDojRecDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4690,7 +4823,8 @@ exports.byProfileAdvanced = async(input, by) =>{
 
         else if (by === 'staComDor' ||
             // by == 'staComDorRec' ||
-            by == 'staComDorPos' || by == 'staComDorDep' || by == 'staComDorDes'
+            by == 'staComDorPos' || by == 'staComDorDep' || by == 'staComDorDes' ||
+            by == 'staComDorPosDep' || by == 'staComDorPosDes' || by == 'staComDorDepDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4701,7 +4835,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             };
         }
-        else if (by === 'staComDorRec'
+        else if (by === 'staComDorRec' ||
+            by == 'staComDorRecPos' || by == 'staComDorRecDep' || by == 'staComDorRecDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4714,7 +4849,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         }
         else if (by === 'staComRec' ||
-            by == 'staComRecPos' || by == 'staComRecDep' || by == 'staComRecDes'
+            by == 'staComRecPos' || by == 'staComRecDep' || by == 'staComRecDes' ||
+            by == 'staComRecPosDep' || by == 'staComRecPosDes' || by == 'staComRecDepDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4738,7 +4874,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         } else if (by === 'staDegDoj' || 
             by == 'staDegDojPos' ||
-            by == 'staDegDojPos' || by == 'staDegDojDep' || by == 'staDegDojDes'
+            by == 'staDegDojPos' || by == 'staDegDojDep' || by == 'staDegDojDes' ||
+            by == 'staDegDoj'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4753,7 +4890,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             };
         } 
-        else if (by === 'staDegDojDor'
+        else if (by === 'staDegDojDor' ||
+                by == 'staDegDojDorPos' || by == 'staDegDojDorDep' || by == 'staDegDojDorDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4772,7 +4910,29 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             };
         }
-        else if (by === 'staDegDojRec'
+        else if (by === 'staDegDojDorRec'
+    ) {
+        getQueryJson = {
+            state: input.state,
+            degreeData: {
+                $elemMatch: {
+                    degree: input.degree
+                }
+            },
+            dateOfJoining: {
+                $gte: startDateJ,
+                $lt: endDateJ
+            },
+            dateOfRetirement: {
+                $gte: startDateR,
+                $lt: endDateR
+            },
+            recruitmentType: input.recruitmentType
+        };
+    }
+        
+        else if (by === 'staDegDojRec' || 
+            by == 'staDegDojRecPos' || by == 'staDegDojRecDep' || by == 'staDegDojRecDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4790,7 +4950,8 @@ exports.byProfileAdvanced = async(input, by) =>{
         }
         else if (by === 'staDegDor' ||
             // by == 'staDegDorRec' || 
-            by == 'staDegDorPos' || by == 'staDegDorDep' || by == 'staDegDorDes'
+            by == 'staDegDorPos' || by == 'staDegDorDep' || by == 'staDegDorDes' ||
+            by == 'staDegDorPosDep' || by == 'staDegDorPosDes' || by == 'staDegDorDepDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4805,7 +4966,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             };
         } 
-        else if (by === 'staDegDorRec'
+        else if (by === 'staDegDorRec' ||
+            by == 'staDegDorRecPos' || by == 'staDegDorRecDep' || by == 'staDegDorRecDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4822,7 +4984,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         }
         else if (by === 'staDegRec' ||
-            by == 'staDegRecPos' || by == 'staDegRecDep' || by == 'staDegRecDes'
+            by == 'staDegRecPos' || by == 'staDegRecDep' || by == 'staDegRecDes' ||
+            by == 'staDegRecPosDep' || by == 'staDegRecPosDes' || by == 'staDegRecDepDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4866,7 +5029,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         } else if (by === 'staDojDor' ||
             // by == 'staDojDorRec' || 
-            by == 'staDojDorPos' || by == 'staDojDorDep' || by == 'staDojDorDes'
+            by == 'staDojDorPos' || by == 'staDojDorDep' || by == 'staDojDorDes' ||
+            by == 'staDojDorPosDep' || by == 'staDojDorPosDes' || by == 'staDojDorDepDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4880,7 +5044,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             };
         } 
-        else if (by === 'staDojDorRec'
+        else if (by === 'staDojDorRec' ||
+            by == 'staDojDorRecPos' || by == 'staDojDorRecDep' || by == 'staDojDorRecDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4896,7 +5061,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         } 
         else if (by === 'staDojRec' || 
-            by == 'staDojRecPos' || by == 'staDojRecDep' || by == 'staDojRecDes'
+            by == 'staDojRecPos' || by == 'staDojRecDep' || by == 'staDojRecDes' ||
+            by == 'staDojRecPosDep' || by == 'staDojRecPosDes' || by == 'staDojRecDepDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4932,7 +5098,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             };
         } else if (by === 'staDorRec' ||
-            by == 'staDorRecPos' || by == 'staDorRecDep' || by == 'staDorRecDes'
+            by == 'staDorRecPos' || by == 'staDorRecDep' || by == 'staDorRecDes' ||
+            by == 'staDorRecPosDep' || by == 'staDorRecPosDes' || by == 'staDorRecDepDes'
         ) {
             getQueryJson = {
                 state: input.state,
@@ -4994,7 +5161,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 state: input.state,
             };
         } else if (by === 'comDegDoj' ||
-            by == 'comDegDojPos' || by == 'comDegDojDep' || by == 'comDegDojDes'
+            by == 'comDegDojPos' || by == 'comDegDojDep' || by == 'comDegDojDes' ||
+            by == 'comDegDojPosDep' || by == 'comDegDojPosDes' || by == 'comDegDojDepDes'
         ) {
             getQueryJson = {
                 community: input.community,
@@ -5009,7 +5177,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             };
         } 
-        else if (by === 'comDegDojDor'
+        else if (by === 'comDegDojDor' ||
+            by == 'comDegDojDorPos' || by == 'comDegDojDorDep' || by == 'comDegDojDorDes'
         ) {
             getQueryJson = {
                 community: input.community,
@@ -5028,7 +5197,28 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             };
         }
-        else if (by === 'comDegDojRec'
+        else if (by === 'comDegDojDorRec'
+        ) {
+            getQueryJson = {
+                community: input.community,
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                    }
+                },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType
+            };
+        }
+        else if (by === 'comDegDojRec' ||
+                by == 'comDegDojRecPos' || by == 'comDegDojRecDep' || by == 'comDegDojRecDes'
         ) {
             getQueryJson = {
                 community: input.community,
@@ -5046,7 +5236,8 @@ exports.byProfileAdvanced = async(input, by) =>{
         }
         else if (by === 'comDegDor' ||
             // by == 'comDegDorRec' || 
-            by == 'comDegDorPos' || by == 'comDegDorDep' || by == 'comDegDorDes'
+            by == 'comDegDorPos' || by == 'comDegDorDep' || by == 'comDegDorDes' ||
+            by == 'comDegDorPosDep' || by == 'comDegDorPosDes' || by == 'comDegDorDepDes'
         ) {
             getQueryJson = {
                 community: input.community,
@@ -5061,7 +5252,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             };
         } 
-        else if (by === 'comDegDorRec'
+        else if (by === 'comDegDorRec' ||
+            by == 'comDegDorRecPos' || by == 'comDegDorRecDep' || by == 'comDegDorRecDes'
         ) {
             getQueryJson = {
                 community: input.community,
@@ -5078,7 +5270,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         }
         else if (by === 'comDegRec' ||
-            by == 'comDegRecPos' || by == 'comDegRecDep' || by == 'comDegRecDes'
+            by == 'comDegRecPos' || by == 'comDegRecDep' || by == 'comDegRecDes' ||
+            by == 'comDegRecPosDep' || by == 'comDegRecPosDes' || by == 'comDegRecDepDes'
         ) {
             getQueryJson = {
                 community: input.community,
@@ -5122,7 +5315,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         } else if (by === 'comDojDor' ||
             // by == 'comDojDorRec' ||
-            by == 'comDojDorPos' || by == 'comDojDorDep' || by == 'comDojDorDes'
+            by == 'comDojDorPos' || by == 'comDojDorDep' || by == 'comDojDorDes' ||
+            by == 'comDojDorPosDep' || by == 'comDojDorPosDes' || by == 'comDojDorDepDes'
         ) {
             getQueryJson = {
                 community: input.community,
@@ -5136,7 +5330,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             };
         } 
-        else if (by === 'comDojDorRec'
+        else if (by === 'comDojDorRec' ||
+            by == 'comDojDorRecPos' || by == 'comDojDorRecDep' || by == 'comDojDorRecDes'
         ) {
             getQueryJson = {
                 community: input.community,
@@ -5152,7 +5347,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         }
         else if (by === 'comDojRec' ||
-            by == 'comDojRecPos' || by == 'comDojRecDep' || by == 'comDojRecDes'
+            by == 'comDojRecPos' || by == 'comDojRecDep' || by == 'comDojRecDes' ||
+            by == 'comDojRecPosDep' || by == 'comDojRecPosDes' || by == 'comDojRecDepDes'
         ) {
             getQueryJson = {
                 community: input.community,
@@ -5191,7 +5387,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             };
         } else if (by === 'comDorRec' ||
-            by == 'comDorRecPos' || by == 'comDorRecDep' || by == 'comDorRecDes'
+            by == 'comDorRecPos' || by == 'comDorRecDep' || by == 'comDorRecDes' ||
+            by == 'comDorRecPosDep' || by == 'comDorRecPosDes' || by == 'comDorRecDepDes'
         ) {
             getQueryJson = {
                 community: input.community,
@@ -5254,7 +5451,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         } else if (by === 'degDojDor' ||
             // by == 'degDojDorRec' || 
-            by == 'degDojDorPos' || by == 'degDojDorDep' || by == 'degDojDorDes'
+            by == 'degDojDorPos' || by == 'degDojDorDep' || by == 'degDojDorDes' ||
+            by == 'degDojDorPosDep' || by == 'degDojDorPosDes' || by == 'degDojDorDepDes' 
         ) {
             getQueryJson = {
                 degreeData: {
@@ -5272,7 +5470,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 }
             };
         } 
-        else if (by === 'degDojDorRec'
+        else if (by === 'degDojDorRec' ||
+            by == 'degDojDorRecPos' || by == 'degDojDorRecDep' || by == 'degDojDorRecDes'
         ) {
             getQueryJson = {
                 degreeData: {
@@ -5292,7 +5491,8 @@ exports.byProfileAdvanced = async(input, by) =>{
             };
         }
         else if (by === 'degDojRec' ||
-            by == 'degDojRecPos' || by == 'degDojRecDep' || by == 'degDojRecDes'
+            by == 'degDojRecPos' || by == 'degDojRecDep' || by == 'degDojRecDes' ||
+            by == 'degDojRecPosDep' || by == 'degDojRecPosDes' || by == 'degDojRecDepDes'
         ) {
             getQueryJson = {
                 degreeData: {
@@ -5343,7 +5543,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             };
         } else if (by === 'degDorRec' ||
-            by == 'degDorRecPos' || by == 'degDorRecDep' || by == 'degDorRecDes'
+            by == 'degDorRecPos' || by == 'degDorRecDep' || by == 'degDorRecDes' ||
+            by == 'degDorRecPosDep' || by == 'degDorRecPosDes' || by == 'degDorRecDepDes'
         ) {
             getQueryJson = {
                 degreeData: {
@@ -5445,7 +5646,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 },
             };
         } else if (by === 'dojDorRec' ||
-            by == 'dojDorRecPos' || by == 'dojDorRecDep' || by == 'dojDorRecDes'
+            by == 'dojDorRecPos' || by == 'dojDorRecDep' || by == 'dojDorRecDes' ||
+            by == 'dojDorRecPosDep' || by == 'dojDorRecPosDes' || by == 'dojDorRecDepDes'
         ) {
             getQueryJson = {
                 dateOfJoining: {
@@ -5717,7 +5919,9 @@ exports.byProfileAdvanced = async(input, by) =>{
             }
             console.log('updateQueryJson ', updateQueryJson);
             if(by == "dateOfBirth" || by == "dateOfJoining" || by == "dateOfRetirement" ||
-                by == "community" || by == "recruitmentType" || by == "state"  || by == "degree" || 
+                by == "community" || by == "recruitmentType" || by == "state"  || by == "degree" ||
+                
+                ///////two params
                 by == "dobSta" || by == "dobCom" || by == "dobDeg"|| 
                 by == "dobPos"|| by == "dobDep" || by == "dobDes" || by == "staPos" || by == "staDep" ||
                 by == "staDes" || by == "comPos" || by == "comDep" || by == "comDes" || by == "degPos" ||
@@ -5728,6 +5932,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 by == "staDor" || by == "staRec" || by == "comDeg" || by == "comDoj" || by == "comDor" ||
                 by == "comRec" || by == "degDoj" || by == "degDor" || by == "degRec" || by == "dojDor" ||
                 by == "dojRec" || by == "dorRec" ||
+
+                ////////three params
                 by == "dobStaCom" || by == "dobStaDeg" || by == "dobStaDoj" ||by == "dobStaDor" ||
                 by == "dobStaRec" || by == "dobStaPos" || by == "dobStaDep" || by == "dobStaDes" || by == "dobComDeg" ||
                 by == "dobComDoj" || by == "dobComDor" || by == "dobComRec" || by == "dobComPos" || by == "dobComDep" ||
@@ -5759,6 +5965,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                 by == "dorRecDep" || by == "dorRecDes" || by == "dorPosDep" || 
                 by == "dorPosDes" || by == "dorDepDes" || by == "recPosDep" || by == "recPosDes" || 
                 by == "recDepDes" ||
+
+                /////// four params
                 by == 'dobStaComDeg' || by == 'dobStaComDoj' || by == 'dobStaComDor' || by == 'dobStaComRec' ||
                 by == 'dobStaComPos' || by == 'dobStaComDep' || by == 'dobStaComDes' || by == 'dobStaDegDoj' ||
                 by == 'dobStaDegDor' || by == 'dobStaDegRec' || by == 'dobStaDegPos' || by == 'dobStaDegDep' ||
@@ -5818,7 +6026,74 @@ exports.byProfileAdvanced = async(input, by) =>{
                 
                 by == 'dorRecPosDep' || by == 'dorRecPosDes' || by == 'dorRecDepDes' || by == 'dorPosDepDes' ||
                 
-                by == 'recPosDepDes'
+                by == 'recPosDepDes' ||
+
+                ////five params
+                by == 'dobStaComDegDoj' || by == 'dobStaComDegDor' || by == 'dobStaComDegRec' || by == 'dobStaComDegPos' ||
+                by == 'dobStaComDegDep' || by == 'dobStaComDegDes' || by == 'dobStaComDojDor' || by == 'dobStaComDojRec' ||
+                by == 'dobStaComDojPos' || by == 'dobStaComDojDep' || by == 'dobStaComDojDes' || by == 'dobStaComDorRec' ||
+                by == 'dobStaComDorPos' || by == 'dobStaComDorDep' || by == 'dobStaComDorDes' || by == 'dobStaComRecPos' ||
+                by == 'dobStaComRecDep' || by == 'dobStaComRecDes' || by == 'dobStaComPosDep' || by == 'dobStaComPosDes' ||
+                by == 'dobStaComDepDes' || by == 'dobStaDegDojDor' || by == 'dobStaDegDojRec' || by == 'dobStaDegDojPos' ||
+                by == 'dobStaDegDojDep' || by == 'dobStaDegDojDes' || by == 'dobStaDegDorRec' || by == 'dobStaDegDorPos' ||
+                by == 'dobStaDegDorDep' || by == 'dobStaDegDorDes' || by == 'dobStaDegRecPos' || by == 'dobStaDegRecDep' ||
+                by == 'dobStaDegRecDes' || by == 'dobStaDegPosDep' || by == 'dobStaDegPosDes' || by == 'dobStaDegDepDes' ||
+                by == 'dobStaDojDorRec' || by == 'dobStaDojDorPos' || by == 'dobStaDojDorDep' || by == 'dobStaDojDorDes' ||
+                by == 'dobStaDojRecPos' || by == 'dobStaDojRecDep' || by == 'dobStaDojRecDes' || by == 'dobStaDojPosDep' ||
+                by == 'dobStaDojPosDes' || by == 'dobStaDojDepDes' || by == 'dobStaDorRecPos' || by == 'dobStaDorRecDep' ||
+                by == 'dobStaDorRecDes' || by == 'dobStaDorPosDep' || by == 'dobStaDorPosDes' || by == 'dobStaDorDepDes' ||
+                by == 'dobStaRecPosDep' || by == 'dobStaRecPosDes' || by == 'dobStaRecDepDes' || by == 'dobStaPosDepDes' ||
+                by == 'dobComDegDojDor' || by == 'dobComDegDojRec' || by == 'dobComDegDojPos' || by == 'dobComDegDojDep' ||
+                by == 'dobComDegDorRec' || by == 'dobComDegDorPos' || by == 'dobComDegDorDep' || by == 'dobComDegDorDes' ||
+                by == 'dobComDegRecPos' || by == 'dobComDegRecDep' || by == 'dobComDegRecDes' || by == 'dobComDegPosDep' ||
+                by == 'dobComDegPosDes' || by == 'dobComDegDepDes' || by == 'dobComDojDorRec' || by == 'dobComDojDorPos' ||
+                by == 'dobComDojDorDep' || by == 'dobComDojDorDes' || by == 'dobComDojRecPos' || by == 'dobComDojRecDep' ||
+                by == 'dobComDojRecDes' || by == 'dobComDojPosDep' || by == 'dobComDojPosDes' || by == 'dobComDojDepDes' ||
+                by == 'dobComDorRecPos' || by == 'dobComDorRecDep' || by == 'dobComDorRecDes' || by == 'dobComDorPosDep' ||
+                by == 'dobComDorPosDes' || by == 'dobComDorDepDes' || by == 'dobComRecPosDep' || by == 'dobComRecPosDes' ||
+                by == 'dobComRecDepDes' || by == 'dobComPosDepDes' || by == 'dobDegDojDorRec' || by == 'dobDegDojDorPos' ||
+                by == 'dobDegDojDorDep' || by == 'dobDegDojDorDes' || by == 'dobDegDojRecPos' || by == 'dobDegDojRecDep' ||
+                by == 'dobDegDojRecDes' || by == 'dobDegDojPosDep' || by == 'dobDegDojPosDes' || by == 'dobDegDojDepDes' ||
+                by == 'dobDegDorRecPos' || by == 'dobDegDorRecDep' || by == 'dobDegDorRecDes' || by == 'dobDegDorPosDep' ||
+                by == 'dobDegDorPosDes' || by == 'dobDegDorDepDes' || by == 'dobDegRecPosDep' || by == 'dobDegRecPosDes' ||
+                by == 'dobDegRecDepDes' || by == 'dobDegPosDepDes' || by == 'dobDojDorRecPos' || by == 'dobDojDorRecDep' ||
+                by == 'dobDojDorRecDes' || by == 'dobDojDorPosDep' || by == 'dobDojDorPosDes' || by == 'dobDojDorDepDes' ||
+                by == 'dobDojRecPosDep' || by == 'dobDojRecPosDes' || by == 'dobDojRecDepDes' || by == 'dobDojPosDepDes' ||
+                by == 'dobDorRecPosDep' || by == 'dobDorRecPosDes' || by == 'dobDorRecDepDes' || by == 'dobDorPosDepDes' ||
+                by == 'dobRecPosDepDes' || by == 'staComDegDojDor' || by == 'staComDegDojRec' || by == 'staComDegDojPos' ||
+                by == 'staComDegDojDep' || by == 'staComDegDojDes' || by == 'staComDegDorRec' || by == 'staComDegDorPos' ||
+                by == 'staComDegDorDep' || by == 'staComDegDorDes' || by == 'staComDegRecPos' || by == 'staComDegRecDep' ||
+                by == 'staComDegRecDes' || by == 'staComDegPosDep' || by == 'staComDegPosDes' || by == 'staComDegDepDes' ||
+                by == 'staComDojDorRec' || by == 'staComDojDorPos' || by == 'staComDojDorDep' || by == 'staComDojDorDes' ||
+                by == 'staComDojRecPos' || by == 'staComDojRecDep' || by == 'staComDojRecDes' || by == 'staComDojPosDep' ||
+                by == 'staComDojPosDes' || by == 'staComDojDepDes' || by == 'staComDorRecPos' || by == 'staComDorRecDep' ||
+                by == 'staComDorRecDes' || by == 'staComDorPosDep' || by == 'staComDorPosDes' || by == 'staComDorDepDes' ||
+                by == 'staComRecPosDep' || by == 'staComRecPosDes' || by == 'staComRecDepDes' || by == 'staComPosDepDes' ||
+                by == 'staDegDojDorRec' || by == 'staDegDojDorPos' || by == 'staDegDojDorDep' || by == 'staDegDojDorDes' ||
+                by == 'staDegDojRecPos' || by == 'staDegDojRecDep' || by == 'staDegDojRecDes' || by == 'staDegDojPosDep' ||
+                by == 'staDegDojPosDes' || by == 'staDegDojDepDes' || by == 'staDegDorRecPos' || by == 'staDegDorRecDep' ||
+                by == 'staDegDorRecDes' || by == 'staDegDorPosDep' || by == 'staDegDorPosDes' || by == 'staDegDorDepDes' ||
+                by == 'staDegRecPosDep' || by == 'staDegRecPosDes' || by == 'staDegRecDepDes' || by == 'staDegPosDepDes' ||
+                by == 'staDojDorRecPos' || by == 'staDojDorRecDep' || by == 'staDojDorRecDes' || by == 'staDojDorPosDep' ||
+                by == 'staDojDorPosDes' || by == 'staDojDorDepDes' || by == 'staDojRecPosDep' || by == 'staDojRecPosDes' ||
+                by == 'staDojRecDepDes' || by == 'staDojPosDepDes' || by == 'staDorRecPosDep' || by == 'staDorRecPosDes' ||
+                by == 'staDorRecDepDes' || by == 'staDorPosDepDes' || by == 'staRecPosDepDes' || by == 'comDegDojDorRec' ||
+                by == 'comDegDojDorPos' || by == 'comDegDojDorDep' || by == 'comDegDojDorDes' || by == 'comDegDojRecPos' ||
+                by == 'comDegDojRecDep' || by == 'comDegDojRecDes' || by == 'comDegDojPosDep' || by == 'comDegDojPosDes' ||
+                by == 'comDegDojDepDes' || by == 'comDegDorRecPos' || by == 'comDegDorRecDep' || by == 'comDegDorRecDes' ||
+                by == 'comDegDorPosDep' || by == 'comDegDorPosDes' || by == 'comDegDorDepDes' || by == 'comDegRecPosDep' ||
+                by == 'comDegRecPosDes' || by == 'comDegRecDepDes' || by == 'comDegPosDepDes' || by == 'comDojDorRecPos' ||
+                by == 'comDojDorRecDep' || by == 'comDojDorRecDes' || by == 'comDojDorPosDep' || by == 'comDojDorPosDes' ||
+                by == 'comDojDorDepDes' || by == 'comDojRecPosDep' || by == 'comDojRecPosDes' || by == 'comDojRecDepDes' ||
+                by == 'comDojPosDepDes' || by == 'comDorRecPosDep' || by == 'comDorRecPosDes' || by == 'comDorRecDepDes' ||
+                by == 'comDorPosDepDes' || by == 'comRecPosDepDes' || by == 'degDojDorRecPos' || by == 'degDojDorRecDep' ||
+                by == 'degDojDorRecDes' || by == 'degDojDorPosDep' || by == 'degDojDorPosDes' || by == 'degDojDorDepDes' ||
+                by == 'degDojRecPosDep' || by == 'degDojRecPosDes' || by == 'degDojRecDepDes' || by == 'degDojPosDepDes' ||
+                by == 'degDorRecPosDep' || by == 'degDorRecPosDes' || by == 'degDorRecDepDes' || by == 'degDorPosDepDes' ||
+                by == 'degRecPosDepDes' || by == 'dojDorRecPosDep' || by == 'dojDorRecPosDes' || by == 'dojDorRecDepDes' ||
+                by == 'dojDorPosDepDes' || by == 'dojRecPosDepDes'
+
+
             ){
                     dataAll = {
                         personalEmail: employee.personalEmail,
@@ -5925,7 +6200,15 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'staDojDorPos' || by == 'staDojRecPos' || by == 'staDorRecPos' || by == 'comDegDojPos' ||
                             by == 'comDegDorPos' || by == 'comDegRecPos' || by == 'comDojDorPos' || by == 'comDojRecPos' || 
                             by == 'comDorRecPos' || by == 'degDojDorPos' || by == 'degDojRecPos' || by == 'degDorRecPos' ||
-                            by == 'dojDorRecPos' 
+                            by == 'dojDorRecPos'||
+                            by == 'dobStaComDegPos' || by == 'dobStaComRecPos' || by == 'dobStaComDojPos' || by == 'dobStaComDorPos' ||
+                            by == 'dobStaDegDojPos' || by == 'dobStaDegDorPos' || by == 'dobStaDojDorPos' || by == 'dobStaDojRecPos' ||
+                            by == 'dobStaDorRecPos' || by == 'dobComDegDojPos' || by == 'dobComDegDorPos' || by == 'dobComDegRecPos' ||
+                            by == 'dobComDorRecPos' || by == 'dobDegDojDorPos' || by == 'dobDegDojRecPos' || by == 'dobDegDorRecPos' ||
+                            by == 'dobDojDorRecPos' || by == 'staComDegDojPos' || by == 'staComDegDorPos' || by == 'staComDegRecPos' || 
+                            by == 'staComDojDorPos' || by == 'staComDojRecPos' || by == 'staComDorRecPos' || by == 'staDegDojDorPos' ||
+                            by == 'staDegDojRecPos' || by == 'staDegDorRecPos' || by == 'staDojDorRecPos' || by == 'comDegDojDorPos' || 
+                            by == 'comDegDojRecPos' || by == 'comDegDorRecPos' || by == 'comDojDorRecPos' || by == 'degDojDorRecPos' 
                             ){
                             console.log('yes posting ');
                             if(transferOrPostingEmployeesList.toPostingInCategoryCode){
@@ -5956,7 +6239,11 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'staDojDorDep' || by == 'staDojRecDep' || by == 'staDorRecDep' || by == 'comDegDojDep' || 
                             by == 'comDegDorDep' || by == 'comDegRecDep' || by == 'comDojDorDep' || by == 'comDojRecDep' || 
                             by == 'comDorRecDep' || by == 'degDojDorDep' || by == 'degDojRecDep' || by == 'degDorRecDep' || 
-                            by == 'dojDorRecDep'){
+                            by == 'dojDorRecDep'  ||
+                            by == 'dobStaComDegDep' || by == 'dobStaComDojDep' || by == 'dobStaComDorDep' || by == 'dobStaComRecDep' ||
+                            by == 'dobStaDegDojDep' || by == 'dobStaDegDorDep' || by == 'dobStaDegRecDep' || by == 'dobStaDojDorDep' || 
+                            by == 'dobStaDojRecDep' || by == 'dobStaDorRecDep'
+                        ){
                             console.log('yes dept ');
                             if(transferOrPostingEmployeesList.toPostingInCategoryCode){
                                 console.log('yes dept avail')
