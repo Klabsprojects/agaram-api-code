@@ -6208,7 +6208,8 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'dobDojDorRecPos' || by == 'staComDegDojPos' || by == 'staComDegDorPos' || by == 'staComDegRecPos' || 
                             by == 'staComDojDorPos' || by == 'staComDojRecPos' || by == 'staComDorRecPos' || by == 'staDegDojDorPos' ||
                             by == 'staDegDojRecPos' || by == 'staDegDorRecPos' || by == 'staDojDorRecPos' || by == 'comDegDojDorPos' || 
-                            by == 'comDegDojRecPos' || by == 'comDegDorRecPos' || by == 'comDojDorRecPos' || by == 'degDojDorRecPos' 
+                            by == 'comDegDojRecPos' || by == 'comDegDorRecPos' || by == 'comDojDorRecPos' || by == 'degDojDorRecPos' || 
+                            by == 'dobStaDegRecPos' || by == 'dobComDojDorPos' || by == 'dobComDojRecPos' || by == 'staDegDorRecPos'
                             ){
                             console.log('yes posting ');
                             if(transferOrPostingEmployeesList.toPostingInCategoryCode){
@@ -6242,7 +6243,13 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'dojDorRecDep'  ||
                             by == 'dobStaComDegDep' || by == 'dobStaComDojDep' || by == 'dobStaComDorDep' || by == 'dobStaComRecDep' ||
                             by == 'dobStaDegDojDep' || by == 'dobStaDegDorDep' || by == 'dobStaDegRecDep' || by == 'dobStaDojDorDep' || 
-                            by == 'dobStaDojRecDep' || by == 'dobStaDorRecDep'
+                            by == 'dobStaDojRecDep' || by == 'dobStaDorRecDep' || by == 'dobComDegDorDep' || by == 'dobComDegRecDep' || 
+                            by == 'dobComDojDorDep' || by == 'dobComDojRecDep' || by == 'dobComDorRecDep' || by == 'dobDegDojRecDep' ||
+                            by == 'dobDegDojDorDep' || by == 'dobDegDorRecDep' || by == 'dobDojDorRecDep' || by == 'staComDegDojDep' ||
+                            by == 'staComDegDorDep' || by == 'staComDegRecDep' || by == 'staComDojDorDep' || by == 'staComDojRecDep' || 
+                            by == 'staComDorRecDep' || by == 'staDegDojDorDep' || by == 'staDegDojRecDep' || by == 'staDegDorRecDep' || 
+                            by == 'staDojDorRecDep' || by == 'comDegDojDorDep' || by == 'comDegDojRecDep' || by == 'comDegDorRecDep' || 
+                            by == 'comDojDorRecDep' || by == 'degDojDorRecDep' || by == 'dobComDegDojDep'
                         ){
                             console.log('yes dept ');
                             if(transferOrPostingEmployeesList.toPostingInCategoryCode){
@@ -6270,7 +6277,16 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'staDojDorDes' || by == 'staDojRecDes' || by == 'staDorRecDes' || by == 'comDegDojDes' ||
                             by == 'comDegDorDes' || by == 'comDegRecDes' || by == 'comDojDorDes' || by == 'comDojRecDes' || 
                             by == 'comDorRecDes' || by == 'degDojDorDes' || by == 'degDojRecDes' || by == 'degDorRecDes' ||
-                            by == 'dojDorRecDes'
+                            by == 'dojDorRecDes' ||
+                            by == 'dobStaComDegDes' || by == 'dobStaComDojDes' || by == 'dobStaComDorDes' || by == 'dobStaComRecDes' ||
+                            by == 'dobStaDegDojDes' || by == 'dobStaDegDorDes' || by == 'dobStaDegRecDes' || by == 'dobStaDojDorDes' ||
+                            by == 'dobStaDojRecDes' || by == 'dobStaDorRecDes' || by == 'dobComDegDorDes' || by == 'dobComDegRecDes' || 
+                            by == 'dobComDojDorDes' || by == 'dobComDojRecDes' || by == 'dobComDorRecDes' || by == 'dobDegDojDorDes' ||
+                            by == 'dobDegDojRecDes' || by == 'dobDegDorRecDes' || by == 'dobDojDorRecDes' || by == 'staComDegDojDes' || 
+                            by == 'staComDegDorDes' || by == 'staComDegRecDes' || by == 'staComDojDorDes' || by == 'staComDojRecDes' || 
+                            by == 'staComDorRecDes' || by == 'staDegDojRecDes' || by == 'staDojDorRecDes' || by == 'comDegDojDorDes' || 
+                            by == 'comDegDojRecDes' || by == 'comDegDorRecDes' || by == 'comDojDorRecDes' || by == 'degDojDorRecDes' || 
+                            by == 'staDegDojDorDes' || by == 'staDegDorRecDes' 
                         ){
                             console.log('yes designation ');
                             if(transferOrPostingEmployeesList.toDesignationId){
@@ -6286,7 +6302,16 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'dobDorPosDep' || by == 'dobRecPosDep' || by == 'staComPosDep' || by == 'staDegPosDep' || 
                             by == 'staDojPosDep' || by == 'staDorPosDep' || by == 'staRecPosDep' || by == 'comDegPosDep' ||
                             by == 'comDorPosDep' || by == 'comRecPosDep' || by == 'degDojPosDep' || by == 'degDorPosDep' || 
-                            by == 'degRecPosDep' || by == 'dojDorPosDep' || by == 'dojRecPosDep' || by == 'dorRecPosDep'
+                            by == 'degRecPosDep' || by == 'dojDorPosDep' || by == 'dojRecPosDep' || by == 'dorRecPosDep' ||
+                            by == 'dobStaComPosDep' || by == 'dobStaDegPosDep' || by == 'dobStaDojPosDep' || by == 'dobStaDorPosDep' ||
+                            by == 'dobStaRecPosDep' || by == 'dobComDegPosDep' || by == 'dobComDojPosDep' || by == 'dobComDorPosDep' || 
+                            by == 'dobComRecPosDep' || by == 'dobDegDojPosDep' || by == 'dobDegDorPosDep' || by == 'dobDegRecPosDep' || 
+                            by == 'dobDojDorPosDep' || by == 'dobDojRecPosDep' || by == 'dobDorRecPosDep' || by == 'dobDorPosDepDes' || 
+                            by == 'staComDegPosDep' || by == 'staComDojPosDep' || by == 'staComDorPosDep' || by == 'staComRecPosDep' || 
+                            by == 'staDegDojPosDep' || by == 'staDegDorPosDep' || by == 'staDegRecPosDep' || by == 'staDojDorPosDep' || 
+                            by == 'staDojRecPosDep' || by == 'staDorRecPosDep' || by == 'comDegDojPosDep' || by == 'comDegDorPosDep' || 
+                            by == 'comDegRecPosDep' || by == 'comDojDorPosDep' || by == 'comDojRecPosDep' || by == 'comDorRecPosDep' || 
+                            by == 'degDojDorPosDep' || by == 'degDojRecPosDep' || by == 'degDorRecPosDep' || by == 'dojDorRecPosDep'
                         ){
                             if(transferOrPostingEmployeesList.toDepartmentId == input.department){
                                 if(transferOrPostingEmployeesList.toPostingInCategoryCode){
@@ -6307,7 +6332,16 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'staDojPosDes' || by == 'staDorPosDes' || by == 'staRecPosDes' || by == 'comDegPosDes' || 
                             by == 'comDojPosDep' || by == 'comDojPosDes' || by == 'degDojPosDes' || by == 'comDorPosDes' || 
                             by == 'comRecPosDes' || by == 'degDorPosDes' || by == 'degRecPosDes' || by == 'dojDorPosDes' || 
-                            by == 'dojRecPosDes' || by == 'dorRecPosDes'
+                            by == 'dojRecPosDes' || by == 'dorRecPosDes' || 
+                            by == 'dobStaComPosDes' || by == 'dobStaDegPosDes' || by == 'dobStaDojPosDes' || by == 'dobStaDorPosDes' || 
+                            by == 'dobStaRecPosDes' || by == 'dobComDegPosDes' || by == 'dobComDojPosDes' || by == 'dobComDorPosDes' || 
+                            by == 'dobComRecPosDes' || by == 'dobDegDojPosDes' || by == 'dobDegDorPosDes' || by == 'dobDegRecPosDes' || 
+                            by == 'dobDojDorPosDes' || by == 'dobDojRecPosDes' || by == 'dobDorRecPosDes' || by == 'staComDegPosDes' || 
+                            by == 'staComDojPosDes' || by == 'staComDorPosDes' || by == 'staComRecPosDes' || by == 'staDegDojPosDes' || 
+                            by == 'staDegDorPosDes' || by == 'staDegRecPosDes' || by == 'staDojDorPosDes' || by == 'staDojRecPosDes' || 
+                            by == 'staDorRecPosDes' || by == 'comDegDojPosDes' || by == 'comDegDorPosDes' || by == 'comDegRecPosDes' || 
+                            by == 'comDojDorPosDes' || by == 'comDojRecPosDes' || by == 'comDorRecPosDes' || by == 'degDojDorPosDes' || 
+                            by == 'degDojRecPosDes' || by == 'degDorRecPosDes' || by == 'dojDorRecPosDes'
                         ){
                             if(transferOrPostingEmployeesList.toDesignationId == input.designation){
                                 if(transferOrPostingEmployeesList.toPostingInCategoryCode){
@@ -6326,7 +6360,17 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'dobDorDepDes' || by == 'dobRecDepDes' || by == 'staComDepDes' || by == 'staDegDepDes' || 
                             by == 'staDojDepDes' || by == 'staDorDepDes' || by == 'staRecDepDes' || by == 'comDegDepDes' || 
                             by == 'comDojDepDes' || by == 'degDojDepDes' || by == 'degDorDepDes' || by == 'degRecDepDes' ||
-                            by == 'dojRecDepDes' || by == 'dorRecDepDes'
+                            by == 'dojRecDepDes' || by == 'dorRecDepDes' ||
+                            by == 'comRecDepDes' || by == 'dojDorDepDes' ||
+                            by == 'dobStaComDepDes' || by == 'dobStaDegDepDes' || by == 'dobStaDojDepDes' || by == 'dobStaDorDepDes' || 
+                            by == 'dobStaRecDepDes' || by == 'dobComDegDepDes' || by == 'dobComDojDepDes' || by == 'dobComDorDepDes' || 
+                            by == 'dobComRecDepDes' || by == 'dobDegDojDepDes' || by == 'dobDegDorDepDes' || by == 'dobDegRecDepDes' || 
+                            by == 'dobDojDorDepDes' || by == 'dobDojRecDepDes' || by == 'dobDorRecDepDes' || by == 'staComDegDepDes' || 
+                            by == 'staComDojDepDes' || by == 'staComDorDepDes' || by == 'staComRecDepDes' || by == 'staDegDojDepDes' || 
+                            by == 'staDegDorDepDes' || by == 'staDegRecDepDes' || by == 'staDojDorDepDes' || by == 'staDojRecDepDes' ||
+                            by == 'staDorRecDepDes' || by == 'comDegDojDepDes' || by == 'comDegDorDepDes' || by == 'comDegRecDepDes' || 
+                            by == 'comDojDorDepDes' || by == 'comDojRecDepDes' || by == 'comDorRecDepDes' || by == 'degDojDorDepDes' || 
+                            by == 'degDojRecDepDes' || by == 'degDorRecDepDes' || by == 'dojDorRecDepDes'
                         ){
                             if(transferOrPostingEmployeesList.toDepartmentId == input.department){
                                 if(transferOrPostingEmployeesList.toDesignationId){
@@ -6342,7 +6386,11 @@ exports.byProfileAdvanced = async(input, by) =>{
                         else if(by == 'posDepDes' ||
                             by == 'dobPosDepDes' || by == 'staPosDepDes' || by == 'comPosDepDes' || by == 'degPosDepDes' ||
                             by == 'dojPosDepDes' || by == 'dorPosDepDes' || by == 'recPosDepDes' || by == 'comDorDepDes' || 
-                            by == 'comRecDepDes' || by == 'dojDorDepDes'
+                            by == 'dobStaPosDepDes' || by == 'dobComPosDepDes' || by == 'dobDegPosDepDes' || by == 'dobDojPosDepDes' ||
+                            by == 'dobRecPosDepDes' || by == 'staComPosDepDes' || by == 'staDegPosDepDes' || by == 'staDojPosDepDes' || 
+                            by == 'staDorPosDepDes' || by == 'staRecPosDepDes' || by == 'comDegPosDepDes' || by == 'comDojPosDepDes' ||
+                            by == 'comDorPosDepDes' || by == 'comRecPosDepDes' || by == 'degDojPosDepDes' || by == 'degRecPosDepDes' || 
+                            by == 'degDorPosDepDes' || by == 'dojDorPosDepDes' || by == 'dojRecPosDepDes'
                         ){
                             if(transferOrPostingEmployeesList.toDepartmentId == input.department){
                                 if(transferOrPostingEmployeesList.toDesignationId){
@@ -6393,7 +6441,13 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'staDegDojDor' || by == 'staDegDojRec' || by == 'staDegDorRec' ||
                             by == 'staDojDorRec' ||
                             by == 'comDegDojDor' || by == 'comDegDojRec' || by == 'comDegDorRec' || by == 'comDojDorRec' ||
-                            by == 'degDojDorRec'
+                            by == 'degDojDorRec' ||
+                            by == 'dobStaComDegDoj' || by == 'dobStaComDegDor' || by == 'dobStaComDegRec' || by == 'dobStaComDojDor' || 
+                            by == 'dobStaComDojRec' || by == 'dobStaComDorRec' || by == 'dobStaDegDojDor' || by == 'dobStaDegDojRec' ||
+                            by == 'dobStaDegDorRec' || by == 'dobStaDojDorRec' || by == 'dobComDegDojDor' || by == 'dobComDegDojRec' ||
+                            by == 'dobComDegDorRec' || by == 'dobComDojDorRec' || by == 'dobDegDojDorRec' || by == 'staComDegDojDor' || 
+                            by == 'staComDegDojRec' || by == 'staComDegDorRec' ||by == 'staComDojDorRec'  || by == 'staDegDojDorRec' || 
+                            by == 'comDegDojDorRec'
                          ){
                             // console.log('dataAll => ', dataAll);
                             console.log('condition true');
