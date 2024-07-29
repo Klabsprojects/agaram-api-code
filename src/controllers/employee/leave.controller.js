@@ -78,17 +78,26 @@ exports.getLeave = async (req, res) => {
             let filter;
             let update = {};
             update = req.body;
-            if(query.id){
-                console.log('id coming');
-                console.log(query.id);
-                filter = {
-                    _id : query.id
+            if(Object.keys(req.body).length >0){
+                if(query.id){
+                    console.log('id coming');
+                    console.log(query.id);
+                    filter = {
+                        _id : query.id
+                    }
                 }
-            }
+                
             else{
-                console.log('id coming');
+                console.log('id not coming');
                 throw 'pls provide id field';
             }
+            }
+            
+            else{
+                console.log('problem in input query');
+                throw 'pls provideinput query';
+            }
+            
                 
             console.log('update ', update);
             console.log('filter ', filter);

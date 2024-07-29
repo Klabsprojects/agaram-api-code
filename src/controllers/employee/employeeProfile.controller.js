@@ -1993,7 +1993,17 @@ exports.getEmployeeAdvancedSearch = async (req, res) => {
                 result = await this.sixParameterAdvanced(req.body);
                 console.log('getEmployeeAdvancedSearch ', result)
                 successRes(res, result, 'Employee listed -> 6 params Successfully');
-            }  
+            } 
+            else if(count == 9){
+                result = await this.nineParameterAdvanced(req.body);
+                console.log('getEmployeeAdvancedSearch ', result)
+                successRes(res, result, 'Employee listed -> 9 params Successfully');
+            } 
+            else if(count == 10){
+                result = await this.tenParameterAdvanced(req.body);
+                console.log('getEmployeeAdvancedSearch ', result)
+                successRes(res, result, 'Employee listed -> 10 params Successfully');
+            }
         } 
         catch (error) {
         console.log('error', error);
@@ -2942,7 +2952,7 @@ exports.fourParameterAdvanced = async (input) => {
             return null; // Return null if no valid action found
         }
     } catch (error) {
-        console.error('Error in threeParameterAdvanced:', error);
+        console.error('Error in fourParameterAdvanced:', error);
         throw error;
     }
 };
@@ -3234,10 +3244,127 @@ exports.fiveParameterAdvanced = async (input) => {
             return null; // Return null if no valid action found
         }
     } catch (error) {
-        console.error('Error in threeParameterAdvanced:', error);
+        console.error('Error in fiveParameterAdvanced:', error);
         throw error;
     }
 };
+
+exports.tenParameterAdvanced = async (input) => {
+    try {
+        console.log('inside tenParameterAdvanced function', input);
+
+        const combinations = [
+            { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", 
+            "dateOfRetirement", "recruitmentType", "postingIn", "department", "designation"], "action": "ten" }
+        ]
+
+        // Function to check combinations
+        async function checkCombinations(input) {
+            for (const combo of combinations) {
+                const { fields, action } = combo;
+                const match = fields.every(field => input[field] !== undefined); // Check if all fields in combo are present
+
+                if (match) {
+                    console.log(`${fields.join(', ')} present, by ${action}`);
+                    return action; // Return action once found
+                }
+            }
+
+            console.log('No matching combination found');
+            return null; // Return null if no matching combination found
+        }
+
+        // Call the function to determine action
+        const action = await checkCombinations(input);
+
+        if (action) {
+            console.log('Final Action:', action);
+            const result = await this.byProfileAdvanced(input, action);
+            console.log('Result:', result);
+            return result; // Return result
+        } else {
+            console.log('No valid action found');
+            return null; // Return null if no valid action found
+        }
+    } catch (error) {
+        console.error('Error in tenParameterAdvanced:', error);
+        throw error;
+    }
+};
+
+exports.nineParameterAdvanced = async (input) => {
+    try {
+        console.log('inside nineParameterAdvanced function', input);
+        const combinations = [
+            { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "postingIn", "department"], "action": "dobStaComDegDojDorRecPosDep" },
+            { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "postingIn", "designation"], "action": "dobStaComDegDojDorRecPosDes" },
+            { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "department", "designation"], "action": "dobStaComDegDojDorRecDepDes" },
+            { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "postingIn", "department", "designation"], "action": "dobStaComDegDojDorPosDepDes" },
+            { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "recruitmentType", "postingIn", "department", "designation"], "action": "dobStaComDegDojRecPosDepDes" },
+            { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfRetirement", "recruitmentType", "postingIn", "department", "designation"], "action": "dobStaComDegDorRecPosDepDes" },
+            { "fields": ["dateOfBirth", "state", "community", "dateOfJoining", "dateOfRetirement", "recruitmentType", "postingIn", "department", "designation"], "action": "dobStaComDojDorRecPosDepDes" },
+            { "fields": ["dateOfBirth", "state", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "postingIn", "department", "designation"], "action": "dobStaDegDojDorRecPosDepDes" },
+            { "fields": ["dateOfBirth", "community", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "postingIn", "department", "designation"], "action": "dobComDegDojDorRecPosDepDes" },
+            { "fields": ["state", "community", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "postingIn", "department", "designation"], "action": "staComDegDojDorRecPosDepDes" }
+        ]
+
+        // const combinations = [
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "postingIn", "department"], "action": "dobStaComDegDojDorRecPosDep" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "postingIn", "designation"], "action": "dobStaComDegDojDorRecPosDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "department", "designation"], "action": "dobStaComDegDojDorRecDepDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "postingIn", "department", "designation"], "action": "dobStaComDegDojDorPosDepDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "recruitmentType", "postingIn", "department", "designation"], "action": "dobStaComDegDojRecPosDepDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfRetirement", "recruitmentType", "postingIn", "department", "designation"], "action": "dobStaComDegDorRecPosDepDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "postingIn", "department", "designation"], "action": "dobStaComDegDojDorPosDepDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "postingIn", "department"], "action": "dobStaComDegDojDorRecPosDep" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "postingIn", "designation"], "action": "dobStaComDegDojDorRecPosDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "department", "designation"], "action": "dobStaComDegDojDorRecDepDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "postingIn", "department", "designation"], "action": "dobStaComDegDojDorPosDepDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "postingIn", "department", "designation"], "action": "dobStaComDegDojDorPosDepDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "postingIn", "recruitmentType", "designation"], "action": "dobStaComDegDojDorPosRecDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "postingIn", "recruitmentType", "department"], "action": "dobStaComDegDojDorPosRecDep" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "postingIn", "department"], "action": "dobStaComDegDojDorRecPosDep" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "recruitmentType", "postingIn", "designation"], "action": "dobStaComDegDojDorRecPosDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "postingIn", "department", "designation"], "action": "dobStaComDegDojDorPosDepDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "postingIn", "recruitmentType", "designation"], "action": "dobStaComDegDojDorPosRecDes" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "postingIn", "recruitmentType", "department"], "action": "dobStaComDegDojDorPosRecDep" },
+        //     { "fields": ["dateOfBirth", "state", "community", "degree", "dateOfJoining", "dateOfRetirement", "postingIn", "recruitmentType", "designation"], "action": "dobStaComDegDojDorPosRecDes" }
+        // ];
+
+        // Function to check combinations
+        async function checkCombinations(input) {
+            for (const combo of combinations) {
+                const { fields, action } = combo;
+                const match = fields.every(field => input[field] !== undefined); // Check if all fields in combo are present
+
+                if (match) {
+                    console.log(`${fields.join(', ')} present, by ${action}`);
+                    return action; // Return action once found
+                }
+            }
+
+            console.log('No matching combination found');
+            return null; // Return null if no matching combination found
+        }
+
+        // Call the function to determine action
+        const action = await checkCombinations(input);
+
+        if (action) {
+            console.log('Final Action:', action);
+            const result = await this.byProfileAdvanced(input, action);
+            console.log('Result:', result);
+            return result; // Return result
+        } else {
+            console.log('No valid action found');
+            return null; // Return null if no valid action found
+        }
+    } catch (error) {
+        console.error('Error in nineParameterAdvanced:', error);
+        throw error;
+    }
+};
+
 
 exports.byProfileAdvanced = async(input, by) =>{
     try{
@@ -5796,6 +5923,203 @@ exports.byProfileAdvanced = async(input, by) =>{
                 recruitmentType: input.recruitmentType,
             };
         }
+        ////nine params
+        else if(by == 'dobStaComDegDojDorRecPosDep' || by == 'dobStaComDegDojDorRecPosDes' || by == 'dobStaComDegDojDorRecDepDes'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                state: input.state,
+                community: input.community,
+                degreeData: {
+                $elemMatch: {
+                    degree: input.degree
+                    }
+                },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType,
+            };
+        }
+        else if(by == 'dobStaComDegDojDorPosDepDes'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                state: input.state,
+                community: input.community,
+                degreeData: {
+                $elemMatch: {
+                    degree: input.degree
+                    }
+                },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+            };
+        }
+        else if(by == 'dobStaComDegDojRecPosDepDes'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                state: input.state,
+                community: input.community,
+                degreeData: {
+                $elemMatch: {
+                    degree: input.degree
+                    }
+                },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                recruitmentType: input.recruitmentType,
+            };
+        }
+        else if(by == 'dobStaComDegDorRecPosDepDes'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                state: input.state,
+                community: input.community,
+                degreeData: {
+                $elemMatch: {
+                    degree: input.degree
+                    }
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType,
+            };
+        }
+        else if(by == 'dobStaComDojDorRecPosDepDes'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                state: input.state,
+                community: input.community,
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType,
+            };
+        }
+        else if(by == 'dobStaDegDojDorRecPosDepDes'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                state: input.state,
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                        }
+                    },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType,
+            };
+        }
+        else if(by == 'dobComDegDojDorRecPosDepDes'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                community: input.community,
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                        }
+                    },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType,
+            };
+        }
+        else if(by == 'staComDegDojDorRecPosDepDes'){
+            getQueryJson = {
+                state: input.state,
+                community: input.community,
+                degreeData: {
+                    $elemMatch: {
+                        degree: input.degree
+                        }
+                    },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType,
+            };
+        }
+        else if(by == 'ten'){
+            getQueryJson = {
+                dateOfBirth: {
+                    $gte: startDate,
+                    $lt: endDate
+                },
+                state: input.state,
+                community: input.community,
+                degreeData: {
+                $elemMatch: {
+                    degree: input.degree
+                    }
+                },
+                dateOfJoining: {
+                    $gte: startDateJ,
+                    $lt: endDateJ
+                },
+                dateOfRetirement: {
+                    $gte: startDateR,
+                    $lt: endDateR
+                },
+                recruitmentType: input.recruitmentType,
+            };
+        }
         console.log(getQueryJson);
         if(by == "dateOfBirth" || by == "dateOfJoining" || by == "dateOfRetirement" ||
         by == "community" || by == "recruitmentType" || by == "state"  || by == "degree" || 
@@ -5900,7 +6224,15 @@ exports.byProfileAdvanced = async(input, by) =>{
         
         by == 'dorRecPosDep' || by == 'dorRecPosDes' || by == 'dorRecDepDes' || by == 'dorPosDepDes' ||
         
-        by == 'recPosDepDes'
+        by == 'recPosDepDes' ||
+
+        ///////nine params
+        by == "dobStaComDegDojDorRecPosDep" || by == "dobStaComDegDojDorRecPosDes" || by == "dobStaComDegDojDorRecDepDes" ||
+        by == "dobStaComDegDojDorPosDepDes" || by == "dobStaComDegDojRecPosDepDes" || by == "dobStaComDegDorRecPosDepDes" || 
+        by == "dobStaComDojDorRecPosDepDes" || by == "dobStaDegDojDorRecPosDepDes" || by == "dobComDegDojDorRecPosDepDes" ||
+        by == "staComDegDojDorRecPosDepDes" ||
+
+        by == 'ten'
 
     )
             data = await employeeProfile.find(getQueryJson).sort({ dateOfJoining: 'asc' }).exec();
@@ -6091,8 +6423,15 @@ exports.byProfileAdvanced = async(input, by) =>{
                 by == 'degDojRecPosDep' || by == 'degDojRecPosDes' || by == 'degDojRecDepDes' || by == 'degDojPosDepDes' ||
                 by == 'degDorRecPosDep' || by == 'degDorRecPosDes' || by == 'degDorRecDepDes' || by == 'degDorPosDepDes' ||
                 by == 'degRecPosDepDes' || by == 'dojDorRecPosDep' || by == 'dojDorRecPosDes' || by == 'dojDorRecDepDes' ||
-                by == 'dojDorPosDepDes' || by == 'dojRecPosDepDes'
+                by == 'dojDorPosDepDes' || by == 'dojRecPosDepDes' ||
 
+                ///////nine params
+                by == "dobStaComDegDojDorRecPosDep" || by == "dobStaComDegDojDorRecPosDes" || by == "dobStaComDegDojDorRecDepDes" ||
+                by == "dobStaComDegDojDorPosDepDes" || by == "dobStaComDegDojRecPosDepDes" || by == "dobStaComDegDorRecPosDepDes" || 
+                by == "dobStaComDojDorRecPosDepDes" || by == "dobStaDegDojDorRecPosDepDes" || by == "dobComDegDojDorRecPosDepDes" ||
+                by == "staComDegDojDorRecPosDepDes" ||
+                
+                by == 'ten'
 
             ){
                     dataAll = {
@@ -6311,7 +6650,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'staDegDojPosDep' || by == 'staDegDorPosDep' || by == 'staDegRecPosDep' || by == 'staDojDorPosDep' || 
                             by == 'staDojRecPosDep' || by == 'staDorRecPosDep' || by == 'comDegDojPosDep' || by == 'comDegDorPosDep' || 
                             by == 'comDegRecPosDep' || by == 'comDojDorPosDep' || by == 'comDojRecPosDep' || by == 'comDorRecPosDep' || 
-                            by == 'degDojDorPosDep' || by == 'degDojRecPosDep' || by == 'degDorRecPosDep' || by == 'dojDorRecPosDep'
+                            by == 'degDojDorPosDep' || by == 'degDojRecPosDep' || by == 'degDorRecPosDep' || by == 'dojDorRecPosDep' ||
+
+                            by == 'dobStaComDegDojDorRecPosDep'
                         ){
                             if(transferOrPostingEmployeesList.toDepartmentId == input.department){
                                 if(transferOrPostingEmployeesList.toPostingInCategoryCode){
@@ -6341,7 +6682,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'staDegDorPosDes' || by == 'staDegRecPosDes' || by == 'staDojDorPosDes' || by == 'staDojRecPosDes' || 
                             by == 'staDorRecPosDes' || by == 'comDegDojPosDes' || by == 'comDegDorPosDes' || by == 'comDegRecPosDes' || 
                             by == 'comDojDorPosDes' || by == 'comDojRecPosDes' || by == 'comDorRecPosDes' || by == 'degDojDorPosDes' || 
-                            by == 'degDojRecPosDes' || by == 'degDorRecPosDes' || by == 'dojDorRecPosDes'
+                            by == 'degDojRecPosDes' || by == 'degDorRecPosDes' || by == 'dojDorRecPosDes' ||
+
+                            by == 'dobStaComDegDojDorRecPosDes'
                         ){
                             if(transferOrPostingEmployeesList.toDesignationId == input.designation){
                                 if(transferOrPostingEmployeesList.toPostingInCategoryCode){
@@ -6370,7 +6713,9 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'staDegDorDepDes' || by == 'staDegRecDepDes' || by == 'staDojDorDepDes' || by == 'staDojRecDepDes' ||
                             by == 'staDorRecDepDes' || by == 'comDegDojDepDes' || by == 'comDegDorDepDes' || by == 'comDegRecDepDes' || 
                             by == 'comDojDorDepDes' || by == 'comDojRecDepDes' || by == 'comDorRecDepDes' || by == 'degDojDorDepDes' || 
-                            by == 'degDojRecDepDes' || by == 'degDorRecDepDes' || by == 'dojDorRecDepDes'
+                            by == 'degDojRecDepDes' || by == 'degDorRecDepDes' || by == 'dojDorRecDepDes' ||
+
+                            by == 'dobStaComDegDojDorRecDepDes'
                         ){
                             if(transferOrPostingEmployeesList.toDepartmentId == input.department){
                                 if(transferOrPostingEmployeesList.toDesignationId){
@@ -6390,7 +6735,12 @@ exports.byProfileAdvanced = async(input, by) =>{
                             by == 'dobRecPosDepDes' || by == 'staComPosDepDes' || by == 'staDegPosDepDes' || by == 'staDojPosDepDes' || 
                             by == 'staDorPosDepDes' || by == 'staRecPosDepDes' || by == 'comDegPosDepDes' || by == 'comDojPosDepDes' ||
                             by == 'comDorPosDepDes' || by == 'comRecPosDepDes' || by == 'degDojPosDepDes' || by == 'degRecPosDepDes' || 
-                            by == 'degDorPosDepDes' || by == 'dojDorPosDepDes' || by == 'dojRecPosDepDes'
+                            by == 'degDorPosDepDes' || by == 'dojDorPosDepDes' || by == 'dojRecPosDepDes' ||
+
+                            by == "dobStaComDegDojDorPosDepDes" || by == "dobStaComDegDojRecPosDepDes" ||by == "dobStaComDegDorRecPosDepDes" ||
+                            by == "dobStaComDojDorRecPosDepDes" || by == "dobStaDegDojDorRecPosDepDes" || by == "dobComDegDojDorRecPosDepDes" ||
+                            by == "staComDegDojDorRecPosDepDes" ||
+                            by == 'ten'
                         ){
                             if(transferOrPostingEmployeesList.toDepartmentId == input.department){
                                 if(transferOrPostingEmployeesList.toDesignationId){
