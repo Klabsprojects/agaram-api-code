@@ -8,7 +8,7 @@ exports.register = async (req, res) => {
         console.log('try');
         console.log(req.body);
         let inputQuery = req.body;
-        data = await role.insertMany(inputQuery, { fields: ['roleName', 'menu', 'allAccess', 'entryAccess', 'viewAccess', 'approvalAccess'] });
+        data = await role.insertMany(inputQuery, { fields: ['roleName', 'menu', 'allAccess', 'entryAccess', 'viewAccess', 'editAccess', 'approvalAccess'] });
         successRes(res, data, 'Role registered successfully');
 
         /*console.log(req.body);
@@ -46,6 +46,7 @@ exports.update = async (req, res) => {
             console.log('query[input] ', query[input].entryAccess);
             console.log('query[input] ', query[input].allAccess);
             console.log('query[input] ', query[input].viewAccess);
+            console.log('query[input] ', query[input].editAccess);
             console.log('query[input] ', query[input].approvalAccess);
 
             let data;
@@ -62,6 +63,11 @@ exports.update = async (req, res) => {
                 console.log('viewAccess coming ', query[input].viewAccess);
                 update.viewAccess = query[input].viewAccess;
             }
+            if(query[input].editAccess != undefined){
+                console.log('editAccess coming ', query[input].editAccess);
+                update.editAccess = query[input].editAccess;
+            }
+            
             if(query[input].approvalAccess != undefined){
                 console.log('approvalAccess coming ', query[input].approvalAccess);
                 update.approvalAccess = query[input].approvalAccess;
@@ -121,6 +127,7 @@ exports.getRoleClassified = async (req, res) => {
                             allAccess: '$allAccess', 
                             entryAccess: '$entryAccess',
                             viewAccess: '$viewAccess',
+                            editAccess: '$editAccess',
                             approvalAccess: '$approvalAccess'
                         },
                     }
@@ -133,6 +140,7 @@ exports.getRoleClassified = async (req, res) => {
                         allAccess: '$_id.allAccess', // Rename _id.status to username
                         entryAccess: '$_id.entryAccess', // Rename _id.status to username
                         viewAccess: '$_id.viewAccess', // Rename _id.status to username
+                        editAccess: '$_id.editAccess',
                         approvalAccess: '$_id.approvalAccess', // Rename _id.status to username
                         count: 1 // Include the count field
 
@@ -159,6 +167,7 @@ function transformData(data) {
                 allAccess: item.allAccess,
                 entryAccess: item.entryAccess,
                 viewAccess: item.viewAccess,
+                editAccess: item.editAccess,
                 approvalAccess: item.approvalAccess
              });
         } else {
@@ -169,6 +178,7 @@ function transformData(data) {
                 allAccess: item.allAccess,
                 entryAccess: item.entryAccess,
                 viewAccess: item.viewAccess,
+                editAccess: item.editAccess,
                 approvalAccess: item.approvalAccess
                 }]
             };

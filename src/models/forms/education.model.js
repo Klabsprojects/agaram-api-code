@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const profile = require('../employee/employeeProfile.model');
 const login = require('../login/login.model');
+const degree = require('../employee/degree.model');
 
 const educationSchema = new Schema({
     officerName: String,
@@ -19,6 +20,10 @@ const educationSchema = new Schema({
 	degreeData : [{
 		courseLevel: String,
 		specialisation: String,
+		degree: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'degree' // This references the degree model
+		},
 		instituteName: String,
 		locationState: ObjectId,
 		locationCountry: ObjectId,
@@ -27,6 +32,7 @@ const educationSchema = new Schema({
 		fees: Number,
 		courseCompletedYear: Number,
 		courseCompletedDate: Date,
+		addedBy: String
 	}],
 	remarks: String,
 	orderType: ObjectId, 

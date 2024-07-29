@@ -23,6 +23,10 @@ const roleSchema = new Schema({
     type: Boolean,
     required: true
   },
+  editAccess: {
+    type: Boolean,
+    required: true
+  },
   approvalAccess: {
     type: Boolean,
     required: true

@@ -28,6 +28,7 @@ exports.addEducation = async (req, res) => {
                     const newDegreeData = {
                         courseLevel: dataDegree.courseLevel,
                         specialisation: dataDegree.specialisation,
+                        degree: dataDegree.degree,
                         instituteName: dataDegree.instituteName,
                         locationState: dataDegree.locationState,
                         locationCountry: dataDegree.locationCountry,
@@ -100,7 +101,7 @@ exports.getEducation = async (req, res) => {
                         orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                         orderNumber: uniqueArray[0].orderNumber,
                         orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                        officerName: data[0].officer_name,
+                        officerName: data[0].officerName,
                         employeeProfileId: data[0].employeeProfileId,
                         designation: data[0].designation,
                         designationId: data[0].designationId,

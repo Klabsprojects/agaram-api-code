@@ -355,12 +355,12 @@ exports.updateEmployeeProfile = async (req, res) => {
         if(query.personalEmail){
             update.personalEmail = query.personalEmail;
         }
-        // if(query.personalEmail){
-        //     update.personalEmail = query.personalEmail;
-        // }
-        // if(query.personalEmail){
-        //     update.personalEmail = query.personalEmail;
-        // }
+        if(query.ifhrmsId){
+            update.ifhrmsId = query.ifhrmsId;
+        }
+        if(query.employeeId){
+            update.employeeId = query.employeeId;
+        }
         let filter = {
             _id : query.id
         }
