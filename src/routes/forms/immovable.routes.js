@@ -24,6 +24,7 @@ module.exports = (app) => {
     
   app.put(
     "/updateImmovable",
+    upload.single('orderFile'),
     value.updateImmovable
   );
 

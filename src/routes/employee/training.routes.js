@@ -24,6 +24,7 @@ module.exports = (app) => {
     
   app.put(
     "/updateTraining",
+    upload.single('orderFile'),
     value.updateTraining
   );
 
