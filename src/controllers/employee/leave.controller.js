@@ -77,10 +77,10 @@ exports.getLeave = async (req, res) => {
             }
             let filter;
             let update = {};
-            //update = req.body;
-            update = {
-                fullName: query.fullName,
-            }
+            update = req.body;
+            // update = {
+            //     fullName: query.fullName,
+            // }
             if(Object.keys(req.body).length >0){
                 if(query.id){
                     console.log('id coming');
