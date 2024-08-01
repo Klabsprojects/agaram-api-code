@@ -23,10 +23,10 @@ module.exports = (app) => {
     value.updateSafApplication
   );
 
-  app.put(
-    "/updateSafApplication",
-    value.updateSafApplication
-  );
+  // app.put(
+  //   "/updateSafApplication",
+  //   value.updateSafApplication
+  // );
 
   app.put(
     "/updateSafApplicationApprovalStatus",
