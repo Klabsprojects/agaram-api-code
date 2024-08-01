@@ -24,6 +24,7 @@ module.exports = (app) => {
   
   app.put(
     "/updateLeave",
+    upload.single('orderFile'),
     value.updateLeave
   );
 
