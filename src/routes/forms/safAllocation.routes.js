@@ -22,6 +22,7 @@ module.exports = (app) => {
 
   app.put(
     "/updateSafAllocation",
+    upload.single('orderFile'),
     value.updateSafAllocation
   );
 

@@ -82,7 +82,7 @@ exports.getSafAllocation = async (req, res) => {
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
-                    select: 'batch' // Fields to select from the application collection
+                    select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 })  
                 .exec();
                 console.log('data[0] ', data[0]);
@@ -152,7 +152,7 @@ exports.getSafAllocation = async (req, res) => {
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
-                    select: 'batch' // Fields to select from the application collection
+                    select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 })    
                 .exec();
             successRes(res, data, 'safAllocation listed Successfully');
