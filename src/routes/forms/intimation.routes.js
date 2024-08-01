@@ -21,4 +21,11 @@ module.exports = (app) => {
     upload.single('orderFile'),
     value.addIntimation
   );
+
+  app.put(
+    "/updateIntimation",
+    upload.single('orderFile'),
+    value.updateIntimation
+  );
+
 }
