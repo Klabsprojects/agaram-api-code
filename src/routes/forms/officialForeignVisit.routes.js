@@ -31,6 +31,7 @@ module.exports = (app) => {
     
   app.put(
     "/updateVisit",
+    upload.single('orderFile'),
     value.updateVisit
   );
 

@@ -44,7 +44,7 @@ exports.getTraining = async (req, res) => {
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
-                    select: 'batch' // Fields to select from the application collection
+                    select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 })  
                 .exec();
             }
@@ -54,7 +54,7 @@ exports.getTraining = async (req, res) => {
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
-                    select: 'batch' // Fields to select from the application collection
+                    select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 })  
                 .exec();
             successRes(res, data, 'training listed Successfully');
