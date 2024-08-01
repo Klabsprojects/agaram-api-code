@@ -25,6 +25,7 @@ module.exports = (app) => {
     
   app.put(
     "/updateMedicalReimbursement",
+    upload.single('orderFile'),
     value.updateMedicalReimbursement
   );
 

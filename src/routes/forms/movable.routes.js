@@ -24,6 +24,7 @@ module.exports = (app) => {
     
   app.put(
     "/updateMovable",
+    upload.single('orderFile'),
     value.updateMovable
   );
 
