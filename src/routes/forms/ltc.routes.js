@@ -26,6 +26,7 @@ module.exports = (app) => {
 
   app.put(
     "/updateLtc",
+    upload.single('orderFile'),
     value.updateLtc
   );
 
