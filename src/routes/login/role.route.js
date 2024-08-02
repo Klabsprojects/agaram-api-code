@@ -16,18 +16,18 @@ module.exports = (app) => {
   );*/
 
   app.route("/addRole")
-    .post(value.register)
+    .post([jwt.verifyToken], value.register)
 
   app.route("/updateRole")
-    .put(value.update)
+    .put([jwt.verifyToken], value.update)
 
   app.route("/getRole")
-    .get(value.getRole)
+    .get([jwt.verifyToken], value.getRole)
 
   app.route("/getUserTypes")
-    .get(value.getUserTypes)
+    .get([jwt.verifyToken], value.getUserTypes)
   
   app.route("/getRoleClassified")
-    .get(value.getRoleClassified)
+    .get([jwt.verifyToken], value.getRoleClassified)
 
 }

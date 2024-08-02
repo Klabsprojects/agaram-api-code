@@ -1,5 +1,6 @@
 module.exports = (app) => {
     const value = require("../../controllers/forms/block.controller");
+    const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
    app.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
@@ -10,16 +11,19 @@ module.exports = (app) => {
 
   app.get(
     "/getBlock",
+    [jwt.verifyToken],
     value.getBlock
   );
 
   app.post(
     "/addBlock",
+    [jwt.verifyToken],
     value.addBlock
   );
 
   app.put(
     "/updateBlock",
+    [jwt.verifyToken],
     value.updateBlock
   );
 }

@@ -1,7 +1,6 @@
 module.exports = (app) => {
     const value = require("../../controllers/categories/categories.controller");
-   //const { joi, cache } = require("../../helpers/index.helper");
-   //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
+    const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
 
    app.use(function(req, res, next) {
     res.header(
@@ -13,16 +12,19 @@ module.exports = (app) => {
 
   app.get(
     "/getCategories",
+    [jwt.verifyToken],
     value.getCategories
   );
 
   app.post(
     "/addCategories",
+    [jwt.verifyToken],
     value.addCategories
   );
 
   app.get(
     "/getCategoryTypes",
+    [jwt.verifyToken],
     value.getCategoryTypes
   )
 

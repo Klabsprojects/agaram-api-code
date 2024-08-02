@@ -157,6 +157,14 @@ exports.getLeave = async (req, res) => {
                         new: true
                       });
                     console.log('data updated ', data);
+                    let reqest = {}
+                    reqest.body = {
+                        phone: req.body.phone,
+                        module: req.body.module,
+                        date: req.body.dateOfOrder,
+                        fileName: req.file.filename
+                    }
+                    const goSent = await whatsapp.sendWhatsapp(reqest, res);
                     successRes(res, data, 'data updated Successfully');
                 } else {
                     console.log('empty');

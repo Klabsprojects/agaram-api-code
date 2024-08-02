@@ -2,6 +2,7 @@ const foreignVisit = require('../../models/forms/officialForeignVisit.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const employeeProfile = require('../../models/employee/employeeProfile.model');
 const empProfile = require('../employee/employeeProfile.controller');
+const whatsapp = require('../whatsapp/whatsapp.controller');
 
 // Degree creation
 exports.addVisit = async (req, res) => {
@@ -227,6 +228,13 @@ exports.updateVisit = async (req, res) => {
                     new: true
                   });
                 console.log('data updated ', data);
+                reqest.body = {
+                    phone: req.body.phone,
+                    module: req.body.module,
+                    date: req.body.dateOfOrder,
+                    fileName: req.file.filename
+                }
+                const goSent = await whatsapp.sendWhatsapp(reqest, res);
                 successRes(res, data, 'data updated Successfully');
             } else {
                 console.log('empty');

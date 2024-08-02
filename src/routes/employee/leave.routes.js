@@ -1,7 +1,6 @@
 module.exports = (app) => {
     const value = require("../../controllers/employee/leave.controller");
-   //const { joi, cache } = require("../../helpers/index.helper");
-   //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
+    const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
    const upload = require("../../middlewares/upload")
    app.use(function(req, res, next) {
     res.header(
@@ -13,23 +12,27 @@ module.exports = (app) => {
 
   app.get(
     "/getLeave",
+    [jwt.verifyToken],
     value.getLeave
   );
 
   app.post(
     "/addLeave",
+    [jwt.verifyToken],
     upload.single('orderFile'),
     value.addLeave
   );
   
   app.put(
     "/updateLeave",
+    [jwt.verifyToken],
     upload.single('orderFile'),
     value.updateLeave
   );
 
   app.put(
     "/updateLeaveApprovalStatus",
+    [jwt.verifyToken],
     value.updateApprovalStatus
   );
 }

@@ -2,6 +2,7 @@ const employeeProfile = require('../../models/employee/employeeProfile.model');
 const employeeUpdate = require('../../models/employee/employeeUpdate.model');
 const categories = require('../../models/categories/categories.model');
 const designations = require('../../models/categories/designation.model');
+const whatsapp = require('../whatsapp/whatsapp.controller');
 //const { Op } = require('sequelize');
 
 const { successRes, errorRes } = require("../../middlewares/response.middleware");
@@ -418,6 +419,13 @@ exports.updateEmployeeProfile = async (req, res) => {
                     new: true
                   });
                 console.log('data updated ', data);
+                reqest.body = {
+                    phone: req.body.phone,
+                    module: req.body.module,
+                    date: req.body.dateOfOrder,
+                    fileName: req.file.filename
+                }
+                const goSent = await whatsapp.sendWhatsapp(reqest, res);
                 successRes(res, data, 'data updated Successfully');
             } else {
                 console.log('empty');

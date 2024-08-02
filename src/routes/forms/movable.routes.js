@@ -1,7 +1,6 @@
 module.exports = (app) => {
     const value = require("../../controllers/forms/movable.controller");
-   //const { joi, cache } = require("../../helpers/index.helper");
-   //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
+    const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
    const upload = require("../../middlewares/upload")
    app.use(function(req, res, next) {
     res.header(
@@ -13,23 +12,27 @@ module.exports = (app) => {
 
   app.get(
     "/getMovable",
+    [jwt.verifyToken],
     value.getMovable
   );
 
   app.post(
     "/addMovable",
+    [jwt.verifyToken],
     upload.single('orderFile'),
     value.addMovable
   );
     
   app.put(
     "/updateMovable",
+    [jwt.verifyToken],
     upload.single('orderFile'),
     value.updateMovable
   );
 
   app.put(
     "/updateMovableApprovalStatus",
+    [jwt.verifyToken],
     value.updateMovableApprovalStatus
   );
 }

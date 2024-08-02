@@ -1,7 +1,6 @@
 module.exports = (app) => {
     const value = require("../../controllers/employee/employeeProfile.controller");
-   //const { joi, cache } = require("../../helpers/index.helper");
-   //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
+    const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
 
    app.use(function(req, res, next) {
     res.header(
@@ -13,86 +12,103 @@ module.exports = (app) => {
 
   app.get(
     "/getEmployeeProfile",
+    [jwt.verifyToken],
     value.getEmployeeProfile
   );
 
   app.post(
     "/addEmployeeProfile",
+    [jwt.verifyToken],
     value.addEmployeeProfile
   );
 
   app.get(
     "/getEmployeeByFilter",
+    [jwt.verifyToken],
     value.getEmployeeByFilter
   );
 
   app.put(
     "/updateEmployeeProfile",
+    [jwt.verifyToken],
     value.updateEmployeeProfile
   );
 
   app.put(
     "/updateProfileApprovalStatus",
+    [jwt.verifyToken],
     value.updateApprovalStatus
   );
 
   app.get(
     "/getMaleEmployees",
+    [jwt.verifyToken],
     value.getMaleEmployees
   )
 
   app.get(
     "/getFemaleEmployees",
+    [jwt.verifyToken],
     value.getFemaleEmployees
   )
 
   app.get(
     "/getActiveEmployees",
+    [jwt.verifyToken],
     value.getActiveEmployees
   )
   
   app.get(
     "/getRetiredEmployees",
+    [jwt.verifyToken],
     value.getRetiredEmployees
   )
 
   app.get(
     "/getByLocation",
+    [jwt.verifyToken],
     value.getByLocation
   )
 
   app.get(
     "/getByLocation",
+    [jwt.verifyToken],
     value.getByLocation
   )
 
   app.get(
     "/getBySecretariat",
+    [jwt.verifyToken],
     value.getBySecretariat
   )
 
   app.get(
     "/getByDesignation",
+    [jwt.verifyToken],
     value.getByDesignation
   )
   
   app.get(
     "/getEmployeeHistory",
+    [jwt.verifyToken],
     value.getEmployeeHistory
   );
 
   app.post(
     "/getEmployeeSearch",
+    [jwt.verifyToken],
     value.getEmployeeSearch
   );
 
   app.get(
     "/getEmployeeCurrentPosting",
+    [jwt.verifyToken],
     value.getEmployeeCurrentPosting
   );
 
   app.post(
     "/getEmployeeAdvancedSearch",
+    [jwt.verifyToken],
     value.getEmployeeAdvancedSearch
   );
 

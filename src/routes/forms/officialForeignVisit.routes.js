@@ -1,7 +1,6 @@
 module.exports = (app) => {
     const value = require("../../controllers/forms/officialForeignVisit.controller");
-   //const { joi, cache } = require("../../helpers/index.helper");
-   //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
+    const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
 
    const upload = require("../../middlewares/upload")
    app.use(function(req, res, next) {
@@ -14,12 +13,13 @@ module.exports = (app) => {
 
   app.get(
     "/getVisit",
+    [jwt.verifyToken],
     value.getVisit
   );
 
   app.post(
     "/addVisit",
-    //upload.single('politicalClearance'),
+    [jwt.verifyToken],
     upload.fields([
       { name: 'politicalClearance', maxCount: 1 }, 
       { name: 'fcraClearance', maxCount: 1 },
@@ -31,12 +31,14 @@ module.exports = (app) => {
     
   app.put(
     "/updateVisit",
+    [jwt.verifyToken],
     upload.single('orderFile'),
     value.updateVisit
   );
 
   app.put(
     "/updateVisitApprovalStatus",
+    [jwt.verifyToken],
     value.updateVisitApprovalStatus
   );
 }

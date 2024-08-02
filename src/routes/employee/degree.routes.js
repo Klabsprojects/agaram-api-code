@@ -1,7 +1,6 @@
 module.exports = (app) => {
     const value = require("../../controllers/employee/degree.controller");
-   //const { joi, cache } = require("../../helpers/index.helper");
-   //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
+    const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
 
    app.use(function(req, res, next) {
     res.header(
@@ -13,11 +12,13 @@ module.exports = (app) => {
 
   app.get(
     "/getDegree",
+    [jwt.verifyToken],
     value.getDegree
   );
 
   app.post(
     "/addDegree",
+    [jwt.verifyToken],
     value.addDegree
   );
 }

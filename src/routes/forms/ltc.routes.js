@@ -1,7 +1,6 @@
 module.exports = (app) => {
     const value = require("../../controllers/forms/ltc.controller");
-   //const { joi, cache } = require("../../helpers/index.helper");
-   //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
+    const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
 
    const upload = require("../../middlewares/upload")
    app.use(function(req, res, next) {
@@ -14,11 +13,13 @@ module.exports = (app) => {
 
   app.get(
     "/getLtc",
+    [jwt.verifyToken],
     value.getLtc
   );
 
   app.post(
     "/addLtc",
+    [jwt.verifyToken],
     upload.single('orderFile'),
     //upload.single('fcraClearance'),
     value.addLtc
@@ -26,12 +27,14 @@ module.exports = (app) => {
 
   app.put(
     "/updateLtc",
+    [jwt.verifyToken],
     upload.single('orderFile'),
     value.updateLtc
   );
 
   app.put(
     "/updateLtcApprovalStatus",
+    [jwt.verifyToken],
     value.updateLtcApprovalStatus
   );
 }

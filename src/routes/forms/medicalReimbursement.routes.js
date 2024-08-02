@@ -1,7 +1,6 @@
 module.exports = (app) => {
     const value = require("../../controllers/forms/medicalReimbursement.controller");
-   //const { joi, cache } = require("../../helpers/index.helper");
-   //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
+    const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
    const upload = require("../../middlewares/upload")
    app.use(function(req, res, next) {
     res.header(
@@ -13,11 +12,13 @@ module.exports = (app) => {
 
   app.get(
     "/getMedicalReimbursement",
+    [jwt.verifyToken],
     value.getMedicalReimbursement
   );
 
   app.post(
     "/addMedicalReimbursement",
+    [jwt.verifyToken],
     upload.single('orderFile'),
     value.addMedicalReimbursement
   );
@@ -25,12 +26,14 @@ module.exports = (app) => {
     
   app.put(
     "/updateMedicalReimbursement",
+    [jwt.verifyToken],
     upload.single('orderFile'),
     value.updateMedicalReimbursement
   );
 
   app.put(
     "/updateMedicalReimbursementApprovalStatus",
+    [jwt.verifyToken],
     value.updateMedicalReimbursementApprovalStatus
   );
 }

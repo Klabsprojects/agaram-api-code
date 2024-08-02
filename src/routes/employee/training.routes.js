@@ -1,7 +1,6 @@
 module.exports = (app) => {
     const value = require("../../controllers/employee/training.controller");
-   //const { joi, cache } = require("../../helpers/index.helper");
-   //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
+    const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
    const upload = require("../../middlewares/upload")
    app.use(function(req, res, next) {
     res.header(
@@ -13,23 +12,27 @@ module.exports = (app) => {
 
   app.get(
     "/getTraining",
+    [jwt.verifyToken],
     value.getTraining
   );
 
   app.post(
     "/addTraining",
+    [jwt.verifyToken],
     upload.single('orderFile'),
     value.addTraining
   );
     
   app.put(
     "/updateTraining",
+    [jwt.verifyToken],
     upload.single('orderFile'),
     value.updateTraining
   );
 
   app.put(
     "/updateTrainingApprovalStatus",
+    [jwt.verifyToken],
     value.updateApprovalStatus
   );
 }

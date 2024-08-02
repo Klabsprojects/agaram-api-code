@@ -1,7 +1,6 @@
 module.exports = (app) => {
     const value = require("../../controllers/employee/employeeUpdate.controller");
-   //const { joi, cache } = require("../../helpers/index.helper");
-   //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
+    const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
 
    const upload = require("../../middlewares/upload")
    app.use(function(req, res, next) {
@@ -12,33 +11,35 @@ module.exports = (app) => {
     next();
   });
 
-  
-// app.use(upload.none()); // Use this if you're not uploading files
-
   app.get(
     "/getEmployeeUpdate",
+    [jwt.verifyToken],
     value.getEmployeeUpdate
   );
 
   app.post(
     "/addEmployeeUpdate",
+    [jwt.verifyToken],
     upload.single('orderFile'),
     value.addEmployeeUpdate
   );
 
   app.post(
     "/addTransferOrPostingManyEmployees",
+    [jwt.verifyToken],
     upload.single('orderFile'),
     value.addTransferOrPostingManyEmployees
   );
 
   app.put(
     "/updateTransferPosting",
+    [jwt.verifyToken],
     value.updateTransferPosting
   );
 
   app.put(
     "/updateApprovalStatus",
+    [jwt.verifyToken],
     value.updateApprovalStatus
   );
 

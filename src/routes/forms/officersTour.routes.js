@@ -1,7 +1,6 @@
 module.exports = (app) => {
     const value = require("../../controllers/forms/officersTour.controller");
-   //const { joi, cache } = require("../../helpers/index.helper");
-   //const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
+    const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
 
    app.use(function(req, res, next) {
     res.header(
@@ -13,11 +12,13 @@ module.exports = (app) => {
 
   app.get(
     "/getOfficersTour",
+    [jwt.verifyToken],
     value.getOfficersTour
   );
 
   app.post(
     "/addOfficersTour",
+    [jwt.verifyToken],
     value.addOfficersTour
   );
 }

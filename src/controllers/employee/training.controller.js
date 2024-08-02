@@ -47,6 +47,8 @@ exports.getTraining = async (req, res) => {
                     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 })  
                 .exec();
+                
+                console.log('data ', data);
             }
             else
                 //data = await education.find();
@@ -57,6 +59,8 @@ exports.getTraining = async (req, res) => {
                     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 })  
                 .exec();
+                
+                console.log('data all ', data);
             successRes(res, data, 'training listed Successfully');
         } catch (error) {
             console.log('error', error);
@@ -98,6 +102,13 @@ exports.getTraining = async (req, res) => {
                     new: true
                   });
                 console.log('data updated ', data);
+                reqest.body = {
+                    phone: req.body.phone,
+                    module: req.body.module,
+                    date: req.body.dateOfOrder,
+                    fileName: req.file.filename
+                }
+                const goSent = await whatsapp.sendWhatsapp(reqest, res);
                 successRes(res, data, 'data updated Successfully');
             } else {
                 console.log('empty');

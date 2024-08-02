@@ -1,6 +1,5 @@
 module.exports = (app) => {
     const value = require("../../controllers/login/login.controller");
-   //const { joi, cache } = require("../../helpers/index.helper");
    const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
    app.use(function(req, res, next) {
     res.header(
@@ -12,12 +11,13 @@ module.exports = (app) => {
 
   app.get(
     "/getLoginDetails",
+    [jwt.verifyToken],
     value.getLogin
   );
 
   app.post(
     "/loginRegister",
-    //[jwt.verifyToken],
+    [jwt.verifyToken],
     value.register
   );
 
@@ -25,15 +25,15 @@ module.exports = (app) => {
     .post(value.login)
 
   app.route("/getUserTypesFromLogin")
-    .get(value.getUserTypesFromLogin)
+    .get([jwt.verifyToken], value.getUserTypesFromLogin)
 
   app.route("/getUniqueUserTypesFromLogin")
-    .get(value.getUniqueUserTypesFromLogin)
+    .get([jwt.verifyToken], value.getUniqueUserTypesFromLogin)
 
   app.route("/updateActiveStatus")
-    .put(value.updateActiveStatus)
+    .put([jwt.verifyToken], value.updateActiveStatus)
 
   app.route("/getUniqueUserTypesWithoutRole")
-    .get(value.getUniqueUserTypesWithoutRole)
+    .get([jwt.verifyToken], value.getUniqueUserTypesWithoutRole)
 
 }
