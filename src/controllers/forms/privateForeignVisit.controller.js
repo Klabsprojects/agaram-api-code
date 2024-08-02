@@ -201,6 +201,7 @@ exports.getPrivateForeignVisit = async (req, res) => {
                         new: true
                       });
                     console.log('data updated ', data);
+                    let reqest = {}
                     reqest.body = {
                         phone: req.body.phone,
                         module: req.body.module,
