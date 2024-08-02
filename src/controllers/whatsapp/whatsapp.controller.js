@@ -17,10 +17,10 @@ exports.sendWhatsapp = async (req, res) => {
         let msg = "Find attached the GO related to your "+module+" published on "+date;
         let msg2 = " - Public Department";
         let msgg = msg.concat("%0A%0A", msg2);
-        const pdfFilePath = path.join(__dirname, '../../../uploads/', filename);
+        //const pdfFilePath = path.join(__dirname, '../../../uploads/', filename);
         //let filePath = process.env.goFolderPath+"uploads/"+filename; 
         //sample filename in server 1714211541186.pdf
-        //filename = '1714211541186.pdf';
+        filename = '1714211541186.pdf';
         let filePath = process.env.goFolderPath+"uploads/"+filename; 
         console.log('filePath ', filePath);
         const smsUrl = "https://int.chatway.in/api/send-file?username="+process.env.chatwayUsername+"&number="+phone+"&message="+msgg+"&token="+process.env.chatwayToken+"&file_url="+filePath;
