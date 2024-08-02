@@ -48,7 +48,11 @@ exports.addEmployeeProfile = async (req, res) => {
   pincode: data1.pincode,
   employeeId: data1.employeeId,
   ifhrmsId: data1.ifhrmsId,
-            photo: pho
+            photo: pho,
+            submittedBy: data1.submittedBy,
+            approvedBy: data1.approvedBy,
+            approvedDate: data1.approvedDate,
+            approvalStatus: data1.approvalStatus
         }
         successRes(res, data3, 'Employee added Successfully');
     } catch (error) {
@@ -378,6 +382,52 @@ exports.updateEmployeeProfile = async (req, res) => {
         errorRes(res, error, "Error on employeeProfile updation");
     }
     }
+
+    exports.updateApprovalStatus = async (req, res) => {
+        try {
+            console.log('try update block', req.body);
+            const query = req.body;
+            let update = {};
+            const currentDate = new Date();
+            if(query.approvedBy){
+                update.approvedBy = query.approvedBy;
+                update.approvalStatus = true;
+                update.approvedDate = currentDate;
+            } 
+            else    
+                throw 'Pls provide inputs';
+            let filter;
+            if(query.id){
+                console.log('id coming');
+                console.log(query.id);
+                filter = {
+                    _id : query.id
+                }
+            }
+            else{
+                console.log('id coming');
+                throw 'pls provide id field';
+            }
+                
+            console.log('update ', update);
+            console.log('filter ', filter);
+            // Check if the update object is empty or not
+            if (Object.keys(update).length > 0) {
+                console.log('value got');
+                const data = await employeeProfile.findOneAndUpdate(filter, update, {
+                    new: true
+                  });
+                console.log('data updated ', data);
+                successRes(res, data, 'data updated Successfully');
+            } else {
+                console.log('empty');
+                throw 'Update value missing';
+            }
+        } catch (error) {
+            console.log('catch update', error);
+            errorRes(res, error, error);
+        }
+        }
 
 exports.getEmployeeUpdate = async(empId) => {
     console.log('inside getEmployeeUpdate function')

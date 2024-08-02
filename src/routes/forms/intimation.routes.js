@@ -27,5 +27,9 @@ module.exports = (app) => {
     upload.single('orderFile'),
     value.updateIntimation
   );
-
+  
+  app.put(
+    "/updateIntimationApprovalStatus",
+    value.updateIntimationApprovalStatus
+  );
 }

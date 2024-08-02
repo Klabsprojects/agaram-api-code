@@ -31,6 +31,11 @@ module.exports = (app) => {
     value.updateEmployeeProfile
   );
 
+  app.put(
+    "/updateProfileApprovalStatus",
+    value.updateApprovalStatus
+  );
+
   app.get(
     "/getMaleEmployees",
     value.getMaleEmployees

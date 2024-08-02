@@ -32,5 +32,10 @@ module.exports = (app) => {
     upload.single('orderFile'),
     value.updateEducation
   );
+
+  app.put(
+    "/updateEducationApprovalStatus",
+    value.updateEducationApprovalStatus
+  );
   
 }

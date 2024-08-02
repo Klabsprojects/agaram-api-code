@@ -54,6 +54,21 @@ const employeeProfileSchema = new Schema({
 	photo: Buffer,
 	foreignVisit: String,
 	foreignVisitCount: Number,
+	submittedBy: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'login' // This references the AllocatedBlock model
+	},
+	approvedBy: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'login' // This references the AllocatedBlock model
+	},
+	approvalStatus: {
+		type: Boolean,
+		default: false
+	},
+	approvedDate: {
+		type: Date
+	},
 	createdAt: {
 		type: Date, 
 		default: Date.now
