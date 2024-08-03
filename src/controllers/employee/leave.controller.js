@@ -50,6 +50,8 @@ exports.getLeave = async (req, res) => {
                     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 })  
                 .exec();
+                console.log(data, 'leave listed else Successfully');
+                successRes(res, data, 'leave listed Successfully');
             }
             else if(req.query.loginAs == 'Spl A - SO' ||
                 req.query.loginAs == 'Spl B - SO' ||
