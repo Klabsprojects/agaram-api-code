@@ -1,4 +1,5 @@
 const leave = require('../../models/employee/leave.model');
+const login = require('../../models/login/login.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const whatsapp = require('../whatsapp/whatsapp.controller');
 const employeeProfile = require('../../models/employee/employeeProfile.model');
@@ -38,9 +39,10 @@ exports.getLeave = async (req, res) => {
         try {
             let query = {};
             let data;
-            if(req.query){
+            let admins;
+            if(req.query._id){
+                /////old
                 query.where = req.query;
-                //data = await education.find(req.query).exec();
                 data = await leave.find(req.query)
                 .populate({
                     path: 'employeeProfileId',
@@ -49,15 +51,59 @@ exports.getLeave = async (req, res) => {
                 })  
                 .exec();
             }
+            else if(req.query.loginAs == 'Spl A - SO' ||
+                req.query.loginAs == 'Spl B - SO' ||
+                req.query.loginAs == 'Spl A - ASO' || 
+                req.query.loginAs == 'Spl B - ASO'
+            ){
+                // Step 1: Find the user IDs where loginAs is 'adminLogin'
+                if(req.query.loginAs == 'Spl A - SO'){
+                    admins  = await login.find({ loginAs: { $in: ['Spl A - SO', 'Spl A - ASO'] } }).select('_id').exec();
+                    if (admins .length === 0) {
+                        return res.status(404).json({ message: 'No admin users found' });
+                    }   
+                }
+                else if(req.query.loginAs == 'Spl B - SO'){
+                    admins  = await login.find({ loginAs: { $in: ['Spl B - SO', 'Spl B - ASO'] } }).select('_id').exec();
+                    if (admins .length === 0) {
+                        return res.status(404).json({ message: 'No admin users found' });
+                    }   
+                }
+                else if(req.query.loginAs == 'Spl A - ASO' || req.query.loginAs == 'Spl B - ASO'){
+                    admins.push(req.query.loginId);
+                }
+                 // console.log(admins);
+                 const adminIds = admins.map(admin => admin._id);
+                 console.log(adminIds);
+                 // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
+                 const leaves = await leave.find({ submittedBy: { $in: adminIds } })
+                     .populate({
+                         path: 'employeeProfileId',
+                         model: 'employeeProfile',
+                         select: ['batch', 'mobileNo1']
+                     })
+                     .exec();   
+                
+                    
+            }
             else
-                //data = await education.find();
-                data = await leave.find()
-                .populate({
-                    path: 'employeeProfileId',
-                    model: 'employeeProfile', // Model of the application collection
-                    select: ['batch', 'mobileNo1'] // Fields to select from the application collection
-                })  
-                .exec();
+                {
+                    data = await leave.find()
+                    .populate({
+                        path: 'employeeProfileId',
+                        model: 'employeeProfile', // Model of the application collection
+                        select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+                    })  
+                    .exec();
+                }
+
+                // data = await leave.find()
+                // .populate({
+                //     path: 'employeeProfileId',
+                //     model: 'employeeProfile', // Model of the application collection
+                //     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+                // })  
+                // .exec();
             successRes(res, data, 'leave listed Successfully');
         } catch (error) {
             console.log('error', error);
