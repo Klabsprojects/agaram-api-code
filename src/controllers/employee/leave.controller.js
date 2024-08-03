@@ -38,8 +38,8 @@ exports.getLeave = async (req, res) => {
         console.log('helo from leave controller', req.query);
         try {
             let query = {};
-            let data;
-            let admins;
+            let data = [];
+            let admins = [];
             if(req.query._id){
                 /////old
                 query.where = req.query;
@@ -76,7 +76,7 @@ exports.getLeave = async (req, res) => {
                  const adminIds = admins.map(admin => admin._id);
                  console.log(adminIds);
                  // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
-                 const leaves = await leave.find({ submittedBy: { $in: adminIds } })
+                 data = await leave.find({ submittedBy: { $in: adminIds } })
                      .populate({
                          path: 'employeeProfileId',
                          model: 'employeeProfile',
@@ -84,6 +84,8 @@ exports.getLeave = async (req, res) => {
                      })
                      .exec();   
                 
+            console.log(data, 'leave listed if Successfully');
+            successRes(res, data, 'leave listed Successfully');
                     
             }
             else
@@ -95,6 +97,8 @@ exports.getLeave = async (req, res) => {
                         select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                     })  
                     .exec();
+                    console.log(data, 'leave listed else Successfully');
+                    successRes(res, data, 'leave listed Successfully');
                 }
 
                 // data = await leave.find()
@@ -104,7 +108,6 @@ exports.getLeave = async (req, res) => {
                 //     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 // })  
                 // .exec();
-            successRes(res, data, 'leave listed Successfully');
         } catch (error) {
             console.log('error', error);
             errorRes(res, error, "Error on listing leave");
