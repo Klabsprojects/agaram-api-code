@@ -1,4 +1,5 @@
 const training = require('../../models/employee/training.model');
+const login = require('../../models/login/login.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const whatsapp = require('../whatsapp/whatsapp.controller');
 const employeeProfile = require('../../models/employee/employeeProfile.model');
