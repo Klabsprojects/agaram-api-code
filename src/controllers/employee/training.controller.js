@@ -36,8 +36,9 @@ exports.getTraining = async (req, res) => {
         console.log('helo from training controller', req.query);
         try {
             let query = {};
-            let data;
-            if(req.query){
+            let data = [];
+            let admins = [];
+            if(req.query._id){
                 query.where = req.query;
                 //data = await education.find(req.query).exec();
                 data = await training.find(req.query)
@@ -47,11 +48,47 @@ exports.getTraining = async (req, res) => {
                     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 })  
                 .exec();
-                
-                console.log('data ', data);
+                console.log(data, 'leave listed else Successfully');
+                successRes(res, data, 'leave listed Successfully');
             }
-            else
-                //data = await education.find();
+            else if(req.query.loginAs == 'Spl A - SO' ||
+                req.query.loginAs == 'Spl B - SO' ||
+                req.query.loginAs == 'Spl A - ASO' || 
+                req.query.loginAs == 'Spl B - ASO'
+            ){
+                // Step 1: Find the user IDs where loginAs is 'adminLogin'
+                if(req.query.loginAs == 'Spl A - SO'){
+                    admins  = await login.find({ loginAs: { $in: ['Spl A - SO', 'Spl A - ASO'] } }).select('_id').exec();
+                    if (admins .length === 0) {
+                        return res.status(404).json({ message: 'No admin users found' });
+                    }   
+                }
+                else if(req.query.loginAs == 'Spl B - SO'){
+                    admins  = await login.find({ loginAs: { $in: ['Spl B - SO', 'Spl B - ASO'] } }).select('_id').exec();
+                    if (admins .length === 0) {
+                        return res.status(404).json({ message: 'No admin users found' });
+                    }   
+                }
+                else if(req.query.loginAs == 'Spl A - ASO' || req.query.loginAs == 'Spl B - ASO'){
+                    admins.push(req.query.loginId);
+                }
+                 // console.log(admins);
+                 const adminIds = admins.map(admin => admin._id);
+                 console.log(adminIds);
+                 // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
+                 data = await training.find({ submittedBy: { $in: adminIds } })
+                     .populate({
+                         path: 'employeeProfileId',
+                         model: 'employeeProfile',
+                         select: ['batch', 'mobileNo1']
+                     })
+                     .exec();   
+                
+            console.log(data, 'training listed if Successfully');
+            successRes(res, data, 'training listed Successfully');
+                    
+            }
+            else{
                 data = await training.find()
                 .populate({
                     path: 'employeeProfileId',
@@ -62,6 +99,7 @@ exports.getTraining = async (req, res) => {
                 
                 console.log('data all ', data);
             successRes(res, data, 'training listed Successfully');
+            }
         } catch (error) {
             console.log('error', error);
             errorRes(res, error, "Error on listing training");
