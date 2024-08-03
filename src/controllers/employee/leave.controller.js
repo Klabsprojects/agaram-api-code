@@ -40,6 +40,7 @@ exports.getLeave = async (req, res) => {
             let query = {};
             let data = [];
             let admins = [];
+            let adminIds = [];
             if(req.query._id){
                 /////old
                 query.where = req.query;
@@ -72,11 +73,16 @@ exports.getLeave = async (req, res) => {
                     }   
                 }
                 else if(req.query.loginAs == 'Spl A - ASO' || req.query.loginAs == 'Spl B - ASO'){
-                    admins.push(req.query.loginId);
+                    adminIds.push(req.query.loginId);
                 }
-                 // console.log(admins);
-                 const adminIds = admins.map(admin => admin._id);
-                 console.log(adminIds);
+                
+                 if(req.query.loginAs == 'Spl A - SO' ||
+                    req.query.loginAs == 'Spl B - SO')
+                {
+                    adminIds = admins.map(admin => admin._id);
+                }
+                console.log('admins ', admins);
+                console.log('adminIds ', adminIds);
                  // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
                  data = await leave.find({ submittedBy: { $in: adminIds } })
                      .populate({
