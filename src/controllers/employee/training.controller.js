@@ -39,6 +39,7 @@ exports.getTraining = async (req, res) => {
             let query = {};
             let data = [];
             let admins = [];
+            let adminIds = [];
             if(req.query._id){
                 query.where = req.query;
                 //data = await education.find(req.query).exec();
@@ -71,23 +72,27 @@ exports.getTraining = async (req, res) => {
                     }   
                 }
                 else if(req.query.loginAs == 'Spl A - ASO' || req.query.loginAs == 'Spl B - ASO'){
-                    admins.push(req.query.loginId);
+                    adminIds.push(req.query.loginId);
                 }
-                 // console.log(admins);
-                 const adminIds = admins.map(admin => admin._id);
-                 console.log(adminIds);
-                 // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
-                 data = await training.find({ submittedBy: { $in: adminIds } })
-                     .populate({
-                         path: 'employeeProfileId',
-                         model: 'employeeProfile',
-                         select: ['batch', 'mobileNo1']
-                     })
-                     .exec();   
                 
-            console.log(data, 'training listed if Successfully');
-            successRes(res, data, 'training listed Successfully');
-                    
+                 if(req.query.loginAs == 'Spl A - SO' ||
+                    req.query.loginAs == 'Spl B - SO')
+                {
+                    adminIds = admins.map(admin => admin._id);
+                }
+                console.log('admins ', admins);
+                console.log('adminIds ', adminIds);
+                // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
+                data = await training.find({ submittedBy: { $in: adminIds } })
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile',
+                    select: ['batch', 'mobileNo1']
+                })
+                .exec();   
+           
+                console.log(data, 'leave listed if Successfully');
+                successRes(res, data, 'leave listed Successfully');
             }
             else{
                 data = await training.find()
