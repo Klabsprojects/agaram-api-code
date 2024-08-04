@@ -1,4 +1,5 @@
 const intimation = require('../../models/forms/intimation.model');
+const login = require('../../models/login/login.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const whatsapp = require('../whatsapp/whatsapp.controller');
 const empProfile = require('../employee/employeeProfile.controller');
@@ -38,7 +39,9 @@ exports.getIntimation = async (req, res) => {
             let query = {};
             let data;
             let resultData = [];
-            if(Object.keys(req.query).length >0){
+            let admins = [];
+            let adminIds = [];
+            if(req.query._id){
                 query.where = req.query;
                 data = await intimation.find(req.query)
                 .populate({
@@ -99,6 +102,90 @@ exports.getIntimation = async (req, res) => {
                 resultData = [];
             }
         successRes(res, resultData, 'intimation listed Successfully');
+            }
+            else if(req.query.loginAs == 'Spl A - SO' ||
+                req.query.loginAs == 'Spl B - SO' ||
+                req.query.loginAs == 'Spl A - ASO' || 
+                req.query.loginAs == 'Spl B - ASO'
+            ){
+                // Step 1: Find the user IDs where loginAs is 'adminLogin'
+                if(req.query.loginAs == 'Spl A - SO'){
+                    admins  = await login.find({ loginAs: { $in: ['Spl A - SO', 'Spl A - ASO'] } }).select('_id').exec();
+                    if (admins .length === 0) {
+                        return res.status(404).json({ message: 'No admin users found' });
+                    }   
+                }
+                else if(req.query.loginAs == 'Spl B - SO'){
+                    admins  = await login.find({ loginAs: { $in: ['Spl B - SO', 'Spl B - ASO'] } }).select('_id').exec();
+                    if (admins .length === 0) {
+                        return res.status(404).json({ message: 'No admin users found' });
+                    }   
+                }
+                else if(req.query.loginAs == 'Spl A - ASO' || req.query.loginAs == 'Spl B - ASO'){
+                    adminIds.push(req.query.loginId);
+                }
+                
+                 if(req.query.loginAs == 'Spl A - SO' ||
+                    req.query.loginAs == 'Spl B - SO')
+                {
+                    adminIds = admins.map(admin => admin._id);
+                }
+                console.log('admins ', admins);
+                console.log('adminIds ', adminIds);
+                 // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
+                 data = await intimation.find({ submittedBy: { $in: adminIds } })
+                     .populate({
+                         path: 'employeeProfileId',
+                         model: 'employeeProfile',
+                         select: ['batch', 'mobileNo1']
+                     })
+                     .exec();   
+                     if(data.length > 0){
+                        let updateQueryJson = {
+                            empId: data[0].employeeProfileId
+                        }
+                        uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                        console.log('length ==> ', uniqueArray.length);
+                        if(uniqueArray.length > 0){
+                            console.log('alert')
+                            console.log('data => ', data[0]);
+                            let dataAll = {
+                                toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                                toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                                toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                                postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                                locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                                updateType: uniqueArray[0].updateType,
+                                orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                                orderNumber: uniqueArray[0].orderNumber,
+                                orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                                officerName: data[0].officerName,
+                                employeeProfileId: data[0].employeeProfileId,
+                                designation: data[0].designation,
+                                designationId: data[0].designationId,
+                                department: data[0].department,
+                                departmentId: data[0].departmentId,
+                                degreeData : data[0].degreeData,
+                                dateOfOrder: data[0].dateOfOrder,
+                                orderType: data[0].orderType,
+                                orderNo: data[0].orderNo,
+                                orderFor: data[0].orderFor,
+                                remarks: data[0].remarks,
+                                orderFile: data[0].orderFile,
+                                submittedBy: data[0].submittedBy,
+                                approvedBy: data[0].approvedBy,
+                                approvedDate: data[0].approvedDate,
+                                approvalStatus: data[0].approvalStatus,
+                            }
+                    resultData.push(dataAll);
+                        }
+                    }
+                    else
+                    {
+                        resultData = [];
+                    }
+                successRes(res, resultData, 'intimation listed Successfully');
+                    
             }
             else{
                 data = await intimation.find()
