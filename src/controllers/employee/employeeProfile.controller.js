@@ -2,6 +2,7 @@ const employeeProfile = require('../../models/employee/employeeProfile.model');
 const employeeUpdate = require('../../models/employee/employeeUpdate.model');
 const categories = require('../../models/categories/categories.model');
 const designations = require('../../models/categories/designation.model');
+const login = require('../../models/login/login.model');
 const whatsapp = require('../whatsapp/whatsapp.controller');
 //const { Op } = require('sequelize');
 
@@ -24,31 +25,31 @@ exports.addEmployeeProfile = async (req, res) => {
         let pho = data1.photo.toString('base64');
         let data3 = {
             fullName: data1.fullName,
-  gender: data1.gender,
-  dateOfBirth: data1.dateOfBirth,
-  dateOfJoining: data1.dateOfJoining,
-  dateOfRetirement: data1.dateOfRetirement,
-  state: data1.state,
-  batch: data1.batch,
-  recruitmentType: data1.recruitmentType,
-  serviceStatus: data1.serviceStatus,
-  qualification1: data1.qualification1,
-  qualification2: data1.qualification2,
-  community: data1.community,
-  degreeData: data1.degreeData,
-  caste: data1.caste,
-  religion: data1.religion,
-  promotionGrade: data1.promotionGrade,
-  payscale: data1.payscale,
-  officeEmail: data1.officeEmail,
-  mobileNo1: data1.mobileNo1,
-  mobileNo2: data1.mobileNo2,
-  mobileNo3: data1.mobileNo3,
-  addressLine: data1.addressLine,
-  city: data1.city,
-  pincode: data1.pincode,
-  employeeId: data1.employeeId,
-  ifhrmsId: data1.ifhrmsId,
+            gender: data1.gender,
+            dateOfBirth: data1.dateOfBirth,
+            dateOfJoining: data1.dateOfJoining,
+            dateOfRetirement: data1.dateOfRetirement,
+            state: data1.state,
+            batch: data1.batch,
+            recruitmentType: data1.recruitmentType,
+            serviceStatus: data1.serviceStatus,
+            qualification1: data1.qualification1,
+            qualification2: data1.qualification2,
+            community: data1.community,
+            degreeData: data1.degreeData,
+            caste: data1.caste,
+            religion: data1.religion,
+            promotionGrade: data1.promotionGrade,
+            payscale: data1.payscale,
+            officeEmail: data1.officeEmail,
+            mobileNo1: data1.mobileNo1,
+            mobileNo2: data1.mobileNo2,
+            mobileNo3: data1.mobileNo3,
+            addressLine: data1.addressLine,
+            city: data1.city,
+            pincode: data1.pincode,
+            employeeId: data1.employeeId,
+            ifhrmsId: data1.ifhrmsId,
             photo: pho,
             submittedBy: data1.submittedBy,
             approvedBy: data1.approvedBy,
@@ -69,10 +70,48 @@ exports.getEmployeeProfile = async (req, res) => {
             
         let query = {};
         let data;
-        if(req.query){
+        let admins = [];
+            let adminIds = [];
+            if(req.query._id){
             query.where = req.query;
             data = await employeeProfile.find(req.query).sort({ batch: 'asc' }).exec();
             console.log('if', data);
+        }
+        else if(req.query.loginAs == 'Spl A - SO' ||
+            req.query.loginAs == 'Spl B - SO' ||
+            req.query.loginAs == 'Spl A - ASO' || 
+            req.query.loginAs == 'Spl B - ASO'
+        ){
+            // Step 1: Find the user IDs where loginAs is 'adminLogin'
+            if(req.query.loginAs == 'Spl A - SO'){
+                admins  = await login.find({ loginAs: { $in: ['Spl A - SO', 'Spl A - ASO'] } }).select('_id').exec();
+                if (admins .length === 0) {
+                    return res.status(404).json({ message: 'No admin users found' });
+                }   
+            }
+            else if(req.query.loginAs == 'Spl B - SO'){
+                admins  = await login.find({ loginAs: { $in: ['Spl B - SO', 'Spl B - ASO'] } }).select('_id').exec();
+                if (admins .length === 0) {
+                    return res.status(404).json({ message: 'No admin users found' });
+                }   
+            }
+            else if(req.query.loginAs == 'Spl A - ASO' || req.query.loginAs == 'Spl B - ASO'){
+                adminIds.push(req.query.loginId);
+            }
+            
+             if(req.query.loginAs == 'Spl A - SO' ||
+                req.query.loginAs == 'Spl B - SO')
+            {
+                adminIds = admins.map(admin => admin._id);
+            }
+            console.log('admins ', admins);
+            console.log('adminIds ', adminIds);
+             // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
+             data = await employeeProfile.find({ submittedBy: { $in: adminIds } }).sort({ batch: 'asc' }).exec();
+            
+        console.log(data, 'employeeProfile listed if Successfully');
+        successRes(res, data, 'employeeProfile listed Successfully');
+                
         }
         else{
             data = await employeeProfile.find().sort({ batch: 'asc' }).exec();
