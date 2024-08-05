@@ -169,7 +169,7 @@ exports.updateTransferPosting = async (req, res) => {
         if (Object.keys(update).length > 0) {
             if(update.transferOrPostingEmployeesList){
                 console.log(' original transferOrPostingEmployeesList ', update.transferOrPostingEmployeesList);
-                update.transferOrPostingEmployeesList = JSON.stringify(update.transferOrPostingEmployeesList);
+                //update.transferOrPostingEmployeesList = JSON.stringify(update.transferOrPostingEmployeesList);
                 console.log(' after stringify transferOrPostingEmployeesList ', update.transferOrPostingEmployeesList);
                 console.log('yes');
                 //query = req.body;
