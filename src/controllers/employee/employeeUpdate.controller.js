@@ -33,7 +33,7 @@ exports.addTransferOrPostingManyEmployees = async (req, res) => {
             }
             if(req.body.transferOrPostingEmployeesList){
                 console.log(' original transferOrPostingEmployeesList ', req.body.transferOrPostingEmployeesList);
-                req.body.transferOrPostingEmployeesList = JSON.stringify(req.body.transferOrPostingEmployeesList);
+                //req.body.transferOrPostingEmployeesList = JSON.stringify(req.body.transferOrPostingEmployeesList);
                 console.log(' after stringify transferOrPostingEmployeesList ', req.body.transferOrPostingEmployeesList);
                 console.log('yes');
                 query = req.body;
