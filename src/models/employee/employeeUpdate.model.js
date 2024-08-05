@@ -39,8 +39,13 @@ const employeeUpdateSchema = new Schema({
 	// additionalCharge: String,
 	// postTypeCategoryCode: ObjectId,
 	// locationChangeCategoryId: ObjectId,
+	additionalCharge: String,
 	transferOrPostingEmployeesList: [{
-		empProfileId: ObjectId,
+		empProfileId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'profile' // This references the AllocatedBlock model
+		},
+		//empProfileId: ObjectId,
 		employeeId: String,
 		fullName: String,
 		fromPostingInCategoryCode: ObjectId,
@@ -49,7 +54,6 @@ const employeeUpdateSchema = new Schema({
 		toPostingInCategoryCode: ObjectId,
 		toDepartmentId: ObjectId,
 		toDesignationId: ObjectId,
-		additionalCharge: String,
 		postTypeCategoryCode: ObjectId,
 		locationChangeCategoryId: ObjectId,
 		promotionGrade: ObjectId,

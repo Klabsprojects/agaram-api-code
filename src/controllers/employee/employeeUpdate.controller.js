@@ -69,12 +69,68 @@ exports.getEmployeeUpdate = async (req, res) => {
         try {
             let query = {};
             let data;
-            if(req.query){
+            let admins = [];
+            let adminIds = [];
+            if(req.query._id){
                 query.where = req.query;
-                data = await employeeUpdate.find(req.query).exec();
+                data = await employeeUpdate.find(req.query)
+                .populate({
+                    path: 'transferOrPostingEmployeesList.empProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+                })  
+                .exec();
+            }
+            else if(req.query.loginAs == 'Spl A - SO' ||
+                req.query.loginAs == 'Spl B - SO' ||
+                req.query.loginAs == 'Spl A - ASO' || 
+                req.query.loginAs == 'Spl B - ASO'
+            ){
+                // Step 1: Find the user IDs where loginAs is 'adminLogin'
+                if(req.query.loginAs == 'Spl A - SO'){
+                    admins  = await login.find({ loginAs: { $in: ['Spl A - SO', 'Spl A - ASO'] } }).select('_id').exec();
+                    if (admins .length === 0) {
+                        return res.status(404).json({ message: 'No admin users found' });
+                    }   
+                }
+                else if(req.query.loginAs == 'Spl B - SO'){
+                    admins  = await login.find({ loginAs: { $in: ['Spl B - SO', 'Spl B - ASO'] } }).select('_id').exec();
+                    if (admins .length === 0) {
+                        return res.status(404).json({ message: 'No admin users found' });
+                    }   
+                }
+                else if(req.query.loginAs == 'Spl A - ASO' || req.query.loginAs == 'Spl B - ASO'){
+                    adminIds.push(req.query.loginId);
+                }
+                
+                 if(req.query.loginAs == 'Spl A - SO' ||
+                    req.query.loginAs == 'Spl B - SO')
+                {
+                    adminIds = admins.map(admin => admin._id);
+                }
+                console.log('admins ', admins);
+                console.log('adminIds ', adminIds);
+                 // Step 2: Query the leave collection where submittedBy matches any of the admin IDs 
+                     data = await employeeUpdate.find({ submittedBy: { $in: adminIds } })
+                .populate({
+                    path: 'transferOrPostingEmployeesList.empProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+                })  
+                .exec();  
+                
+            console.log(data, 'leave listed if Successfully');
+            successRes(res, data, 'leave listed Successfully');
+                    
             }
             else
-                data = await employeeUpdate.find();
+                data = await employeeUpdate.find()
+                .populate({
+                    path: 'transferOrPostingEmployeesList.empProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+                })  
+                .exec();
             successRes(res, data, 'Employee Update listed Successfully');
         } catch (error) {
             console.log('error', error.reason);
