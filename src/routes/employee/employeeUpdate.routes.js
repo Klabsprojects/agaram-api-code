@@ -34,6 +34,7 @@ module.exports = (app) => {
   app.put(
     "/updateTransferPosting",
     [jwt.verifyToken],
+    upload.single('orderFile'),
     value.updateTransferPosting
   );
 
