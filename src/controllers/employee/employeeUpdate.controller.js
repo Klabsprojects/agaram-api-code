@@ -227,12 +227,14 @@ exports.updateTransferPosting = async (req, res) => {
                     new: true
                   });
                 console.log('data updated ', data);
+
+                console.log('phoneArr', req.body.phoneArr);
                 let reqest = {}
                 reqest.body = {
-                    phone: req.body.phone,
+                    phone: req.body.phoneArr,
                     module: req.body.module,
                     date: req.body.dateOfOrder,
-                    fileName: req.file.filename
+                    fileName: req.body.filename
                 }
                 const goSent = await whatsapp.sendWhatsapp(reqest, res);
                 successRes(res, data, 'data updated Successfully');
