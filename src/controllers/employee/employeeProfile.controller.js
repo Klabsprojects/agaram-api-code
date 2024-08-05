@@ -727,7 +727,6 @@ exports.getActiveEmployees = async (req, res) => {
                 console.log('uniqueArray.length ==> ', uniqueArray.length);
                 if(uniqueArray.length > 0){
                     console.log('posting available')
-                    //console.log('data => ', data[0]);
                     dataAll = {
                         toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
                         toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
@@ -772,7 +771,6 @@ exports.getActiveEmployees = async (req, res) => {
                         approvedDate: data0.approvedDate,
                         approvalStatus: data0.approvalStatus,
                     }
-                    //resultData.push(dataAll);
                 }
                 else{
                     dataAll = {
@@ -810,7 +808,6 @@ exports.getActiveEmployees = async (req, res) => {
                         approvedDate: data0.approvedDate,
                         approvalStatus: data0.approvalStatus,
                     }
-            //resultData.push(dataAll);
                 }
                 resultData.push(dataAll);
             }
