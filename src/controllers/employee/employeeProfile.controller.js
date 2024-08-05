@@ -716,100 +716,105 @@ exports.getActiveEmployees = async (req, res) => {
             serviceStatus : serviceId
         };
         data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
+        let dataAll = {}
         if(data.length > 0){
-            //console.log('data', data._id)
-            let updateQueryJson = {
-                empId: data[0]._id
-            }
-            uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
-            console.log('length ==> ', uniqueArray.length);
-            if(uniqueArray.length > 0){
-                console.log('alert')
-                console.log('data => ', data[0]);
-                let dataAll = {
-                    toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
-                    toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
-                    toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
-                    postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
-                    locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                    updateType: uniqueArray[0].updateType,
-                    orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
-                    orderNumber: uniqueArray[0].orderNumber,
-                    orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                    fullName: data[0].fullName,
-                    personalEmail: data[0].personalEmail,
-                    _id: data[0]._id,
-                    gender: data[0].gender,
-                    dateOfBirth: data[0].dateOfBirth,
-                    dateOfJoining: data[0].dateOfJoining,
-                    dateOfRetirement : data[0].dateOfRetirement,
-                    state: data[0].state,
-                    batch: data[0].batch,
-                    recruitmentType: data[0].recruitmentType,
-                    serviceStatus: data[0].serviceStatus,
-                    qualification1: data[0].qualification1,
-                    qualification2: data[0].qualification2,
-                    community: data[0].community,
-                    degreeData: data[0].degreeData,
-                    caste: data[0].caste,
-                    religion: data[0].religion,
-                    promotionGrade: data[0].promotionGrade,
-                    payscale: data[0].payscale,
-                    officeEmail: data[0].officeEmail,
-                    mobileNo1: data[0].mobileNo1,
-                    mobileNo2: data[0].mobileNo2,
-                    mobileNo3: data[0].mobileNo3,
-                    addressLine: data[0].addressLine,
-                    city: data[0].city,
-                    pincode: data[0].pincode,
-                    employeeId: data[0].employeeId,
-                    ifhrmsId: data[0].ifhrmsId,
-                    photo: data[0].photo,
-                    submittedBy: data[0].submittedBy,
-                    approvedBy: data[0].approvedBy,
-                    approvedDate: data[0].approvedDate,
-                    approvalStatus: data[0].approvalStatus,
+            console.log('data.length', data.length)
+            for(let data0 of data){
+                let updateQueryJson = {
+                    empId: data0._id
+                }
+                uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                console.log('uniqueArray.length ==> ', uniqueArray.length);
+                if(uniqueArray.length > 0){
+                    console.log('posting available')
+                    //console.log('data => ', data[0]);
+                    dataAll = {
+                        toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                        toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                        toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                        postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                        locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                        updateType: uniqueArray[0].updateType,
+                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                        orderNumber: uniqueArray[0].orderNumber,
+                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                        fullName: data0.fullName,
+                        personalEmail: data0.personalEmail,
+                        _id: data0._id,
+                        gender: data0.gender,
+                        dateOfBirth: data0.dateOfBirth,
+                        dateOfJoining: data0.dateOfJoining,
+                        dateOfRetirement : data0.dateOfRetirement,
+                        state: data0.state,
+                        batch: data0.batch,
+                        recruitmentType: data0.recruitmentType,
+                        serviceStatus: data0.serviceStatus,
+                        qualification1: data0.qualification1,
+                        qualification2: data0.qualification2,
+                        community: data0.community,
+                        degreeData: data0.degreeData,
+                        caste: data0.caste,
+                        religion: data0.religion,
+                        promotionGrade: data0.promotionGrade,
+                        payscale: data0.payscale,
+                        officeEmail: data0.officeEmail,
+                        mobileNo1: data0.mobileNo1,
+                        mobileNo2: data0.mobileNo2,
+                        mobileNo3: data0.mobileNo3,
+                        addressLine: data0.addressLine,
+                        city: data0.city,
+                        pincode: data0.pincode,
+                        employeeId: data0.employeeId,
+                        ifhrmsId: data0.ifhrmsId,
+                        photo: data0.photo,
+                        submittedBy: data0.submittedBy,
+                        approvedBy: data0.approvedBy,
+                        approvedDate: data0.approvedDate,
+                        approvalStatus: data0.approvalStatus,
+                    }
+                    //resultData.push(dataAll);
+                }
+                else{
+                    dataAll = {
+                        fullName: data0.fullName,
+                        personalEmail: data0.personalEmail,
+                        _id: data0._id,
+                        gender: data0.gender,
+                        dateOfBirth: data0.dateOfBirth,
+                        dateOfJoining: data0.dateOfJoining,
+                        dateOfRetirement : data0.dateOfRetirement,
+                        state: data0.state,
+                        batch: data0.batch,
+                        recruitmentType: data0.recruitmentType,
+                        serviceStatus: data0.serviceStatus,
+                        qualification1: data0.qualification1,
+                        qualification2: data0.qualification2,
+                        community: data0.community,
+                        degreeData: data0.degreeData,
+                        caste: data0.caste,
+                        religion: data0.religion,
+                        promotionGrade: data0.promotionGrade,
+                        payscale: data0.payscale,
+                        officeEmail: data0.officeEmail,
+                        mobileNo1: data0.mobileNo1,
+                        mobileNo2: data0.mobileNo2,
+                        mobileNo3: data0.mobileNo3,
+                        addressLine: data0.addressLine,
+                        city: data0.city,
+                        pincode: data0.pincode,
+                        employeeId: data0.employeeId,
+                        ifhrmsId: data0.ifhrmsId,
+                        photo: data0.photo,
+                        submittedBy: data0.submittedBy,
+                        approvedBy: data0.approvedBy,
+                        approvedDate: data0.approvedDate,
+                        approvalStatus: data0.approvalStatus,
+                    }
+            //resultData.push(dataAll);
                 }
                 resultData.push(dataAll);
             }
-            else{
-                let dataAll = {
-                    fullName: data[0].fullName,
-                    personalEmail: data[0].personalEmail,
-                    _id: data[0]._id,
-                    gender: data[0].gender,
-                    dateOfBirth: data[0].dateOfBirth,
-                    dateOfJoining: data[0].dateOfJoining,
-                    dateOfRetirement : data[0].dateOfRetirement,
-                    state: data[0].state,
-                    batch: data[0].batch,
-                    recruitmentType: data[0].recruitmentType,
-                    serviceStatus: data[0].serviceStatus,
-                    qualification1: data[0].qualification1,
-                    qualification2: data[0].qualification2,
-                    community: data[0].community,
-                    degreeData: data[0].degreeData,
-                    caste: data[0].caste,
-                    religion: data[0].religion,
-                    promotionGrade: data[0].promotionGrade,
-                    payscale: data[0].payscale,
-                    officeEmail: data[0].officeEmail,
-                    mobileNo1: data[0].mobileNo1,
-                    mobileNo2: data[0].mobileNo2,
-                    mobileNo3: data[0].mobileNo3,
-                    addressLine: data[0].addressLine,
-                    city: data[0].city,
-                    pincode: data[0].pincode,
-                    employeeId: data[0].employeeId,
-                    ifhrmsId: data[0].ifhrmsId,
-                    photo: data[0].photo,
-                    submittedBy: data[0].submittedBy,
-                    approvedBy: data[0].approvedBy,
-                    approvedDate: data[0].approvedDate,
-                    approvalStatus: data[0].approvalStatus,
-                }
-        resultData.push(dataAll);
-            }
+            
         }
         else
         {
