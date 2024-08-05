@@ -501,7 +501,8 @@ exports.getEmployeeUpdateChange = async(empId) => {
     console.log('inside getEmployeeUpdate function')
 
     const dataResArray  = await employeeUpdate.find({
-        'transferOrPostingEmployeesList.empProfileId': empId
+        'transferOrPostingEmployeesList.empProfileId': empId,
+        'updateType': 'Transfer / Posting'
     })
     .populate({
         path: 'transferOrPostingEmployeesList.empProfileId',
@@ -1325,7 +1326,8 @@ exports.getEmployeeHistory = async (req, res) => {
                 resJson.employeeHistory = dataUpdate;*/
 
                 const dataResArray  = await employeeUpdate.find({
-                    'transferOrPostingEmployeesList.empProfileId': employee._id
+                    'transferOrPostingEmployeesList.empProfileId': employee._id,
+                    'updateType': 'Transfer / Posting'
                 })
                 .populate({
                     path: 'transferOrPostingEmployeesList.empProfileId',
@@ -1954,7 +1956,8 @@ exports.getEmployeeUpdateFilter = async(input) => {
     // return uniqueArray;
 
     const dataResArray  = await employeeUpdate.find({
-        'transferOrPostingEmployeesList.empProfileId': input.empId
+        'transferOrPostingEmployeesList.empProfileId': input.empId,
+        'updateType': 'Transfer / Posting'
     })
     .populate({
         path: 'transferOrPostingEmployeesList.empProfileId',
@@ -1993,7 +1996,8 @@ exports.getEmployeeCurrentPosting = async (req, res) => {
                 }
                 data.update = queryUpdate;
                 const dataResArray  = await employeeUpdate.find({
-                    'transferOrPostingEmployeesList.empProfileId': employee._id
+                    'transferOrPostingEmployeesList.empProfileId': employee._id,
+                    'updateType': 'Transfer / Posting'
                 })
                 .populate({
                     path: 'transferOrPostingEmployeesList.empProfileId',
