@@ -33,7 +33,7 @@ exports.addTransferOrPostingManyEmployees = async (req, res) => {
             }
             if(req.body.transferOrPostingEmployeesList){
                 console.log(' original transferOrPostingEmployeesList ', req.body.transferOrPostingEmployeesList);
-                //req.body.transferOrPostingEmployeesList = JSON.stringify(req.body.transferOrPostingEmployeesList);
+                req.body.transferOrPostingEmployeesList = JSON.stringify(req.body.transferOrPostingEmployeesList);
                 console.log(' after stringify transferOrPostingEmployeesList ', req.body.transferOrPostingEmployeesList);
                 console.log('yes');
                 query = req.body;
@@ -167,6 +167,15 @@ exports.updateTransferPosting = async (req, res) => {
         console.log('filter ', filter);
         // Check if the update object is empty or not
         if (Object.keys(update).length > 0) {
+            if(update.transferOrPostingEmployeesList){
+                console.log(' original transferOrPostingEmployeesList ', update.transferOrPostingEmployeesList);
+                update.transferOrPostingEmployeesList = JSON.stringify(update.transferOrPostingEmployeesList);
+                console.log(' after stringify transferOrPostingEmployeesList ', update.transferOrPostingEmployeesList);
+                console.log('yes');
+                //query = req.body;
+                update.transferOrPostingEmployeesList = JSON.parse(update.transferOrPostingEmployeesList);
+                console.log(' after parse transferOrPostingEmployeesList ', update.transferOrPostingEmployeesList);
+            }
             console.log('value got');
             const data = await employeeUpdate.findOneAndUpdate(filter, update, {
                 new: true
