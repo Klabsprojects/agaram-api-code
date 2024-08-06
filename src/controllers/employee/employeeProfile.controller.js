@@ -1507,140 +1507,162 @@ exports.getBySecretariat = async (req, res) => {
         let query = {};
         let secretariatDetails;
         let categoryDetails;
-        let resData = [];
         let categoryId;
         let resDataFinal;
         let resJson;
+        let data;
+        let resultData = [];
         categoryDetails = await categories.find({
             "category_name": "Secretariat"
         })
         console.log('categoryDetails', categoryDetails[0]._id);
         categoryId = categoryDetails[0]._id.toString();
-        // secretariatDetails =  await employeeUpdate.find({})
-        //   const uniqueNamesByLatestDateOfOrder = secretariatDetails
-        //     .sort((a, b) => new Date(b.dateOfOrder) - new Date(a.dateOfOrder)) // Sort by latest date first
-        //     .reduce((acc, curr) => {
-        //       if (!acc[curr.empProfileId]) { // Check if name already exists in accumulator
-        //         console.log('acc profile id => ', acc[curr.empProfileId]);
-        //         acc[curr.empProfileId] = curr; // If not, add the current item
-        //       }
-        //       return acc;
-        //     }, {});
-          
-        //   const uniqueArray = Object.values(uniqueNamesByLatestDateOfOrder);
-        //   console.log('Unique by latest date of order:', uniqueArray.transferOrPostingEmployeesList);
 
-        const uniqueArray  = await employeeUpdate.find()
-        .populate({
-            path: 'transferOrPostingEmployeesList.empProfileId',
-            model: 'employeeProfile', // Ensure the model name matches exactly
-            select: 'orderNumber' // Specify the fields you want to include from EmployeeProfile
-        })
-        .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
-        .exec();
-        // console.log(uniqueArray);
-        // console.log('Unique by latest date of order:', uniqueArray);
-          
-          if(req.query.secretariat == 'yes'){
-            let lastIndex = -1;
-            for(let data of uniqueArray){
-                console.log('fullname => ', data.transferOrPostingEmployeesList[0].fullName, data._id);
-                console.log('toPostingInCategoryCode => ', data.transferOrPostingEmployeesList[0].toPostingInCategoryCode);
-                console.log('categoryId => ', categoryId);
-                if(data.transferOrPostingEmployeesList[0].toPostingInCategoryCode == categoryId)
-                {
-                    console.log('true');
-                    let getQueryJson = {
-                        _id: data.transferOrPostingEmployeesList[0].empProfileId
-                    } 
-                    console.log(getQueryJson);
-                    const profileData = await employeeProfile.find(getQueryJson).exec();
-                    // console.log('profileData ', profileData);
-                    if(profileData.length > 0){
-                        resJson = {
-                            employeeId : data.transferOrPostingEmployeesList[0].employeeId,
-                            fullName: data.transferOrPostingEmployeesList[0].fullName,
-                            toPostingInCategoryCode: data.transferOrPostingEmployeesList[0].toPostingInCategoryCode , 
-                            toDepartmentId: data.transferOrPostingEmployeesList[0].toDepartmentId ,
-                            toDesignationId: data.transferOrPostingEmployeesList[0].toDesignationId ,
-                            postTypeCategoryCode: data.transferOrPostingEmployeesList[0].postTypeCategoryCode ,
-                            dateOfOrder: data.dateOfOrder ,
-                            orderForCategoryCode: data.orderForCategoryCode ,
-                            orderTypeCategoryCode: data.orderTypeCategoryCode,
-                            batch: profileData[0].batch,
-                            ifhrmsId: profileData[0].ifhrmsId,
-                            officeEmail: profileData[0].officeEmail,
-                            mobileNo1: profileData[0].mobileNo1,
-                            city: profileData[0].city
-                        }
-                        
-                    // console.log('resJson ', resJson);
-                    resData.push(resJson);
-                    // console.log('resData ', resData);
-                    }
-                    lastIndex++;
+        data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
+        let dataAll = {}
+        if(data.length > 0){
+            console.log('data.length', data.length)
+            for(let data0 of data){
+                let updateQueryJson = {
+                    empId: data0._id
                 }
-                if (lastIndex === uniqueArray.length - 1) {
-                    console.log('Reached the end of the array');
-                    //console.log(resData);
-                  }   
-            }
-          }
-          else{
-            let lastIndex = -1;
-            for(let data of uniqueArray){
-                console.log('toPostingInCategoryCode => ', data.transferOrPostingEmployeesList[0].toPostingInCategoryCode);
-                console.log('categoryId => ', categoryId);
-                if(data.transferOrPostingEmployeesList[0].toPostingInCategoryCode != categoryId)
-                {
-                    console.log('true');
-                    let getQueryJson = {
-                        _id: data.transferOrPostingEmployeesList[0].empProfileId
-                    } 
-                    // console.log(getQueryJson);
-                    const profileData = await employeeProfile.find(getQueryJson).exec();
-                    // console.log('profileData ', profileData._doc);
-                    if(profileData.length > 0){
-                        resJson = {
-                            employeeId : data.transferOrPostingEmployeesList[0].employeeId,
-                            //fullName: data.fullName,
-                            toPostingInCategoryCode: data.transferOrPostingEmployeesList[0].toPostingInCategoryCode , 
-                            toDepartmentId: data.transferOrPostingEmployeesList[0].toDepartmentId ,
-                            toDesignationId: data.transferOrPostingEmployeesList[0].toDesignationId ,
-                            postTypeCategoryCode: data.transferOrPostingEmployeesList[0].postTypeCategoryCode ,
-                            dateOfOrder: data.dateOfOrder ,
-                            orderForCategoryCode: data.orderForCategoryCode ,
-                            orderTypeCategoryCode: data.orderTypeCategoryCode,
-                            batch: profileData[0].batch,
-                            ifhrmsId: profileData[0].ifhrmsId,
-                            officeEmail: profileData[0].officeEmail,
-                            mobileNo1: profileData[0].mobileNo1,
-                            city: profileData[0].city,
-                            gender: profileData[0].gender,
-                            fullName: profileData[0].fullName,
-                            _id: profileData[0]._id
+                console.log('updateQueryJson ', updateQueryJson);
+                uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                console.log('uniqueArray.length ==> ', uniqueArray[0]);
+                if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                    for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                        console.log('Check ', transferOrPostingEmployeesList.fullName);
+                        if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0._id.toString()){
+                            console.log('Matched ');
+                            console.log('posting available')
+                    console.log('fullname => ', transferOrPostingEmployeesList.empProfileId.fullName, uniqueArray[0]._id);
+                    console.log('toPostingInCategoryCode => ', transferOrPostingEmployeesList.empProfileId.toPostingInCategoryCode);
+                    console.log('categoryId => ', categoryId);
+
+                        if(transferOrPostingEmployeesList.toPostingInCategoryCode == categoryId){
+                            if(req.query.secretariat == 'yes'){
+
+                            dataAll = {
+                                toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                                remarks: uniqueArray[0].remarks,
+                                updateType: uniqueArray[0].updateType,
+                                orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                                orderNumber: uniqueArray[0].orderNumber,
+                                orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                                dateOfOrder: uniqueArray[0].dateOfOrder,
+                                        fullName: data0.fullName,
+                                personalEmail: data0.personalEmail,
+                                _id: data0._id,
+                                gender: data0.gender,
+                                dateOfBirth: data0.dateOfBirth,
+                                dateOfJoining: data0.dateOfJoining,
+                                dateOfRetirement : data0.dateOfRetirement,
+                                state: data0.state,
+                                batch: data0.batch,
+                                recruitmentType: data0.recruitmentType,
+                                serviceStatus: data0.serviceStatus,
+                                qualification1: data0.qualification1,
+                                qualification2: data0.qualification2,
+                                community: data0.community,
+                                degreeData: data0.degreeData,
+                                caste: data0.caste,
+                                religion: data0.religion,
+                                promotionGrade: data0.promotionGrade,
+                                payscale: data0.payscale,
+                                officeEmail: data0.officeEmail,
+                                mobileNo1: data0.mobileNo1,
+                                mobileNo2: data0.mobileNo2,
+                                mobileNo3: data0.mobileNo3,
+                                addressLine: data0.addressLine,
+                                city: data0.city,
+                                pincode: data0.pincode,
+                                employeeId: data0.employeeId,
+                                ifhrmsId: data0.ifhrmsId,
+                                // photo: data0.photo,
+                                submittedBy: data0.submittedBy,
+                                approvedBy: data0.approvedBy,
+                                approvedDate: data0.approvedDate,
+                                approvalStatus: data0.approvalStatus,
+                            }
                         }
-                        // console.log('resJson ', resJson);
-                        resData.push(resJson);
-                        // console.log('resData ', resData);
                     }
-                    
-                    lastIndex++;
+                    else{
+                        if(transferOrPostingEmployeesList.toPostingInCategoryCode != categoryId){
+                            if(req.query.secretariat == 'no'){
+                            dataAll = {
+                                toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                                remarks: uniqueArray[0].remarks,
+                                updateType: uniqueArray[0].updateType,
+                                orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                                orderNumber: uniqueArray[0].orderNumber,
+                                orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                                dateOfOrder: uniqueArray[0].dateOfOrder,
+                                fullName: data0.fullName,
+                                personalEmail: data0.personalEmail,
+                                _id: data0._id,
+                                gender: data0.gender,
+                                dateOfBirth: data0.dateOfBirth,
+                                dateOfJoining: data0.dateOfJoining,
+                                dateOfRetirement : data0.dateOfRetirement,
+                                state: data0.state,
+                                batch: data0.batch,
+                                recruitmentType: data0.recruitmentType,
+                                serviceStatus: data0.serviceStatus,
+                                qualification1: data0.qualification1,
+                                qualification2: data0.qualification2,
+                                community: data0.community,
+                                degreeData: data0.degreeData,
+                                caste: data0.caste,
+                                religion: data0.religion,
+                                promotionGrade: data0.promotionGrade,
+                                payscale: data0.payscale,
+                                officeEmail: data0.officeEmail,
+                                mobileNo1: data0.mobileNo1,
+                                mobileNo2: data0.mobileNo2,
+                                mobileNo3: data0.mobileNo3,
+                                addressLine: data0.addressLine,
+                                city: data0.city,
+                                pincode: data0.pincode,
+                                employeeId: data0.employeeId,
+                                ifhrmsId: data0.ifhrmsId,
+                                // photo: data0.photo,
+                                submittedBy: data0.submittedBy,
+                                approvedBy: data0.approvedBy,
+                                approvedDate: data0.approvedDate,
+                                approvalStatus: data0.approvalStatus,
+                            }
+                        }
+                        }
+                    }
+
+                        }
+                    }
+
                 }
-                if (lastIndex === uniqueArray.length - 1) {
-                    console.log('Reached the end of the array');
-                    //console.log(resData);
-                  }   
+
+
             }
-          }
-          for(let i=0; i< resData.length; i++){
-            // console.log('resData name==> ', resData[i]);
+            resultData.push(dataAll);
         }
-        let result = {
-            empCount: resData.length,
-            empList: resData
+        else
+        {
+            resultData = [];
         }
-          successRes(res, result, 'Secretariat Employees listed Successfully');
+        console.log('Unique by latest date of order:', uniqueArray);
+        let resData = {
+            empCount : resultData.length,
+            empList: resultData
+        }
+        successRes(res, resData, 'List employees based on location Success');
+
     }
     catch(error){
         console.log('error', error);
@@ -2512,7 +2534,7 @@ exports.getEmployeeUpdateFilter = async(input) => {
     })
     .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
     .exec();
-    console.log('dataResArray ==> ', dataResArray);
+    // console.log('dataResArray ==> ', dataResArray);
     // console.log('Unique by latest date of order:', dataResArray);
     return dataResArray;
 }
