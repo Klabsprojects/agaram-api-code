@@ -78,6 +78,7 @@ exports.getEmployeeProfile = async (req, res) => {
             query.where = req.query;
             data = await employeeProfile.find(req.query).sort({ batch: 'asc' }).exec();
             console.log('if', data);
+            successRes(res, data, 'Employee listed Successfully');
         }
         else if(req.query.loginAs == 'Spl A - SO' ||
             req.query.loginAs == 'Spl B - SO' ||
@@ -118,8 +119,8 @@ exports.getEmployeeProfile = async (req, res) => {
         else{
             data = await employeeProfile.find().sort({ batch: 'asc' }).exec();
             console.log('else', data);
+            successRes(res, data, 'Employee listed Successfully');
         }
-        successRes(res, data, 'Employee listed Successfully');
         } catch (error) {
             console.log('error', error);
             errorRes(res, error, "Error on listing employee");
