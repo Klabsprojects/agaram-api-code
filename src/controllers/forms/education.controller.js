@@ -124,6 +124,28 @@ exports.getEducation = async (req, res) => {
                     }
             resultData.push(dataAll);
                 }
+                else{
+                    let dataAll = {
+                        officerName: data[0].officerName,
+                        employeeProfileId: data[0].employeeProfileId,
+                        designation: data[0].designation,
+                        designationId: data[0].designationId,
+                        department: data[0].department,
+                        departmentId: data[0].departmentId,
+                        degreeData : data[0].degreeData,
+                        dateOfOrder: data[0].dateOfOrder,
+                        orderType: data[0].orderType,
+                        orderNo: data[0].orderNo,
+                        orderFor: data[0].orderFor,
+                        remarks: data[0].remarks,
+                        orderFile: data[0].orderFile,
+                        submittedBy: data[0].submittedBy,
+                        approvedBy: data[0].approvedBy,
+                        approvedDate: data[0].approvedDate,
+                        approvalStatus: data[0].approvalStatus,
+                    }
+            resultData.push(dataAll);
+                }
             }
             else
             {
@@ -169,50 +191,131 @@ exports.getEducation = async (req, res) => {
                      })
                      .exec();   
                      if(data.length > 0){
-                        let updateQueryJson = {
-                            empId: data[0].employeeProfileId
+                        console.log('data.length', data.length)
+                for(let data0 of data){
+                    let updateQueryJson = {
+                        empId: data0.employeeProfileId
+                    }
+                    uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                    console.log('length ==> ', uniqueArray.length);
+                    if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                        for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                            console.log('Check ', transferOrPostingEmployeesList.fullName);
+                            if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0._id.toString()){
+                                console.log('Matched ');
+                                console.log('posting available')
+                        dataAll = {
+                            // toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                            // toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                            // toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                            // postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                            // locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                            toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                    toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                    toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                    postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                    locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                            updateType: uniqueArray[0].updateType,
+                            orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                            orderNumber: uniqueArray[0].orderNumber,
+                            orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                            officerName: data0.officerName,
+                            employeeProfileId: data0.employeeProfileId,
+                            designation: data0.designation,
+                            designationId: data0.designationId,
+                            department: data0.department,
+                            departmentId: data0.departmentId,
+                            degreeData : data0.degreeData,
+                            dateOfOrder: data0.dateOfOrder,
+                            orderType: data0.orderType,
+                            orderNo: data0.orderNo,
+                            orderFor: data0.orderFor,
+                            remarks: data0.remarks,
+                            orderFile: data0.orderFile,
+                            submittedBy: data0.submittedBy,
+                            approvedBy: data0.approvedBy,
+                            approvedDate: data0.approvedDate,
+                            approvalStatus: data0.approvalStatus,
                         }
-                        uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
-                        console.log('length ==> ', uniqueArray.length);
-                        if(uniqueArray.length > 0){
-                            console.log('alert')
-                            console.log('data => ', data[0]);
-                            let dataAll = {
-                                toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
-                                toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
-                                toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
-                                postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
-                                locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                                updateType: uniqueArray[0].updateType,
-                                orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
-                                orderNumber: uniqueArray[0].orderNumber,
-                                orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                                officerName: data[0].officerName,
-                                employeeProfileId: data[0].employeeProfileId,
-                                designation: data[0].designation,
-                                designationId: data[0].designationId,
-                                department: data[0].department,
-                                departmentId: data[0].departmentId,
-                                degreeData : data[0].degreeData,
-                                dateOfOrder: data[0].dateOfOrder,
-                                orderType: data[0].orderType,
-                                orderNo: data[0].orderNo,
-                                orderFor: data[0].orderFor,
-                                remarks: data[0].remarks,
-                                orderFile: data[0].orderFile,
-                                submittedBy: data[0].submittedBy,
-                                approvedBy: data[0].approvedBy,
-                                approvedDate: data[0].approvedDate,
-                                approvalStatus: data[0].approvalStatus,
-                            }
-                    resultData.push(dataAll);
-                        }
+                resultData.push(dataAll);
+                    }
+                    
+                }
+                }
+                else{
+                    dataAll = {
+                        officerName: data0.officerName,
+                            employeeProfileId: data0.employeeProfileId,
+                            designation: data0.designation,
+                            designationId: data0.designationId,
+                            department: data0.department,
+                            departmentId: data0.departmentId,
+                            degreeData : data0.degreeData,
+                            dateOfOrder: data0.dateOfOrder,
+                            orderType: data0.orderType,
+                            orderNo: data0.orderNo,
+                            orderFor: data0.orderFor,
+                            remarks: data0.remarks,
+                            orderFile: data0.orderFile,
+                            submittedBy: data0.submittedBy,
+                            approvedBy: data0.approvedBy,
+                            approvedDate: data0.approvedDate,
+                            approvalStatus: data0.approvalStatus,
+                    }
+            resultData.push(dataAll);
+                }
+            }
                     }
                     else
                     {
                         resultData = [];
                     }
-                successRes(res, resultData, 'education listed Successfully');
+            successRes(res, resultData, 'education listed Successfully');
+                //      if(data.length > 0){
+                //         let updateQueryJson = {
+                //             empId: data[0].employeeProfileId
+                //         }
+                //         uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                //         console.log('length ==> ', uniqueArray.length);
+                //         if(uniqueArray.length > 0){
+                //             console.log('alert')
+                //             console.log('data => ', data[0]);
+                //             let dataAll = {
+                //                 toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                //                 toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                //                 toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                //                 postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                //                 locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                //                 updateType: uniqueArray[0].updateType,
+                //                 orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                //                 orderNumber: uniqueArray[0].orderNumber,
+                //                 orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                //                 officerName: data[0].officerName,
+                //                 employeeProfileId: data[0].employeeProfileId,
+                //                 designation: data[0].designation,
+                //                 designationId: data[0].designationId,
+                //                 department: data[0].department,
+                //                 departmentId: data[0].departmentId,
+                //                 degreeData : data[0].degreeData,
+                //                 dateOfOrder: data[0].dateOfOrder,
+                //                 orderType: data[0].orderType,
+                //                 orderNo: data[0].orderNo,
+                //                 orderFor: data[0].orderFor,
+                //                 remarks: data[0].remarks,
+                //                 orderFile: data[0].orderFile,
+                //                 submittedBy: data[0].submittedBy,
+                //                 approvedBy: data[0].approvedBy,
+                //                 approvedDate: data[0].approvedDate,
+                //                 approvalStatus: data[0].approvalStatus,
+                //             }
+                //     resultData.push(dataAll);
+                //         }
+                //     }
+                //     else
+                //     {
+                //         resultData = [];
+                //     }
+                // successRes(res, resultData, 'education listed Successfully');
                     
             }
             else{
