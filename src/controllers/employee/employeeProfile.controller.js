@@ -944,14 +944,24 @@ exports.getActiveEmployees = async (req, res) => {
                 }
                 uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
                 console.log('uniqueArray.length ==> ', uniqueArray.length);
-                if(uniqueArray.length > 0){
-                    console.log('posting available')
+                console.log('uniqueArray ==> ', uniqueArray[0]);
+                if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                    for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                        console.log('Check ', transferOrPostingEmployeesList.fullName);
+                        if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0._id.toString()){
+                            console.log('Matched ');
+                            console.log('posting available')
                     dataAll = {
-                        toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
-                        toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
-                        toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
-                        postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
-                        locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                        // toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                        // toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                        // toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                        // postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                        // locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                        toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
                         updateType: uniqueArray[0].updateType,
                         orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                         orderNumber: uniqueArray[0].orderNumber,
@@ -990,6 +1000,10 @@ exports.getActiveEmployees = async (req, res) => {
                         approvedDate: data0.approvedDate,
                         approvalStatus: data0.approvalStatus,
                     }
+                    resultData.push(dataAll);
+                }
+            }
+
                 }
                 else{
                     dataAll = {
@@ -1027,8 +1041,8 @@ exports.getActiveEmployees = async (req, res) => {
                         approvedDate: data0.approvedDate,
                         approvalStatus: data0.approvalStatus,
                     }
+                    resultData.push(dataAll);
                 }
-                resultData.push(dataAll);
             }
             
         }
