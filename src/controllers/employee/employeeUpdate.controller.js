@@ -80,6 +80,8 @@ exports.getEmployeeUpdate = async (req, res) => {
                     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 })  
                 .exec();
+                console.log(data, 'Employee Update listed if Successfully');
+                successRes(res, data, 'Employee Update listed Successfully');
             }
             else if(req.query.loginAs == 'Spl A - SO' ||
                 req.query.loginAs == 'Spl B - SO' ||
@@ -119,11 +121,11 @@ exports.getEmployeeUpdate = async (req, res) => {
                 })  
                 .exec();  
                 
-            console.log(data, 'leave listed if Successfully');
-            successRes(res, data, 'leave listed Successfully');
+            console.log(data, 'Employee Update listed if Successfully');
+            successRes(res, data, 'Employee Update listed Successfully');
                     
             }
-            else
+            else{
                 data = await employeeUpdate.find()
                 .populate({
                     path: 'transferOrPostingEmployeesList.empProfileId',
@@ -132,6 +134,7 @@ exports.getEmployeeUpdate = async (req, res) => {
                 })  
                 .exec();
             successRes(res, data, 'Employee Update listed Successfully');
+            }
         } catch (error) {
             console.log('error', error.reason);
             errorRes(res, error, "Error on listing employee Update");
