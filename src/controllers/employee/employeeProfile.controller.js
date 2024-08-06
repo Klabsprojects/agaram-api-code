@@ -460,13 +460,14 @@ exports.updateEmployeeProfile = async (req, res) => {
                     new: true
                   });
                 console.log('data updated ', data);
-                reqest.body = {
-                    phone: req.body.phone,
-                    module: req.body.module,
-                    date: req.body.dateOfOrder,
-                    fileName: req.body.filename
-                }
-                const goSent = await whatsapp.sendWhatsapp(reqest, res);
+                // let reqest = {}
+                // reqest.body = {
+                //     phone: req.body.phone,
+                //     module: req.body.module,
+                //     date: req.body.dateOfOrder,
+                //     fileName: req.body.filename
+                // }
+                // const goSent = await whatsapp.sendWhatsapp(reqest, res);
                 successRes(res, data, 'data updated Successfully');
             } else {
                 console.log('empty');
