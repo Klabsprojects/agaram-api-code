@@ -1588,6 +1588,7 @@ exports.getBySecretariat = async (req, res) => {
                                 approvedDate: data0.approvedDate,
                                 approvalStatus: data0.approvalStatus,
                             }
+                            resultData.push(dataAll);
                         }
                     }
                     else{
@@ -1639,6 +1640,7 @@ exports.getBySecretariat = async (req, res) => {
                                 approvedDate: data0.approvedDate,
                                 approvalStatus: data0.approvalStatus,
                             }
+                            resultData.push(dataAll);
                         }
                         }
                     }
@@ -1650,7 +1652,6 @@ exports.getBySecretariat = async (req, res) => {
 
 
             }
-            resultData.push(dataAll);
         }
         else
         {
