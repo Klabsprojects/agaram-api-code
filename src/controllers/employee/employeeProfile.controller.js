@@ -85,28 +85,6 @@ exports.getEmployeeProfile = async (req, res) => {
             req.query.loginAs == 'Spl A - ASO' || 
             req.query.loginAs == 'Spl B - ASO'
         ){
-            // Step 1: Find the user IDs where loginAs is 'adminLogin'
-            // if(req.query.loginAs == 'Spl A - SO'){
-            //     admins  = await login.find({ loginAs: { $in: ['Spl A - SO', 'Spl A - ASO'] } }).select('_id').exec();
-            //     if (admins .length === 0) {
-            //         return res.status(404).json({ message: 'No admin users found' });
-            //     }   
-            // }
-            // else if(req.query.loginAs == 'Spl B - SO'){
-            //     admins  = await login.find({ loginAs: { $in: ['Spl B - SO', 'Spl B - ASO'] } }).select('_id').exec();
-            //     if (admins .length === 0) {
-            //         return res.status(404).json({ message: 'No admin users found' });
-            //     }   
-            // }
-            // else if(req.query.loginAs == 'Spl A - ASO' || req.query.loginAs == 'Spl B - ASO'){
-            //     adminIds.push(req.query.loginId);
-            // }
-            
-            //  if(req.query.loginAs == 'Spl A - SO' ||
-            //     req.query.loginAs == 'Spl B - SO')
-            // {
-            //     adminIds = admins.map(admin => admin._id);
-            // }
             if(req.query.loginAs == 'Spl A - SO'){
                     admins  = await login.find({ loginAs: { $in: ['Spl A - ASO', 'Spl A - SO'] } }).select('_id').exec();
                     if (admins .length === 0) {
