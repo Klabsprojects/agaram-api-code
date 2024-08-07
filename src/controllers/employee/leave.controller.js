@@ -41,7 +41,7 @@ exports.getLeave = async (req, res) => {
             let data = [];
             let admins = [];
             let adminIds = [];
-            if(req.query._id){
+            if(req.query._id || req.query.employeeProfileId){
                 /////old
                 query.where = req.query;
                 data = await leave.find(req.query)

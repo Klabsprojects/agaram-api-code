@@ -71,14 +71,25 @@ exports.getEmployeeUpdate = async (req, res) => {
             let data;
             let admins = [];
             let adminIds = [];
-            if(req.query._id){
+            if(req.query.employeeProfileId && req.query.updateType){
+                data  = await employeeUpdate.find({
+                    'transferOrPostingEmployeesList.empProfileId': req.query.employeeProfileId,
+                    'updateType': req.query.updateType
+                })
+                .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
+                .exec();
+                
+                console.log(data, 'Employee Update listed if Successfully');
+                successRes(res, data, 'Employee Update listed Successfully');
+            }
+            else if(req.query._id){
                 query.where = req.query;
                 data = await employeeUpdate.find(req.query)
-                .populate({
-                    path: 'transferOrPostingEmployeesList.empProfileId',
-                    model: 'employeeProfile', // Model of the application collection
-                    select: ['batch', 'mobileNo1'] // Fields to select from the application collection
-                })  
+                // .populate({
+                //     path: 'transferOrPostingEmployeesList.empProfileId',
+                //     model: 'employeeProfile', // Model of the application collection
+                //     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+                // })  
                 .exec();
                 console.log(data, 'Employee Update listed if Successfully');
                 successRes(res, data, 'Employee Update listed Successfully');
