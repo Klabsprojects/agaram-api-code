@@ -77,13 +77,22 @@ exports.getEducation = async (req, res) => {
             let adminIds = [];
             if(req.query._id){
                 query.where = req.query;
-                //data = await education.find(req.query).exec();
                 data = await education.find(req.query)
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
                     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 })  
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                }) 
                 .exec();
                 if(data.length > 0){
                 let updateQueryJson = {
@@ -158,37 +167,60 @@ exports.getEducation = async (req, res) => {
                 req.query.loginAs == 'Spl A - ASO' || 
                 req.query.loginAs == 'Spl B - ASO'
             ){
-                // Step 1: Find the user IDs where loginAs is 'adminLogin'
-                if(req.query.loginAs == 'Spl A - SO'){
-                    admins  = await login.find({ loginAs: { $in: ['Spl A - SO', 'Spl A - ASO'] } }).select('_id').exec();
+            if(req.query.loginAs == 'Spl A - SO'){
+                    admins  = await login.find({ loginAs: { $in: ['Spl A - ASO', 'Spl A - SO'] } }).select('_id').exec();
                     if (admins .length === 0) {
                         return res.status(404).json({ message: 'No admin users found' });
                     }   
-                }
-                else if(req.query.loginAs == 'Spl B - SO'){
-                    admins  = await login.find({ loginAs: { $in: ['Spl B - SO', 'Spl B - ASO'] } }).select('_id').exec();
-                    if (admins .length === 0) {
-                        return res.status(404).json({ message: 'No admin users found' });
-                    }   
-                }
-                else if(req.query.loginAs == 'Spl A - ASO' || req.query.loginAs == 'Spl B - ASO'){
-                    adminIds.push(req.query.loginId);
-                }
-                
-                 if(req.query.loginAs == 'Spl A - SO' ||
-                    req.query.loginAs == 'Spl B - SO')
-                {
-                    adminIds = admins.map(admin => admin._id);
-                }
-                console.log('admins ', admins);
-                console.log('adminIds ', adminIds);
+            }
+            if(req.query.loginAs == 'Spl A - ASO'){
+                admins  = await login.find({ loginAs: { $in: ['Spl A - ASO'] } }).select('_id').exec();
+                if (admins .length === 0) {
+                    return res.status(404).json({ message: 'No admin users found' });
+                }   
+            }
+            if(req.query.loginAs == 'Spl B - SO'){
+                admins  = await login.find({ loginAs: { $in: ['Spl B - ASO', 'Spl B - SO'] } }).select('_id').exec();
+                if (admins .length === 0) {
+                    return res.status(404).json({ message: 'No admin users found' });
+                }   
+            }
+            if(req.query.loginAs == 'Spl B - ASO'){
+                admins  = await login.find({ loginAs: { $in: ['Spl B - ASO'] } }).select('_id').exec();
+                if (admins .length === 0) {
+                    return res.status(404).json({ message: 'No admin users found' });
+                }   
+            }
+            if(req.query.loginAs == 'Spl A - SO' || req.query.loginAs == 'Spl A - ASO' ||
+                req.query.loginAs == 'Spl B - SO' || req.query.loginAs == 'Spl B - ASO')
+            {
+                adminIds = admins.map(admin => admin._id);
+            }
+            console.log('admins ', admins);
+            console.log('adminIds ', adminIds);
+            let profileQuery = {
+                $or: [
+                    { submittedBy: { $in: adminIds } },
+                    { approvalStatus: true }
+                ]
+            }
                  // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
-                 data = await education.find({ submittedBy: { $in: adminIds } })
+                 data = await education.find(profileQuery)
                      .populate({
                          path: 'employeeProfileId',
                          model: 'employeeProfile',
                          select: ['batch', 'mobileNo1']
                      })
+                     .populate({
+                        path: 'submittedBy',
+                        model: 'login', // Ensure the model name matches exactly
+                        select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                    })
+                    .populate({
+                        path: 'approvedBy',
+                        model: 'login', // Ensure the model name matches exactly
+                        select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                    }) 
                      .exec();   
                      if(data.length > 0){
                         console.log('data.length', data.length)
@@ -205,16 +237,11 @@ exports.getEducation = async (req, res) => {
                                 console.log('Matched ');
                                 console.log('posting available')
                         dataAll = {
-                            // toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
-                            // toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
-                            // toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
-                            // postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
-                            // locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
                             toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
-                                    toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
-                                    toDesignationId: transferOrPostingEmployeesList.toDesignationId,
-                                    postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
-                                    locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                            toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                            toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                            postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                            locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
                             updateType: uniqueArray[0].updateType,
                             orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                             orderNumber: uniqueArray[0].orderNumber,
@@ -326,6 +353,16 @@ exports.getEducation = async (req, res) => {
                     model: 'employeeProfile', // Model of the application collection
                     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 })  
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                }) 
                 .exec();
             successRes(res, data, 'education listed Successfully');
             }
