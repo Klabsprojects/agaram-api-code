@@ -76,6 +76,16 @@ exports.getEmployeeUpdate = async (req, res) => {
                     'transferOrPostingEmployeesList.empProfileId': req.query.employeeProfileId,
                     'updateType': req.query.updateType
                 })
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })
                 .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
                 .exec();
                 
@@ -90,6 +100,16 @@ exports.getEmployeeUpdate = async (req, res) => {
                 //     model: 'employeeProfile', // Model of the application collection
                 //     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 // })  
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })
                 .exec();
                 console.log(data, 'Employee Update listed if Successfully');
                 successRes(res, data, 'Employee Update listed Successfully');
@@ -143,6 +163,16 @@ exports.getEmployeeUpdate = async (req, res) => {
                     model: 'employeeProfile', // Model of the employeeProfile collection
                     select: ['batch', 'mobileNo1'] // Fields to select from the employeeProfile collection
                 })  
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })
                 .exec();  
                 
             console.log(data, 'Employee Update listed if Successfully');
@@ -155,7 +185,17 @@ exports.getEmployeeUpdate = async (req, res) => {
                     path: 'transferOrPostingEmployeesList.empProfileId',
                     model: 'employeeProfile', // Model of the application collection
                     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
-                })  
+                }) 
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                }) 
                 .exec();
             successRes(res, data, 'Employee Update listed Successfully');
             }

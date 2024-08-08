@@ -50,6 +50,16 @@ exports.getLeave = async (req, res) => {
                     model: 'employeeProfile', // Model of the application collection
                     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                 })  
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                }) 
                 .exec();
                 console.log(data, 'leave listed else Successfully');
                 successRes(res, data, 'leave listed Successfully');
@@ -103,6 +113,16 @@ exports.getLeave = async (req, res) => {
                          model: 'employeeProfile',
                          select: ['batch', 'mobileNo1']
                      })
+                     .populate({
+                        path: 'submittedBy',
+                        model: 'login', // Ensure the model name matches exactly
+                        select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                    })
+                    .populate({
+                        path: 'approvedBy',
+                        model: 'login', // Ensure the model name matches exactly
+                        select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                    }) 
                      .exec();   
                 
             console.log(data, 'leave listed if Successfully');
@@ -117,6 +137,16 @@ exports.getLeave = async (req, res) => {
                         model: 'employeeProfile', // Model of the application collection
                         select: ['batch', 'mobileNo1'] // Fields to select from the application collection
                     })  
+                    .populate({
+                        path: 'submittedBy',
+                        model: 'login', // Ensure the model name matches exactly
+                        select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                    })
+                    .populate({
+                        path: 'approvedBy',
+                        model: 'login', // Ensure the model name matches exactly
+                        select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                    }) 
                     .exec();
                     console.log(data, 'leave listed else Successfully');
                     successRes(res, data, 'leave listed Successfully');
