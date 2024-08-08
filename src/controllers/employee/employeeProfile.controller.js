@@ -76,7 +76,18 @@ exports.getEmployeeProfile = async (req, res) => {
             let adminIds = [];
             if(req.query._id || req.query.fullName || req.query.batch){
             query.where = req.query;
-            data = await employeeProfile.find(req.query).sort({ batch: 'asc' }).exec();
+            data = await employeeProfile.find(req.query)
+            .populate({
+                path: 'submittedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            })
+            .populate({
+                path: 'approvedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            })
+            .sort({ batch: 'asc' }).exec();
             console.log('if', data);
             successRes(res, data, 'Employee listed Successfully');
         }
@@ -123,7 +134,18 @@ exports.getEmployeeProfile = async (req, res) => {
                 ]
             }
              // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
-             data = await employeeProfile.find(profileQuery).sort({ batch: 'asc' }).exec();
+             data = await employeeProfile.find(profileQuery)
+             .populate({
+                path: 'submittedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            })
+            .populate({
+                path: 'approvedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            })
+             .sort({ batch: 'asc' }).exec();
             console.log(data, 'employeeProfile listed if Successfully');
             successRes(res, data, 'employeeProfile listed Successfully');
                 
