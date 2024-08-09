@@ -103,16 +103,6 @@ exports.getEducation = async (req, res) => {
                             empId: data0.employeeProfileId._id
                         }
                 uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
-                // console.log('length ==> ', uniqueArray.length);
-                // if(uniqueArray.length > 0){
-                //     console.log('alert')
-                //     console.log('data => ', data[0]);
-                //     let dataAll = {
-                //         toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
-                //         toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
-                //         toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
-                //         postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
-                //         locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
                 console.log('length ==> ', uniqueArray.length);
                         if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
                             for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
@@ -178,12 +168,12 @@ exports.getEducation = async (req, res) => {
             resultData.push(dataAll);
                 }
             }
-            }
-            else
-            {
-                resultData = [];
-            }
-        successRes(res, resultData, 'education listed Successfully');
+                }
+                else
+                {
+                    resultData = [];
+                }
+                successRes(res, resultData, 'education listed Successfully');
             }
             else if(req.query.loginAs == 'Spl A - SO' ||
                 req.query.loginAs == 'Spl B - SO' ||
@@ -298,6 +288,7 @@ exports.getEducation = async (req, res) => {
                         }
                         else{
                             dataAll = {
+                                _id: data0._id,
                                 officerName: data0.officerName,
                                     employeeProfileId: data0.employeeProfileId,
                                     designation: data0.designation,
@@ -325,52 +316,6 @@ exports.getEducation = async (req, res) => {
                         resultData = [];
                     }
             successRes(res, resultData, 'education listed Successfully');
-                //      if(data.length > 0){
-                //         let updateQueryJson = {
-                //             empId: data[0].employeeProfileId
-                //         }
-                //         uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
-                //         console.log('length ==> ', uniqueArray.length);
-                //         if(uniqueArray.length > 0){
-                //             console.log('alert')
-                //             console.log('data => ', data[0]);
-                //             let dataAll = {
-                //                 toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
-                //                 toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
-                //                 toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
-                //                 postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
-                //                 locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                //                 updateType: uniqueArray[0].updateType,
-                //                 orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
-                //                 orderNumber: uniqueArray[0].orderNumber,
-                //                 orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                //                 officerName: data[0].officerName,
-                //                 employeeProfileId: data[0].employeeProfileId,
-                //                 designation: data[0].designation,
-                //                 designationId: data[0].designationId,
-                //                 department: data[0].department,
-                //                 departmentId: data[0].departmentId,
-                //                 degreeData : data[0].degreeData,
-                //                 dateOfOrder: data[0].dateOfOrder,
-                //                 orderType: data[0].orderType,
-                //                 orderNo: data[0].orderNo,
-                //                 orderFor: data[0].orderFor,
-                //                 remarks: data[0].remarks,
-                //                 orderFile: data[0].orderFile,
-                //                 submittedBy: data[0].submittedBy,
-                //                 approvedBy: data[0].approvedBy,
-                //                 approvedDate: data[0].approvedDate,
-                //                 approvalStatus: data[0].approvalStatus,
-                //             }
-                //     resultData.push(dataAll);
-                //         }
-                //     }
-                //     else
-                //     {
-                //         resultData = [];
-                //     }
-                // successRes(res, resultData, 'education listed Successfully');
-                    
             }
             else{
                 data = await education.find()
