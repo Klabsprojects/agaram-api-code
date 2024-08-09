@@ -95,8 +95,9 @@ exports.getEducation = async (req, res) => {
                 }) 
                 .exec();
                 if(data.length > 0){
+                    console.log('data[0] ', data[0]);
                 let updateQueryJson = {
-                    empId: data[0].employeeProfileId
+                    empId: data[0].employeeProfileId._id
                 }
                 uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
                 console.log('length ==> ', uniqueArray.length);
@@ -224,74 +225,77 @@ exports.getEducation = async (req, res) => {
                      .exec();   
                      if(data.length > 0){
                         console.log('data.length', data.length)
-                for(let data0 of data){
-                    let updateQueryJson = {
-                        empId: data0.employeeProfileId
-                    }
-                    uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
-                    console.log('length ==> ', uniqueArray.length);
-                    if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
-                        for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
-                            console.log('Check ', transferOrPostingEmployeesList.fullName);
-                            if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0._id.toString()){
-                                console.log('Matched ');
-                                console.log('posting available')
-                        dataAll = {
-                            toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
-                            toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
-                            toDesignationId: transferOrPostingEmployeesList.toDesignationId,
-                            postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
-                            locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
-                            updateType: uniqueArray[0].updateType,
-                            orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
-                            orderNumber: uniqueArray[0].orderNumber,
-                            orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                            officerName: data0.officerName,
-                            employeeProfileId: data0.employeeProfileId,
-                            designation: data0.designation,
-                            designationId: data0.designationId,
-                            department: data0.department,
-                            departmentId: data0.departmentId,
-                            degreeData : data0.degreeData,
-                            dateOfOrder: data0.dateOfOrder,
-                            orderType: data0.orderType,
-                            orderNo: data0.orderNo,
-                            orderFor: data0.orderFor,
-                            remarks: data0.remarks,
-                            orderFile: data0.orderFile,
-                            submittedBy: data0.submittedBy,
-                            approvedBy: data0.approvedBy,
-                            approvedDate: data0.approvedDate,
-                            approvalStatus: data0.approvalStatus,
+                    for(let data0 of data){
+                        console.log('IDDD => ', data0);
+                        console.log('IDDD => ', data0.employeeProfileId._id);
+                        let updateQueryJson = {
+                            empId: data0.employeeProfileId._id
                         }
-                resultData.push(dataAll);
+                        uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                        console.log('length ==> ', uniqueArray.length);
+                        if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                            for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                                console.log('Check ', transferOrPostingEmployeesList.fullName, transferOrPostingEmployeesList.empProfileId._id.toString(),
+                                data0.employeeProfileId._id.toString());
+                                if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0.employeeProfileId._id.toString()){
+                                    console.log('Matched ');
+                                    console.log('posting available')
+                            dataAll = {
+                                toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                                updateType: uniqueArray[0].updateType,
+                                orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                                orderNumber: uniqueArray[0].orderNumber,
+                                orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                                officerName: data0.officerName,
+                                employeeProfileId: data0.employeeProfileId,
+                                designation: data0.designation,
+                                designationId: data0.designationId,
+                                department: data0.department,
+                                departmentId: data0.departmentId,
+                                degreeData : data0.degreeData,
+                                dateOfOrder: data0.dateOfOrder,
+                                orderType: data0.orderType,
+                                orderNo: data0.orderNo,
+                                orderFor: data0.orderFor,
+                                remarks: data0.remarks,
+                                orderFile: data0.orderFile,
+                                submittedBy: data0.submittedBy,
+                                approvedBy: data0.approvedBy,
+                                approvedDate: data0.approvedDate,
+                                approvalStatus: data0.approvalStatus,
+                            }
+                    resultData.push(dataAll);
+                        }
+                        
                     }
-                    
-                }
-                }
-                else{
-                    dataAll = {
-                        officerName: data0.officerName,
-                            employeeProfileId: data0.employeeProfileId,
-                            designation: data0.designation,
-                            designationId: data0.designationId,
-                            department: data0.department,
-                            departmentId: data0.departmentId,
-                            degreeData : data0.degreeData,
-                            dateOfOrder: data0.dateOfOrder,
-                            orderType: data0.orderType,
-                            orderNo: data0.orderNo,
-                            orderFor: data0.orderFor,
-                            remarks: data0.remarks,
-                            orderFile: data0.orderFile,
-                            submittedBy: data0.submittedBy,
-                            approvedBy: data0.approvedBy,
-                            approvedDate: data0.approvedDate,
-                            approvalStatus: data0.approvalStatus,
+                        }
+                        else{
+                            dataAll = {
+                                officerName: data0.officerName,
+                                    employeeProfileId: data0.employeeProfileId,
+                                    designation: data0.designation,
+                                    designationId: data0.designationId,
+                                    department: data0.department,
+                                    departmentId: data0.departmentId,
+                                    degreeData : data0.degreeData,
+                                    dateOfOrder: data0.dateOfOrder,
+                                    orderType: data0.orderType,
+                                    orderNo: data0.orderNo,
+                                    orderFor: data0.orderFor,
+                                    remarks: data0.remarks,
+                                    orderFile: data0.orderFile,
+                                    submittedBy: data0.submittedBy,
+                                    approvedBy: data0.approvedBy,
+                                    approvedDate: data0.approvedDate,
+                                    approvalStatus: data0.approvalStatus,
+                            }
+                    resultData.push(dataAll);
+                        }
                     }
-            resultData.push(dataAll);
-                }
-            }
                     }
                     else
                     {
@@ -346,7 +350,6 @@ exports.getEducation = async (req, res) => {
                     
             }
             else{
-                //data = await education.find();
                 data = await education.find()
                 .populate({
                     path: 'employeeProfileId',

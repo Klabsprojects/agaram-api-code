@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
 const Schema = mongoose.Schema;
 
-const profile = require('../employee/employeeProfile.model');
+const employeeProfile = require('../employee/employeeProfile.model');
 const login = require('../login/login.model');
 const degree = require('../employee/degree.model');
 
@@ -11,7 +11,7 @@ const educationSchema = new Schema({
 	//employeeProfileId: ObjectId,
 	employeeProfileId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'profile' // This references the AllocatedBlock model
+		ref: 'employeeProfile' // This references the AllocatedBlock model
 	},
 	designation: String,
 	designationId: ObjectId,
