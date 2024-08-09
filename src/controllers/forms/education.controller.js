@@ -95,25 +95,44 @@ exports.getEducation = async (req, res) => {
                 }) 
                 .exec();
                 if(data.length > 0){
-                    console.log('data[0] ', data[0]);
-                let updateQueryJson = {
-                    empId: data[0].employeeProfileId._id
-                }
+                    console.log('data.length', data.length)
+                    for(let data0 of data){
+                        console.log('IDDD => ', data0);
+                        console.log('IDDD => ', data0.employeeProfileId._id);
+                        let updateQueryJson = {
+                            empId: data0.employeeProfileId._id
+                        }
                 uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                // console.log('length ==> ', uniqueArray.length);
+                // if(uniqueArray.length > 0){
+                //     console.log('alert')
+                //     console.log('data => ', data[0]);
+                //     let dataAll = {
+                //         toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                //         toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                //         toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                //         postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                //         locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
                 console.log('length ==> ', uniqueArray.length);
-                if(uniqueArray.length > 0){
-                    console.log('alert')
-                    console.log('data => ', data[0]);
-                    let dataAll = {
-                        toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
-                        toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
-                        toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
-                        postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
-                        locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                        if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                            for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                                console.log('Check ', transferOrPostingEmployeesList.fullName, transferOrPostingEmployeesList.empProfileId._id.toString(),
+                                data0.employeeProfileId._id.toString());
+                                if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0.employeeProfileId._id.toString()){
+                                    console.log('Matched ');
+                                    console.log('posting available')
+                            dataAll = {
+                                toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
                         updateType: uniqueArray[0].updateType,
                         orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                         orderNumber: uniqueArray[0].orderNumber,
                         orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                        
+                        _id: data[0]._id,
                         officerName: data[0].officerName,
                         employeeProfileId: data[0].employeeProfileId,
                         designation: data[0].designation,
@@ -133,6 +152,8 @@ exports.getEducation = async (req, res) => {
                         approvalStatus: data[0].approvalStatus,
                     }
             resultData.push(dataAll);
+                }
+                    }
                 }
                 else{
                     let dataAll = {
@@ -156,6 +177,7 @@ exports.getEducation = async (req, res) => {
                     }
             resultData.push(dataAll);
                 }
+            }
             }
             else
             {
@@ -250,6 +272,7 @@ exports.getEducation = async (req, res) => {
                                 orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                                 orderNumber: uniqueArray[0].orderNumber,
                                 orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                                _id: data0._id,
                                 officerName: data0.officerName,
                                 employeeProfileId: data0.employeeProfileId,
                                 designation: data0.designation,

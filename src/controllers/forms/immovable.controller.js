@@ -50,62 +50,83 @@ exports.getImmovable = async (req, res) => {
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
                     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
-                }) 
+                })
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })  
                 .exec();
                 if(data.length > 0){
-                let updateQueryJson = {
-                    empId: data[0].employeeProfileId
-                }
-                uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
-                console.log('length ==> ', uniqueArray.length);
-                if(uniqueArray.length > 0){
-                    console.log('alert')
-                    console.log('data => ', data[0]);
-                    let dataAll = {
-                        toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
-                        toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
-                        toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
-                        postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
-                        locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                        updateType: uniqueArray[0].updateType,
-                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
-                        orderNumber: uniqueArray[0].orderNumber,
-                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                    console.log('data.length', data.length)
+                    for(let data0 of data){
+                        console.log('IDDD => ', data0);
+                        console.log('IDDD => ', data0.employeeProfileId._id);
+                        let updateQueryJson = {
+                            empId: data0.employeeProfileId._id
+                        }
+                        uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                        console.log('length ==> ', uniqueArray.length);
+                        if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                            for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                                console.log('Check ', transferOrPostingEmployeesList.fullName, transferOrPostingEmployeesList.empProfileId._id.toString(),
+                                data0.employeeProfileId._id.toString());
+                                if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0.employeeProfileId._id.toString()){
+                                    console.log('Matched ');
+                                    console.log('posting available')
+                                    dataAll = {
+                                        toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                        toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                        toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                        postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                        locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                                        updateType: uniqueArray[0].updateType,
+                                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                                        orderNumber: uniqueArray[0].orderNumber,
+                                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
 
-                        _id: data[0]._id,
-                        officerName: data[0].officerName,
-                        employeeProfileId: data[0].employeeProfileId,
-                        designation: data[0].designation,
-                        designationId: data[0].designationId,
-                        department: data[0].department,
-                        departmentId: data[0].departmentId,
-                        typeOfImmovableProperty: data[0].typeOfImmovableProperty,
-                        detailsOfImovableProperty: data[0].detailsOfImovableProperty,
-                        sourceOfFunding: data[0].sourceOfFunding,
-                        totalCostOfProperty: data[0].totalCostOfProperty,
-                        boughtFromName: data[0].boughtFromName,
-                        boughtFromContactNumber: data[0].boughtFromContactNumber,
-                        boughtFromAddress: data[0].boughtFromAddress,
-                        propertyShownInIpr: data[0].propertyShownInIpr,
-                        immovableDateOfOrder: data[0].immovableDateOfOrder,
-                        previousSanctionOrder: data[0].previousSanctionOrder,
-                        detailsOfIntimation: data[0].detailsOfIntimation,
-                        fundSource: data[0].fundSource,
-                        typeOfIntimation: data[0].typeOfIntimation,
-                        selfOrFamily: data[0].selfOrFamily,
-                        dateOfOrder: data[0].dateOfOrder,
-                        orderType: data[0].orderType,
-                        orderNo: data[0].orderNo,
-                        orderFor: data[0].orderFor,
-                        remarks: data[0].remarks,
-                        orderFile: data[0].orderFile,
-                        submittedBy: data[0].submittedBy,
-                        approvedBy: data[0].approvedBy,
-                        approvedDate: data[0].approvedDate,
-                        approvalStatus: data[0].approvalStatus,
+                                        _id: data0._id,
+                                        officerName: data0.officerName,
+                                        employeeProfileId: data0.employeeProfileId,
+                                        designation: data0.designation,
+                                        designationId: data0.designationId,
+                                        department: data0.department,
+                                        departmentId: data0.departmentId,
+                                        typeOfImmovableProperty: data0.typeOfImmovableProperty,
+                                        detailsOfImovableProperty: data0.detailsOfImovableProperty,
+                                        sourceOfFunding: data0.sourceOfFunding,
+                                        totalCostOfProperty: data0.totalCostOfProperty,
+                                        boughtFromName: data0.boughtFromName,
+                                        boughtFromContactNumber: data0.boughtFromContactNumber,
+                                        boughtFromAddress: data0.boughtFromAddress,
+                                        propertyShownInIpr: data0.propertyShownInIpr,
+                                        immovableDateOfOrder: data0.immovableDateOfOrder,
+                                        previousSanctionOrder: data0.previousSanctionOrder,
+                                        detailsOfIntimation: data0.detailsOfIntimation,
+                                        fundSource: data0.fundSource,
+                                        typeOfIntimation: data0.typeOfIntimation,
+                                        selfOrFamily: data0.selfOrFamily,
+                                        dateOfOrder: data0.dateOfOrder,
+                                        orderType: data0.orderType,
+                                        orderNo: data0.orderNo,
+                                        orderFor: data0.orderFor,
+                                        remarks: data0.remarks,
+                                        orderFile: data0.orderFile,
+                                        submittedBy: data0.submittedBy,
+                                        approvedBy: data0.approvedBy,
+                                        approvedDate: data0.approvedDate,
+                                        approvalStatus: data0.approvalStatus,
+                                    }
+                                    resultData.push(dataAll);
+                                }   
+                            }
+                        }
                     }
-            resultData.push(dataAll);
-                }
             }
             else
             {
@@ -149,45 +170,63 @@ exports.getImmovable = async (req, res) => {
                          model: 'employeeProfile',
                          select: ['batch', 'mobileNo1']
                      })
+                     .populate({
+                        path: 'submittedBy',
+                        model: 'login', // Ensure the model name matches exactly
+                        select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                    })
+                    .populate({
+                        path: 'approvedBy',
+                        model: 'login', // Ensure the model name matches exactly
+                        select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                    })  
                      .exec();   
                      if(data.length > 0){
-                        let updateQueryJson = {
-                            empId: data[0].employeeProfileId
-                        }
-                        uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
-                        console.log('length ==> ', uniqueArray.length);
-                        if(uniqueArray.length > 0){
-                            console.log('alert')
-                            console.log('data => ', data[0]);
-                            let dataAll = {
-                                toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
-                                toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
-                                toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
-                                postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
-                                locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
-                                updateType: uniqueArray[0].updateType,
-                                orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
-                                orderNumber: uniqueArray[0].orderNumber,
-                                orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
-                                officerName: data[0].officerName,
-                                employeeProfileId: data[0].employeeProfileId,
-                                designation: data[0].designation,
-                                designationId: data[0].designationId,
-                                department: data[0].department,
-                                departmentId: data[0].departmentId,
-                                degreeData : data[0].degreeData,
-                                dateOfOrder: data[0].dateOfOrder,
-                                orderType: data[0].orderType,
-                                orderNo: data[0].orderNo,
-                                orderFor: data[0].orderFor,
-                                remarks: data[0].remarks,
-                                orderFile: data[0].orderFile,
-                                submittedBy: data[0].submittedBy,
-                                approvedBy: data[0].approvedBy,
-                                approvedDate: data[0].approvedDate,
-                                approvalStatus: data[0].approvalStatus,
+                        for(let data0 of data){
+                            let updateQueryJson = {
+                                empId: data0.employeeProfileId._id
                             }
-                    resultData.push(dataAll);
+                            uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                            console.log('length ==> ', uniqueArray.length);
+                            if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                                for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                                    console.log('Check ', transferOrPostingEmployeesList.fullName);
+                                    if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0.employeeProfileId._id.toString()){
+                                        console.log('Matched ');
+                                        console.log('posting available')
+                                        let dataAll = {
+                                            toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                            toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                            toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                            postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                            locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                                            updateType: uniqueArray[0].updateType,
+                                            orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                                            orderNumber: uniqueArray[0].orderNumber,
+                                            orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                                            _id: data0._id,
+                                            officerName: data0.officerName,
+                                            employeeProfileId: data0.employeeProfileId,
+                                            designation: data0.designation,
+                                            designationId: data0.designationId,
+                                            department: data0.department,
+                                            departmentId: data0.departmentId,
+                                            degreeData : data0.degreeData,
+                                            dateOfOrder: data0.dateOfOrder,
+                                            orderType: data0.orderType,
+                                            orderNo: data0.orderNo,
+                                            orderFor: data0.orderFor,
+                                            remarks: data0.remarks,
+                                            orderFile: data0.orderFile,
+                                            submittedBy: data0.submittedBy,
+                                            approvedBy: data0.approvedBy,
+                                            approvedDate: data0.approvedDate,
+                                            approvalStatus: data0.approvalStatus,
+                                        }
+                                        resultData.push(dataAll);
+                                    }
+                                }
+                            }
                         }
                     }
                     else
@@ -203,6 +242,16 @@ exports.getImmovable = async (req, res) => {
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
                     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+                })  
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
                 })  
                 .exec();
             //res.json(data);
