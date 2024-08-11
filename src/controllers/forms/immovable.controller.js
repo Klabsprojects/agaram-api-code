@@ -107,9 +107,9 @@ exports.getImmovable = async (req, res) => {
                                         propertyShownInIpr: data0.propertyShownInIpr,
                                         immovableDateOfOrder: data0.immovableDateOfOrder,
                                         previousSanctionOrder: data0.previousSanctionOrder,
-                                        detailsOfIntimation: data0.detailsOfIntimation,
-                                        fundSource: data0.fundSource,
-                                        typeOfIntimation: data0.typeOfIntimation,
+                                        // detailsOfIntimation: data0.detailsOfIntimation,
+                                        // fundSource: data0.fundSource,
+                                        // typeOfIntimation: data0.typeOfIntimation,
                                         selfOrFamily: data0.selfOrFamily,
                                         dateOfOrder: data0.dateOfOrder,
                                         orderType: data0.orderType,
@@ -125,6 +125,42 @@ exports.getImmovable = async (req, res) => {
                                     resultData.push(dataAll);
                                 }   
                             }
+                        }
+                        else{
+                            let dataAll = {
+                                _id: data0._id,
+                                        officerName: data0.officerName,
+                                        employeeProfileId: data0.employeeProfileId,
+                                        designation: data0.designation,
+                                        designationId: data0.designationId,
+                                        department: data0.department,
+                                        departmentId: data0.departmentId,
+                                        typeOfImmovableProperty: data0.typeOfImmovableProperty,
+                                        detailsOfImovableProperty: data0.detailsOfImovableProperty,
+                                        sourceOfFunding: data0.sourceOfFunding,
+                                        totalCostOfProperty: data0.totalCostOfProperty,
+                                        boughtFromName: data0.boughtFromName,
+                                        boughtFromContactNumber: data0.boughtFromContactNumber,
+                                        boughtFromAddress: data0.boughtFromAddress,
+                                        propertyShownInIpr: data0.propertyShownInIpr,
+                                        immovableDateOfOrder: data0.immovableDateOfOrder,
+                                        previousSanctionOrder: data0.previousSanctionOrder,
+                                        // detailsOfIntimation: data0.detailsOfIntimation,
+                                        // fundSource: data0.fundSource,
+                                        // typeOfIntimation: data0.typeOfIntimation,
+                                        selfOrFamily: data0.selfOrFamily,
+                                        dateOfOrder: data0.dateOfOrder,
+                                        orderType: data0.orderType,
+                                        orderNo: data0.orderNo,
+                                        orderFor: data0.orderFor,
+                                        remarks: data0.remarks,
+                                        orderFile: data0.orderFile,
+                                        submittedBy: data0.submittedBy,
+                                        approvedBy: data0.approvedBy,
+                                        approvedDate: data0.approvedDate,
+                                        approvalStatus: data0.approvalStatus,
+                            }
+                    resultData.push(dataAll);
                         }
                     }
             }
@@ -204,6 +240,7 @@ exports.getImmovable = async (req, res) => {
                                             orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                                             orderNumber: uniqueArray[0].orderNumber,
                                             orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                                            
                                             _id: data0._id,
                                             officerName: data0.officerName,
                                             employeeProfileId: data0.employeeProfileId,
@@ -211,7 +248,20 @@ exports.getImmovable = async (req, res) => {
                                             designationId: data0.designationId,
                                             department: data0.department,
                                             departmentId: data0.departmentId,
-                                            degreeData : data0.degreeData,
+                                            typeOfImmovableProperty: data0.typeOfImmovableProperty,
+                                            detailsOfImovableProperty: data0.detailsOfImovableProperty,
+                                            sourceOfFunding: data0.sourceOfFunding,
+                                            totalCostOfProperty: data0.totalCostOfProperty,
+                                            boughtFromName: data0.boughtFromName,
+                                            boughtFromContactNumber: data0.boughtFromContactNumber,
+                                            boughtFromAddress: data0.boughtFromAddress,
+                                            propertyShownInIpr: data0.propertyShownInIpr,
+                                            immovableDateOfOrder: data0.immovableDateOfOrder,
+                                            previousSanctionOrder: data0.previousSanctionOrder,
+                                            // detailsOfIntimation: data0.detailsOfIntimation,
+                                            // fundSource: data0.fundSource,
+                                            // typeOfIntimation: data0.typeOfIntimation,
+                                            selfOrFamily: data0.selfOrFamily,
                                             dateOfOrder: data0.dateOfOrder,
                                             orderType: data0.orderType,
                                             orderNo: data0.orderNo,
@@ -226,6 +276,42 @@ exports.getImmovable = async (req, res) => {
                                         resultData.push(dataAll);
                                     }
                                 }
+                            }
+                            else{
+                                let dataAll = {
+                                    _id: data0._id,
+                                            officerName: data0.officerName,
+                                            employeeProfileId: data0.employeeProfileId,
+                                            designation: data0.designation,
+                                            designationId: data0.designationId,
+                                            department: data0.department,
+                                            departmentId: data0.departmentId,
+                                            typeOfImmovableProperty: data0.typeOfImmovableProperty,
+                                            detailsOfImovableProperty: data0.detailsOfImovableProperty,
+                                            sourceOfFunding: data0.sourceOfFunding,
+                                            totalCostOfProperty: data0.totalCostOfProperty,
+                                            boughtFromName: data0.boughtFromName,
+                                            boughtFromContactNumber: data0.boughtFromContactNumber,
+                                            boughtFromAddress: data0.boughtFromAddress,
+                                            propertyShownInIpr: data0.propertyShownInIpr,
+                                            immovableDateOfOrder: data0.immovableDateOfOrder,
+                                            previousSanctionOrder: data0.previousSanctionOrder,
+                                            // detailsOfIntimation: data0.detailsOfIntimation,
+                                            // fundSource: data0.fundSource,
+                                            // typeOfIntimation: data0.typeOfIntimation,
+                                            selfOrFamily: data0.selfOrFamily,
+                                            dateOfOrder: data0.dateOfOrder,
+                                            orderType: data0.orderType,
+                                            orderNo: data0.orderNo,
+                                            orderFor: data0.orderFor,
+                                            remarks: data0.remarks,
+                                            orderFile: data0.orderFile,
+                                            submittedBy: data0.submittedBy,
+                                            approvedBy: data0.approvedBy,
+                                            approvedDate: data0.approvedDate,
+                                            approvalStatus: data0.approvalStatus,
+                                }
+                        resultData.push(dataAll);
                             }
                         }
                     }
