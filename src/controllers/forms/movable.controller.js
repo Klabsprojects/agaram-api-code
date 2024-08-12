@@ -585,7 +585,7 @@ exports.getMovable = async (req, res) => {
                     phone: req.body.phone,
                     module: req.body.module,
                     date: req.body.dateOfOrder,
-                    fileName: req.file.filename
+                    fileName: req.body.fileName
                 }
                 const goSent = await whatsapp.sendWhatsapp(reqest, res);
                 successRes(res, data, 'data updated Successfully');
