@@ -217,7 +217,7 @@ exports.getPrivateForeignVisitOld = async (req, res) => {
             let resultData = [];
             let admins = [];
             let adminIds = [];
-            if(req.query._id){
+            if(req.query._id || req.query.employeeProfileId){
                 console.log('if 1');
                 query.where = req.query;
                 data = await privateVisit.find(req.query)

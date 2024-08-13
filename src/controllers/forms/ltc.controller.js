@@ -44,7 +44,7 @@ exports.getLtc = async (req, res) => {
             let resultData = [];
             let admins = [];
             let adminIds = [];
-            if(req.query._id){
+            if(req.query._id || req.query.employeeProfileId){
                 query.where = req.query;
                 //data = await education.find(req.query).exec();
                 data = await ltc.find(req.query)
