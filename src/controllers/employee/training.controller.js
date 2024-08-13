@@ -63,6 +63,34 @@ exports.getTraining = async (req, res) => {
                 console.log(data, 'leave listed else Successfully');
                 successRes(res, data, 'leave listed Successfully');
             }
+
+            
+            // else if(req.query.employeeProfileId){
+            //     console.log('profileid', req.query.employeeProfileId)
+            //     query.where = req.query;
+            //     data = await training.find({
+            //         'employeeProfileId': req.query.employeeProfileId
+            //     })
+            //     .populate({
+            //         path: 'employeeProfileId',
+            //         model: 'employeeProfile', // Model of the application collection
+            //         select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+            //     })  
+            //     .populate({
+            //         path: 'submittedBy',
+            //         model: 'login', // Ensure the model name matches exactly
+            //         select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            //     })
+            //     .populate({
+            //         path: 'approvedBy',
+            //         model: 'login', // Ensure the model name matches exactly
+            //         select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            //     }) 
+            //     .exec();
+            //     console.log(data, 'leave listed else Successfully');
+            //     successRes(res, data, 'leave listed Successfully');
+            // }
+
             else if(req.query.loginAs == 'Spl A - SO' ||
                 req.query.loginAs == 'Spl B - SO' ||
                 req.query.loginAs == 'Spl A - ASO' || 
