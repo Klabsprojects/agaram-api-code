@@ -1,6 +1,7 @@
 const {  ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
 const login = require('../../models/login/login.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
+const employeeProfile = require('../../models/employee/employeeProfile.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 let file = "login.controller";
@@ -35,6 +36,7 @@ exports.register = async (req, res) => {
     try {
         console.log('try');
         console.log(req.body);
+        let update = {}
         let username; let password; let loginAs; let inputQuery; let activeStatus;
         username = req.body.username;
         loginAs = req.body.loginAs;
@@ -59,7 +61,26 @@ exports.register = async (req, res) => {
         console.log(password);
         inputQuery = { username, password: password, loginAs: loginAs, activeStatus: activeStatus };
         const data = await login.create(inputQuery);
-        successRes(res, data, 'Login registered successfully');
+        console.log('data ', data);
+        if(data != null){
+            if(req.body.employeeProfileId){
+                update.loginId = data._id;
+                let filter = {
+                    _id : req.body.employeeProfileId
+                }
+                const dataUpdate = await employeeProfile.findOneAndUpdate(filter, update, {
+                    new: true
+                  });
+                console.log('data updated ', dataUpdate);
+                successRes(res, data, 'Login registered successfully');
+            }
+            else
+                successRes(res, data, 'Login registered successfully');
+        }
+        else{
+            throw 'Error on login registration';
+        }
+        
     } catch (error) {
         if (error.code === 11000) {
             // Duplicate key error

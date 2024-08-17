@@ -442,6 +442,9 @@ exports.updateEmployeeProfile = async (req, res) => {
         if(query.employeeId){
             update.employeeId = query.employeeId;
         }
+        if(query.loginId){
+            update.loginId = query.loginId;
+        }
         let filter = {
             _id : query.id
         }

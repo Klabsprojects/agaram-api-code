@@ -49,7 +49,7 @@ exports.getLeave = async (req, res) => {
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
-                    select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+                    select: ['batch', 'mobileNo1', 'loginId'] // Fields to select from the application collection
                 })  
                 .populate({
                     path: 'submittedBy',

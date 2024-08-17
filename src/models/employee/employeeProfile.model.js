@@ -69,6 +69,10 @@ const employeeProfileSchema = new Schema({
 	approvedDate: {
 		type: Date
 	},
+	loginId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'login' // This references the AllocatedBlock model
+	},
 	createdAt: {
 		type: Date, 
 		default: Date.now
