@@ -20,9 +20,20 @@ const educationSchema = new Schema({
 	degreeData : [{
 		courseLevel: String,
 		specialisation: String,
+		// degree: {
+		// 	type: mongoose.Schema.Types.ObjectId,
+		// 	ref: 'degree' 
+		// },
 		degree: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'degree' // This references the degree model
+			type: Schema.Types.Mixed, // Allows any type
+			validate: {
+				validator: function(value) {
+					// Check if the value is an empty string or a valid ObjectId
+					return value === '' || mongoose.Types.ObjectId.isValid(value);
+				},
+				message: 'Invalid degree ID or empty string.'
+			},
+			default: ''
 		},
 		instituteName: String,
 		locationState: ObjectId,
