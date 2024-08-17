@@ -287,6 +287,11 @@ exports.getSafAllocationOld = async (req, res) => {
                     model: 'login', // Ensure the model name matches exactly
                     select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
                 }) 
+                .populate({
+                    path: 'blockId',
+                    model: 'block', // Model of the application collection
+                    select: ['FlatNumber'] // Fields to select from the application collection
+                }) 
                 .exec();
                 if(data.length > 0){
                     console.log('data.length', data.length)
@@ -437,6 +442,11 @@ exports.getSafAllocationOld = async (req, res) => {
                         model: 'login', // Ensure the model name matches exactly
                         select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
                     }) 
+                    .populate({
+                        path: 'blockId',
+                        model: 'block', // Model of the application collection
+                        select: ['FlatNumber'] // Fields to select from the application collection
+                    }) 
                      .exec();   
                      if(data.length > 0){
                         console.log('data.length', data.length)
@@ -544,6 +554,11 @@ exports.getSafAllocationOld = async (req, res) => {
                     path: 'approvedBy',
                     model: 'login', // Ensure the model name matches exactly
                     select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                }) 
+                .populate({
+                    path: 'blockId',
+                    model: 'block', // Model of the application collection
+                    select: ['FlatNumber'] // Fields to select from the application collection
                 }) 
                 .exec();
             successRes(res, data, 'safAllocation listed Successfully');
