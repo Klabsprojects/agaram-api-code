@@ -28,6 +28,12 @@ module.exports = (app) => {
     value.getEmployeeByFilter
   );
 
+  app.get(
+    "/getEmployeeByFilterOfficer",
+    [jwt.verifyToken],
+    value.getEmployeeByFilterOfficer
+  );
+
   app.put(
     "/updateEmployeeProfile",
     [jwt.verifyToken],
