@@ -131,6 +131,32 @@ exports.getEmployeeProfile = async (req, res) => {
         }
     }
 
+
+// Get getEmployeeForLogin
+exports.getEmployeeForLogin = async (req, res) => {
+    console.log('helo from employeeProfile controller', req.query);
+    try {
+        let query = {};
+        let data;
+        data = await employeeProfile
+        .find({
+            $or: [
+              { loginId: { $exists: false } }, // loginId does not exist
+              { loginId: null }                // loginId exists but is null
+            ]
+          })
+        .select('fullName _id')
+        .sort({ batch: 'asc' }).exec();
+        console.log('else', data);
+        successRes(res, data, 'Employee listed Successfully');
+    }
+    catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing employee");
+    }
+}
+
+
 // Get getEmployeeByFilter
 exports.getEmployeeByFilter = async (req, res) => {
     console.log('helo from getEmployeeByJoiningDate controller', req.query);

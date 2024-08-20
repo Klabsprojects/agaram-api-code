@@ -16,6 +16,12 @@ module.exports = (app) => {
     value.getEmployeeProfile
   );
 
+  app.get(
+    "/getEmployeeForLogin",
+    // [jwt.verifyToken],
+    value.getEmployeeForLogin
+  );
+
   app.post(
     "/addEmployeeProfile",
     [jwt.verifyToken],
