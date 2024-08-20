@@ -106,6 +106,12 @@ module.exports = (app) => {
     value.getEmployeeSearch
   );
 
+  app.post(
+    "/getEmployeeSearchOfficer",
+    [jwt.verifyToken],
+    value.getEmployeeSearchOfficer
+  );
+
   app.get(
     "/getEmployeeCurrentPosting",
     [jwt.verifyToken],

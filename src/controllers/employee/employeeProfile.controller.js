@@ -3512,6 +3512,478 @@ exports.byProfile = async(input, by) =>{
         }
 }
 
+// Get Employee with search option
+exports.getEmployeeSearchOfficer = async (req, res) => {
+    console.log('helo from getEmployeeSearch controller', req.query);
+    try {
+            let result = [];
+            const count = Object.keys(req.body).length;
+            console.log(`Number of parameters: ${count}`);
+            if(count == 0){
+                successRes(res, result, 'No employee matched');
+            }
+            else if(count == 1){
+                result = await this.oneParameterOfficer(req.body);
+                console.log('getEmployeeSearch', result)
+                successRes(res, result, 'Employee listed -> one param Successfully');
+            }
+            else if(count == 2){
+                result = await this.twoParameterOfficer(req.body);
+                console.log('getEmployeeSearch', result)
+                successRes(res, result, 'Employee listed -> 2 params Successfully');
+            }
+            else if(count == 3){
+                result = await this.threeParameterOfficer(req.body);
+                console.log('getEmployeeSearch', result)
+                successRes(res, result, 'Employee listed -> 3 params Successfully');
+            }
+            else if(count == 4){
+                result = await this.fourParameterOfficer(req.body);
+                console.log('getEmployeeSearch', result)
+                successRes(res, result, 'Employee listed -> 4 params Successfully');
+            }
+            else if(count == 5){
+                result = await this.fiveParameterOfficer(req.body);
+                console.log('getEmployeeSearch', result)
+                successRes(res, result, 'Employee listed -> 5 params Successfully');
+            }
+            //successRes(res, count, 'Employee profile with history listed Successfully');
+        } 
+        catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing employee profile with history");
+        }
+}
+
+exports.oneParameterOfficer = async(input) => {
+    console.log('inside oneParameter function', input);
+    let result;
+    if(input.name){
+        console.log('name present');
+        result = await this.byProfileOfficer(input, "name");
+        console.log('oneParameter name ', result);
+        return result;
+    }
+    else if(input.batch){
+        console.log('batch present');
+        result = await this.byProfileOfficer(input, "batch");
+        console.log('oneParameter batch ', result);
+        return result;
+    }
+    else if(input.department){
+        console.log('department present');
+        result = await this.byProfileOfficer(input, "department");
+        console.log('oneParameter department ', result);
+        return result;
+    }
+    else if(input.postingIn){
+        console.log('postingIn present');
+        result = await this.byProfileOfficer(input, "postingIn");
+        console.log('oneParameter posting ', result);
+        return result;
+    }
+    else if(input.designation){
+        console.log('designation present');
+        result = await this.byProfileOfficer(input, "designation");
+        console.log('oneParameter designation ', result);
+        return result;
+    }
+    let oneResult = [];
+    return oneResult;
+}
+
+exports.twoParameterOfficer = async(input) => {
+    console.log('inside twoParameter function', input);
+    let result;
+    if(input.name && input.batch && !input.department && !input.designation && !input.postingIn){
+        console.log('name and batch present');
+        result = await this.byProfileOfficer(input, "naBa");
+        console.log('twoParameter name batch', result);
+        return result;
+    }
+    else if(input.name && !input.batch && input.department && !input.designation && !input.postingIn){
+        console.log('name department present');
+        result = await this.byProfileOfficer(input, "naDe");
+        console.log('twoParameter name department', result);
+        return result;
+    }
+    else if(input.name && !input.batch && !input.department && input.designation && !input.postingIn){
+        console.log('name designation present');
+        result = await this.byProfileOfficer(input, "naDes");
+        console.log('twoParameter name designation', result);
+        return result;
+    }
+    else if(input.name && !input.batch && !input.department && !input.designation && input.postingIn){
+        console.log('name postingIn present');
+        result = await this.byProfileOfficer(input, "naPo");
+        console.log('twoParameter name postingIn', result);
+        return result;
+    }
+    else if(!input.name && input.batch && input.department && !input.designation && !input.postingIn){
+        console.log('batch department present');
+        result = await this.byProfileOfficer(input, "baDe");
+        console.log('twoParameter batch department', result);
+        return result;
+    }
+    else if(!input.name && input.batch && !input.department && input.designation && !input.postingIn){
+        console.log('batch period present');
+        result = await this.byProfileOfficer(input, "baPe");
+        console.log('twoParameter batch period', result);
+        return result;
+    }
+    else if(!input.name && input.batch && !input.department && !input.designation && input.postingIn){
+        console.log('batch postingIn present');
+        result = await this.byProfileOfficer(input, "baPo");
+        console.log('twoParameter postingIn department', result);
+        return result;
+    }
+    else if(!input.name && !input.batch && input.department && input.designation && !input.postingIn){
+        console.log('department designation present');
+        result = await this.byProfileOfficer(input, "deDes");
+        console.log('twoParameter department designation', result);
+        return result;
+    }
+    else if(!input.name && !input.batch && input.department && !input.designation && input.postingIn){
+        console.log('department postingIn present');
+        result = await this.byProfileOfficer(input, "dePo");
+        console.log('twoParameter department postingIn', result);
+        return result;
+    }
+    else if(!input.name && !input.batch && !input.department && input.designation && input.postingIn){
+        console.log('designation postingIn present');
+        result = await this.byProfileOfficer(input, "desPo");
+        console.log('twoParameter designation postingIn', result);
+        return result;
+    }
+    else {
+        let oneResult = [];
+        return oneResult;
+    }
+}
+
+exports.threeParameterOfficer = async(input) => {
+    console.log('inside 3Parameter function', input);
+    let result;
+    if(input.name && input.batch && input.department && !input.designation && !input.postingIn){
+        console.log('name batch department present');
+        result = await this.byProfileOfficer(input, "naBaDe");
+        console.log('threeParameter name batch department', result);
+        return result;
+    }
+    else if(input.name && input.batch && !input.department && input.designation && !input.postingIn){
+        console.log('name batch designation present');
+        result = await this.byProfileOfficer(input, "naBaDes");
+        console.log('threeParameter name batch designation', result);
+        return result;
+    }
+    else if(input.name && input.batch && !input.department && !input.designation && input.postingIn){
+        console.log('name batch postingIn present');
+        result = await this.byProfileOfficer(input, "naBaPo");
+        console.log('threeParameter name batch postingIn', result);
+        return result;
+    }
+    else if(input.name && !input.batch && input.department && input.designation && !input.postingIn){
+        console.log('name department designation present');
+        result = await this.byProfileOfficer(input, "naDeDes");
+        console.log('threeParameter name department designation', result);
+        return result;
+    }
+    else if(input.name && !input.batch && input.department && !input.designation && input.postingIn){
+        console.log('name department postingIn present');
+        result = await this.byProfileOfficer(input, "naDePo");
+        console.log('threeParameter name department postingIn', result);
+        return result;
+    }
+    else if(input.name && !input.batch && !input.department && input.designation && input.postingIn){
+        console.log('name period postingIn present');
+        result = await this.byProfileOfficer(input, "naPePo");
+        console.log('threeParameter name period postingIn', result);
+        return result;
+    }
+    else if(!input.name && input.batch && input.department && input.designation && !input.postingIn){
+        console.log('batch department designation present');
+        result = await this.byProfileOfficer(input, "baDeDes");
+        console.log('threeParameter batch department designation', result);
+        return result;
+    }
+    else if(!input.name && input.batch && input.department && !input.designation && input.postingIn){
+        console.log('batch department postingIn present');
+        result = await this.byProfileOfficer(input, "baDePo");
+        console.log('threeParameter batch department postingIn', result);
+        return result;
+    }
+    else if(!input.name && input.batch && !input.department && input.designation && input.postingIn){
+        console.log('batch designation postingIn present');
+        result = await this.byProfileOfficer(input, "baDesPo");
+        console.log('threeParameter batch designation postingIn', result);
+        return result;
+    }
+    else if(!input.name && !input.batch && input.department && input.designation && input.postingIn){
+        console.log('department designation postingIn present');
+        result = await this.byProfileOfficer(input, "deDesPo");
+        console.log('threeParameter department designation postingIn', result);
+        return result;
+    }
+    else {
+        let oneResult = [];
+        return oneResult;
+    }
+}
+
+exports.fourParameterOfficer = async(input) => {
+    console.log('inside 4Parameter function', input);
+    let result;
+    if(input.name && input.batch && input.department && input.designation && !input.postingIn){
+        result = await this.byProfileOfficer(input, "naBaDeDes");
+        console.log('4Parameter name batch department designation', result);
+        return result;
+    }
+    else if(input.name && input.batch && input.department && !input.designation && input.postingIn){
+        result = await this.byProfileOfficer(input, "naBaDePo");
+        console.log('4Parameter name batch department postingIn', result);
+        return result;
+    }
+    else if(input.name && input.batch && !input.department && input.designation && input.postingIn){
+        result = await this.byProfileOfficer(input, "naBaDesPo");
+        console.log('4Parameter name batch designation postingIn', result);
+        return result;
+    }
+    else if(input.name && !input.batch && input.department && input.designation && input.postingIn){
+        result = await this.byProfileOfficer(input, "naDeDesPo");
+        console.log('4Parameter name department designation postingIn', result);
+        return result;
+    }
+    else if(!input.name && input.batch && input.department && input.designation && input.postingIn){
+        result = await this.byProfileOfficer(input, "baDeDesPo");
+        console.log('4Parameter batch department designation postingIn', result);
+        return result;
+    }
+    else {
+        let oneResult = [];
+        return oneResult;
+    }
+}
+
+exports.fiveParameterOfficer = async(input) => {
+    console.log('inside fiveParameter function', input);
+    let resultFive = await this.byProfileOfficer(input, "all");
+    console.log('fiveParameter batch ', resultFive);
+    return resultFive;
+}
+
+exports.byProfileOfficer = async(input, by) =>{
+    try{
+        //let batch = input;
+        let updateQueryJson;
+        console.log('input => ', input+' by => ', by);
+        let getQueryJson;
+        ////, , , , 
+        let uniqueArray = [];
+        let resultData = [];
+        if(by == "name" || by == 'naDePe' || by == 'naDePo' || by == 'naPePo' || by == 'naDePePo'){
+            getQueryJson = {
+                fullName: input.name
+            } 
+        }
+        else if(by == "batch" || by == 'baDe' || by == 'baDes' || by == "baPo" ||
+        by == 'baDeDes' || by == 'baDePo' || by == 'baDesPo' || by == 'baDeDesPo'){
+            getQueryJson = {
+                batch: input.batch
+            } 
+        }
+        else if(by == 'all' || by == 'naBa' || by == 'naBaDe' || by == 'naBaDes' || by == 'naBaPo' || 
+        by == 'naBaDeDes' || by == 'naBaDePo' || by == 'naBaDesPo'){
+            getQueryJson = {
+                fullName: input.name,
+                batch: input.batch
+            } 
+        }
+        /*else if(by == 'naBa'){
+            getQueryJson = {
+                fullName: input.name,
+                batch: input.batch
+            }
+        }*/
+        else if(by == 'naDe' || by == 'naDes' || by == "naPo"){
+            console.log('yes dept/ des => ');
+            getQueryJson = {
+                fullName: input.name
+            }
+        }
+
+        console.log(getQueryJson);
+        if(by == "name" || by == "batch" || by == "all" || 
+        by == "naBa" || by == "naDe" || by == "naDes" || by == "naPo" || 
+        by == 'baDe' || by == 'baDes' || by == "baPo" || 
+        by == 'naBaDe' || by == 'naBaDes' || by == 'naBaPo' || 
+        by == 'naDeDes' || by == 'naDePo' || 
+        by == 'naDesPo' ||
+        by == 'baDeDes' || by == 'baDePo' || by == 'baDesPo' || 
+        by == 'naBaDeDes' || by == 'naBaDePo' || by == 'naBaDesPo' || 
+        by == 'naDeDesPo' || by == 'baDeDesPo')
+            data = await employeeProfile.find(getQueryJson).sort({ dateOfJoining: 'asc' }).exec();
+        else if(by == "department" || by == "designation" || by == "postingIn"
+        || by == 'deDes' || by == 'dePo' || by == 'desPo' || by == 'deDesPo')
+            data = await employeeProfile.find().sort({ dateOfJoining: 'asc' }).exec();
+            
+        for(let employee of data){
+            console.log('for data => ', employee);
+            updateQueryJson = {
+                empId: employee._id
+            }
+            uniqueArray = await this.getEmployeeUpdateFilter(updateQueryJson);
+            console.log('length ==> ', uniqueArray.length);
+            if(uniqueArray.length > 0){
+                console.log('len ', uniqueArray.length);
+                for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                    console.log('Check ', transferOrPostingEmployeesList.empProfileId._id.toString(), employee._id.toString());
+                    if(transferOrPostingEmployeesList.empProfileId._id.toString() === employee._id.toString()){
+                        console.log('Matched ');
+                        let dataAll = {
+                            toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                            toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                            toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                            postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                            locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                            remarks: uniqueArray[0].remarks,
+                            updateType: uniqueArray[0].updateType,
+                            orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                            orderNumber: uniqueArray[0].orderNumber,
+                            orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                            dateOfOrder: uniqueArray[0].dateOfOrder,
+                            personalEmail: employee.personalEmail,
+                            _id: employee._id,
+                            fullName: employee.fullName,
+                            gender: employee.gender,
+                            dateOfBirth: employee.dateOfBirth,
+                            dateOfJoining: employee.dateOfJoining,
+                            dateOfRetirement: employee.dateOfRetirement,
+                            state: employee.state,
+                            batch: employee.batch,
+                            recruitmentType: employee.recruitmentType,
+                            serviceStatus: employee.serviceStatus,
+                            qualification1: employee.qualification1,
+                            qualification2: employee.qualification2,
+                            community: employee.community,
+                            degreeData: employee.degreeData,
+                            caste: employee.caste,
+                            religion: employee.religion,
+                            promotionGrade: employee.promotionGrade,
+                            payscale: employee.payscale,
+                            officeEmail: employee.officeEmail,
+                            mobileNo1: employee.mobileNo1,
+                            mobileNo2: employee.mobileNo2,
+                            mobileNo3: employee.mobileNo3,
+                            addressLine: employee.addressLine,
+                            city: employee.city,
+                            pincode: employee.pincode,
+                            employeeId: employee.employeeId,
+                            ifhrmsId: employee.ifhrmsId,
+                            //photo: employee.photo
+                        }
+                        if(by == 'department' || by == 'naDe' || by == "baDe" || by == 'naBaDe'){
+                            console.log('yes dept ');
+                            if(transferOrPostingEmployeesList.toDepartmentId == input.department){
+                                resultData.push(dataAll);
+                            }
+                        }
+                        if( by == "designation" || by == 'naDes' || by == 'baDes' || by == 'naBaDes'){
+                            console.log('yes designation ');
+                            if(transferOrPostingEmployeesList.toDesignationId == input.designation){
+                                resultData.push(dataAll);
+                            }
+                        }
+                        if(by == 'postingIn' || by == 'naPo' || by == "baPo" || by == 'naBaPo'){
+                            console.log('yes posting ');
+                            if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+                                {console.log('yes toposting avail')
+                                if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+                                    {
+                                        console.log('yes posting matched')
+                                        resultData.push(dataAll);
+                                    }
+                            }
+                            }
+                        }
+                        else if(by == 'deDes' || by == 'naDeDes' || by == 'baDeDes' || by == 'naBaDeDes'){
+                            console.log('yes designation ');
+                            if(transferOrPostingEmployeesList.toDepartmentId == input.department){
+                                if(transferOrPostingEmployeesList.toDesignationId == input.designation){
+                                    resultData.push(dataAll);
+                                }
+                            }
+                        }
+                        else if(by == 'dePo' || by == 'naDePo' || by == 'baDePo' || by == 'naBaDePo'){
+                            if(transferOrPostingEmployeesList.toDepartmentId == input.department){
+                                if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+                                    console.log('yes toposting avail')
+                                    if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+                                    {
+                                        console.log('yes posting matched')
+                                        resultData.push(dataAll);
+                                    }
+                                }
+                            }
+                        }
+                        else if(by == 'desPo' || by == 'naDesPo' || by == 'baDesPo' || by == 'naBaDesPo'){
+                            console.log('yes designation ');
+                            if(transferOrPostingEmployeesList.toDesignationId == input.designation){
+                                if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+                                    console.log('yes toposting avail')
+                                    if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+                                    {
+                                        console.log('yes posting matched')
+                                        resultData.push(dataAll);
+                                    }
+                                }
+                            }
+                        }
+                        else if(by == "all" || by == 'deDesPo' || by == 'naDeDesPo' || by == 'baDeDesPo'){
+                            if(transferOrPostingEmployeesList.toDepartmentId == input.department){
+                            if(transferOrPostingEmployeesList.toDesignationId == input.designation){
+                                if(transferOrPostingEmployeesList.toPostingInCategoryCode){
+                                    console.log('yes toposting avail')
+                                    if(transferOrPostingEmployeesList.toPostingInCategoryCode == input.postingIn)
+                                    {
+                                        console.log('yes posting matched')
+                                        resultData.push(dataAll);
+                                    }
+                                }
+                            }
+                            }
+                        }
+                        else if(by == 'name' || by == 'batch' || by == 'naBa'){
+                            console.log('dataAll => ', dataAll);
+                            resultData.push(dataAll);
+                        }
+                        //else 
+                            //resultData = [];
+                    }
+                }
+                
+            }
+            else{
+                console.log('len else ', uniqueArray.length);
+            }
+            /*else{
+                resultData.push(employee);
+                console.log('employee => ', employee);
+            }  */
+        }
+        console.log('Unique by latest date of order: 2', uniqueArray);
+        let resData = {
+            empCount : resultData.length,
+            empList: resultData
+        }
+        console.log('resDate =====> ', resData);
+        return resData;
+    }
+    catch (error) {
+        console.log('error', error);
+        return [];
+        }
+}
+
 exports.getEmployeeUpdateFilter = async(input) => {
     console.log('inside getEmployeeUpdate function', input)
     let secretariatDetails;
