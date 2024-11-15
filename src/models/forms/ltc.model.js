@@ -33,6 +33,8 @@ const ltcSchema = new Schema({
 	dateOfOrder: Date,
 	orderFile: String, //file
 	remarks: String,
+	leaveAvailed: String,
+	category: String,
 	submittedBy: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'login' // This references the AllocatedBlock model

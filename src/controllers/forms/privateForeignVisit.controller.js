@@ -24,7 +24,7 @@ exports.addPrivateForeignVisit = async (req, res) => {
             date: req.body.dateOfOrder,
             fileName: req.file.filename
         }
-        const goSent = await whatsapp.sendWhatsapp(reqest, res);
+        //const goSent = await whatsapp.sendWhatsapp(reqest, res);
         //res.json(data);
         successRes(res, data, 'privateVisit created Successfully');
     } catch (error) {

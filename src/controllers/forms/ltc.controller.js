@@ -8,7 +8,7 @@ const empProfile = require('../employee/employeeProfile.controller');
 // Ltc creation
 exports.addLtc = async (req, res) => {
     try {
-        console.log('try create ltc');
+        console.log('try create ltc', req.body);
         const query = req.body;
         //console.log('Uploaded file path:', req.file.path);
         
@@ -25,11 +25,11 @@ exports.addLtc = async (req, res) => {
             date: req.body.dateOfOrder,
             fileName: req.file.filename
         }
-        const goSent = await whatsapp.sendWhatsapp(reqest, res);
+        //const goSent = await whatsapp.sendWhatsapp(reqest, res);
         //res.json(data);
         successRes(res, data, 'ltc created Successfully');
     } catch (error) {
-        console.log('catch create ltc');
+        console.log('catch create ltc', error);
         //res.json(error);
         errorRes(res, error, "Error on creating ltc");
     }

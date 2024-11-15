@@ -42,6 +42,11 @@ exports.addVisit = async (req, res) => {
         } else {
             throw new Error('orderFile upload failed: No certificate file uploaded');
         }
+        if (req.files && req.files['invitationFile'] && req.files['invitationFile'].length > 0) {
+            // If invitationFile file exists
+            query.orderFile = req.files['invitationFile'][0].path; // Assuming only one file is uploaded
+            console.log('Uploaded invitationFile file path:', req.files['invitationFile'][0].path);
+        }
         
         const data = await foreignVisit.create(query);
         successRes(res, data, 'foreignVisit created Successfully');

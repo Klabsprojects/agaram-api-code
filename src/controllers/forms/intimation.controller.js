@@ -24,7 +24,7 @@ exports.addIntimation = async (req, res) => {
             date: req.body.dateOfOrder,
             fileName: req.file.filename
         }
-        const goSent = await whatsapp.sendWhatsapp(reqest, res);
+        //const goSent = await whatsapp.sendWhatsapp(reqest, res);
         successRes(res, data, 'intimation created Successfully');
     } catch (error) {
         console.log('catch create intimation', error);

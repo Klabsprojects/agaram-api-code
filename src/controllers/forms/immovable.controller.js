@@ -24,7 +24,7 @@ exports.addImmovable = async (req, res) => {
             date: req.body.dateOfOrder,
             fileName: req.file.filename
         }
-        const goSent = await whatsapp.sendWhatsapp(reqest, res);
+        //const goSent = await whatsapp.sendWhatsapp(reqest, res);
         //res.json(data);
         successRes(res, data, 'immovable created Successfully');
     } catch (error) {

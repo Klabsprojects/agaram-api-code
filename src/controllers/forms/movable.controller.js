@@ -24,7 +24,7 @@ exports.addMovable = async (req, res) => {
             date: req.body.dateOfOrder,
             fileName: req.file.filename
         }
-        const goSent = await whatsapp.sendWhatsapp(reqest, res);
+        //const goSent = await whatsapp.sendWhatsapp(reqest, res);
         //res.json(data);
         successRes(res, data, 'movable created Successfully');
     } catch (error) {

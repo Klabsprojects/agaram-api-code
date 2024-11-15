@@ -32,6 +32,9 @@ const officialForeignVisitSchema = new Schema({
 	orderFor: ObjectId,
 	dateOfOrder: Date,
 	orderFile: String, //file
+	invitingAuthority: String,
+	invitationEndorsed: String,
+	invitationFile: String,
 	submittedBy: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'login' // This references the AllocatedBlock model

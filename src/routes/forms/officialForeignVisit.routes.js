@@ -23,7 +23,8 @@ module.exports = (app) => {
     upload.fields([
       { name: 'politicalClearance', maxCount: 1 }, 
       { name: 'fcraClearance', maxCount: 1 },
-      { name: 'orderFile', maxCount: 1 }
+      { name: 'orderFile', maxCount: 1 },
+      { name: 'invitationFile', maxCount: 1}
   ]),
 
     value.addVisit
@@ -32,7 +33,13 @@ module.exports = (app) => {
   app.put(
     "/updateVisit",
     [jwt.verifyToken],
-    upload.single('orderFile'),
+    //upload.single('orderFile'),
+    upload.fields([
+      { name: 'politicalClearance', maxCount: 1 }, 
+      { name: 'fcraClearance', maxCount: 1 },
+      { name: 'orderFile', maxCount: 1 },
+      { name: 'invitationFile', maxCount: 1}
+  ]),
     value.updateVisit
   );
 

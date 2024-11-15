@@ -29,6 +29,8 @@ const medicalReimbursementSchema = new Schema({
 	orderFor: ObjectId,
 	dateOfOrder: Date,
 	orderFile: String, //file
+	dischargeSummaryEndorsed: String,
+	dischargeOrTestFile: String,
 	submittedBy: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'login' // This references the AllocatedBlock model

@@ -29,7 +29,7 @@ var upload = multer({
             callback(null, true)
         }
         else{
-            console.log('Only jpg or png file supported');
+            console.log('Only pdf, jpg or png file supported');
             callback(null, false)
         }
     },

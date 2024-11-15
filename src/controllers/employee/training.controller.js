@@ -24,7 +24,7 @@ exports.addTraining = async (req, res) => {
             date: req.body.dateOfOrder,
             fileName: req.file.filename
         }
-        const goSent = await whatsapp.sendWhatsapp(reqest, res);
+        //const goSent = await whatsapp.sendWhatsapp(reqest, res);
         successRes(res, data, 'training created Successfully');
     } catch (error) {
         console.log('catch create training', error);
@@ -47,7 +47,7 @@ exports.getTraining = async (req, res) => {
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
-                    select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+                    select: ['batch', 'mobileNo1', 'loginId'] // Fields to select from the application collection
                 })  
                 .populate({
                     path: 'submittedBy',

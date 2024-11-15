@@ -9,22 +9,31 @@ exports.addMedicalReimbursement = async (req, res) => {
     try {
         console.log('try create medicalReimbursement', req.body);
         const query = req.body;
-        //console.log('Uploaded file path:', req.file.path);
-        if (req.file) {
-            query.orderFile = req.file.path;
-            console.log('Uploaded file path:', req.file.path);
+        console.log('REQ.FILE => ',req.file);
+        if (req.files && req.files['orderFile'] && req.files['orderFile'].length > 0) {
+            // If orderFile file exists
+            query.orderFile = req.files['orderFile'][0].path; // Assuming only one file is uploaded
+            console.log('Uploaded orderFile file path:', req.files['orderFile'][0].path);
         } else {
-            throw new Error('File upload failed: No file uploaded');
+            throw new Error('orderFile upload failed: No orderFile file uploaded');
         }
+
+        if (req.files && req.files['dischargeOrTestFile'] && req.files['dischargeOrTestFile'].length > 0) {
+            // If politicalClearance file exists
+            query.dischargeOrTestFile = req.files['dischargeOrTestFile'][0].path; // Assuming only one file is uploaded
+            console.log('dischargeOrTestFile file path:', req.files['dischargeOrTestFile'][0].path);
+        }
+        console.log(query);
         let reqest = {}
         reqest.body = {
             phone: req.body.phone,
             module: req.body.module,
             date: req.body.dateOfOrder,
-            fileName: req.file.filename
+            fileName: query.orderFile
         }
-        const goSent = await whatsapp.sendWhatsapp(reqest, res);
+        //const goSent = await whatsapp.sendWhatsapp(reqest, res);
         const data = await medicalReimbursement.create(query);
+        console.log('data ', data);
         successRes(res, data, 'medicalReimbursement created Successfully');
     } catch (error) {
         console.log('catch create medicalReimbursement', error);

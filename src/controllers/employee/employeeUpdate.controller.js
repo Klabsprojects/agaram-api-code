@@ -55,7 +55,7 @@ exports.addTransferOrPostingManyEmployees = async (req, res) => {
             }
             console.log('request ', reqest);
             const data = await employeeUpdate.create(query);
-            const goSent = await whatsapp.sendWhatsapp(reqest, res);
+            //const goSent = await whatsapp.sendWhatsapp(reqest, res);
             successRes(res, data, 'Bulk Employees transfer/posting Added successfully');
     } catch (error) {
             console.log('catch create employeeUpdate', error);

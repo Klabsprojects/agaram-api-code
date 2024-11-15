@@ -25,7 +25,7 @@ exports.addLeave = async (req, res) => {
             date: req.body.dateOfOrder,
             fileName: req.file.filename
         }
-        const goSent = await whatsapp.sendWhatsapp(reqest, res);
+        //const goSent = await whatsapp.sendWhatsapp(reqest, res);
         successRes(res, data, 'leave created Successfully');
     } catch (error) {
         console.log('catch create leave', error);
@@ -188,7 +188,7 @@ exports.getLeave = async (req, res) => {
     // leave updation
     exports.updateLeave = async (req, res) => {
         try {
-            console.log('try update block', req.body);
+            console.log('try update leave block', req.body);
             const query = req.body;
             if(req.file){
                 req.body.orderFile = req.file.path

@@ -51,7 +51,7 @@ exports.addEducation = async (req, res) => {
                         date: req.body.dateOfOrder,
                         fileName: req.file.filename
                     }
-                    const goSent = await whatsapp.sendWhatsapp(reqest, res);
+                    //const goSent = await whatsapp.sendWhatsapp(reqest, res);
                       console.log('Update successful:', result, 'document(s) updated.');
                       
                 }
