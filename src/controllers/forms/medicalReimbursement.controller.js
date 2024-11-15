@@ -225,6 +225,7 @@ exports.getMedicalReimbursement = async (req, res) => {
         let admins = [];
         let adminIds = [];
         if(req.query._id || req.query.employeeProfileId){
+            console.log('if');
             query.where = req.query;
             data = await medicalReimbursement.find(req.query)
             .populate({
@@ -243,6 +244,7 @@ exports.getMedicalReimbursement = async (req, res) => {
                 select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
             }) 
             .exec();
+            console.log('data', data);
             if(data.length > 0){
                 console.log('data.length', data.length)
                 for(let data0 of data){
@@ -295,6 +297,8 @@ exports.getMedicalReimbursement = async (req, res) => {
                                 approvedBy: data[0].approvedBy,
                                 approvedDate: data[0].approvedDate,
                                 approvalStatus: data[0].approvalStatus,
+                                dischargeSummaryEndorsed: data[0].dischargeSummaryEndorsed,
+                                dischargeOrTestFile: data[0].dischargeOrTestFile,
                 }
         resultData.push(dataAll);
             }
@@ -326,6 +330,8 @@ exports.getMedicalReimbursement = async (req, res) => {
                     approvedBy: data[0].approvedBy,
                     approvedDate: data[0].approvedDate,
                     approvalStatus: data[0].approvalStatus,
+                    dischargeSummaryEndorsed: data[0].dischargeSummaryEndorsed,
+                    dischargeOrTestFile: data[0].dischargeOrTestFile,
                 }
         resultData.push(dataAll);
             }
@@ -448,6 +454,8 @@ exports.getMedicalReimbursement = async (req, res) => {
                             approvedBy: data[0].approvedBy,
                             approvedDate: data[0].approvedDate,
                             approvalStatus: data[0].approvalStatus,
+                            dischargeSummaryEndorsed: data[0].dischargeSummaryEndorsed,
+                            dischargeOrTestFile: data[0].dischargeOrTestFile,
                         }
                 resultData.push(dataAll);
                     }
@@ -480,6 +488,8 @@ exports.getMedicalReimbursement = async (req, res) => {
                             approvedBy: data[0].approvedBy,
                             approvedDate: data[0].approvedDate,
                             approvalStatus: data[0].approvalStatus,
+                            dischargeSummaryEndorsed: data[0].dischargeSummaryEndorsed,
+                            dischargeOrTestFile: data[0].dischargeOrTestFile,
                         }
                 resultData.push(dataAll);
                     }
@@ -523,10 +533,23 @@ exports.getMedicalReimbursement = async (req, res) => {
         try {
             console.log('try update block', req.body);
             const query = req.body;
-            if(req.file){
-                req.body.orderFile = req.file.path
-                query.orderFile = req.file.path
-                console.log('Uploaded file path:', req.file.path);
+            // if(req.file){
+            //     req.body.orderFile = req.file.path
+            //     query.orderFile = req.file.path
+            //     console.log('Uploaded file path:', req.file.path);
+            // }
+            if (req.files && req.files['orderFile'] && req.files['orderFile'].length > 0) {
+                // If orderFile file exists
+                query.orderFile = req.files['orderFile'][0].path; // Assuming only one file is uploaded
+                console.log('Uploaded orderFile file path:', req.files['orderFile'][0].path);
+            } else {
+                throw new Error('orderFile upload failed: No orderFile file uploaded');
+            }
+    
+            if (req.files && req.files['dischargeOrTestFile'] && req.files['dischargeOrTestFile'].length > 0) {
+                // If politicalClearance file exists
+                query.dischargeOrTestFile = req.files['dischargeOrTestFile'][0].path; // Assuming only one file is uploaded
+                console.log('dischargeOrTestFile file path:', req.files['dischargeOrTestFile'][0].path);
             }
             let filter;
             let update = {};

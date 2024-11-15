@@ -44,7 +44,7 @@ exports.addVisit = async (req, res) => {
         }
         if (req.files && req.files['invitationFile'] && req.files['invitationFile'].length > 0) {
             // If invitationFile file exists
-            query.orderFile = req.files['invitationFile'][0].path; // Assuming only one file is uploaded
+            query.invitationFile = req.files['invitationFile'][0].path; // Assuming only one file is uploaded
             console.log('Uploaded invitationFile file path:', req.files['invitationFile'][0].path);
         }
         
@@ -325,6 +325,9 @@ exports.getVisit = async (req, res) => {
                             approvedBy: data0.approvedBy,
                             approvedDate: data0.approvedDate,
                             approvalStatus: data0.approvalStatus,
+                            invitingAuthority: data0.invitingAuthority,
+	                        invitationEndorsed: data0.invitationEndorsed,
+	                        invitationFile: data0.invitationFile,
                 }
         resultData.push(dataAll);
             }
@@ -569,10 +572,38 @@ exports.updateVisit = async (req, res) => {
     try {
         console.log('try update block', req.body);
         const query = req.body;
-        if(req.file){
-            req.body.orderFile = req.file.path
-            query.orderFile = req.file.path
-            console.log('Uploaded file path:', req.file.path);
+        // if(req.file){
+        //     req.body.orderFile = req.file.path
+        //     query.orderFile = req.file.path
+        //     console.log('Uploaded file path:', req.file.path);
+        // }
+        if (req.files && req.files['politicalClearance'] && req.files['politicalClearance'].length > 0) {
+            // If politicalClearance file exists
+            query.politicalClearance = req.files['politicalClearance'][0].path; // Assuming only one file is uploaded
+            console.log('politicalClearance resume file path:', req.files['politicalClearance'][0].path);
+        } else {
+            throw new Error('politicalClearance upload failed: No resume file uploaded');
+        }
+        
+        if (req.files && req.files['fcraClearance'] && req.files['fcraClearance'].length > 0) {
+            // If fcraClearance file exists
+            query.fcraClearance = req.files['fcraClearance'][0].path; // Assuming only one file is uploaded
+            console.log('Uploaded fcraClearance file path:', req.files['fcraClearance'][0].path);
+        } else {
+            throw new Error('fcraClearance upload failed: No certificate file uploaded');
+        }
+
+        if (req.files && req.files['orderFile'] && req.files['orderFile'].length > 0) {
+            // If orderFile file exists
+            query.orderFile = req.files['orderFile'][0].path; // Assuming only one file is uploaded
+            console.log('Uploaded orderFile file path:', req.files['orderFile'][0].path);
+        } else {
+            throw new Error('orderFile upload failed: No certificate file uploaded');
+        }
+        if (req.files && req.files['invitationFile'] && req.files['invitationFile'].length > 0) {
+            // If invitationFile file exists
+            query.orderFile = req.files['invitationFile'][0].path; // Assuming only one file is uploaded
+            console.log('Uploaded invitationFile file path:', req.files['invitationFile'][0].path);
         }
         let filter;
         let update = {};

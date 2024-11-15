@@ -28,6 +28,7 @@ const privateVisitSchema = new Schema({
 	remarks: String,
 	status: String,
 	orderFile: String, //file
+	proposedAmountOfExpenditure: Number,
 	submittedBy: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'login' // This references the AllocatedBlock model

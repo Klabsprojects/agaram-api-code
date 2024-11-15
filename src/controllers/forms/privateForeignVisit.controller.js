@@ -288,6 +288,7 @@ exports.getPrivateForeignVisitOld = async (req, res) => {
                                 approvedBy: data0.approvedBy,
                                 approvedDate: data0.approvedDate,
                                 approvalStatus: data0.approvalStatus,
+                                proposedAmountOfExpenditure: data0.proposedAmountOfExpenditure,
                     }
             resultData.push(dataAll);
                 }
@@ -318,6 +319,7 @@ exports.getPrivateForeignVisitOld = async (req, res) => {
                                 approvedBy: data0.approvedBy,
                                 approvedDate: data0.approvedDate,
                                 approvalStatus: data0.approvalStatus,
+                                proposedAmountOfExpenditure: data0.proposedAmountOfExpenditure,
                     }
             resultData.push(dataAll);
                 }
@@ -441,6 +443,7 @@ exports.getPrivateForeignVisitOld = async (req, res) => {
                                 approvedBy: data0.approvedBy,
                                 approvedDate: data0.approvedDate,
                                 approvalStatus: data0.approvalStatus,
+                                proposedAmountOfExpenditure: data0.proposedAmountOfExpenditure,
                             }
                     resultData.push(dataAll);
                         }
@@ -472,6 +475,7 @@ exports.getPrivateForeignVisitOld = async (req, res) => {
                                 approvedBy: data0.approvedBy,
                                 approvedDate: data0.approvedDate,
                                 approvalStatus: data0.approvalStatus,
+                                proposedAmountOfExpenditure: data0.proposedAmountOfExpenditure,
                             }
                     resultData.push(dataAll);
                         }

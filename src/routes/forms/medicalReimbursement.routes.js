@@ -31,7 +31,11 @@ module.exports = (app) => {
   app.put(
     "/updateMedicalReimbursement",
     [jwt.verifyToken],
-    upload.single('orderFile'),
+    //upload.single('orderFile'),
+    upload.fields([
+      { name: 'orderFile', maxCount: 1 },
+      { name: 'dischargeOrTestFile', maxCount: 1 },
+  ]),
     value.updateMedicalReimbursement
   );
 

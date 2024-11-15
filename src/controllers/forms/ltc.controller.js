@@ -116,6 +116,8 @@ exports.getLtc = async (req, res) => {
                                         approvedBy: data0.approvedBy,
                                         approvedDate: data0.approvedDate,
                                         approvalStatus: data0.approvalStatus,
+                                        leaveAvailed: data0.leaveAvailed,
+	                                    category: data0.category,
                                     }
                                 }
                             }
@@ -147,6 +149,8 @@ exports.getLtc = async (req, res) => {
                                         approvedBy: data0.approvedBy,
                                         approvedDate: data0.approvedDate,
                                         approvalStatus: data0.approvalStatus,
+                                        leaveAvailed: data0.leaveAvailed,
+	                                    category: data0.category,
                             }
                     resultData.push(dataAll);
                         }
@@ -269,6 +273,8 @@ exports.getLtc = async (req, res) => {
                                         approvedBy: data0.approvedBy,
                                         approvedDate: data0.approvedDate,
                                         approvalStatus: data0.approvalStatus,
+                                        leaveAvailed: data0.leaveAvailed,
+	                                    category: data0.category,
                             }
                     resultData.push(dataAll);
                         }
@@ -301,6 +307,8 @@ exports.getLtc = async (req, res) => {
                                         approvedBy: data0.approvedBy,
                                         approvedDate: data0.approvedDate,
                                         approvalStatus: data0.approvalStatus,
+                                        leaveAvailed: data0.leaveAvailed,
+	                                    category: data0.category,
                             }
                     resultData.push(dataAll);
                         }
