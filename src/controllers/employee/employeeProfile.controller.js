@@ -44,7 +44,7 @@ exports.getEmployeeProfile = async (req, res) => {
         let data;
         let admins = [];
             let adminIds = [];
-            if(req.query._id || req.query.fullName || req.query.batch){
+            if(req.query._id || req.query.fullName || req.query.batch || req.query.loginId){
             query.where = req.query;
             data = await employeeProfile.find(req.query)
             .populate({
@@ -120,15 +120,15 @@ exports.getEmployeeProfile = async (req, res) => {
             successRes(res, data, 'employeeProfile listed Successfully');
                 
         }
-        else if(req.query.loginId){
-            console.log('loginid coming');
-            let profileQuery = {
-                loginId: req.query.loginId
-            }
-            let dataRes = await employeeProfile.find(profileQuery).sort({ batch: 'asc' }).exec();
-            console.log('else if by loginid fetch success');
-            successRes(res, dataRes, 'Employee listed Successfully');
-        }
+        // else if(req.query.loginId){
+        //     console.log('loginid coming');
+        //     let profileQuery = {
+        //         loginId: req.query.loginId
+        //     }
+        //     let dataRes = await employeeProfile.find(profileQuery).sort({ batch: 'asc' }).exec();
+        //     console.log('else if by loginid fetch success');
+        //     successRes(res, dataRes, 'Employee listed Successfully');
+        // }
         else{
             data = await employeeProfile.find().sort({ batch: 'asc' }).exec();
             console.log('else', data);
