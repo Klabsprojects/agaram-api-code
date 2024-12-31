@@ -27,7 +27,7 @@ module.exports = (app) => {
     "/addEmployeeProfile",
    [jwt.verifyToken],
    uploadImage.single('imagePath'),
-    value.addEmployeeProfile
+   value.addEmployeeProfile
   );
 
   app.get(
@@ -44,7 +44,8 @@ module.exports = (app) => {
 
   app.put(
     "/updateEmployeeProfile",
-    [jwt.verifyToken],
+    //[jwt.verifyToken],
+    uploadImage.single('imagePath'),
     value.updateEmployeeProfile
   );
 
