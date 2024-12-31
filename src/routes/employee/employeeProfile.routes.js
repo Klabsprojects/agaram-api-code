@@ -1,7 +1,8 @@
 module.exports = (app) => {
     const value = require("../../controllers/employee/employeeProfile.controller");
     const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
-
+    const upload = require("../../middlewares/upload")
+    const uploadImage = require("../../middlewares/uploadImage")
    app.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
@@ -24,7 +25,8 @@ module.exports = (app) => {
 
   app.post(
     "/addEmployeeProfile",
-    [jwt.verifyToken],
+   [jwt.verifyToken],
+   uploadImage.single('imagePath'),
     value.addEmployeeProfile
   );
 

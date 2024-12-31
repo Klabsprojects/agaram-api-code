@@ -57,7 +57,7 @@ const employeeProfileSchema = new Schema({
 	payscale: String,
 	officeEmail: {
 		type: String,
-		unique: true
+		//unique: true
 	},
 	personalEmail: [String],
 	mobileNo1: Number,
@@ -65,12 +65,14 @@ const employeeProfileSchema = new Schema({
 	mobileNo3: Number,
 	addressLine: String,
 	city: String,
-	pincode: Number,
+	pincode: String,
 	employeeId: String,
 	ifhrmsId: String,
 	photo: Buffer,
+	imagePath: String,
 	foreignVisit: String,
 	foreignVisitCount: Number,
+	seniority: Number,
 	submittedBy: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'login' // This references the AllocatedBlock model

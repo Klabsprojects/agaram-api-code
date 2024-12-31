@@ -17,7 +17,12 @@ exports.addEmployeeProfile = async (req, res) => {
         console.log('DEMO');
         console.log('try create employeeProfile', req.body);
         const query = req.body;
-        query.photo = Buffer.from(query.photo.split(",")[1], 'base64')
+        if (req.file) {
+            query.imagePath = req.file.path;
+            console.log('Uploaded file path:', req.file.path);
+        } else {
+            throw new Error('Photo upload failed: No Photo uploaded');
+        }
         const data = await employeeProfile.create(query);
         let data1 = data;
         successRes(res, data1, 'Employee added Successfully');
@@ -57,8 +62,11 @@ exports.getEmployeeProfile = async (req, res) => {
                 model: 'login', // Ensure the model name matches exactly
                 select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
             })
-            .sort({ batch: 'asc' }).exec();
-            console.log('if', data);
+            .sort({ batch: 'asc' })
+	    .allowDiskUse(true)
+        //.limit(100)
+	    .exec();
+            //console.log('if', data);
             successRes(res, data, 'Employee listed Successfully');
         }
         else if(req.query.loginAs == 'Spl A - SO' ||
@@ -115,24 +123,52 @@ exports.getEmployeeProfile = async (req, res) => {
                 model: 'login', // Ensure the model name matches exactly
                 select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
             })
-             .sort({ batch: 'asc' }).exec();
-            console.log(data, 'employeeProfile listed if Successfully');
+             .sort({ batch: 'asc' })
+	    .allowDiskUse(true)
+	    .exec();
+            //console.log(data, 'employeeProfile listed if Successfully');
             successRes(res, data, 'employeeProfile listed Successfully');
                 
         }
-        // else if(req.query.loginId){
-        //     console.log('loginid coming');
-        //     let profileQuery = {
-        //         loginId: req.query.loginId
-        //     }
-        //     let dataRes = await employeeProfile.find(profileQuery).sort({ batch: 'asc' }).exec();
-        //     console.log('else if by loginid fetch success');
-        //     successRes(res, dataRes, 'Employee listed Successfully');
-        // }
         else{
-            data = await employeeProfile.find().sort({ batch: 'asc' }).exec();
-            console.log('else', data);
-            successRes(res, data, 'Employee listed Successfully');
+
+            data = await employeeProfile.find().sort({ batch: 'asc' })
+	     .limit(100)
+ 	     .allowDiskUse(true)
+	     .exec();
+
+        //     data = await employeeProfile.find().sort({ batch: 'asc' })
+	    // .allowDiskUse(true)
+	    // .exec();
+        //     //console.log('else', data);
+        //     successRes(res, data, 'Employee listed Successfully');
+
+        console.log('Fetching employee data in batches');
+    
+    // Get the total count of employees
+    const totalRecords = await employeeProfile.countDocuments();
+    
+    // Array to store all the results
+    let allData = [];
+
+    // Loop through in batches of 100
+    const batchSize = 100;
+    const numBatches = Math.ceil(totalRecords / batchSize); // Calculate number of iterations
+
+    for (let i = 0; i < numBatches; i++) {
+        const skipCount = i * batchSize; // Calculate how many records to skip
+        const batchData = await employeeProfile.find()
+            .skip(skipCount) // Skip the previous records
+            .limit(batchSize) // Limit to 100 records per batch
+            .allowDiskUse(true)
+            .exec();
+        
+        // Push the fetched data into the allData array
+        allData = allData.concat(batchData);
+    }
+
+    // Return the complete array of all records
+    successRes(res, allData, 'Employee list fetched successfully');
         }
         } catch (error) {
             console.log('error', error);
@@ -1329,6 +1365,13 @@ exports.updateEmployeeProfile = async (req, res) => {
         if(query.loginId){
             update.loginId = query.loginId;
         }
+        if(query.seniority){
+            update.seniority = query.seniority;
+        }
+	if(query.dateOfJoining){
+            update.dateOfJoining = query.dateOfJoining;
+        }
+        
         let filter = {
             _id : query.id
         }
