@@ -1363,7 +1363,8 @@ exports.updateEmployeeProfile = async (req, res) => {
             update.fullName = query.fullName;
         }
         if(query.degreeData){
-            update.degreeData = query.degreeData;
+            update.degreeData = JSON.parse(req.body.degreeData);
+            //update.degreeData = query.degreeData;
         }
         if(query.mobileNo1){
             update.mobileNo1 = query.mobileNo1;
