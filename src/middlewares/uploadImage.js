@@ -23,7 +23,8 @@ var uploadImage= multer({
         if(
             file.mimetype == "image/png" ||
             file.mimetype == "image/jpeg" ||
-            file.mimetype === "image/tif"
+            file.mimetype === "image/tiff" ||
+            file.mimetype === "application/pdf"
         ){
             console.log('FILE', file);
             callback(null, true)
