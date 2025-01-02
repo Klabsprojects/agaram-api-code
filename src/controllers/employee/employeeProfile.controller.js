@@ -28,8 +28,8 @@ exports.addEmployeeProfile = async (req, res) => {
             //req.body.transferOrPostingEmployeesList = JSON.stringify(req.body.transferOrPostingEmployeesList);
             console.log(' after stringify transferOrPostingEmployeesList ', req.body.degreeData);
             console.log('yes');
-            query = req.body;
-            req.body.degreeData = JSON.parse(req.body.degreeData);
+            //query = req.body;
+            query.degreeData = JSON.parse(req.body.degreeData);
             console.log(' after parse transferOrPostingEmployeesList ', req.body.degreeData);
         }
         const data = await employeeProfile.create(query);
