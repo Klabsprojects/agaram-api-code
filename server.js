@@ -9,6 +9,7 @@ const routes = require('./src/routes/index.routes');
 
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const port = process.env.PORT;
 const MONGO_URI = 'mongodb://127.0.0.1:27017/agaram';

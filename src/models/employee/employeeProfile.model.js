@@ -68,7 +68,7 @@ const employeeProfileSchema = new Schema({
 	pincode: String,
 	employeeId: String,
 	ifhrmsId: String,
-	photo: Buffer,
+	//photo: Buffer,
 	imagePath: String,
 	foreignVisit: String,
 	foreignVisitCount: Number,

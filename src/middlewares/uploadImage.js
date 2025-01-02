@@ -24,6 +24,7 @@ var uploadImage= multer({
             file.mimetype == "image/png" ||
             file.mimetype == "image/jpeg" ||
             file.mimetype === "image/tiff" ||
+            file.mimetype === "image/heic" ||
             file.mimetype === "application/pdf"
         ){
             console.log('FILE', file);
@@ -35,7 +36,7 @@ var uploadImage= multer({
         }
     },
     limits: {
-        fileSize: 1024 * 1024 * 2
+        fileSize: 1024 * 1024
     }
 })
 
