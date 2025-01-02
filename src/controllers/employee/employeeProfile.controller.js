@@ -23,6 +23,15 @@ exports.addEmployeeProfile = async (req, res) => {
         } else {
             throw new Error('Photo upload failed: No Photo uploaded');
         }
+        if(req.body.degreeData){
+            console.log(' original transferOrPostingEmployeesList ', req.body.degreeData);
+            //req.body.transferOrPostingEmployeesList = JSON.stringify(req.body.transferOrPostingEmployeesList);
+            console.log(' after stringify transferOrPostingEmployeesList ', req.body.degreeData);
+            console.log('yes');
+            query = req.body;
+            req.body.degreeData = JSON.parse(req.body.degreeData);
+            console.log(' after parse transferOrPostingEmployeesList ', req.body.degreeData);
+        }
         const data = await employeeProfile.create(query);
         let data1 = data;
         successRes(res, data1, 'Employee added Successfully');
