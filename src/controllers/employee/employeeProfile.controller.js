@@ -142,42 +142,11 @@ exports.getEmployeeProfile = async (req, res) => {
         else{
 
             data = await employeeProfile.find().sort({ batch: 'asc' })
-	     .limit(100)
- 	     .allowDiskUse(true)
-	     .exec();
+	        .allowDiskUse(true)
+	        .exec();
+            //console.log('else', data);
+            successRes(res, data, 'Employee listed Successfully');
 
-        //     data = await employeeProfile.find().sort({ batch: 'asc' })
-	    // .allowDiskUse(true)
-	    // .exec();
-        //     //console.log('else', data);
-        //     successRes(res, data, 'Employee listed Successfully');
-
-        console.log('Fetching employee data in batches');
-    
-    // Get the total count of employees
-    const totalRecords = await employeeProfile.countDocuments();
-    
-    // Array to store all the results
-    let allData = [];
-
-    // Loop through in batches of 100
-    const batchSize = 100;
-    const numBatches = Math.ceil(totalRecords / batchSize); // Calculate number of iterations
-
-    for (let i = 0; i < numBatches; i++) {
-        const skipCount = i * batchSize; // Calculate how many records to skip
-        const batchData = await employeeProfile.find()
-            .skip(skipCount) // Skip the previous records
-            .limit(batchSize) // Limit to 100 records per batch
-            .allowDiskUse(true)
-            .exec();
-        
-        // Push the fetched data into the allData array
-        allData = allData.concat(batchData);
-    }
-
-    // Return the complete array of all records
-    successRes(res, allData, 'Employee list fetched successfully');
         }
         } catch (error) {
             console.log('error', error);
