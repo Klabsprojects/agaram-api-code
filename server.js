@@ -9,6 +9,8 @@ const routes = require('./src/routes/index.routes');
 
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/profileImages', express.static(path.join(__dirname, 'profileImages')));
+app.use('/uploadNew', express.static(path.join(__dirname, 'src/controllers/employee/uploadsImages')));
 //app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const port = process.env.PORT;

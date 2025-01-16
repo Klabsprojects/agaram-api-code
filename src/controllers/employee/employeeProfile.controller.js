@@ -11,16 +11,56 @@ const empProfile = require('../employee/employeeProfile.controller');
 const { successRes, errorRes } = require("../../middlewares/response.middleware");
 const { ObjectId, ObjectID } = require('mongodb');
 
+const fs = require('fs');
+const path = require('path');
+const Jimp = require('jimp');
+
+
+const uploadDir = 'uploadsImages/';
+
 // employeeProfile creation
 exports.addEmployeeProfile = async (req, res) => {
     try {
         console.log('DEMO');
         console.log('try create employeeProfile', req.body);
         const query = req.body;
+        console.log('__dirname ', __dirname);
+        const baseDir = path.resolve(__dirname, '../../../');  // Go two levels up from the current directory
+
+        console.log('Base directory:', baseDir);
+
+        const uploadDir = path.join(baseDir, 'profileImages');
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+
         if (req.file) {
-            query.imagePath = req.file.path;
-            console.log('Uploaded file path:', req.file.path);
-        } else {
+            const fileExtension = path.extname(req.file.originalname);  // Get the file extension
+            console.log('uploadDir', uploadDir);
+            
+            // Output file path for the converted image
+            const outputFilePath = path.join(uploadDir, `${Date.now()}.jpeg`);
+            console.log('outputFilePath', outputFilePath);
+            
+            // Use imagemagick to convert the uploaded image to JPEG
+            console.log('req.file.path', req.file.path);
+        
+            await Jimp.read(req.file.path)
+            .then(image => {
+                return image.writeAsync(outputFilePath);
+            })
+            .then(() => {
+                console.log('Conversion successful! Output saved to', outputFilePath);
+                const fileName = path.basename(outputFilePath);
+            //query.imagePath = fileName;
+            query.imagePath = fileName;
+            })
+            .catch(err => {
+                console.error('Error during conversion:', err);
+                throw new Error('Error during conversion');
+            });
+        }
+        else {
             throw new Error('Photo upload failed: No Photo uploaded');
         }
         if(req.body.degreeData){
@@ -1323,7 +1363,7 @@ exports.getEmployeeByFilterOfficer = async (req, res) => {
 }
 
 // employeeProfile updation
-exports.updateEmployeeProfile = async (req, res) => {
+exports.updateEmployeeProfileOLD = async (req, res) => {
     try {
         console.log('try update employeeProfile');
         const query = req.body;
@@ -1366,7 +1406,8 @@ exports.updateEmployeeProfile = async (req, res) => {
             update.dateOfJoining = query.dateOfJoining;
         }
         if(req.file) {
-            update.imagePath = req.file.path;
+            update.imagePath = path.relative('imageUploads/', req.file.path);
+            //update.imagePath = req.file.path;
             console.log('Uploaded file path:', req.file.path);
         }
         let filter = {
@@ -1386,6 +1427,228 @@ exports.updateEmployeeProfile = async (req, res) => {
         errorRes(res, error, "Error on employeeProfile updation");
     }
     }
+
+    exports.updateEmployeeProfileOLDV2 = async (req, res) => {
+        try {
+            console.log('try update employeeProfile');
+            const query = req.body;
+            let update = {};
+            if(query.fullName){
+                update.fullName = query.fullName;
+            }
+            if(query.degreeData){
+                update.degreeData = JSON.parse(query.degreeData);
+                //update.degreeData = query.degreeData;
+            }
+            if(query.mobileNo1){
+                update.mobileNo1 = query.mobileNo1;
+            }
+            if(query.mobileNo2){
+                update.mobileNo2 = query.mobileNo2;
+            }
+            if(query.mobileNo3){
+                update.mobileNo3 = query.mobileNo3;
+            }
+            if(query.religion){
+                update.religion = query.religion;
+            }
+            if(query.personalEmail){
+                update.personalEmail = query.personalEmail;
+            }
+            if(query.ifhrmsId){
+                update.ifhrmsId = query.ifhrmsId;
+            }
+            if(query.employeeId){
+                update.employeeId = query.employeeId;
+            }
+            if(query.loginId){
+                update.loginId = query.loginId;
+            }
+            if(query.seniority){
+                update.seniority = query.seniority;
+            }
+            if(query.dateOfJoining){
+                update.dateOfJoining = query.dateOfJoining;
+            }
+            // if(req.file) {
+            //     update.imagePath = req.file.path;
+            //     console.log('Uploaded file path:', req.file.path);
+            // }
+            // Ensure the upload directory exists before converting the image
+            const uploadDir = path.join(__dirname, 'uploadsImages');
+            if (!fs.existsSync(uploadDir)) {
+                fs.mkdirSync(uploadDir, { recursive: true });
+            }
+            if (req.file) {
+                const fileExtension = path.extname(req.file.originalname);  // Get the file extension
+                //console.log('__dirname', __dirname);
+                console.log('uploadDir', uploadDir)
+                const outputFilePath = path.join(uploadDir, `${Date.now()}.jpeg`);  // Output file path for the converted image
+                console.log('outputFilePath', outputFilePath);
+
+                // Convert the uploaded image to JPEG using sharp
+                console.log('req.file.path', req.file.path);
+                
+                sharp(req.file.path)
+                    .jpeg()
+                    .toFile(outputFilePath, (err, info) => {
+                        if (err) {
+                            console.error('Error converting image:', err);
+                            return res.status(500).json({ message: 'Error processing image' });
+                        }
+                        const fileName = path.basename(outputFilePath);
+                        update.imagePath = fileName;
+    
+                        const filter = { _id: query.id };
+                        console.log('update ', update);
+                        console.log('filter ', filter);
+    
+                        employeeProfile.findOneAndUpdate(filter, update, { new: true })
+                            .then(data => {
+                                console.log('data updated ', data);
+                                successRes(res, data, 'Employee updated Successfully');
+                            })
+                            .catch(err => {
+                                console.log('Error updating employee profile:', err);
+                                errorRes(res, err, "Error on employeeProfile updation");
+                            });
+                    });
+            }
+            else{
+
+                let filter = {
+                    _id : query.id
+                }
+        
+                console.log('update ', update);
+                console.log('filter ', filter);
+        
+                const data = await employeeProfile.findOneAndUpdate(filter, update, {
+                    new: true
+                  });
+                console.log('data updated ', data);
+                successRes(res, data, 'Employee updated Successfully');
+            }
+            
+        } catch (error) {
+            console.log('catch update employeeProfile', error);
+            errorRes(res, error, "Error on employeeProfile updation");
+        }
+        }
+
+        exports.updateEmployeeProfile = async (req, res) => {
+            try {
+                console.log('try update employeeProfile');
+                const query = req.body;
+                let update = {};
+                if(query.fullName){
+                    update.fullName = query.fullName;
+                }
+                if(query.degreeData){
+                    update.degreeData = JSON.parse(query.degreeData);
+                    //update.degreeData = query.degreeData;
+                }
+                if(query.mobileNo1){
+                    update.mobileNo1 = query.mobileNo1;
+                }
+                if(query.mobileNo2){
+                    update.mobileNo2 = query.mobileNo2;
+                }
+                if(query.mobileNo3){
+                    update.mobileNo3 = query.mobileNo3;
+                }
+                if(query.religion){
+                    update.religion = query.religion;
+                }
+                if(query.personalEmail){
+                    update.personalEmail = query.personalEmail;
+                }
+                if(query.ifhrmsId){
+                    update.ifhrmsId = query.ifhrmsId;
+                }
+                if(query.employeeId){
+                    update.employeeId = query.employeeId;
+                }
+                if(query.loginId){
+                    update.loginId = query.loginId;
+                }
+                if(query.seniority){
+                    update.seniority = query.seniority;
+                }
+                if(query.dateOfJoining){
+                    update.dateOfJoining = query.dateOfJoining;
+                }
+                console.log('__dirname ', __dirname);
+                const baseDir = path.resolve(__dirname, '../../../');  // Go two levels up from the current directory
+
+                console.log('Base directory:', baseDir);
+
+                const uploadDir = path.join(baseDir, 'profileImages');
+                if (!fs.existsSync(uploadDir)) {
+                    fs.mkdirSync(uploadDir, { recursive: true });
+                }
+
+                    if (req.file) {
+                        const fileExtension = path.extname(req.file.originalname);  // Get the file extension
+                        console.log('uploadDir', uploadDir);
+                        
+                        // Output file path for the converted image
+                        const outputFilePath = path.join(uploadDir, `${Date.now()}.jpeg`);
+                        console.log('outputFilePath', outputFilePath);
+                        
+                        // Use imagemagick to convert the uploaded image to JPEG
+                        console.log('req.file.path', req.file.path);
+                    
+                        Jimp.read(req.file.path)
+                        .then(image => {
+                            return image.writeAsync(outputFilePath);
+                        })
+                        .then(() => {
+                            console.log('Conversion successful! Output saved to', outputFilePath);
+                            const fileName = path.basename(outputFilePath);
+                        update.imagePath = fileName;
+    
+                        const filter = { _id: query.id };
+                        console.log('update ', update);
+                        console.log('filter ', filter);
+    
+                        employeeProfile.findOneAndUpdate(filter, update, { new: true })
+                            .then(data => {
+                                //console.log('data updated ', data);
+                                successRes(res, data, 'Employee updated Successfully');
+                            })
+                            .catch(err => {
+                                console.log('Error updating employee profile:', err);
+                                errorRes(res, err, "Error on employeeProfile updation");
+                            });
+                            
+                        })
+                        .catch(err => {
+                            console.error('Error during conversion:', err);
+                        });
+                    }
+
+                else{
+    
+                    let filter = {
+                        _id : query.id
+                    }
+            
+                    console.log('update ', update);
+                    console.log('filter ', filter);
+            
+                    const data = await employeeProfile.findOneAndUpdate(filter, update, {
+                        new: true
+                      });
+                    console.log('data updated ', data);
+                    successRes(res, data, 'Employee updated Successfully');
+                }
+                
+            } catch (error) {
+                console.log('catch update employeeProfile', error);
+                errorRes(res, error, "Error on employeeProfile updation");
+            }
+            }
 
     exports.updateApprovalStatus = async (req, res) => {
         try {
