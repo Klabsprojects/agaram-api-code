@@ -1578,6 +1578,14 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                 if(query.dateOfJoining){
                     update.dateOfJoining = query.dateOfJoining;
                 }
+                if(query.batch){
+                    update.batch = query.batch;
+                }
+                if(query.personalEmail){
+                    update.personalEmail = query.personalEmail;
+                }
+                
+                
                 console.log('__dirname ', __dirname);
                 const baseDir = path.resolve(__dirname, '../../../');  // Go two levels up from the current directory
 
