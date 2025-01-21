@@ -20,4 +20,10 @@ module.exports = (app) => {
   ]),
     value.addIdcard
   );
+
+  app.get(
+    "/getIdCard",
+    [jwt.verifyToken],
+    value.getIdCard
+  );
 }
