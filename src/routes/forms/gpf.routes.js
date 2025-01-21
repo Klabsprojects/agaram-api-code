@@ -16,4 +16,10 @@ module.exports = (app) => {
     upload.single('orderFile'),
     value.addGpf
   );
+
+  app.get(
+    "/getGpf",
+    [jwt.verifyToken],
+    value.getGpf
+  );
 }
