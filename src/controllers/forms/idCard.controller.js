@@ -8,13 +8,6 @@ exports.addIdcard = async (req, res) => {
     try {
         console.log('try create Idcard', req.body);
         const query = req.body;
-        //console.log('Uploaded file path:', req.file.path);
-        // if (req.file) {
-        //     query.orderFile = req.file.path;
-        //     console.log('Uploaded file path:', req.file.path);
-        // } else {
-        //     throw new Error('File upload failed: No file uploaded');
-        // }
 
         if (req.files && req.files['orderFile'] && req.files['orderFile'].length > 0) {
             // If orderFile file exists
