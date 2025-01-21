@@ -26,5 +26,6 @@ require("./forms/idCard.routes")(app);
 require("./employee/leave.routes")(app);
 require("./employee/training.routes")(app);
 require("./whatsapp/whatsapp.route")(app);
+require("./services/circulars.route")(app);
 module.exports = app;
 
