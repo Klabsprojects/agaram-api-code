@@ -2,7 +2,7 @@ const officersTour = require('../../models/forms/officersTour.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware");
 const whatsapp = require('../whatsapp/whatsapp.controller');
 const mongoose = require('mongoose');
-const profile = require('../../models/employee/employeeProfile.model');
+const employeeprofiles = require('../../models/employee/employeeProfile.model');
 const state = require('../../models/state/state.model');
 const district = require('../../models/state/district.model');
 const departments = require('../../models/categories/department.model');
@@ -31,6 +31,13 @@ exports.addOfficersTour = async (req, res) => {
     try {
         console.log('try create officersTour', req.body);
         let tourData = { ...req.body };
+
+        if (req.file) {
+            tourData.orderFile = req.file.path;
+            console.log('Uploaded file path:', req.file.path);
+        } else {
+            throw new Error('File upload failed: No file uploaded');
+        }
 
         // Convert IDs to ObjectIds
         tourData.stateId = toObjectId(tourData.stateId);
@@ -75,39 +82,39 @@ exports.getOfficersTour = async (req, res) => {
             data = await officersTour.find(req.query)
                 .populate('stateId')
                 .populate('districtId')
-                .populate('orderType')
-                .populate('orderFor')
-                .populate({
-                    path: 'OtherOfficers.employeeProfileId',
-                    model: 'profile'
-                })
-                .populate({
-                    path: 'OtherOfficers.departmentId',
-                    model: 'departments'
-                })
-                .populate({
-                    path: 'OtherOfficers.designationId',
-                    model: 'designations'
-                })
+                // .populate('orderType')
+                // .populate('orderFor')
+                // .populate({
+                //     path: 'OtherOfficers.employeeProfileId',
+                //     model: 'employeeprofiles'
+                // })
+                // .populate({
+                //     path: 'OtherOfficers.departmentId',
+                //     model: 'departments'
+                // })
+                // .populate({
+                //     path: 'OtherOfficers.designationId',
+                //     model: 'designations'
+                // })
                 .exec();
         } else {
             data = await officersTour.find()
                 .populate('stateId')
                 .populate('districtId')
-                .populate('orderType')
-                .populate('orderFor')
-                .populate({
-                    path: 'OtherOfficers.employeeProfileId',
-                    model: 'profile'
-                })
-                .populate({
-                    path: 'OtherOfficers.departmentId',
-                    model: 'departments'
-                })
-                .populate({
-                    path: 'OtherOfficers.designationId',
-                    model: 'designations'
-                });
+                // .populate('orderType')
+                // .populate('orderFor')
+                // .populate({
+                //     path: 'OtherOfficers.employeeProfileId',
+                //     model: 'employeeprofiles'
+                // })
+                // .populate({
+                //     path: 'OtherOfficers.departmentId',
+                //     model: 'departments'
+                // })
+                // .populate({
+                //     path: 'OtherOfficers.designationId',
+                //     model: 'designations'
+                // });
         }
         
         successRes(res, data, 'officersTour listed Successfully');
@@ -123,11 +130,11 @@ exports.getOfficersTourById = async (req, res) => {
         const data = await officersTour.findById(req.params.id)
             .populate('stateId')
             .populate('districtId')
-            .populate('orderType')
-            .populate('orderFor')
+            // .populate('orderType')
+            // .populate('orderFor')
             .populate({
                 path: 'OtherOfficers.employeeProfileId',
-                model: 'profile'
+                model: 'employeeprofiles'
             })
             .populate({
                 path: 'OtherOfficers.departmentId',

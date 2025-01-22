@@ -41,7 +41,7 @@ const officersTourSchema = new Schema({
 		},
 	}],
 	presentStatus: String,
-	sanctionedGo: String,
+	orderFile: String,
 	orderType: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'categories'
