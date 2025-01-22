@@ -63,6 +63,22 @@ exports.addTransferOrPostingManyEmployees = async (req, res) => {
     }
 }
 
+exports.handleBulkEmployeeTransferPosting = async (req) => {
+    let query = {};
+    if (req.body.transferOrPostingEmployeesList) {
+        console.log('original transferOrPostingEmployeesList ', req.body.transferOrPostingEmployeesList);
+        query = req.body;
+
+        //req.body.transferOrPostingEmployeesList = JSON.parse(req.body.transferOrPostingEmployeesList);
+        //console.log('after parse transferOrPostingEmployeesList ', req.body.transferOrPostingEmployeesList);
+        console.log('after parse body ', query);
+    }
+    // Create the employee update record
+    const data = await employeeUpdate.create(query);
+    return data;  // return the data for further use
+};
+
+
 // Get employeeUpdate
 exports.getEmployeeUpdate = async (req, res) => {
         console.log('helo from employeeUpdate controller', req.query);

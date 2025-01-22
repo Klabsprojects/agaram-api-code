@@ -4,6 +4,7 @@ const categories = require('../../models/categories/categories.model');
 const designations = require('../../models/categories/designation.model');
 const login = require('../../models/login/login.model');
 const whatsapp = require('../whatsapp/whatsapp.controller');
+const employeeUpdateController = require('./employeeUpdate.controller')
 
 const empProfile = require('../employee/employeeProfile.controller');
 //const { Op } = require('sequelize');
@@ -24,6 +25,13 @@ exports.addEmployeeProfile = async (req, res) => {
         console.log('DEMO');
         console.log('try create employeeProfile', req.body);
         const query = req.body;
+        if(req.body.updateType && req.body.toPostingInCategoryCode && req.body.toDepartmentId
+            && req.body.toDesignationId && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
+        ){
+            console.log('employee current posting data coming');
+        }
+        else
+            throw new Error('Pls provide valid inputs for employee current posting');
         console.log('__dirname ', __dirname);
         const baseDir = path.resolve(__dirname, '../../../');  // Go two levels up from the current directory
 
@@ -72,9 +80,39 @@ exports.addEmployeeProfile = async (req, res) => {
             query.degreeData = JSON.parse(req.body.degreeData);
             console.log(' after parse transferOrPostingEmployeesList ', req.body.degreeData);
         }
+        
         const data = await employeeProfile.create(query);
-        let data1 = data;
-        successRes(res, data1, 'Employee added Successfully');
+        console.log('data ', data);
+        if(data){
+            console.log('data ', data);
+            if(req.body.updateType && req.body.toPostingInCategoryCode && req.body.toDepartmentId
+                && req.body.toDesignationId && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
+                && data._id
+            ){
+                console.log('employee current posting' , data._id);
+                let request = {
+                    body : {
+                        updateType : req.body.updateType,
+                        transferOrPostingEmployeesList : [{
+                            empProfileId: data._id,
+                                    employeeId: data.employeeId,
+                                    fullName: data.fullName,
+                                    toPostingInCategoryCode: req.body.toPostingInCategoryCode,
+                                    toDepartmentId: req.body.toDepartmentId,
+                                    toDesignationId: req.body.toDesignationId,
+                                    postTypeCategoryCode: req.body.postTypeCategoryCode,
+                                    locationChangeCategoryId: req.body.locationChangeCategoryId,
+                        }]
+                }
+                }
+                const dataPosting = await employeeUpdateController.handleBulkEmployeeTransferPosting(request);
+                //await employeeUpdateController.addPostingFromProfile(req, res);
+                let data1 = data;
+                successRes(res, data1, 'Employee added Successfully');
+            }
+            else
+                throw new Error('Pls provide valid inputs for employee current posting');
+        }
     }
     catch (error) {
         if (error.code === 11000) {
