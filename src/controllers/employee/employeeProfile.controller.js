@@ -5,6 +5,7 @@ const designations = require('../../models/categories/designation.model');
 const login = require('../../models/login/login.model');
 const whatsapp = require('../whatsapp/whatsapp.controller');
 const employeeUpdateController = require('./employeeUpdate.controller')
+const departmentController = require('./../categories/department.controller')
 
 const empProfile = require('../employee/employeeProfile.controller');
 //const { Op } = require('sequelize');
@@ -85,6 +86,25 @@ exports.addEmployeeProfile = async (req, res) => {
         console.log('data ', data);
         if(data){
             console.log('data ', data);
+            if(req.body.department && req.body.department == 'yes' && req.body.toDepartmentId && 
+                req.body.deptAddress && req.body.deptPhoneNumber && req.body.deptFaxNumber && 
+                req.body.deptOfficialMobileNo && req.body.deptLastDateOfPromotion
+            ){
+                console.log('department details coming' , data._id);
+                let request1 = {
+                    body : {
+                        address : req.body.deptAddress,
+                        phoneNumber : req.body.deptPhoneNumber,
+                        faxNumber : req.body.deptFaxNumber,
+                        officialMobileNo : req.body.deptOfficialMobileNo,
+                        lastDateOfPromotion : req.body.deptLastDateOfPromotion,
+                    },
+                    where: {
+                        _id: req.body.toDepartmentId
+                    }
+                }
+                const dataDepartment = await departmentController.handledepartmentEdit(request1);
+            }
             if(req.body.updateType && req.body.toPostingInCategoryCode && req.body.toDepartmentId
                 && req.body.toDesignationId && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
                 && data._id

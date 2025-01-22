@@ -73,6 +73,7 @@ const employeeProfileSchema = new Schema({
 	foreignVisit: String,
 	foreignVisitCount: Number,
 	seniority: Number,
+	languages: String,
 	submittedBy: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'login' // This references the AllocatedBlock model

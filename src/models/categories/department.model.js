@@ -5,6 +5,11 @@ const departmentSchema = new Schema({
     category_code: String,
     department_name: String,
     department_code: String,
+	address: String,
+	phoneNumber: Number,
+	faxNumber: Number,
+	officialMobileNo: Number,
+	lastDateOfPromotion: Date,
 	  createdAt: {
 		  type: Date, 
 		  default: Date.now

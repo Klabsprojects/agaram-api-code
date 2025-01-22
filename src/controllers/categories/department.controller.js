@@ -31,3 +31,16 @@ exports.getDepartments = async (req, res) => {
             res.json(error);
         }
     }
+
+exports.handledepartmentEdit = async (req) => {
+    let query = {};
+    let where = {};
+    query = req.body;
+    where = req.where;
+    const data = await department.findOneAndUpdate(where, query, {
+        new: true
+      });
+    console.log('data updated ', data);
+
+    return data;  // return the data for further use
+};
