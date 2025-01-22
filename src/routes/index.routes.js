@@ -32,5 +32,7 @@ require("./services/actsrules.route")(app);
 require("./services/special_entries.route")(app);
 require("./services/utilityforms.route")(app);
 require("./services/faq.route")(app);
+require("./state/state.route")(app);
+require("./state/district.route")(app);
 module.exports = app;
 
