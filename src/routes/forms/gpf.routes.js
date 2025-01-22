@@ -22,4 +22,17 @@ module.exports = (app) => {
     [jwt.verifyToken],
     value.getGpf
   );
+
+  app.put(
+    "/updateGpf",
+    [jwt.verifyToken],
+    upload.single('orderFile'),
+    value.updateGpf
+  );
+
+  app.put(
+    "/updateGpfApprovalStatus",
+    [jwt.verifyToken],
+    value.updateGpfApprovalStatus
+  );
 }

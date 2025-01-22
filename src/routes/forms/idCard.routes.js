@@ -26,4 +26,22 @@ module.exports = (app) => {
     [jwt.verifyToken],
     value.getIdCard
   );
+
+  app.put(
+    "/updateIdCard",
+    [jwt.verifyToken],
+    //upload.single('orderFile'),
+    upload.fields([
+      { name: 'orderFile', maxCount: 1 },
+      { name: 'idCardApplication', maxCount: 1 },
+      { name: 'finalIdCard', maxCount: 1}
+  ]),
+    value.updateIdCard
+  );
+
+  app.put(
+    "/updateIdCardApprovalStatus",
+    [jwt.verifyToken],
+    value.updateIdCardApprovalStatus
+  );
 }

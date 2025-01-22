@@ -339,3 +339,114 @@ exports.addIdcard = async (req, res) => {
             errorRes(res, error, "Error on listing IdCard");
         }
     }    
+
+    exports.updateIdCard = async (req, res) => {
+        try {
+            console.log('try update IdCard', req.body);
+            const query = req.body;
+            if (req.files && req.files['orderFile'] && req.files['orderFile'].length > 0) {
+                // If orderFile file exists
+                query.orderFile = req.files['orderFile'][0].path; // Assuming only one file is uploaded
+                console.log('Uploaded orderFile file path:', req.files['orderFile'][0].path);
+            } 
+    
+            if (req.files && req.files['idCardApplication'] && req.files['idCardApplication'].length > 0) {
+                // If politicalClearance file exists
+                query.idCardApplication = req.files['idCardApplication'][0].path; // Assuming only one file is uploaded
+                console.log('idCardApplication file path:', req.files['idCardApplication'][0].path);
+            }
+
+            if (req.files && req.files['finalIdCard'] && req.files['finalIdCard'].length > 0) {
+                // If politicalClearance file exists
+                query.finalIdCard = req.files['finalIdCard'][0].path; // Assuming only one file is uploaded
+                console.log('finalIdCard file path:', req.files['finalIdCard'][0].path);
+            }
+
+            let filter;
+            let update = {};
+            update = req.body;
+            if(query.id){
+                console.log('id coming');
+                console.log(query.id);
+                filter = {
+                    _id : query.id
+                }
+            }
+            else{
+                console.log('id coming');
+                throw 'pls provide id field';
+            }
+                
+            console.log('update ', update);
+            console.log('filter ', filter);
+            // Check if the update object is empty or not
+            if (Object.keys(update).length > 0) {
+                console.log('value got');
+                const data = await idcard.findOneAndUpdate(filter, update, {
+                    new: true
+                  });
+                console.log('data updated ', data);
+                successRes(res, data, 'data updated Successfully');
+            } else {
+                console.log('empty');
+                throw 'Update value missing';
+            }
+        } catch (error) {
+            console.log('catch update idcard', error);
+            errorRes(res, error, "Error on idcard updation");
+        }
+        }
+    
+        exports.updateIdCardApprovalStatus = async (req, res) => {
+            try {
+                console.log('try update IdCard', req.body);
+                const query = req.body;
+                let update = {};
+                const currentDate = new Date();
+                if(query.approvedBy){
+                    update.approvedBy = query.approvedBy;
+                    update.approvalStatus = true;
+                    update.approvedDate = currentDate;
+                } 
+                else    
+                    throw 'Pls provide inputs';
+                let filter;
+                if(query.id){
+                    console.log('id coming');
+                    console.log(query.id);
+                    filter = {
+                        _id : query.id
+                    }
+                }
+                else{
+                    console.log('id coming');
+                    throw 'pls provide id field';
+                }
+                    
+                console.log('update ', update);
+                console.log('filter ', filter);
+                // Check if the update object is empty or not
+                if (Object.keys(update).length > 0) {
+                    console.log('value got');
+                    const data = await idcard.findOneAndUpdate(filter, update, {
+                        new: true
+                      });
+                    console.log('data updated ', data);
+                    let reqest = {}
+                    reqest.body = {
+                        phone: req.body.phone,
+                        module: req.body.module,
+                        date: req.body.dateOfOrder,
+                        fileName: req.body.fileName
+                    }
+                    const goSent = await whatsapp.sendWhatsapp(reqest, res);
+                    successRes(res, data, 'data updated Successfully');
+                } else {
+                    console.log('empty');
+                    throw 'Update value missing';
+                }
+            } catch (error) {
+                console.log('catch update', error);
+                errorRes(res, error, error);
+            }
+            }

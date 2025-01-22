@@ -324,4 +324,102 @@ exports.addGpf = async (req, res) => {
             console.log('error', error);
             errorRes(res, error, "Error on listing Gpf");
         }
-    } 
+    }
+    
+    exports.updateGpf = async (req, res) => {
+        try {
+            console.log('try update gpf', req.body);
+            const query = req.body;
+            if(req.file){
+                req.body.orderFile = req.file.path
+                query.orderFile = req.file.path
+                console.log('Uploaded file path:', req.file.path);
+            }
+            let filter;
+            let update = {};
+            update = req.body;
+            if(query.id){
+                console.log('id coming');
+                console.log(query.id);
+                filter = {
+                    _id : query.id
+                }
+            }
+            else{
+                console.log('id coming');
+                throw 'pls provide id field';
+            }
+                
+            console.log('update ', update);
+            console.log('filter ', filter);
+            // Check if the update object is empty or not
+            if (Object.keys(update).length > 0) {
+                console.log('value got');
+                const data = await gpf.findOneAndUpdate(filter, update, {
+                    new: true
+                  });
+                console.log('data updated ', data);
+                successRes(res, data, 'data updated Successfully');
+            } else {
+                console.log('empty');
+                throw 'Update value missing';
+            }
+        } catch (error) {
+            console.log('catch update gpf', error);
+            errorRes(res, error, "Error on gpf updation");
+        }
+        }
+    
+        exports.updateGpfApprovalStatus = async (req, res) => {
+            try {
+                console.log('try update gpf', req.body);
+                const query = req.body;
+                let update = {};
+                const currentDate = new Date();
+                if(query.approvedBy){
+                    update.approvedBy = query.approvedBy;
+                    update.approvalStatus = true;
+                    update.approvedDate = currentDate;
+                } 
+                else    
+                    throw 'Pls provide inputs';
+                let filter;
+                if(query.id){
+                    console.log('id coming');
+                    console.log(query.id);
+                    filter = {
+                        _id : query.id
+                    }
+                }
+                else{
+                    console.log('id coming');
+                    throw 'pls provide id field';
+                }
+                    
+                console.log('update ', update);
+                console.log('filter ', filter);
+                // Check if the update object is empty or not
+                if (Object.keys(update).length > 0) {
+                    console.log('value got');
+                    const data = await gpf.findOneAndUpdate(filter, update, {
+                        new: true
+                      });
+                    console.log('data updated ', data);
+                    let reqest = {}
+                    reqest.body = {
+                        phone: req.body.phone,
+                        module: req.body.module,
+                        date: req.body.dateOfOrder,
+                        fileName: req.body.fileName
+                    }
+                    const goSent = await whatsapp.sendWhatsapp(reqest, res);
+                    successRes(res, data, 'data updated Successfully');
+                } else {
+                    console.log('empty');
+                    throw 'Update value missing';
+                }
+            } catch (error) {
+                console.log('catch update', error);
+                errorRes(res, error, error);
+            }
+        }
