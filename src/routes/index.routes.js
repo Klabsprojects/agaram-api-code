@@ -34,5 +34,6 @@ require("./services/utilityforms.route")(app);
 require("./services/faq.route")(app);
 require("./state/state.route")(app);
 require("./state/district.route")(app);
+require("./employee/dros.routes")(app);
 module.exports = app;
 
