@@ -1642,8 +1642,12 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                 if(query.personalEmail){
                     update.personalEmail = query.personalEmail;
                 }
-                
-                
+                if(query.languages){
+                    update.languages = query.languages;
+                }
+                if(query.lastDateOfPromotion){
+                    update.lastDateOfPromotion = query.lastDateOfPromotion;
+                }
                 console.log('__dirname ', __dirname);
                 const baseDir = path.resolve(__dirname, '../../../');  // Go two levels up from the current directory
 
@@ -1679,8 +1683,60 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                         console.log('filter ', filter);
     
                         employeeProfile.findOneAndUpdate(filter, update, { new: true })
-                            .then(data => {
+                            .then(async (data) => {
                                 //console.log('data updated ', data);
+                                //const data = await employeeProfile.create(query);
+                                console.log('data ', data);
+                                if(data){
+                                    console.log('data ', data);
+                                    if(req.body.department && req.body.department == 'yes' && req.body.toDepartmentId && 
+                                        req.body.deptAddress && req.body.deptPhoneNumber && req.body.deptFaxNumber && 
+                                        req.body.deptOfficialMobileNo && req.body.deptLastDateOfPromotion
+                                    ){
+                                        console.log('department details coming' , data._id);
+                                        let request1 = {
+                                            body : {
+                                                address : req.body.deptAddress,
+                                                phoneNumber : req.body.deptPhoneNumber,
+                                                faxNumber : req.body.deptFaxNumber,
+                                                officialMobileNo : req.body.deptOfficialMobileNo,
+                                                lastDateOfPromotion : req.body.deptLastDateOfPromotion,
+                                            },
+                                            where: {
+                                                _id: req.body.toDepartmentId
+                                            }
+                                        }
+                                        const dataDepartment = await departmentController.handledepartmentEdit(request1);
+                                    }
+                                    if(req.body.updateType && req.body.toPostingInCategoryCode && req.body.toDepartmentId
+                                        && req.body.toDesignationId && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
+                                        && data._id
+                                    ){
+                                        console.log('employee current posting' , data._id);
+                                        let request = {
+                                            body : {
+                                                updateType : req.body.updateType,
+                                                transferOrPostingEmployeesList : [{
+                                                    empProfileId: data._id,
+                                                            employeeId: data.employeeId,
+                                                            fullName: data.fullName,
+                                                            toPostingInCategoryCode: req.body.toPostingInCategoryCode,
+                                                            toDepartmentId: req.body.toDepartmentId,
+                                                            toDesignationId: req.body.toDesignationId,
+                                                            postTypeCategoryCode: req.body.postTypeCategoryCode,
+                                                            locationChangeCategoryId: req.body.locationChangeCategoryId,
+                                                }]
+                                        }
+                                        }
+                                        const dataPosting = await employeeUpdateController.handleBulkEmployeeTransferPosting(request);
+                                        //await employeeUpdateController.addPostingFromProfile(req, res);
+                                        //let data1 = data;
+                                        //successRes(res, data1, 'Employee added Successfully');
+                                    }
+                                    else
+                                        throw new Error('Pls provide valid inputs for employee current posting');
+                                }
+                                //below
                                 successRes(res, data, 'Employee updated Successfully');
                             })
                             .catch(err => {

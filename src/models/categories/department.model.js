@@ -9,7 +9,6 @@ const departmentSchema = new Schema({
 	phoneNumber: Number,
 	faxNumber: Number,
 	officialMobileNo: Number,
-	lastDateOfPromotion: Date,
 	  createdAt: {
 		  type: Date, 
 		  default: Date.now
