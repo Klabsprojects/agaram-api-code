@@ -27,5 +27,10 @@ require("./employee/leave.routes")(app);
 require("./employee/training.routes")(app);
 require("./whatsapp/whatsapp.route")(app);
 require("./services/circulars.route")(app);
+require("./services/other_type_go.route")(app);
+require("./services/actsrules.route")(app);
+require("./services/special_entries.route")(app);
+require("./services/utilityforms.route")(app);
+require("./services/faq.route")(app);
 module.exports = app;
 

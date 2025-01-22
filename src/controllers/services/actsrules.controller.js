@@ -1,45 +1,45 @@
-const circluar = require('../../models/services/circulars.model');
+const actsrules = require('../../models/services/actsrules.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 
-// circluar creation
-exports.addCircular = async (req, res) => {
+// actsrules creation
+exports.addActsrules = async (req, res) => {
     try {
         // console.log('try create circular', req.body);
         const query = req.body;
         if (req.file) {
-            query.CircularFile = req.file.path;
+            query.actsrulesFile = req.file.path;
             // console.log('Uploaded file path:', req.file.path);
         } else {
             throw new Error('File upload failed: No file uploaded');
         }
-        const data = await circluar.create(query);
-        successRes(res, data, 'circluar created Successfully');
+        const data = await actsrules.create(query);
+        successRes(res, data, 'actsrules created Successfully');
     } catch (error) {
-        console.log('catch create circluar', error);
-        errorRes(res, error, "Error on creating circluar");
+        console.log('catch create actsrules', error);
+        errorRes(res, error, "Error on creating actsrules");
     }
     }
 
-// Get circluar
-exports.getCircluar = async (req, res) => {
-        // console.log('helo from circluar controller', req.query);
+// Get actsrules
+exports.getActsrules = async (req, res) => {
+        // console.log('helo from actsrules controller', req.query);
         try {
             let query = {};
             let data;
             if(req.query){
                 query.where = req.query;
-                data = await circluar.find(req.query).exec();
+                data = await actsrules.find(req.query).exec();
             }
             else
-                data = await circluar.find();
-            successRes(res, data, 'circluar listed Successfully');
+                data = await actsrules.find();
+            successRes(res, data, 'actsrules listed Successfully');
         } catch (error) {
             console.log('error', error);
-            errorRes(res, error, "Error on listing circluar");
+            errorRes(res, error, "Error on listing actsrules");
         }
     }
 
-    exports.deleteCircular = async (req, res) => {
+    exports.deleteActsrules = async (req, res) => {
         // console.log('Hello from delete circular controller', req.params);
         try {
             let query = {};
@@ -51,7 +51,7 @@ exports.getCircluar = async (req, res) => {
                 errorRes(res, error, "connot get Id");
             }
     
-            const deletedCircular = await circluar.findOneAndDelete(query);
+            const deletedCircular = await actsrules.findOneAndDelete(query);
     
             if (!deletedCircular) {
                 return errorRes(res, null, 'Circular not found or already deleted');
@@ -66,26 +66,26 @@ exports.getCircluar = async (req, res) => {
     
 
 
-// circluar updation
-exports.updatecircluar = async (req, res) => {
+// actsrules updation
+exports.updateaActsrules = async (req, res) => {
     try {
-        console.log('try update circluar');
+        console.log('try update actsrules');
         const query = req.body;
         let filter;
         let update = {};
-        if(query.CircularNumber){
-            update.CircularNumber = query.CircularNumber;
+        if(query.actsrulesNumber){
+            update.actsrulesNumber = query.actsrulesNumber;
         }
-        if(query.CircularDate){
-            update.CircularDate = query.CircularDate;
+        if(query.actsrulesDate){
+            update.actsrulesDate = query.actsrulesDate;
         } 
 
-        if(query.CircularDescription){
-            update.CircularDescription = query.CircularDescription;
+        if(query.actsrulesDescription){
+            update.actsrulesDescription = query.actsrulesDescription;
         } 
 
         if (req.file) {
-            update.CircularFile = req.file.path;
+            update.actsrulesFile = req.file.path;
         } 
 
         if(query.id){
@@ -100,17 +100,17 @@ exports.updatecircluar = async (req, res) => {
         // Check if the update object is empty or not
         if (Object.keys(update).length > 0) {
             console.log('value got');
-            const data = await circluar.findOneAndUpdate(filter, update, {
+            const data = await actsrules.findOneAndUpdate(filter, update, {
                 new: true
               });
             console.log('data updated ', data);
-            successRes(res, data, 'circluar updated Successfully');
+            successRes(res, data, 'actsrules updated Successfully');
         } else {
             console.log('empty');
             throw 'Update value missing';
         }
     } catch (error) {
-        console.log('catch update circluar updation', error);
-        errorRes(res, error, "Error on circluar updation");
+        console.log('catch update actsrules updation', error);
+        errorRes(res, error, "Error on actsrules updation");
     }
     }

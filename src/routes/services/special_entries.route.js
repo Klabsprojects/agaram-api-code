@@ -1,5 +1,5 @@
 module.exports = (app) => {
-    const value = require("../../controllers/services/circulars.controller");
+    const value = require("../../controllers/services/special_entries.controller");
     const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
     const CommonFileUpload = require("../../middlewares/commonfileupload");
 
@@ -12,28 +12,28 @@ module.exports = (app) => {
   });
 
   app.post(
-    "/addCircular",
+    "/addSpecialEntries",
     [jwt.verifyToken],
-    CommonFileUpload('CircularFile').single('CircularFile'),
-    value.addCircular
+    CommonFileUpload('SpecialEntiriesFile').single('SpecialEntiriesFile'),
+    value.addSpecialEntries
   );
 
   app.get(
-    "/getCircluar",
+    "/getSpecialEntries",
     [jwt.verifyToken],
-    value.getCircluar
+    value.getSpecialEntries
   );
 
-  app.delete('/circular/:id',
+  app.delete('/deleteSpecialEntries/:id',
     [jwt.verifyToken],
-     value.deleteCircular);
+     value.deleteSpecialEntries);
 
 
     app.put(
-    "/updateCircular",
+    "/updateSpecialEntries",
     [jwt.verifyToken],
-    CommonFileUpload('CircularFile').single('CircularFile'),
-    value.updatecircluar
+    CommonFileUpload('SpecialEntiriesFile').single('SpecialEntiriesFile'),
+    value.updateSpecialEntries
     );
 
 }

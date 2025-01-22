@@ -1,5 +1,5 @@
 module.exports = (app) => {
-    const value = require("../../controllers/services/circulars.controller");
+    const value = require("../../controllers/services/other_type_go.controller");
     const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
     const CommonFileUpload = require("../../middlewares/commonfileupload");
 
@@ -12,28 +12,28 @@ module.exports = (app) => {
   });
 
   app.post(
-    "/addCircular",
+    "/addgo",
     [jwt.verifyToken],
-    CommonFileUpload('CircularFile').single('CircularFile'),
-    value.addCircular
+    CommonFileUpload('GoFile').single('GoFile'),
+    value.addgo
   );
 
   app.get(
-    "/getCircluar",
+    "/getgo",
     [jwt.verifyToken],
-    value.getCircluar
+    value.getgo
   );
 
-  app.delete('/circular/:id',
+  app.delete('/deletego/:id',
     [jwt.verifyToken],
-     value.deleteCircular);
+     value.deletego);
 
 
     app.put(
-    "/updateCircular",
+    "/updateGo",
     [jwt.verifyToken],
-    CommonFileUpload('CircularFile').single('CircularFile'),
-    value.updatecircluar
+    CommonFileUpload('GoFile').single('GoFile'),
+    value.updateGo
     );
 
 }
