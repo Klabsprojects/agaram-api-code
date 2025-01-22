@@ -160,6 +160,13 @@ exports.updateOfficersTour = async (req, res) => {
     try {
         let updateData = { ...req.body };
 
+        if (req.file) {
+            updateData.orderFile = req.file.path;
+            console.log('Uploaded file path:', req.file.path);
+        } else {
+            throw new Error('File upload failed: No file uploaded');
+        }
+
         // Convert IDs to ObjectIds if present
         if (updateData.stateId) updateData.stateId = toObjectId(updateData.stateId);
         if (updateData.districtId) updateData.districtId = toObjectId(updateData.districtId);

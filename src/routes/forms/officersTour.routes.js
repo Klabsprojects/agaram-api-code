@@ -28,6 +28,13 @@ module.exports = (app) => {
     value.addOfficersTour
   );
 
+  app.put(
+    "/updateOfficersTour/:id",
+    [jwt.verifyToken],
+    upload.single('orderFile'),
+    value.updateOfficersTour
+  );
+
   app.delete('/deleteOfficersTour/:id',
     [jwt.verifyToken],
      value.deleteOfficersTour);
