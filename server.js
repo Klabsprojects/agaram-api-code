@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const express = require("express");
 const cors = require("cors");
 const app = express();
+app.use(express.json());
 require("dotenv").config({ path: path.join(__dirname, ".env") });
 const routes = require('./src/routes/index.routes');
 
@@ -11,6 +12,7 @@ const routes = require('./src/routes/index.routes');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/profileImages', express.static(path.join(__dirname, 'profileImages')));
 app.use('/uploadNew', express.static(path.join(__dirname, 'src/controllers/employee/uploadsImages')));
+app.use('/CommonFileFolders', express.static(path.join(__dirname, 'CommonFileFolders')));
 //app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const port = process.env.PORT;
