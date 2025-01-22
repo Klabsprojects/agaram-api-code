@@ -33,7 +33,7 @@ mongoose
   app.use(cors({
     origin: ['http://localhost:4200', 'https://agaram.a2zweb.in'],
     //, 'https://agaram.a2zweb.in/'], // Allow requests from this origin
-    methods: ['GET', 'POST', 'PUT'],      // Allow only GET and POST requests
+    methods: ['GET', 'POST', 'PUT' , 'DELETE'],      // Allow only GET and POST requests
     allowedHeaders: ['Content-Type', 'Authorization'] // Allow only specific headers
 }));
 
