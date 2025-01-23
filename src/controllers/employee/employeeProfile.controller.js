@@ -3,10 +3,11 @@ const employeeUpdate = require('../../models/employee/employeeUpdate.model');
 const categories = require('../../models/categories/categories.model');
 const designations = require('../../models/categories/designation.model');
 const login = require('../../models/login/login.model');
+//const login = require('../../models/login/login.model');
 const whatsapp = require('../whatsapp/whatsapp.controller');
 const employeeUpdateController = require('./employeeUpdate.controller')
 const departmentController = require('./../categories/department.controller')
-const department = require('../../models/categories/department.model');
+const departments = require('../../models/categories/department.model');
 
 const empProfile = require('../employee/employeeProfile.controller');
 //const { Op } = require('sequelize');
@@ -32,6 +33,7 @@ exports.addEmployeeProfile = async (req, res) => {
         ){
             console.log('employee current posting data coming');
             query.departmentId = req.body.toDepartmentId;
+            query.lastDateOfPromotion = req.body.deptLastDateOfPromotion;
         }
         else
             throw new Error('Pls provide valid inputs for employee current posting');
@@ -90,7 +92,8 @@ exports.addEmployeeProfile = async (req, res) => {
             console.log('data ', data);
             if(req.body.department && req.body.department == 'yes' && req.body.toDepartmentId && 
                 req.body.deptAddress && req.body.deptPhoneNumber && req.body.deptFaxNumber && 
-                req.body.deptOfficialMobileNo && req.body.deptLastDateOfPromotion
+                req.body.deptOfficialMobileNo 
+                //&& req.body.deptLastDateOfPromotion
             ){
                 console.log('department details coming' , data._id);
                 let request1 = {
@@ -99,7 +102,7 @@ exports.addEmployeeProfile = async (req, res) => {
                         phoneNumber : req.body.deptPhoneNumber,
                         faxNumber : req.body.deptFaxNumber,
                         officialMobileNo : req.body.deptOfficialMobileNo,
-                        lastDateOfPromotion : req.body.deptLastDateOfPromotion,
+                        //lastDateOfPromotion : req.body.deptLastDateOfPromotion,
                     },
                     where: {
                         _id: req.body.toDepartmentId
@@ -166,6 +169,7 @@ exports.getEmployeeProfile = async (req, res) => {
                 path: 'departmentId',
                 model: 'departments', // Ensure the model name matches exactly
                 //select: ['department_name', 'address', 'phoneNumber', 'faxNumber', 'officialMobileNo'] // Specify the fields you want to include from EmployeeProfile
+                select: ['department_name', 'address', 'phoneNumber', 'faxNumber', 'officialMobileNo']
             })
             .populate({
                 path: 'submittedBy',
@@ -247,6 +251,7 @@ exports.getEmployeeProfile = async (req, res) => {
                         approvedBy: data0.approvedBy,
                         approvedDate: data0.approvedDate,
                         approvalStatus: data0.approvalStatus,
+                        departmentId: data0.departmentId
                     }
                     resultData.push(dataAll);
                 }
@@ -289,6 +294,8 @@ exports.getEmployeeProfile = async (req, res) => {
                         approvedBy: data0.approvedBy,
                         approvedDate: data0.approvedDate,
                         approvalStatus: data0.approvalStatus,
+                        
+                        departmentId: data0.departmentId
                     }
                     resultData.push(dataAll);
                 }
@@ -296,7 +303,7 @@ exports.getEmployeeProfile = async (req, res) => {
             
         }
             //console.log('if', data);
-            successRes(res, resultData[0], 'Employee listed Successfully');
+            successRes(res, resultData, 'Employee listed Successfully');
         }
         else if(req.query.loginAs == 'Spl A - SO' ||
             req.query.loginAs == 'Spl B - SO' ||

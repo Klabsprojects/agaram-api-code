@@ -2,15 +2,16 @@ const { ObjectID, ObjectId, BSON } = require('mongodb');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const degree = require('../employee/degree.model');
-const department = require('../categories/department.model');
+// const degree = require('../employee/degree.model');
+// const department = require('../categories/department.model');
+const departments = require('../categories/department.model');
 
 const employeeProfileSchema = new Schema({
     fullName: String,
 	departmentId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'department' // This references the AllocatedBlock model
-		},
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'departments'
+	  },
 	gender: ObjectId,
 	dateOfBirth: Date,
 	dateOfJoining: Date,
@@ -80,10 +81,14 @@ const employeeProfileSchema = new Schema({
 	seniority: Number,
 	languages: String,
 	lastDateOfPromotion: Date,
-	submittedBy: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'login' // This references the AllocatedBlock model
-	},
+	// submittedBy: {
+	// 	type: mongoose.Schema.Types.ObjectId,
+	// 	ref: 'login' // This references the AllocatedBlock model
+	// },
+		submittedBy: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'login' // This references the AllocatedBlock model
+		},
 	approvedBy: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'login' // This references the AllocatedBlock model
