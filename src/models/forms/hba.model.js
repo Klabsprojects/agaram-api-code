@@ -38,6 +38,7 @@ const hbaSchema = new Schema({
 	totalNumberOfRecoveryMonths: Number,
 	installments : [{
 			installmentNumber: String,
+			amount: Number,
 			conductRulePermission: String,
 			conductRulePermissionAttachment: String,
 			installmentDate: Date
