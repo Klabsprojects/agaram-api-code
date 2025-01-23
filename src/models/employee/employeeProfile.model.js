@@ -3,9 +3,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const degree = require('../employee/degree.model');
+const department = require('../categories/department.model');
 
 const employeeProfileSchema = new Schema({
     fullName: String,
+	departmentId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'department' // This references the AllocatedBlock model
+		},
 	gender: ObjectId,
 	dateOfBirth: Date,
 	dateOfJoining: Date,

@@ -6,6 +6,7 @@ const login = require('../../models/login/login.model');
 const whatsapp = require('../whatsapp/whatsapp.controller');
 const employeeUpdateController = require('./employeeUpdate.controller')
 const departmentController = require('./../categories/department.controller')
+const department = require('../../models/categories/department.model');
 
 const empProfile = require('../employee/employeeProfile.controller');
 //const { Op } = require('sequelize');
@@ -30,6 +31,7 @@ exports.addEmployeeProfile = async (req, res) => {
             && req.body.toDesignationId && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
         ){
             console.log('employee current posting data coming');
+            query.departmentId = req.body.toDepartmentId;
         }
         else
             throw new Error('Pls provide valid inputs for employee current posting');
@@ -155,10 +157,16 @@ exports.getEmployeeProfile = async (req, res) => {
         let query = {};
         let data;
         let admins = [];
+        let resultData = [];
             let adminIds = [];
             if(req.query._id || req.query.fullName || req.query.batch || req.query.loginId){
             query.where = req.query;
             data = await employeeProfile.find(req.query)
+            .populate({
+                path: 'departmentId',
+                model: 'departments', // Ensure the model name matches exactly
+                //select: ['department_name', 'address', 'phoneNumber', 'faxNumber', 'officialMobileNo'] // Specify the fields you want to include from EmployeeProfile
+            })
             .populate({
                 path: 'submittedBy',
                 model: 'login', // Ensure the model name matches exactly
@@ -169,12 +177,126 @@ exports.getEmployeeProfile = async (req, res) => {
                 model: 'login', // Ensure the model name matches exactly
                 select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
             })
+            
             .sort({ batch: 'asc' })
 	    .allowDiskUse(true)
         //.limit(100)
 	    .exec();
+        console.log('data ', data);
+        if(data.length > 0){
+            console.log('data.length', data.length)
+            for(let data0 of data){
+                let updateQueryJson = {
+                    empId: data0._id
+                }
+                uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                console.log('uniqueArray.length ==> ', uniqueArray.length);
+                console.log('uniqueArray ==> ', uniqueArray[0]);
+                if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                    for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                        console.log('Check ', transferOrPostingEmployeesList.fullName);
+                        if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0._id.toString()){
+                            console.log('Matched ');
+                            console.log('posting available')
+                    dataAll = {
+                        // toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                        // toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                        // toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                        // postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                        // locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                        toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                        updateType: uniqueArray[0].updateType,
+                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                        orderNumber: uniqueArray[0].orderNumber,
+                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                        fullName: data0.fullName,
+                        personalEmail: data0.personalEmail,
+                        _id: data0._id,
+                        gender: data0.gender,
+                        dateOfBirth: data0.dateOfBirth,
+                        dateOfJoining: data0.dateOfJoining,
+                        dateOfRetirement : data0.dateOfRetirement,
+                        state: data0.state,
+                        batch: data0.batch,
+                        recruitmentType: data0.recruitmentType,
+                        serviceStatus: data0.serviceStatus,
+                        qualification1: data0.qualification1,
+                        qualification2: data0.qualification2,
+                        community: data0.community,
+                        degreeData: data0.degreeData,
+                        caste: data0.caste,
+                        religion: data0.religion,
+                        promotionGrade: data0.promotionGrade,
+                        payscale: data0.payscale,
+                        officeEmail: data0.officeEmail,
+                        mobileNo1: data0.mobileNo1,
+                        mobileNo2: data0.mobileNo2,
+                        mobileNo3: data0.mobileNo3,
+                        addressLine: data0.addressLine,
+                        city: data0.city,
+                        pincode: data0.pincode,
+                        employeeId: data0.employeeId,
+                        ifhrmsId: data0.ifhrmsId,
+                        //photo: data0.photo,
+                        imagePath: data0.imagePath,
+                        submittedBy: data0.submittedBy,
+                        approvedBy: data0.approvedBy,
+                        approvedDate: data0.approvedDate,
+                        approvalStatus: data0.approvalStatus,
+                    }
+                    resultData.push(dataAll);
+                }
+            }
+
+                }
+                else{
+                    dataAll = {
+                        fullName: data0.fullName,
+                        personalEmail: data0.personalEmail,
+                        _id: data0._id,
+                        gender: data0.gender,
+                        dateOfBirth: data0.dateOfBirth,
+                        dateOfJoining: data0.dateOfJoining,
+                        dateOfRetirement : data0.dateOfRetirement,
+                        state: data0.state,
+                        batch: data0.batch,
+                        recruitmentType: data0.recruitmentType,
+                        serviceStatus: data0.serviceStatus,
+                        qualification1: data0.qualification1,
+                        qualification2: data0.qualification2,
+                        community: data0.community,
+                        degreeData: data0.degreeData,
+                        caste: data0.caste,
+                        religion: data0.religion,
+                        promotionGrade: data0.promotionGrade,
+                        payscale: data0.payscale,
+                        officeEmail: data0.officeEmail,
+                        mobileNo1: data0.mobileNo1,
+                        mobileNo2: data0.mobileNo2,
+                        mobileNo3: data0.mobileNo3,
+                        addressLine: data0.addressLine,
+                        city: data0.city,
+                        pincode: data0.pincode,
+                        employeeId: data0.employeeId,
+                        ifhrmsId: data0.ifhrmsId,
+                        //photo: data0.photo,
+                        imagePath: data0.imagePath,
+                        submittedBy: data0.submittedBy,
+                        approvedBy: data0.approvedBy,
+                        approvedDate: data0.approvedDate,
+                        approvalStatus: data0.approvalStatus,
+                    }
+                    resultData.push(dataAll);
+                }
+            }
+            
+        }
             //console.log('if', data);
-            successRes(res, data, 'Employee listed Successfully');
+            successRes(res, resultData[0], 'Employee listed Successfully');
         }
         else if(req.query.loginAs == 'Spl A - SO' ||
             req.query.loginAs == 'Spl B - SO' ||
