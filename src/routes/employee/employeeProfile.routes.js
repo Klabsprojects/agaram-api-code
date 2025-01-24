@@ -18,6 +18,13 @@ module.exports = (app) => {
   );
 
   app.get(
+    "/getCurrentPosting",
+    // [jwt.verifyToken],
+    value.getCurrentPosting
+  );
+  
+
+  app.get(
     "/getEmployeeForLogin",
     // [jwt.verifyToken],
     value.getEmployeeForLogin
