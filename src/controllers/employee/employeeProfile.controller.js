@@ -9679,3 +9679,39 @@ exports.byProfileAdvanced = async(input, by) =>{
         throw 'error';
         }
 }
+
+exports.getCurrentPosting = async (req, res) => {
+    console.log('helo from employeeProfile controller', req.query);
+    try {
+        
+    let query = {};
+    let data;
+    let admins = [];
+    let resultData = [];
+    let adminIds = [];
+   
+        query.where = req.query;
+        data = await employeeProfile.find(req.query)
+        .populate({
+            path: 'departmentId',
+            model: 'departments', // Ensure the model name matches exactly
+            //select: ['department_name', 'address', 'phoneNumber', 'faxNumber', 'officialMobileNo'] // Specify the fields you want to include from EmployeeProfile
+            select: ['department_name', 'address', 'phoneNumber', 'faxNumber', 'officialMobileNo']
+        })
+         .populate({
+                    path: 'designationId',
+                    model: 'designations'
+                })
+        
+   
+    .exec();
+    console.log('data ', data);
+    
+        //console.log('if', data);
+        successRes(res, data, 'Employee listed Successfully');
+
+    } catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing employee");
+    }
+}
