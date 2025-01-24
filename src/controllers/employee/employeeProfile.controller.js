@@ -198,7 +198,7 @@ exports.getEmployeeProfile = async (req, res) => {
                     empId: data0._id
                 }
                 uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
-                console.log('uniqueArray.length ==> ', uniqueArray.length);
+                console.log('uniqueArray.length ==> ', uniqueArray.length, uniqueArray);
                 console.log('uniqueArray ==> ', uniqueArray[0]);
                 if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
                     for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
@@ -1739,6 +1739,7 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                 const query = req.body;
                 let update = {};
                 let request = {};
+                
                 if(query.fullName){
                     update.fullName = query.fullName;
                 }
@@ -1856,6 +1857,7 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                                         console.log('employee current posting' , data._id);
                                         request.body = {
                                                 updateType : req.body.updateType,
+                                                dateOfOrder : new Date(),
                                                 transferOrPostingEmployeesList : [{
                                                     empProfileId: data._id,
                                                             employeeId: data.employeeId,
@@ -1942,6 +1944,7 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                                 console.log('employee current posting' , data._id);
                                 request.body = {
                                         updateType : req.body.updateType,
+                                        dateOfOrder : new Date(),
                                         transferOrPostingEmployeesList : [{
                                             empProfileId: data._id,
                                                     employeeId: data.employeeId,
