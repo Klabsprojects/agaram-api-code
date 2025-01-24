@@ -19,8 +19,10 @@ const getCommonStorage = (folderName) => {
             cb(null, uploadDir);
         },
         filename: function(req, file, cb) {
-            let ext = path.extname(file.originalname)
-            cb(null, Date.now() + ext)
+            const originalName = file.originalname;
+            cb(null, originalName);
+            // let ext = path.extname(file.originalname)
+            // cb(null, Date.now() + ext)
         }
     });
 };
