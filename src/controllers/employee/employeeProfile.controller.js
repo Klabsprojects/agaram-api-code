@@ -26,6 +26,7 @@ exports.addEmployeeProfile = async (req, res) => {
     try {
         console.log('DEMO');
         console.log('try create employeeProfile', req.body);
+        let dateOrder = new Date();
         const query = req.body;
         if(req.body.toDepartmentId)
             query.departmentId = req.body.toDepartmentId;
@@ -122,6 +123,7 @@ exports.addEmployeeProfile = async (req, res) => {
                 let request = {
                     body : {
                         updateType : req.body.updateType,
+                        dateOfOrder : dateOrder,
                         transferOrPostingEmployeesList : [{
                             empProfileId: data._id,
                                     employeeId: data.employeeId,
@@ -1739,7 +1741,7 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                 const query = req.body;
                 let update = {};
                 let request = {};
-                
+                let dateOrder = new Date();
                 if(query.fullName){
                     update.fullName = query.fullName;
                 }
@@ -1850,6 +1852,7 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                                         }
                                         const dataDepartment = await departmentController.handledepartmentEdit(request1);
                                     }
+					
                                     if(req.body.updateType && req.body.toPostingInCategoryCode && req.body.toDepartmentId
                                         && req.body.toDesignationId && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
                                         && data._id
@@ -1857,7 +1860,7 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                                         console.log('employee current posting' , data._id);
                                         request.body = {
                                                 updateType : req.body.updateType,
-                                                dateOfOrder : new Date(),
+                                                dateOfOrder : dateOrder,
                                                 transferOrPostingEmployeesList : [{
                                                     empProfileId: data._id,
                                                             employeeId: data.employeeId,
@@ -1944,7 +1947,7 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                                 console.log('employee current posting' , data._id);
                                 request.body = {
                                         updateType : req.body.updateType,
-                                        dateOfOrder : new Date(),
+                                         dateOfOrder : dateOrder,
                                         transferOrPostingEmployeesList : [{
                                             empProfileId: data._id,
                                                     employeeId: data.employeeId,
@@ -9675,44 +9678,4 @@ exports.byProfileAdvanced = async(input, by) =>{
         console.log('error', error);
         throw 'error';
         }
-}
-
-
-
-
-
-exports.getCurrentPosting = async (req, res) => {
-    console.log('helo from employeeProfile controller', req.query);
-    try {
-        
-    let query = {};
-    let data;
-    let admins = [];
-    let resultData = [];
-    let adminIds = [];
-   
-        query.where = req.query;
-        data = await employeeProfile.find(req.query)
-        .populate({
-            path: 'departmentId',
-            model: 'departments', // Ensure the model name matches exactly
-            //select: ['department_name', 'address', 'phoneNumber', 'faxNumber', 'officialMobileNo'] // Specify the fields you want to include from EmployeeProfile
-            select: ['department_name', 'address', 'phoneNumber', 'faxNumber', 'officialMobileNo']
-        })
-         .populate({
-                    path: 'designationId',
-                    model: 'designations'
-                })
-        
-   
-    .exec();
-    console.log('data ', data);
-    
-        //console.log('if', data);
-        successRes(res, data, 'Employee listed Successfully');
-
-    } catch (error) {
-        console.log('error', error);
-        errorRes(res, error, "Error on listing employee");
-    }
 }
