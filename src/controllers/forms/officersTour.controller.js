@@ -134,7 +134,7 @@ exports.getOfficersTourById = async (req, res) => {
             // .populate('orderFor')
             .populate({
                 path: 'OtherOfficers.employeeProfileId',
-                model: 'employeeprofiles'
+                model: 'employeeProfile'
             })
             .populate({
                 path: 'OtherOfficers.departmentId',
