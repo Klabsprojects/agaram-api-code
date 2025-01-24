@@ -79,6 +79,11 @@ module.exports = (app) => {
     [jwt.verifyToken],
     value.getActiveEmployees
   )
+
+  app.get(
+    "/getActiveEmployeeslanding",
+    value.getActiveEmployees
+  )
   
   app.get(
     "/getRetiredEmployees",

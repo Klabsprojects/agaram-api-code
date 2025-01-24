@@ -52,8 +52,14 @@ const employeeUpdateSchema = new Schema({
 		fromDepartmentId: ObjectId,
 		fromDesignationId: ObjectId,
 		toPostingInCategoryCode: ObjectId,
-		toDepartmentId: ObjectId,
-		toDesignationId: ObjectId,
+		toDepartmentId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'departments' // This references the AllocatedBlock model
+		},
+		toDesignationId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'designations' // This references the AllocatedBlock model
+		},
 		postTypeCategoryCode: ObjectId,
 		locationChangeCategoryId: ObjectId,
 		promotionGrade: ObjectId,

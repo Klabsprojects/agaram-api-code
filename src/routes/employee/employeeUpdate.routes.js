@@ -44,4 +44,9 @@ module.exports = (app) => {
     value.updateApprovalStatus
   );
 
+  app.get(
+    "/GetLandingGODetail",
+    value.GetLandingGODetail
+  );
+
 }
