@@ -134,7 +134,7 @@ exports.getOfficersTourById = async (req, res) => {
             // .populate('orderFor')
             .populate({
                 path: 'OtherOfficers.employeeProfileId',
-                model: 'employeeprofiles'
+                model: 'employeeProfile'
             })
             .populate({
                 path: 'OtherOfficers.departmentId',
@@ -164,7 +164,8 @@ exports.updateOfficersTour = async (req, res) => {
             updateData.orderFile = req.file.path;
             console.log('Uploaded file path:', req.file.path);
         } else {
-            throw new Error('File upload failed: No file uploaded');
+            // throw new Error('File upload failed: No file uploaded');
+            console.log('File upload failed: No file uploaded')
         }
 
         // Convert IDs to ObjectIds if present
