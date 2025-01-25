@@ -35,13 +35,13 @@ exports.addEmployeeProfile = async (req, res) => {
         if(req.body.languages)
             query.languages = req.body.languages;
 
-        if(req.body.updateType && req.body.toPostingInCategoryCode && req.body.toDepartmentId
-            && req.body.toDesignationId && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
-        ){
-            console.log('employee current posting data coming');
-        }
-        else
-            throw new Error('Pls provide valid inputs for employee current posting');
+        // if(req.body.updateType && req.body.toPostingInCategoryCode && req.body.toDepartmentId
+        //     && req.body.toDesignationId && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
+        // ){
+        //     console.log('employee current posting data coming');
+        // }
+        // else
+        //     throw new Error('Pls provide valid inputs for employee current posting');
         console.log('__dirname ', __dirname);
         const baseDir = path.resolve(__dirname, '../../../');  // Go two levels up from the current directory
 
@@ -142,7 +142,8 @@ exports.addEmployeeProfile = async (req, res) => {
                 successRes(res, data1, 'Employee added Successfully');
             }
             else
-                throw new Error('Pls provide valid inputs for employee current posting');
+                successRes(res, data, 'Employee added Successfully');
+                //throw new Error('Pls provide valid inputs for employee current posting');
         }
     }
     catch (error) {
@@ -1737,7 +1738,7 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
 
         exports.updateEmployeeProfile = async (req, res) => {
             try {
-                console.log('try update employeeProfile');
+                console.log('try update employeeProfile', req.body);
                 const query = req.body;
                 let update = {};
                 let request = {};
@@ -1791,12 +1792,13 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                 if(query.lastDateOfPromotion){
                     update.lastDateOfPromotion = query.lastDateOfPromotion;
                 }
-                if(req.body.toDepartmentId)
+                if(req.body.toDepartmentId){
                     update.departmentId = req.body.toDepartmentId;
-                console.log('__dirname ', __dirname);
+                }
+                //console.log('__dirname ', __dirname);
                 const baseDir = path.resolve(__dirname, '../../../');  // Go two levels up from the current directory
 
-                console.log('Base directory:', baseDir);
+                //console.log('Base directory:', baseDir);
 
                 const uploadDir = path.join(baseDir, 'profileImages');
                 if (!fs.existsSync(uploadDir)) {
@@ -1805,14 +1807,14 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
 
                     if (req.file) {
                         const fileExtension = path.extname(req.file.originalname);  // Get the file extension
-                        console.log('uploadDir', uploadDir);
+                        //console.log('uploadDir', uploadDir);
                         
                         // Output file path for the converted image
                         const outputFilePath = path.join(uploadDir, `${Date.now()}.jpeg`);
-                        console.log('outputFilePath', outputFilePath);
+                        //console.log('outputFilePath', outputFilePath);
                         
                         // Use imagemagick to convert the uploaded image to JPEG
-                        console.log('req.file.path', req.file.path);
+                        //console.log('req.file.path', req.file.path);
                     
                         Jimp.read(req.file.path)
                         .then(image => {
@@ -1829,67 +1831,154 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
     
                         employeeProfile.findOneAndUpdate(filter, update, { new: true })
                             .then(async (data) => {
-                                //console.log('data updated ', data);
-                                //const data = await employeeProfile.create(query);
-                                console.log('data ', data);
+                                //console.log('data ', data);
                                 if(data){
-                                    console.log('data ', data);
+                                    //console.log('data ', data);
                                     if(req.body.department && req.body.department == 'yes' && req.body.toDepartmentId && 
-                                        req.body.deptAddress && req.body.deptPhoneNumber && req.body.deptFaxNumber && 
-                                        req.body.deptOfficialMobileNo
+                                        req.body.deptAddress && req.body.deptPhoneNumber 
+                                        // && req.body.deptFaxNumber && 
+                                        // req.body.deptOfficialMobileNo
                                     ){
                                         console.log('department details coming' , data._id);
+                                        let deptFaxNumber;
+                                        let deptOfficialMobileNo;
+                                        let transferObjectDept = {
+                                            address : req.body.deptAddress,
+                                            phoneNumber : req.body.deptPhoneNumber,
+                                            officialMobileNo : req.body.deptOfficialMobileNo ? req.body.deptOfficialMobileNo : '',
+                                            faxNumber : req.body.deptFaxNumber ? req.body.deptFaxNumber : '',
+                                        }
+                                        // if(req.body.deptFaxNumber || req.body.deptFaxNumber == undefined || req.body.deptFaxNumber == ''){
+                                        //     console.log('faxNumber is coming');
+                                        //     deptFaxNumber = req.body.deptFaxNumber;
+                                        //     transferObjectDept.faxNumber = req.body.deptFaxNumber;
+                                        // }
+                                        // if(req.body.deptOfficialMobileNo || req.body.deptOfficialMobileNo == undefined || req.body.deptOfficialMobileNo == ''){
+                                        //     console.log('deptOfficialMobileNo is coming');
+                                        //     deptOfficialMobileNo = req.body.deptOfficialMobileNo;
+                                        //     transferObjectDept.officialMobileNo = req.body.deptOfficialMobileNo;
+                                        // }
+                                        console.log('transferObjectDept ', transferObjectDept)
                                         let request1 = {
-                                            body : {
-                                                address : req.body.deptAddress,
-                                                phoneNumber : req.body.deptPhoneNumber,
-                                                faxNumber : req.body.deptFaxNumber,
-                                                officialMobileNo : req.body.deptOfficialMobileNo,
-                                            },
+                                            body : transferObjectDept,
                                             where: {
                                                 _id: req.body.toDepartmentId
                                             }
                                         }
                                         const dataDepartment = await departmentController.handledepartmentEdit(request1);
                                     }
-					
-                                    if(req.body.updateType && req.body.toPostingInCategoryCode && req.body.toDepartmentId
-                                        && req.body.toDesignationId && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
-                                        && data._id
+                                    if(req.body.updateType && req.body.toDepartmentId && req.body.toDesignationId  
+                                        // && req.body.toPostingInCategoryCode && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
+                                        // && data._id
                                     ){
-                                        console.log('employee current posting' , data._id);
+                                        console.log('employee updateType coming' );
+                                        let postingIn;
+                                        let postType;
+                                        let location;
+                                        let transferObject = {
+                                            empProfileId: data._id,
+                                            employeeId: data.employeeId,
+                                            fullName: data.fullName,
+                                            toDepartmentId: req.body.toDepartmentId,
+                                            toDesignationId: req.body.toDesignationId,
+                                            // toPostingInCategoryCode: req.body.toPostingInCategoryCode ? req.body.toPostingInCategoryCode : '',
+                                            // postTypeCategoryCode: req.body.postTypeCategoryCode ? req.body.postTypeCategoryCode : '',
+                                            // locationChangeCategoryId: req.body.locationChangeCategoryId ? req.body.locationChangeCategoryId : ''
+                                        }
+                                        if(req.body.toPostingInCategoryCode){
+                                            postingIn = req.body.toPostingInCategoryCode;
+                                            transferObject.toPostingInCategoryCode = postingIn;
+                                        }
+                                        if(req.body.postTypeCategoryCode){
+                                            postType = req.body.postTypeCategoryCode;
+                                            transferObject.postTypeCategoryCode = postType;
+                                        }
+                                        if(req.body.locationChangeCategoryId){
+                                            location = req.body.locationChangeCategoryId;
+                                            transferObject.locationChangeCategoryId = location;
+                                        }
+                                        console.log('transferObject ', transferObject)
+                                        let tansferArray = [];
+                                        tansferArray.push(transferObject);
                                         request.body = {
                                                 updateType : req.body.updateType,
                                                 dateOfOrder : dateOrder,
-                                                transferOrPostingEmployeesList : [{
-                                                    empProfileId: data._id,
-                                                            employeeId: data.employeeId,
-                                                            fullName: data.fullName,
-                                                            toPostingInCategoryCode: req.body.toPostingInCategoryCode,
-                                                            toDepartmentId: req.body.toDepartmentId,
-                                                            toDesignationId: req.body.toDesignationId,
-                                                            postTypeCategoryCode: req.body.postTypeCategoryCode,
-                                                            locationChangeCategoryId: req.body.locationChangeCategoryId,
-                                                }]
+                                                transferOrPostingEmployeesList : tansferArray
                                         }
+                                        
                                         if(req.body.updatePost && req.body.updatePost == 'yes' && req.body.updateId)
-                                            {
-                                                request.where = {
-                                                    _id : req.body.updateId
-                                                }
-                                                const dataPosting = await employeeUpdateController.handlePostingEdit(request);
+                                        {
+                                            console.log('Already post available -> edit post');
+                                            request.where = {
+                                                _id : req.body.updateId
                                             }
-                                            else
-                                            {
-                                                const dataPosting = await employeeUpdateController.handleBulkEmployeeTransferPosting(request);
-                                            }
-                                        //const dataPosting = await employeeUpdateController.handleBulkEmployeeTransferPosting(request);
+                                            const dataPosting = await employeeUpdateController.handlePostingEdit(request);
+                                        }
+                                        else
+                                        {
+                                            console.log('Already not availabl - New post')
+                                            const dataPosting = await employeeUpdateController.handleBulkEmployeeTransferPosting(request);
+                                        }
                                         //await employeeUpdateController.addPostingFromProfile(req, res);
                                         //let data1 = data;
                                         //successRes(res, data1, 'Employee added Successfully');
                                     }
-                                    else
-                                        throw new Error('Pls provide valid inputs for employee current posting');
+                                    // if(req.body.department && req.body.department == 'yes' && req.body.toDepartmentId && 
+                                    //     req.body.deptAddress && req.body.deptPhoneNumber && req.body.deptFaxNumber && 
+                                    //     req.body.deptOfficialMobileNo
+                                    // ){
+                                    //     console.log('department details coming' , data._id);
+                                    //     let request1 = {
+                                    //         body : {
+                                    //             address : req.body.deptAddress,
+                                    //             phoneNumber : req.body.deptPhoneNumber,
+                                    //             faxNumber : req.body.deptFaxNumber,
+                                    //             officialMobileNo : req.body.deptOfficialMobileNo,
+                                    //         },
+                                    //         where: {
+                                    //             _id: req.body.toDepartmentId
+                                    //         }
+                                    //     }
+                                    //     const dataDepartment = await departmentController.handledepartmentEdit(request1);
+                                    // }
+					
+                                    // if(req.body.updateType && req.body.toPostingInCategoryCode && req.body.toDepartmentId
+                                    //     && req.body.toDesignationId && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
+                                    //     && data._id
+                                    // ){
+                                    //     console.log('employee current posting' , data._id);
+                                    //     request.body = {
+                                    //             updateType : req.body.updateType,
+                                    //             dateOfOrder : dateOrder,
+                                    //             transferOrPostingEmployeesList : [{
+                                    //                 empProfileId: data._id,
+                                    //                         employeeId: data.employeeId,
+                                    //                         fullName: data.fullName,
+                                    //                         toPostingInCategoryCode: req.body.toPostingInCategoryCode,
+                                    //                         toDepartmentId: req.body.toDepartmentId,
+                                    //                         toDesignationId: req.body.toDesignationId,
+                                    //                         postTypeCategoryCode: req.body.postTypeCategoryCode,
+                                    //                         locationChangeCategoryId: req.body.locationChangeCategoryId,
+                                    //             }]
+                                    //     }
+                                    //     if(req.body.updatePost && req.body.updatePost == 'yes' && req.body.updateId)
+                                    //         {
+                                    //             request.where = {
+                                    //                 _id : req.body.updateId
+                                    //             }
+                                    //             const dataPosting = await employeeUpdateController.handlePostingEdit(request);
+                                    //         }
+                                    //         else
+                                    //         {
+                                    //             const dataPosting = await employeeUpdateController.handleBulkEmployeeTransferPosting(request);
+                                    //         }
+                                    //     //const dataPosting = await employeeUpdateController.handleBulkEmployeeTransferPosting(request);
+                                    //     //await employeeUpdateController.addPostingFromProfile(req, res);
+                                    //     //let data1 = data;
+                                    //     //successRes(res, data1, 'Employee added Successfully');
+                                    // }
+                                    // else
+                                    //     throw new Error('Pls provide valid inputs for employee current posting');
                                 }
                                 //below
                                 successRes(res, data, 'Employee updated Successfully');
@@ -1919,46 +2008,81 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                       }).then(async (data) => {
                         //console.log('data updated ', data);
                         //const data = await employeeProfile.create(query);
-                        console.log('data ', data);
+                        //console.log('data coming 1', data);
                         if(data){
-                            console.log('data ', data);
+                            //console.log('data coming 2', data);
                             if(req.body.department && req.body.department == 'yes' && req.body.toDepartmentId && 
-                                req.body.deptAddress && req.body.deptPhoneNumber && req.body.deptFaxNumber && 
-                                req.body.deptOfficialMobileNo
+                                req.body.deptAddress && req.body.deptPhoneNumber 
+                                // && req.body.deptFaxNumber && 
+                                // req.body.deptOfficialMobileNo
                             ){
                                 console.log('department details coming' , data._id);
+                                let deptFaxNumber;
+                                let deptOfficialMobileNo;
+                                let transferObjectDept = {
+                                    address : req.body.deptAddress,
+                                    phoneNumber : req.body.deptPhoneNumber,
+                                    officialMobileNo : req.body.deptOfficialMobileNo ? req.body.deptOfficialMobileNo : '',
+                                    faxNumber : req.body.deptFaxNumber ? req.body.deptFaxNumber : '',
+                                }
+                                // if(req.body.deptFaxNumber || req.body.deptFaxNumber == undefined || req.body.deptFaxNumber == ''){
+                                //     console.log('faxNumber is coming');
+                                //     deptFaxNumber = req.body.deptFaxNumber;
+                                //     transferObjectDept.faxNumber = deptFaxNumber;
+                                // }
+                                // if(req.body.deptOfficialMobileNo || req.body.deptOfficialMobileNo == undefined || req.body.deptFaxNumber == ''){
+                                //     console.log('deptOfficialMobileNo is coming');
+                                //     deptOfficialMobileNo = req.body.deptOfficialMobileNo;
+                                //     transferObjectDept.officialMobileNo = deptOfficialMobileNo;
+                                // }
+                                console.log('transferObjectDept ', transferObjectDept)
                                 let request1 = {
-                                    body : {
-                                        address : req.body.deptAddress,
-                                        phoneNumber : req.body.deptPhoneNumber,
-                                        faxNumber : req.body.deptFaxNumber,
-                                        officialMobileNo : req.body.deptOfficialMobileNo,
-                                    },
+                                    body : transferObjectDept,
                                     where: {
                                         _id: req.body.toDepartmentId
                                     }
                                 }
                                 const dataDepartment = await departmentController.handledepartmentEdit(request1);
                             }
-                            if(req.body.updateType && req.body.toPostingInCategoryCode && req.body.toDepartmentId
-                                && req.body.toDesignationId && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
-                                && data._id
+                            if(req.body.updateType && req.body.toDepartmentId && req.body.toDesignationId  
+                                // && req.body.toPostingInCategoryCode && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
+                                // && data._id
                             ){
-                                console.log('employee current posting' , data._id);
+                                console.log('employee updateType coming' );
+                                let postingIn;
+                                let postType;
+                                let location;
+                                let transferObject = {
+                                    empProfileId: data._id,
+                                    employeeId: data.employeeId,
+                                    fullName: data.fullName,
+                                    toDepartmentId: req.body.toDepartmentId,
+                                    toDesignationId: req.body.toDesignationId,
+                                    // toPostingInCategoryCode: req.body.toPostingInCategoryCode ? req.body.toPostingInCategoryCode : '',
+                                    // postTypeCategoryCode: req.body.postTypeCategoryCode ? req.body.postTypeCategoryCode : '',
+                                    // locationChangeCategoryId: req.body.locationChangeCategoryId ? req.body.locationChangeCategoryId : ''
+                                }
+                                if(req.body.toPostingInCategoryCode){
+                                    postingIn = req.body.toPostingInCategoryCode;
+                                    transferObject.toPostingInCategoryCode = postingIn;
+                                }
+                                if(req.body.postTypeCategoryCode){
+                                    postType = req.body.postTypeCategoryCode;
+                                    transferObject.postTypeCategoryCode = postType;
+                                }
+                                if(req.body.locationChangeCategoryId){
+                                    location = req.body.locationChangeCategoryId;
+                                    transferObject.locationChangeCategoryId = location;
+                                }
+                                console.log('transferObject ', transferObject)
+                                let tansferArray = [];
+                                tansferArray.push(transferObject);
                                 request.body = {
                                         updateType : req.body.updateType,
                                          dateOfOrder : dateOrder,
-                                        transferOrPostingEmployeesList : [{
-                                            empProfileId: data._id,
-                                                    employeeId: data.employeeId,
-                                                    fullName: data.fullName,
-                                                    toPostingInCategoryCode: req.body.toPostingInCategoryCode,
-                                                    toDepartmentId: req.body.toDepartmentId,
-                                                    toDesignationId: req.body.toDesignationId,
-                                                    postTypeCategoryCode: req.body.postTypeCategoryCode,
-                                                    locationChangeCategoryId: req.body.locationChangeCategoryId,
-                                        }]
+                                        transferOrPostingEmployeesList : tansferArray
                                 }
+                                
                                 if(req.body.updatePost && req.body.updatePost == 'yes' && req.body.updateId)
                                 {
                                     console.log('Already post available -> edit post');
@@ -1969,15 +2093,15 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                                 }
                                 else
                                 {
-                                    console.log('Already not availabl - New post')
+                                    console.log(' - New post')
                                     const dataPosting = await employeeUpdateController.handleBulkEmployeeTransferPosting(request);
                                 }
                                 //await employeeUpdateController.addPostingFromProfile(req, res);
                                 //let data1 = data;
                                 //successRes(res, data1, 'Employee added Successfully');
                             }
-                            else
-                                throw new Error('Pls provide valid inputs for employee current posting');
+                            // else
+                            //     throw new Error('Pls provide valid inputs for employee current posting');
                         }
                         //below
                         successRes(res, data, 'Employee updated Successfully');

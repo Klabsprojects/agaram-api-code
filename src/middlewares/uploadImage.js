@@ -36,9 +36,6 @@ var uploadImage= multer({
             console.log('Only pdf, jpg or png file supported');
             callback(null, false)
         }
-    },
-    limits: {
-        fileSize: 1024 * 1024
     }
 })
 
