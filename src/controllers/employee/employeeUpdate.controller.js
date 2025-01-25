@@ -18,7 +18,7 @@ exports.addEmployeeUpdate = async (req, res) => {
 
         const query = req.body;
 
-        if(req.file){
+        if (req.file) {
 
             query.orderFile = req.file.path
 
@@ -48,79 +48,79 @@ exports.addTransferOrPostingManyEmployees = async (req, res) => {
 
     try {
 
-            console.log('try create bulk employees transfer/posting', req.body);
+        console.log('try create bulk employees transfer/posting', req.body);
 
-            let query = {};
+        let query = {};
 
-            let phoneArr = [];
+        let phoneArr = [];
 
-            if(req.file){
+        if (req.file) {
 
-                req.body.orderFile = req.file.path
+            req.body.orderFile = req.file.path
 
-                query.orderFile = req.file.path
+            query.orderFile = req.file.path
 
-                console.log('Uploaded file path:', req.file.path);
+            console.log('Uploaded file path:', req.file.path);
 
-            }
+        }
 
-            if(req.body.transferOrPostingEmployeesList){
+        if (req.body.transferOrPostingEmployeesList) {
 
-                console.log(' original transferOrPostingEmployeesList ', req.body.transferOrPostingEmployeesList);
+            console.log(' original transferOrPostingEmployeesList ', req.body.transferOrPostingEmployeesList);
 
-                //req.body.transferOrPostingEmployeesList = JSON.stringify(req.body.transferOrPostingEmployeesList);
+            //req.body.transferOrPostingEmployeesList = JSON.stringify(req.body.transferOrPostingEmployeesList);
 
-                console.log(' after stringify transferOrPostingEmployeesList ', req.body.transferOrPostingEmployeesList);
+            console.log(' after stringify transferOrPostingEmployeesList ', req.body.transferOrPostingEmployeesList);
 
-                console.log('yes');
+            console.log('yes');
 
-                query = req.body;
+            query = req.body;
 
-                req.body.transferOrPostingEmployeesList = JSON.parse(req.body.transferOrPostingEmployeesList);
+            req.body.transferOrPostingEmployeesList = JSON.parse(req.body.transferOrPostingEmployeesList);
 
-                console.log(' after parse transferOrPostingEmployeesList ', req.body.transferOrPostingEmployeesList);
+            console.log(' after parse transferOrPostingEmployeesList ', req.body.transferOrPostingEmployeesList);
 
-                for(let x of req.body.transferOrPostingEmployeesList){
+            for (let x of req.body.transferOrPostingEmployeesList) {
 
-                    console.log(x);
+                console.log(x);
 
-                    //console.log(parseInt(x.phone, 10));
+                //console.log(parseInt(x.phone, 10));
 
-                    phoneArr.push(x.phone); 
-
-                }
+                phoneArr.push(x.phone);
 
             }
 
-            console.log('phoneArr', phoneArr);
+        }
 
-            let reqest = {}
+        console.log('phoneArr', phoneArr);
 
-            reqest.body = {
+        let reqest = {}
 
-                phone: phoneArr,
+        reqest.body = {
 
-                module: req.body.module,
+            phone: phoneArr,
 
-                date: req.body.dateOfOrder,
+            module: req.body.module,
 
-                fileName: req.file.filename
+            date: req.body.dateOfOrder,
 
-            }
+            fileName: req.file.filename
 
-            console.log('request ', reqest);
+        }
 
-            const data = await employeeUpdate.create(query);
+        console.log('request ', reqest);
 
-            //const goSent = await whatsapp.sendWhatsapp(reqest, res);
+        const data = await employeeUpdate.create(query);
 
-            successRes(res, data, 'Bulk Employees transfer/posting Added successfully');
+        //const goSent = await whatsapp.sendWhatsapp(reqest, res);
+
+        successRes(res, data, 'Bulk Employees transfer/posting Added successfully');
 
     } catch (error) {
 
-            console.log('catch create employeeUpdate', error);
+        console.log('catch create employeeUpdate', error);
 
-            errorRes(res, error, "Error on Bulk Employees transfer/posting Add");
+        errorRes(res, error, "Error on Bulk Employees transfer/posting Add");
 
     }
 
@@ -180,7 +180,7 @@ exports.handlePostingEdit = async (req) => {
 
     const data = await employeeUpdate.findOneAndUpdate(where, query, {
         new: true
-      });
+    });
     console.log('data updated ', data);
 
     return data;  // return the data for further use
@@ -192,27 +192,27 @@ exports.handlePostingEdit = async (req) => {
 
 exports.getEmployeeUpdate = async (req, res) => {
 
-        console.log('helo from employeeUpdate controller', req.query);
+    console.log('helo from employeeUpdate controller', req.query);
 
-        try {
+    try {
 
-            let query = {};
+        let query = {};
 
-            let data;
+        let data;
 
-            let admins = [];
+        let admins = [];
 
-            let adminIds = [];
+        let adminIds = [];
 
-            if(req.query.employeeProfileId && req.query.updateType){
+        if (req.query.employeeProfileId && req.query.updateType) {
 
-                data  = await employeeUpdate.find({
+            data = await employeeUpdate.find({
 
-                    'transferOrPostingEmployeesList.empProfileId': req.query.employeeProfileId,
+                'transferOrPostingEmployeesList.empProfileId': req.query.employeeProfileId,
 
-                    'updateType': req.query.updateType
+                'updateType': req.query.updateType
 
-                })
+            })
 
                 .populate({
 
@@ -238,19 +238,19 @@ exports.getEmployeeUpdate = async (req, res) => {
 
                 .exec();
 
-                
 
-                console.log(data, 'Employee Update listed if Successfully');
 
-                successRes(res, data, 'Employee Update listed Successfully');
+            console.log(data, 'Employee Update listed if Successfully');
 
-            }
+            successRes(res, data, 'Employee Update listed Successfully');
 
-            else if(req.query._id){
+        }
 
-                query.where = req.query;
+        else if (req.query._id) {
 
-                data = await employeeUpdate.find(req.query)
+            query.where = req.query;
+
+            data = await employeeUpdate.find(req.query)
 
                 // .populate({
 
@@ -284,99 +284,97 @@ exports.getEmployeeUpdate = async (req, res) => {
 
                 .exec();
 
-                console.log(data, 'Employee Update listed if Successfully');
+            console.log(data, 'Employee Update listed if Successfully');
 
-                successRes(res, data, 'Employee Update listed Successfully');
+            successRes(res, data, 'Employee Update listed Successfully');
+
+        }
+
+        else if (req.query.loginAs == 'Spl A - SO' ||
+
+            req.query.loginAs == 'Spl B - SO' ||
+
+            req.query.loginAs == 'Spl A - ASO' ||
+
+            req.query.loginAs == 'Spl B - ASO'
+
+        ) {
+
+            if (req.query.loginAs == 'Spl A - SO') {
+
+                admins = await login.find({ loginAs: { $in: ['Spl A - ASO', 'Spl A - SO'] } }).select('_id').exec();
+
+                if (admins.length === 0) {
+
+                    return res.status(404).json({ message: 'No admin users found' });
+
+                }
 
             }
 
-            else if(req.query.loginAs == 'Spl A - SO' ||
+            if (req.query.loginAs == 'Spl A - ASO') {
 
-                req.query.loginAs == 'Spl B - SO' ||
+                admins = await login.find({ loginAs: { $in: ['Spl A - ASO'] } }).select('_id').exec();
 
-                req.query.loginAs == 'Spl A - ASO' || 
+                if (admins.length === 0) {
 
-                req.query.loginAs == 'Spl B - ASO'
-
-            ){
-
-                    if(req.query.loginAs == 'Spl A - SO'){
-
-                        admins  = await login.find({ loginAs: { $in: ['Spl A - ASO', 'Spl A - SO'] } }).select('_id').exec();
-
-                        if (admins .length === 0) {
-
-                            return res.status(404).json({ message: 'No admin users found' });
-
-                        }   
+                    return res.status(404).json({ message: 'No admin users found' });
 
                 }
 
-                if(req.query.loginAs == 'Spl A - ASO'){
+            }
 
-                    admins  = await login.find({ loginAs: { $in: ['Spl A - ASO'] } }).select('_id').exec();
+            if (req.query.loginAs == 'Spl B - SO') {
 
-                    if (admins .length === 0) {
+                admins = await login.find({ loginAs: { $in: ['Spl B - ASO', 'Spl B - SO'] } }).select('_id').exec();
 
-                        return res.status(404).json({ message: 'No admin users found' });
+                if (admins.length === 0) {
 
-                    }   
-
-                }
-
-                if(req.query.loginAs == 'Spl B - SO'){
-
-                    admins  = await login.find({ loginAs: { $in: ['Spl B - ASO', 'Spl B - SO'] } }).select('_id').exec();
-
-                    if (admins .length === 0) {
-
-                        return res.status(404).json({ message: 'No admin users found' });
-
-                    }   
+                    return res.status(404).json({ message: 'No admin users found' });
 
                 }
 
-                if(req.query.loginAs == 'Spl B - ASO'){
+            }
 
-                    admins  = await login.find({ loginAs: { $in: ['Spl B - ASO'] } }).select('_id').exec();
+            if (req.query.loginAs == 'Spl B - ASO') {
 
-                    if (admins .length === 0) {
+                admins = await login.find({ loginAs: { $in: ['Spl B - ASO'] } }).select('_id').exec();
 
-                        return res.status(404).json({ message: 'No admin users found' });
+                if (admins.length === 0) {
 
-                    }   
-
-                }
-
-                if(req.query.loginAs == 'Spl A - SO' || req.query.loginAs == 'Spl A - ASO' ||
-
-                    req.query.loginAs == 'Spl B - SO' || req.query.loginAs == 'Spl B - ASO')
-
-                {
-
-                    adminIds = admins.map(admin => admin._id);
+                    return res.status(404).json({ message: 'No admin users found' });
 
                 }
 
-                console.log('admins ', admins);
+            }
 
-                console.log('adminIds ', adminIds);
+            if (req.query.loginAs == 'Spl A - SO' || req.query.loginAs == 'Spl A - ASO' ||
 
-                let profileQuery = {
+                req.query.loginAs == 'Spl B - SO' || req.query.loginAs == 'Spl B - ASO') {
 
-                    $or: [
+                adminIds = admins.map(admin => admin._id);
 
-                        { submittedBy: { $in: adminIds } },
+            }
 
-                        { approvalStatus: true }
+            console.log('admins ', admins);
 
-                    ]
+            console.log('adminIds ', adminIds);
 
-                }
+            let profileQuery = {
 
-                 // Step 2: Query the leave collection where submittedBy matches any of the admin IDs 
+                $or: [
 
-                     data = await employeeUpdate.find(profileQuery)
+                    { submittedBy: { $in: adminIds } },
+
+                    { approvalStatus: true }
+
+                ]
+
+            }
+
+            // Step 2: Query the leave collection where submittedBy matches any of the admin IDs 
+
+            data = await employeeUpdate.find(profileQuery)
 
                 .populate({
 
@@ -386,7 +384,7 @@ exports.getEmployeeUpdate = async (req, res) => {
 
                     select: ['batch', 'mobileNo1'] // Fields to select from the employeeProfile collection
 
-                })  
+                })
 
                 .populate({
 
@@ -408,21 +406,21 @@ exports.getEmployeeUpdate = async (req, res) => {
 
                 })
 
-                .exec();  
+                .exec();
 
-                
+
 
             console.log(data, 'Employee Update listed if Successfully');
 
             successRes(res, data, 'Employee Update listed Successfully');
 
-                    
 
-            }
 
-            else{
+        }
 
-                data = await employeeUpdate.find()
+        else {
+
+            data = await employeeUpdate.find()
 
                 .populate({
 
@@ -432,7 +430,7 @@ exports.getEmployeeUpdate = async (req, res) => {
 
                     select: ['batch', 'mobileNo1'] // Fields to select from the application collection
 
-                }) 
+                })
 
                 .populate({
 
@@ -452,27 +450,27 @@ exports.getEmployeeUpdate = async (req, res) => {
 
                     select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
 
-                }) 
+                })
 
                 .exec();
 
             successRes(res, data, 'Employee Update listed Successfully');
 
-            }
-
-        } catch (error) {
-
-            console.log('error', error.reason);
-
-            errorRes(res, error, "Error on listing employee Update");
-
         }
+
+    } catch (error) {
+
+        console.log('error', error.reason);
+
+        errorRes(res, error, "Error on listing employee Update");
 
     }
 
+}
 
 
-    // posting/promotion/transfer updation
+
+// posting/promotion/transfer updation
 
 exports.updateTransferPosting = async (req, res) => {
 
@@ -482,7 +480,7 @@ exports.updateTransferPosting = async (req, res) => {
 
         const query = req.body;
 
-        if(req.file){
+        if (req.file) {
 
             req.body.orderFile = req.file.path
 
@@ -498,7 +496,7 @@ exports.updateTransferPosting = async (req, res) => {
 
         update = req.body;
 
-        if(query.id){
+        if (query.id) {
 
             console.log('id coming');
 
@@ -506,13 +504,13 @@ exports.updateTransferPosting = async (req, res) => {
 
             filter = {
 
-                _id : query.id
+                _id: query.id
 
             }
 
         }
 
-        else{
+        else {
 
             console.log('id coming');
 
@@ -520,7 +518,7 @@ exports.updateTransferPosting = async (req, res) => {
 
         }
 
-            
+
 
         console.log('update ', update);
 
@@ -530,7 +528,7 @@ exports.updateTransferPosting = async (req, res) => {
 
         if (Object.keys(update).length > 0) {
 
-            if(update.transferOrPostingEmployeesList){
+            if (update.transferOrPostingEmployeesList) {
 
                 console.log(' original transferOrPostingEmployeesList ', update.transferOrPostingEmployeesList);
 
@@ -554,7 +552,7 @@ exports.updateTransferPosting = async (req, res) => {
 
                 new: true
 
-              });
+            });
 
             console.log('data updated ', data);
 
@@ -576,116 +574,135 @@ exports.updateTransferPosting = async (req, res) => {
 
     }
 
+}
+
+
+
+exports.updateApprovalStatus = async (req, res) => {
+
+    try {
+
+        console.log('try update block', req.body);
+
+        const query = req.body;
+
+        let update = {};
+
+        const currentDate = new Date();
+
+        if (query.approvedBy) {
+
+            update.approvedBy = query.approvedBy;
+
+            update.approvalStatus = true;
+
+            update.approvedDate = currentDate;
+
+        }
+
+        else
+
+            throw 'Pls provide inputs';
+
+        let filter;
+
+        if (query.id) {
+
+            console.log('id coming');
+
+            console.log(query.id);
+
+            filter = {
+
+                _id: query.id
+
+            }
+
+        }
+
+        else {
+
+            console.log('id coming');
+
+            throw 'pls provide id field';
+
+        }
+
+
+
+        console.log('update ', update);
+
+        console.log('filter ', filter);
+
+        // Check if the update object is empty or not
+
+        if (Object.keys(update).length > 0) {
+
+            console.log('value got');
+
+            const data = await employeeUpdate.findOneAndUpdate(filter, update, {
+
+                new: true
+
+            });
+
+            console.log('data updated ', data);
+
+
+
+            console.log('phoneArr', req.body.phoneArr);
+
+            let reqest = {}
+
+            reqest.body = {
+
+                phone: req.body.phoneArr,
+
+                module: req.body.module,
+
+                date: req.body.dateOfOrder,
+
+                fileName: req.body.fileName
+
+            }
+
+            const goSent = await whatsapp.sendWhatsapp(reqest, res);
+
+            successRes(res, data, 'data updated Successfully');
+
+        } else {
+
+            console.log('empty');
+
+            throw 'Update value missing';
+
+        }
+
+    } catch (error) {
+
+        console.log('catch update', error);
+
+        errorRes(res, error, error);
+
     }
 
+}
 
 
-    exports.updateApprovalStatus = async (req, res) => {
+exports.GetLandingGODetail = async (req, res) => {
+    // console.log('helo from GO controller', req.query);
+    try {
+        let query = {};
+        let data;
+        query.where = req.query;
+        data = await employeeUpdate.find(
+            { orderFile: { $exists: true, $ne: null } },
+            { orderFile: 1, dateOfOrder: 1, _id: 0 }
+        )
 
-        try {
-
-            console.log('try update block', req.body);
-
-            const query = req.body;
-
-            let update = {};
-
-            const currentDate = new Date();
-
-            if(query.approvedBy){
-
-                update.approvedBy = query.approvedBy;
-
-                update.approvalStatus = true;
-
-                update.approvedDate = currentDate;
-
-            } 
-
-            else    
-
-                throw 'Pls provide inputs';
-
-            let filter;
-
-            if(query.id){
-
-                console.log('id coming');
-
-                console.log(query.id);
-
-                filter = {
-
-                    _id : query.id
-
-                }
-
-            }
-
-            else{
-
-                console.log('id coming');
-
-                throw 'pls provide id field';
-
-            }
-
-                
-
-            console.log('update ', update);
-
-            console.log('filter ', filter);
-
-            // Check if the update object is empty or not
-
-            if (Object.keys(update).length > 0) {
-
-                console.log('value got');
-
-                const data = await employeeUpdate.findOneAndUpdate(filter, update, {
-
-                    new: true
-
-                  });
-
-                console.log('data updated ', data);
-
-
-
-                console.log('phoneArr', req.body.phoneArr);
-
-                let reqest = {}
-
-                reqest.body = {
-
-                    phone: req.body.phoneArr,
-
-                    module: req.body.module,
-
-                    date: req.body.dateOfOrder,
-
-                    fileName: req.body.fileName
-
-                }
-
-                const goSent = await whatsapp.sendWhatsapp(reqest, res);
-
-                successRes(res, data, 'data updated Successfully');
-
-            } else {
-
-                console.log('empty');
-
-                throw 'Update value missing';
-
-            }
-
-        } catch (error) {
-
-            console.log('catch update', error);
-
-            errorRes(res, error, error);
-
-        }
-
-        }
+        successRes(res, data, 'GO listed Successfully');
+    } catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing GO");
+    }
+}

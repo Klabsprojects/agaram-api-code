@@ -8,7 +8,7 @@ const whatsapp = require('../whatsapp/whatsapp.controller');
 const employeeUpdateController = require('./employeeUpdate.controller')
 const departmentController = require('./../categories/department.controller')
 const departments = require('../../models/categories/department.model');
-
+const state = require('../../models/state/state.model');
 const empProfile = require('../employee/employeeProfile.controller');
 //const { Op } = require('sequelize');
 
@@ -9807,33 +9807,60 @@ exports.byProfileAdvanced = async(input, by) =>{
 exports.getCurrentPosting = async (req, res) => {
     console.log('helo from employeeProfile controller', req.query);
     try {
-        
-    let query = {};
     let data;
-    let admins = [];
     let resultData = [];
-    let adminIds = [];
-   
-        query.where = req.query;
-        data = await employeeProfile.find(req.query)
-        .populate({
-            path: 'departmentId',
-            model: 'departments', // Ensure the model name matches exactly
-            //select: ['department_name', 'address', 'phoneNumber', 'faxNumber', 'officialMobileNo'] // Specify the fields you want to include from EmployeeProfile
-            select: ['department_name', 'address', 'phoneNumber', 'faxNumber', 'officialMobileNo']
-        })
-         .populate({
-                    path: 'designationId',
-                    model: 'designations'
-                })
         
-   
+        data = await employeeProfile.find(req.query)
+        
+        
+    .sort({ batch: 'asc' })
+    .allowDiskUse(true)
+    //.limit(100)
     .exec();
     console.log('data ', data);
-    
-        //console.log('if', data);
-        successRes(res, data, 'Employee listed Successfully');
+    if(data.length > 0){
+        console.log('data.length', data.length)
+        for(let data0 of data){
+            let updateQueryJson = {
+                empId: data0._id
+            }
+            uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+            console.log('uniqueArray.length ==> ', uniqueArray.length);
+            console.log('uniqueArray ==> ', uniqueArray[0]);
+            if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                    console.log('Check ', transferOrPostingEmployeesList.fullName);
+                    if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0._id.toString()){
+                        console.log('Matched ');
+                        console.log('posting available')
+                dataAll = {
+                    Departmentdetails: await departments.findById(transferOrPostingEmployeesList.toDepartmentId).select(['department_name']),
+                    Designationdetails: await designations.findById(transferOrPostingEmployeesList.toDesignationId).select(['designation_name']),
+                    employeeUpdateId:  uniqueArray[0]._id,
+                    fullName: data0.fullName,
+                    personalEmail: data0.personalEmail,
+                    dateOfBirth: data0.dateOfBirth,
+                    dateOfJoining: data0.dateOfJoining,
+                    statinformation : await state.findById(data0.state).select(['stateName']),
+                    officeEmail: data0.officeEmail,
+                    mobileNo1: data0.mobileNo1,
+                    mobileNo2: data0.mobileNo2,
+                    mobileNo3: data0.mobileNo3,
+                    addressLine: data0.addressLine,
+                    city: data0.city,
+                    pincode: data0.pincode,
+                }
+                resultData.push(dataAll);
+            }
+        }
 
+            }
+        }
+        
+    }
+        //console.log('if', data);
+        successRes(res, resultData, 'Employee listed Successfully');
+    
     } catch (error) {
         console.log('error', error);
         errorRes(res, error, "Error on listing employee");
