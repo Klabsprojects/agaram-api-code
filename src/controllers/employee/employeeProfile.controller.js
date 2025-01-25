@@ -255,6 +255,7 @@ exports.getEmployeeProfile = async (req, res) => {
                         ifhrmsId: data0.ifhrmsId,
                         lastDateOfPromotion : data0.lastDateOfPromotion,
                         languages : data0.languages,
+                        seniority: data0.seniority,
                         //photo: data0.photo,
                         imagePath: data0.imagePath,
                         submittedBy: data0.submittedBy,
@@ -301,6 +302,7 @@ exports.getEmployeeProfile = async (req, res) => {
                         
                         lastDateOfPromotion : data0.lastDateOfPromotion,
                         languages : data0.languages,
+                        seniority: data0.seniority,
                         //photo: data0.photo,
                         imagePath: data0.imagePath,
                         submittedBy: data0.submittedBy,
@@ -1775,7 +1777,7 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                     update.loginId = query.loginId;
                 }
                 if(query.seniority){
-                    update.seniority = query.seniority;
+                    //update.seniority = query.seniority ? query.seniority : '';
                 }
                 if(query.dateOfJoining){
                     update.dateOfJoining = query.dateOfJoining;
@@ -1795,6 +1797,7 @@ exports.updateEmployeeProfileOLD = async (req, res) => {
                 if(req.body.toDepartmentId){
                     update.departmentId = req.body.toDepartmentId;
                 }
+                update.seniority = query.seniority ? query.seniority : '';
                 //console.log('__dirname ', __dirname);
                 const baseDir = path.resolve(__dirname, '../../../');  // Go two levels up from the current directory
 
