@@ -3368,6 +3368,124 @@ exports.getBySecretariat = async (req, res) => {
     }
 }
 
+// Get Employees from Secretariat / not from getBySecretariat
+exports.getByDeputation = async (req, res) => {
+    try{
+        let query = {};
+        let secretariatDetails;
+        let categoryDetails;
+        let categoryId;
+        let resDataFinal;
+        let resJson;
+        let data;
+        let resultData = [];
+        categoryDetails = await categories.find({
+            "category_name": "Deputation"
+        })
+        console.log('categoryDetails', categoryDetails[0]._id);
+        categoryId = categoryDetails[0]._id.toString();
+
+        data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
+        let dataAll = {}
+        if(data.length > 0){
+            console.log('data.length', data.length)
+            for(let data0 of data){
+                let updateQueryJson = {
+                    empId: data0._id
+                }
+                console.log('updateQueryJson ', updateQueryJson);
+                uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                console.log('uniqueArray.length ==> ', uniqueArray[0]);
+                if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                    for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                        console.log('Check ', transferOrPostingEmployeesList.fullName);
+                        if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0._id.toString()){
+                            console.log('Matched ');
+                            console.log('posting available')
+                    console.log('categoryId => ', categoryId, uniqueArray[0].orderForCategoryCode);
+
+                        if(uniqueArray[0].orderForCategoryCode == categoryId){
+                            console.log('true');
+                            dataAll = {
+                                toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                                remarks: uniqueArray[0].remarks,
+                                updateType: uniqueArray[0].updateType,
+                                orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                                orderNumber: uniqueArray[0].orderNumber,
+                                orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                                dateOfOrder: uniqueArray[0].dateOfOrder,
+                                        fullName: data0.fullName,
+                                personalEmail: data0.personalEmail,
+                                _id: data0._id,
+                                gender: data0.gender,
+                                dateOfBirth: data0.dateOfBirth,
+                                dateOfJoining: data0.dateOfJoining,
+                                dateOfRetirement : data0.dateOfRetirement,
+                                state: data0.state,
+                                batch: data0.batch,
+                                recruitmentType: data0.recruitmentType,
+                                serviceStatus: data0.serviceStatus,
+                                qualification1: data0.qualification1,
+                                qualification2: data0.qualification2,
+                                community: data0.community,
+                                degreeData: data0.degreeData,
+                                caste: data0.caste,
+                                religion: data0.religion,
+                                promotionGrade: data0.promotionGrade,
+                                payscale: data0.payscale,
+                                officeEmail: data0.officeEmail,
+                                mobileNo1: data0.mobileNo1,
+                                mobileNo2: data0.mobileNo2,
+                                mobileNo3: data0.mobileNo3,
+                                addressLine: data0.addressLine,
+                                city: data0.city,
+                                pincode: data0.pincode,
+                                employeeId: data0.employeeId,
+                                ifhrmsId: data0.ifhrmsId,
+                                //photo: data0.photo,
+                                imagePath: data0.imagePath,
+                                submittedBy: data0.submittedBy,
+                                approvedBy: data0.approvedBy,
+                                approvedDate: data0.approvedDate,
+                                approvalStatus: data0.approvalStatus,
+                            }
+                            resultData.push(dataAll);
+                        //     if(req.query.secretariat == 'yes'){
+
+                            
+                        // }
+                    }
+
+                        }
+                    }
+
+                }
+
+
+            }
+        }
+        else
+        {
+            console.log('No profile info')
+            resultData = [];
+        }
+        console.log('Unique by latest date of order:', uniqueArray);
+        let resData = {
+            empCount : resultData.length,
+            //empList: resultData
+        }
+        successRes(res, resData, 'List employees based on');
+
+    }
+    catch(error){
+        console.log('error', error);
+        errorRes(res, error, "Error on listing employees based on Secretariat");
+    }
+}
 
 exports.getByDesignation = async (req, res) => {
     try{
@@ -4812,7 +4930,7 @@ exports.byProfileOfficer = async(input, by) =>{
 }
 
 exports.getEmployeeUpdateFilter = async(input) => {
-    console.log('inside getEmployeeUpdate function', input)
+    //console.log('inside getEmployeeUpdate function', input)
     let secretariatDetails;
     // secretariatDetails =  await employeeUpdate.find({
     //     empProfileId: input.empId

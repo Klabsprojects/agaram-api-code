@@ -110,6 +110,12 @@ module.exports = (app) => {
   )
 
   app.get(
+    "/getByDeputation",
+    //[jwt.verifyToken],
+    value.getByDeputation
+  )
+
+  app.get(
     "/getByDesignation",
     [jwt.verifyToken],
     value.getByDesignation
