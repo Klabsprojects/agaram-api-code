@@ -28,6 +28,17 @@ module.exports = (app) => {
     CommonFileUpload('DroFile').single('DroFile'),
     value.addDros
   );
+
+  app.put(
+    "/updateDRO",
+    [jwt.verifyToken],
+    CommonFileUpload('DroFile').single('DroFile'),
+    value.updateDRO
+  );
+
+  app.delete('/DeleteDro/:id',
+    [jwt.verifyToken],
+  value.deleteDRO);
     
  
 }

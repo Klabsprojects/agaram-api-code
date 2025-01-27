@@ -54,3 +54,74 @@ exports.getDrosCountByDate = async (req, res) => {
     }
 };
 
+
+
+    exports.deleteDRO = async (req, res) => {
+        // console.log('Hello from delete DRO controller', req.params);
+        try {
+            let query = {};
+            
+            if (req.params.id) {
+                // Delete by ID (assumes you are passing the ID in the URL params)
+                query = { _id: req.params.id };
+            } else {
+                errorRes(res, error, "connot get Id");
+            }
+    
+            const deletedCircular = await dros.findOneAndDelete(query);
+    
+            if (!deletedCircular) {
+                return errorRes(res, null, 'DRO not found or already deleted');
+            }
+    
+            successRes(res, deletedCircular, 'DRO deleted successfully');
+        } catch (error) {
+            console.log('Error', error);
+            errorRes(res, error, "Error occurred while deleting the DRO");
+        }
+    }
+    
+
+
+    
+    // dros updation
+    exports.updateDRO = async (req, res) => {
+        try {
+            console.log('try update dros');
+            const query = req.body;
+            let filter;
+            let update = {};
+            if(query.DateOfUpload){
+                update.DateOfUpload = query.DateOfUpload;
+            }
+    
+            if (req.file) {
+                update.DroFile = req.file.path;
+            } 
+    
+            if(query.id){
+                filter = {
+                    _id : query.id
+                }
+            }
+            else
+                throw 'pls provide id field';
+            console.log('update ', update);
+            console.log('filter ', filter);
+            // Check if the update object is empty or not
+            if (Object.keys(update).length > 0) {
+                console.log('value got');
+                const data = await dros.findOneAndUpdate(filter, update, {
+                    new: true
+                  });
+                console.log('data updated ', data);
+                successRes(res, data, 'dros updated Successfully');
+            } else {
+                console.log('empty');
+                throw 'Update value missing';
+            }
+        } catch (error) {
+            console.log('catch update dros updation', error);
+            errorRes(res, error, "Error on dros updation");
+        }
+        }
