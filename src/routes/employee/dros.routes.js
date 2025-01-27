@@ -1,7 +1,7 @@
 module.exports = (app) => {
     const value = require("../../controllers/employee/dros.controller");
     const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
-   const upload = require("../../middlewares/upload")
+   const CommonFileUpload = require("../../middlewares/commonfileupload");
    app.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
@@ -25,6 +25,7 @@ module.exports = (app) => {
   app.post(
     "/addDros",
     [jwt.verifyToken],
+    CommonFileUpload('DroFile').single('DroFile'),
     value.addDros
   );
     

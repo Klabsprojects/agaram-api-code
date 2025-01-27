@@ -4,8 +4,12 @@ const { successRes, errorRes } = require("../../middlewares/response.middleware"
 // dros creation
 exports.addDros = async (req, res) => {
     try {
-        // console.log('try create circular', req.body);
         const query = req.body;
+        if (req.file) {
+            query.DroFile = req.file.path;
+        } else {
+            throw new Error('File upload failed: No file uploaded');
+        }
         const data = await dros.create(query);
         successRes(res, data, 'dros created Successfully');
     } catch (error) {

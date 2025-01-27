@@ -3,18 +3,14 @@ const { ObjectId } = require('mongodb');
 const { required } = require('joi');
 const Schema = mongoose.Schema;
 
-const faqSchema = new Schema({
-    OfficerName: {
+const drosSchema = new Schema({
+    DroFile: {
         type: String,
         required: true
     },
-    PresentPost: {
-        type: String,
+    DateOfUpload: {
+        type: Date,
         required: true
-    },
-	MobileNo: {
-        type: String,
-        required: false
     },
     createdAt: {
         type: Date, 
@@ -23,4 +19,4 @@ const faqSchema = new Schema({
 });
 
 
-module.exports = mongoose.model('dros', faqSchema);
+module.exports = mongoose.model('dros', drosSchema);
