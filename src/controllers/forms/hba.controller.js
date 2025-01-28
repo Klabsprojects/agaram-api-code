@@ -9,12 +9,45 @@ exports.addHba = async (req, res) => {
     try {
         console.log('try create Hba', req.body);
         const query = req.body;
-        //console.log('Uploaded file path:', req.file.path);
-        if (req.file) {
-            query.orderFile = req.file.path;
-            console.log('Uploaded file path:', req.file.path);
+
+        if (req.files && req.files['orderFile'] && req.files['orderFile'].length > 0) {
+            // If orderFile file exists
+            query.orderFile = req.files['orderFile'][0].path; // Assuming only one file is uploaded
+            console.log('Uploaded orderFile file path:', req.files['orderFile'][0].path);
         } else {
-            throw new Error('File upload failed: No file uploaded');
+            throw new Error('orderFile upload failed: No orderFile file uploaded');
+        }
+        console.log('query ', query);
+
+        if (req.files && req.files['conductRulePermissionAttachment'] && req.files['conductRulePermissionAttachment'].length > 0) {
+            // If conductRulePermissionAttachment file exists
+            const conductRulePermissionAttachmentPath = req.files['conductRulePermissionAttachment'][0].path;
+            console.log('Uploaded conductRulePermissionAttachment file path:', conductRulePermissionAttachmentPath);
+
+            // Add conductRulePermissionAttachment to each installment
+            if (req.files && req.files['conductRulePermissionAttachment'] && req.files['conductRulePermissionAttachment'].length > 0) {
+                // If conductRulePermissionAttachment file exists
+                const conductRulePermissionAttachmentPath = req.files['conductRulePermissionAttachment'][0].path;
+                console.log('Uploaded conductRulePermissionAttachment file path:', conductRulePermissionAttachmentPath);
+    
+                // Add conductRulePermissionAttachment to each installment
+                if (Array.isArray(query.installments)) {
+                    query.installments = query.installments.map(installment => {
+                        // Add conductRulePermissionAttachment and other fields if they exist
+                        installment.conductRulePermissionAttachment = conductRulePermissionAttachmentPath;
+                        
+                        // If you want to add additional properties like conductRulePermission, make sure they're present
+                        // Here I'm assuming you want to copy the original values from the request
+                        installment.conductRulePermission = req.body.conductRulePermission || installment.conductRulePermission;
+                        installment.installmentNumber = req.body.installmentNumber || installment.installmentNumber;
+                        installment.amount = req.body.amount || installment.amount;
+                        installment.installmentDate = req.body.installmentDate || installment.installmentDate;
+                        
+                        return installment;
+                    });
+                }
+            }
+
         }
         const data = await hba.create(query);
         let reqest = {}
@@ -22,7 +55,7 @@ exports.addHba = async (req, res) => {
             phone: req.body.phone,
             module: req.body.module,
             date: req.body.dateOfOrder,
-            fileName: req.file.filename
+            fileName: query.orderFile
         }
         const goSent = await whatsapp.sendWhatsapp(reqest, res);
         successRes(res, data, 'Hba created Successfully');

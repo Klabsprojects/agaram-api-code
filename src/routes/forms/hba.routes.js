@@ -13,7 +13,10 @@ module.exports = (app) => {
   app.post(
     "/addHba",
     [jwt.verifyToken],
-    upload.single('orderFile'),
+    upload.fields([
+      { name: 'orderFile', maxCount: 1 },
+      { name: 'conductRulePermissionAttachment', maxCount: 1 },
+  ]),
     value.addHba
   );
 
