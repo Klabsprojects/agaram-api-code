@@ -9911,7 +9911,7 @@ exports.getCurrentPosting = async (req, res) => {
                     personalEmail: data0.personalEmail,
                     dateOfBirth: data0.dateOfBirth,
                     dateOfJoining: data0.dateOfJoining,
-                    statinformation : await state.findById(data0.state).select(['stateName']),
+                    statinformation : await categories.findById(data0.state).select(['category_name']),
                     officeEmail: data0.officeEmail,
                     mobileNo1: data0.mobileNo1,
                     mobileNo2: data0.mobileNo2,
