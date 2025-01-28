@@ -3,6 +3,7 @@ const login = require('../../models/login/login.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const whatsapp = require('../whatsapp/whatsapp.controller');
 const empProfile = require('../employee/employeeProfile.controller');
+const upload = require("../../middlewares/upload")
 
 // Hba creation
 exports.addHba = async (req, res) => {
@@ -394,57 +395,167 @@ exports.addHba = async (req, res) => {
         }
     }
     
-    exports.updateHba = async (req, res) => {
-        try {
-            console.log('try update hba', req.body);
-            //const query = req.body;
-            let query = {};
-            if(req.file){
-                req.body.orderFile = req.file.path
-                query.orderFile = req.file.path
-                console.log('Uploaded file path:', req.file.path);
-            }
-            if(req.body.installments){
-                console.log(' original transferOrPostingEmployeesList ', req.body.installments);
-                req.body.installments = JSON.stringify(req.body.installments);
-                console.log(' after stringify installments ', req.body.installments);
-                console.log('yes');
-                query = req.body;
-                req.body.installments = JSON.parse(req.body.installments);
-                console.log(' after parse installments ', req.body.installments);
-            }
-            let filter;
-            let update = {};
-            update = req.body;
-            if(query.id){
-                console.log('id coming');
-                console.log(query.id);
-                filter = {
-                    _id : query.id
-                }
-            }
-            else{
-                console.log('id coming');
-                throw 'pls provide id field';
-            }
+    // exports.updateHba = async (req, res) => {
+    //     try {
+    //         // console.log('try update hba', req.body);
+    //         console.log('try update hba', req.body.installments);
+    //         //const query = req.body;
+    //         let query = {};
+    //         // if(req.file){
+    //         //     req.body.orderFile = req.file.path
+    
+    //         //     console.log('Uploaded file path:', req.file.path);
+    //         // }
+    //         // if(req.body.installments){
+    //         //     console.log(' original transferOrPostingEmployeesList ', req.body.installments);
+    //         //     req.body.installments = JSON.stringify(req.body.installments);
+    //         //     console.log(' after stringify installments ', req.body.installments);
+    //         //     console.log('yes');
+    //         //     query = req.body;
+    //         //     req.body.installments = JSON.parse(req.body.installments);
+    //         //     console.log(' after parse installments ', req.body.installments);
+    //         // }
+    //         // let filter;
+    //         // let update = {};
+    //         // update = req.body;
+    //         // if(query.id){
+    //         //     console.log('id coming');
+    //         //     console.log(query.id);
+    //         //     filter = {
+    //         //         _id : query.id
+    //         //     }
+    //         // }
+    //         // else{
+    //         //     console.log('id coming');
+    //         //     throw 'pls provide id field';
+    //         // }
                 
-            console.log('update ', update);
-            console.log('filter ', filter);
-            // Check if the update object is empty or not
-            if (Object.keys(update).length > 0) {
-                console.log('value got');
-                const data = await hba.findOneAndUpdate(filter, update, {
-                    new: true
-                  });
-                console.log('data updated ', data);
-                successRes(res, data, 'data updated Successfully');
-            } else {
-                console.log('empty');
-                throw 'Update value missing';
-            }
-        } catch (error) {
-            console.log('catch update hba', error);
-            errorRes(res, error, "Error on hba updation");
-        }
-        }
+    //         // console.log('update ', update);
+    //         // console.log('filter ', filter);
+    //         // // Check if the update object is empty or not
+    //         // if (Object.keys(update).length > 0) {
+    //         //     console.log('value got');
+    //         //     const data = await hba.findOneAndUpdate(filter, update, {
+    //         //         new: true
+    //         //       });
+    //         //     console.log('data updated ', data);
+    //         //     successRes(res, data, 'data updated Successfully');
+    //         // } else {
+    //         //     console.log('empty');
+    //         //     throw 'Update value missing';
+    //         // }
+    //     } catch (error) {
+    //         console.log('catch update hba', error);
+    //         errorRes(res, error, "Error on hba updation");
+    //     }
+    //     }
  
+
+ 
+exports.updateHba = async (req, res) => {
+    try {
+        console.log("Received HBA update request");
+
+        const query = { ...req.body };
+        console.log('1')
+        console.log(req.body)
+        // console.log("Incoming files:", req.files); // Debugging
+
+        if (req.files && req.files["orderFile"]) {
+            query.orderFile = req.files["orderFile"][0].path;
+        }
+
+        const processedInstallments = [];
+        const installmentKeys = Object.keys(req.body)
+            .filter((key) => key.startsWith("installments["))
+            .sort();
+
+        const installmentMap = new Map();
+        installmentKeys.forEach((key) => {
+            const matches = key.match(/installments\[(\d+)\]\[(.+)\]/);
+            console.log('matches',matches)
+            if (matches) {
+                const [, index, field] = matches;
+                if (!installmentMap.has(index)) {
+                    installmentMap.set(index, {});
+                }
+                installmentMap.get(index)[field] = req.body[key];
+            }
+        });
+
+        for (var z = 0; z < req.body.installments.length; z++) {
+            // Correctly assign conductRulePermissionAttachment from req.files
+            const fileFieldName = `installments[${z}][conductRulePermissionAttachment]`;
+            console.log(req.files, req.files[fileFieldName]);
+        
+            if (req.files && req.files[fileFieldName] && req.files[fileFieldName].length > 0) {
+                console.log('File found');
+                // Assign the first file path as a string
+                req.body.installments[z].conductRulePermissionAttachment = req.files[fileFieldName][0].path;
+            } else {
+                console.log('No file found');
+                req.body.installments[z].conductRulePermissionAttachment = ''; // Ensure it's a string
+            }
+        
+            processedInstallments.push(req.body.installments[z]);
+        }
+
+        const updateOperations = [];
+        for (const installment of processedInstallments) {
+            if (!installment._id) {
+                // New installment
+                updateOperations.push({
+                    updateOne: {
+                        filter: { _id: query.id },
+                        update: { $push: { installments: installment } }
+                    }
+                });
+            } else if (installment.edited === "yes") {
+                // Update existing installment
+                updateOperations.push({
+                    updateOne: {
+                        filter: {
+                            _id: query.id,
+                            "installments._id": installment._id
+                        },
+                        update: {
+                            $set: { "installments.$": installment }
+                        }
+                    }
+                });
+            }
+        }
+
+        if (updateOperations.length > 0) {
+            await hba.bulkWrite(updateOperations);
+        }
+
+        const mainDocUpdate = {};
+        Object.keys(query).forEach((key) => {
+            if (!key.startsWith("installments[") && key !== "id") {
+                mainDocUpdate[key] = query[key];
+            }
+        });
+
+        if (Object.keys(mainDocUpdate).length > 0) {
+            await hba.updateOne({ _id: query.id }, { $set: mainDocUpdate });
+        }
+
+        return res.json({
+            success: true,
+            message: "HBA updated successfully",
+            updatedData: {
+                mainUpdate: mainDocUpdate,
+                installments: processedInstallments
+            }
+        });
+
+    } catch (error) {
+        console.error("Error updating HBA:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error updating HBA",
+            error: error.message
+        });
+    }
+};
