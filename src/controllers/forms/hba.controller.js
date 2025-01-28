@@ -197,7 +197,7 @@ exports.addHba = async (req, res) => {
                 {
                     resultData = [];
                 }
-                successRes(res, resultData, 'education listed Successfully');
+                successRes(res, resultData, 'Hba listed Successfully');
             }
             else if(req.query.loginAs == 'Spl A - SO' ||
                 req.query.loginAs == 'Spl B - SO' ||
@@ -365,7 +365,7 @@ exports.addHba = async (req, res) => {
                     {
                         resultData = [];
                     }
-            successRes(res, resultData, 'education listed Successfully');
+            successRes(res, resultData, 'Hba listed Successfully');
             }
             else{
                 data = await hba.find()
@@ -385,7 +385,7 @@ exports.addHba = async (req, res) => {
                     select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
                 }) 
                 .exec();
-            successRes(res, data, 'Gpf listed Successfully');
+            successRes(res, data, 'Hba listed Successfully');
             }
                 
         } catch (error) {
