@@ -20,7 +20,7 @@ module.exports = (app) => {
 
   app.get(
     "/getCircluar",
-    [jwt.verifyToken],
+    //[jwt.verifyToken],
     value.getCircluar
   );
 

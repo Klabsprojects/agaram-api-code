@@ -19,7 +19,7 @@ module.exports = (app) => {
 
   app.get(
     "/getfaq",
-    [jwt.verifyToken],
+    //[jwt.verifyToken],
     value.getfaq
   );
 

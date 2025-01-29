@@ -20,7 +20,7 @@ module.exports = (app) => {
 
   app.get(
     "/getSpecialEntries",
-    [jwt.verifyToken],
+    //[jwt.verifyToken],
     value.getSpecialEntries
   );
 

@@ -20,7 +20,7 @@ module.exports = (app) => {
 
   app.get(
     "/getActsrules",
-    [jwt.verifyToken],
+    //[jwt.verifyToken],
     value.getActsrules
   );
 

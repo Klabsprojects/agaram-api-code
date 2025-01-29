@@ -9899,7 +9899,7 @@ exports.getCurrentPosting = async (req, res) => {
             console.log('uniqueArray ==> ', uniqueArray[0]);
             if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
                 for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
-                    console.log('Check ', transferOrPostingEmployeesList.fullName);
+                    console.log('Check ', transferOrPostingEmployeesList.fullName, transferOrPostingEmployeesList);
                     if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0._id.toString()){
                         console.log('Matched ');
                         console.log('posting available')
@@ -9910,7 +9910,8 @@ exports.getCurrentPosting = async (req, res) => {
                     fullName: data0.fullName,
                     personalEmail: data0.personalEmail,
                     dateOfBirth: data0.dateOfBirth,
-                    dateOfJoining: data0.dateOfJoining,
+                    //dateOfJoining: data0.dateOfJoining,
+                    dateOfJoining: data0.lastDateOfPromotion,
                     statinformation : await categories.findById(data0.state).select(['category_name']),
                     officeEmail: data0.officeEmail,
                     mobileNo1: data0.mobileNo1,

@@ -20,7 +20,7 @@ module.exports = (app) => {
 
   app.get(
     "/getUtilityforms",
-    [jwt.verifyToken],
+    //[jwt.verifyToken],
     value.getUtilityforms
   );
 

@@ -20,7 +20,7 @@ module.exports = (app) => {
 
   app.get(
     "/getgo",
-    [jwt.verifyToken],
+    //[jwt.verifyToken],
     value.getgo
   );
 
