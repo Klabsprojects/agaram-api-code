@@ -153,13 +153,13 @@ module.exports = (app) => {
 
   app.get(
     "/getEmployeeProfileBydateOfBirth",
-    [jwt.verifyToken],
+    //[jwt.verifyToken],
     value.getEmployeeProfileBydateOfBirth
   );
 
     app.get(
     "/getEmployeesRetiringThisYear",
-    [jwt.verifyToken],
+    //[jwt.verifyToken],
     value.getEmployeesRetiringThisYear
   );
 
