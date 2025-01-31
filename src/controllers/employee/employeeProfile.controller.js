@@ -2183,7 +2183,8 @@ exports.getMaleEmployees = async (req, res) => {
         console.log('genderDetails', genderDetails[0]._id);
         genderId = genderDetails[0]._id;
         query = {
-            gender : genderId
+            gender : genderId,
+            serviceStatus : "65f43649a4a01c1cbbd6c9d6"
         };
         data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
 
@@ -2333,7 +2334,8 @@ exports.getMaleEmployees = async (req, res) => {
             console.log('genderDetails', genderDetails[0]._id);
             genderId = genderDetails[0]._id;
             query = {
-                gender : genderId
+                gender : genderId,
+                serviceStatus : "65f43649a4a01c1cbbd6c9d6"
             };
             data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
 
@@ -2837,14 +2839,17 @@ exports.getByLocation = async (req, res) => {
 
         if(req.query.chennai == 'yes'){
             query = { 
-                city: { $regex: 'chennai', $options: 'i' }
+                city: { $regex: 'chennai', $options: 'i' },
+                serviceStatus : "65f43649a4a01c1cbbd6c9d6"
             };
         }
         else if(req.query.chennai == 'no'){
             query = {
-                city: { $not: { $regex: 'chennai', $options: 'i' } }
+                city: { $not: { $regex: 'chennai', $options: 'i' } },
+                serviceStatus : "65f43649a4a01c1cbbd6c9d6"
             };
         }
+        query.d = 
 
         data = await employeeProfile.find(query).sort({ dateOfJoining: 'asc' }).exec();
         let dataAll = {}
@@ -3148,7 +3153,9 @@ exports.getByLocation = async (req, res) => {
 // Get Employees from Secretariat / not from getBySecretariat
 exports.getBySecretariat = async (req, res) => {
     try{
-        let query = {};
+        let query = {
+                serviceStatus : "65f43649a4a01c1cbbd6c9d6"
+        };
         let secretariatDetails;
         let categoryDetails;
         let categoryId;
@@ -3320,7 +3327,8 @@ exports.getBySecretariat = async (req, res) => {
 // Get Employees from Secretariat / not from getBySecretariat
 exports.getByDeputation = async (req, res) => {
     try{
-        let query = {};
+        let query = {
+        };
         let secretariatDetails;
         let categoryDetails;
         let categoryId;
@@ -3438,7 +3446,8 @@ exports.getByDeputation = async (req, res) => {
 
 exports.getByDesignation = async (req, res) => {
     try{
-        let query = {};
+        let query = {
+            serviceStatus : "65f43649a4a01c1cbbd6c9d6"};
         let secretariatDetails;
         let designationDetails;
         let designationDetails2;
