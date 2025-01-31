@@ -21,7 +21,7 @@ module.exports = (app) => {
     [jwt.verifyToken],
      value.getOfficersTourById);
 
-     app.get('/getOfficersTourByProfileId',
+     app.get('/getOfficersTourByProfileId/:employeeProfileId',
       [jwt.verifyToken],
        value.getOfficersTourByProfileId);
 
