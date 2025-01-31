@@ -12,7 +12,7 @@ module.exports = (app) => {
 
   app.get(
     "/getDesignations",
-    [jwt.verifyToken],
+    //[jwt.verifyToken],
     value.getDesignations
   );
 
