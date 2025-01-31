@@ -155,6 +155,40 @@ exports.getOfficersTourById = async (req, res) => {
     }
 };
 
+// Get single officer tour by Profile ID
+exports.getOfficersTourByProfileId = async (req, res) => {
+    try {
+        const employeeProfileId = req.query.employeeProfileId;
+        const data = await officersTour.find({
+            "OtherOfficers.employeeProfileId": employeeProfileId
+        })
+        .populate('stateId')
+        .populate('districtId')
+        // .populate('orderType')
+        // .populate('orderFor')
+        .populate({
+            path: 'OtherOfficers.employeeProfileId',
+            model: 'employeeProfile'
+        })
+        .populate({
+            path: 'OtherOfficers.departmentId',
+            model: 'departments'
+        })
+        .populate({
+            path: 'OtherOfficers.designationId',
+            model: 'designations'
+        });
+        
+        if (!data || data.length === 0) {
+            return errorRes(res, null, "No OfficersTour records found for the provided employeeProfileId");
+        }
+    successRes(res, data, 'officersTour fetched Successfully');
+    } catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on fetching officersTour");
+    }
+};
+
 // Update officer tour
 exports.updateOfficersTour = async (req, res) => {
     try {

@@ -3,6 +3,7 @@ const login = require('../../models/login/login.model');
 const { successRes, errorRes } = require("../../middlewares/response.middleware")
 const whatsapp = require('../whatsapp/whatsapp.controller');
 const empProfile = require('../employee/employeeProfile.controller');
+const leave = require('../../models/employee/leave.model');
 
 // gpf creation
 exports.addGpf = async (req, res) => {
@@ -146,6 +147,32 @@ exports.addGpf = async (req, res) => {
                     resultData = [];
                 }
                 successRes(res, resultData, 'education listed Successfully');
+            }
+
+            else if(req.query.employeeProfileId){
+                console.log('profileid', req.query.employeeProfileId)
+                query.where = req.query;
+                data = await gpf.find({
+                    'employeeProfileId': req.query.employeeProfileId
+                })
+                .populate({
+                    path: 'employeeProfileId',
+                    model: 'employeeProfile', // Model of the application collection
+                    select: ['batch', 'mobileNo1', 'fullName'] // Fields to select from the application collection
+                })  
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login', // Ensure the model name matches exactly
+                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                }) 
+                .exec();
+                console.log(data, 'gpf listed else Successfully');
+                successRes(res, data, 'gpf listed Successfully');
             }
             else if(req.query.loginAs == 'Spl A - SO' ||
                 req.query.loginAs == 'Spl B - SO' ||
