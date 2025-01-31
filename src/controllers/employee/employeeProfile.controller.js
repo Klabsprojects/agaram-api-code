@@ -9946,3 +9946,191 @@ exports.getCurrentPosting = async (req, res) => {
         errorRes(res, error, "Error on listing employee");
     }
 }
+
+exports.getEmployeeProfileBydateOfBirth = async (req, res) => {
+    console.log('Hello from employeeProfile controller', req.query);
+    try {
+        let query = {};
+        let data;
+        let resultData = [];
+
+        // Get the current date
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth(); // 0-based month (January = 0)
+        const currentDay = currentDate.getDate();
+
+        console.log('Current Month and Day:', currentMonth, currentDay);
+
+        // Use aggregation to match the month and day of dateOfBirth
+        data = await employeeProfile.aggregate([
+            {
+                $project: {
+                    fullName: 1,
+                    personalEmail: 1,
+                    gender: 1,
+                    dateOfBirth: 1,
+                    dateOfJoining: 1,
+                    dateOfRetirement: 1,
+                    state: 1,
+                    batch: 1,
+                    recruitmentType: 1,
+                    serviceStatus: 1,
+                    qualification1: 1,
+                    qualification2: 1,
+                    community: 1,
+                    degreeData: 1,
+                    caste: 1,
+                    religion: 1,
+                    promotionGrade: 1,
+                    payscale: 1,
+                    officeEmail: 1,
+                    mobileNo1: 1,
+                    mobileNo2: 1,
+                    mobileNo3: 1,
+                    addressLine: 1,
+                    city: 1,
+                    pincode: 1,
+                    employeeId: 1,
+                    ifhrmsId: 1,
+                    lastDateOfPromotion: 1,
+                    languages: 1,
+                    seniority: 1,
+                    imagePath: 1,
+                    submittedBy: 1,
+                    approvedBy: 1,
+                    approvedDate: 1,
+                    approvalStatus: 1,
+                    departmentId: 1,
+                    // Extract the month and day from dateOfBirth
+                    birthMonth: { $month: "$dateOfBirth" },
+                    birthDay: { $dayOfMonth: "$dateOfBirth" }
+                }
+            },
+            {
+                $match: {
+                    $and: [
+                        { birthMonth: currentMonth + 1 }, // month is 1-based in MongoDB (Jan = 1)
+                        { birthDay: currentDay }
+                    ]
+                }
+            }
+        ]);
+
+        console.log('Data fetched:', data);
+        if (data.length > 0) {
+            console.log('Data length:', data.length);
+
+            for (let data0 of data) {
+                let updateQueryJson = { empId: data0._id };
+                let uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+
+                console.log('Unique Array Length:', uniqueArray.length);
+                console.log('Unique Array:', uniqueArray[0]);
+
+                if (uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList) {
+                    for (let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList) {
+                        console.log('Check:', transferOrPostingEmployeesList.fullName);
+
+                        if (transferOrPostingEmployeesList.empProfileId._id.toString() === data0._id.toString()) {
+                            console.log('Matched');
+                            resultData.push({
+                                toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                                uniqueId: uniqueArray[0]._id,
+                                updateType: uniqueArray[0].updateType,
+                                orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                                orderNumber: uniqueArray[0].orderNumber,
+                                orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                                fullName: data0.fullName,
+                                personalEmail: data0.personalEmail,
+                                _id: data0._id,
+                                gender: data0.gender,
+                                dateOfBirth: data0.dateOfBirth,
+                                dateOfJoining: data0.dateOfJoining,
+                                dateOfRetirement: data0.dateOfRetirement,
+                                state: data0.state,
+                                batch: data0.batch,
+                                recruitmentType: data0.recruitmentType,
+                                serviceStatus: data0.serviceStatus,
+                                qualification1: data0.qualification1,
+                                qualification2: data0.qualification2,
+                                community: data0.community,
+                                degreeData: data0.degreeData,
+                                caste: data0.caste,
+                                religion: data0.religion,
+                                promotionGrade: data0.promotionGrade,
+                                payscale: data0.payscale,
+                                officeEmail: data0.officeEmail,
+                                mobileNo1: data0.mobileNo1,
+                                mobileNo2: data0.mobileNo2,
+                                mobileNo3: data0.mobileNo3,
+                                addressLine: data0.addressLine,
+                                city: data0.city,
+                                pincode: data0.pincode,
+                                employeeId: data0.employeeId,
+                                ifhrmsId: data0.ifhrmsId,
+                                lastDateOfPromotion: data0.lastDateOfPromotion,
+                                languages: data0.languages,
+                                seniority: data0.seniority,
+                                imagePath: data0.imagePath,
+                                submittedBy: data0.submittedBy,
+                                approvedBy: data0.approvedBy,
+                                approvedDate: data0.approvedDate,
+                                approvalStatus: data0.approvalStatus,
+                                departmentId: data0.departmentId
+                            });
+                        }
+                    }
+                } else {
+                    resultData.push({
+                        fullName: data0.fullName,
+                        personalEmail: data0.personalEmail,
+                        _id: data0._id,
+                        gender: data0.gender,
+                        dateOfBirth: data0.dateOfBirth,
+                        dateOfJoining: data0.dateOfJoining,
+                        dateOfRetirement: data0.dateOfRetirement,
+                        state: data0.state,
+                        batch: data0.batch,
+                        recruitmentType: data0.recruitmentType,
+                        serviceStatus: data0.serviceStatus,
+                        qualification1: data0.qualification1,
+                        qualification2: data0.qualification2,
+                        community: data0.community,
+                        degreeData: data0.degreeData,
+                        caste: data0.caste,
+                        religion: data0.religion,
+                        promotionGrade: data0.promotionGrade,
+                        payscale: data0.payscale,
+                        officeEmail: data0.officeEmail,
+                        mobileNo1: data0.mobileNo1,
+                        mobileNo2: data0.mobileNo2,
+                        mobileNo3: data0.mobileNo3,
+                        addressLine: data0.addressLine,
+                        city: data0.city,
+                        pincode: data0.pincode,
+                        employeeId: data0.employeeId,
+                        ifhrmsId: data0.ifhrmsId,
+                        lastDateOfPromotion: data0.lastDateOfPromotion,
+                        languages: data0.languages,
+                        seniority: data0.seniority,
+                        imagePath: data0.imagePath,
+                        submittedBy: data0.submittedBy,
+                        approvedBy: data0.approvedBy,
+                        approvedDate: data0.approvedDate,
+                        approvalStatus: data0.approvalStatus,
+                        departmentId: data0.departmentId
+                    });
+                }
+            }
+        }
+
+        successRes(res, resultData, 'Employee listed Successfully');
+    } catch (error) {
+        console.log('Error:', error);
+        errorRes(res, error, "Error listing employee");
+    }
+};

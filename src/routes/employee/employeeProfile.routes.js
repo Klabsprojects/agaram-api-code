@@ -151,4 +151,10 @@ module.exports = (app) => {
     value.getEmployeeAdvancedSearch
   );
 
+  app.get(
+    "/getEmployeeProfileBydateOfBirth",
+    // [jwt.verifyToken],
+    value.getEmployeeProfileBydateOfBirth
+  );
+
 }
