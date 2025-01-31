@@ -178,10 +178,6 @@ exports.getOfficersTourByProfileId = async (req, res) => {
             path: 'OtherOfficers.designationId',
             model: 'designations'
         });
-        
-        if (!data || data.length === 0) {
-            return errorRes(res, null, "No OfficersTour records found for the provided employeeProfileId");
-        }
     successRes(res, data, 'officersTour fetched Successfully');
     } catch (error) {
         console.log('error', error);
