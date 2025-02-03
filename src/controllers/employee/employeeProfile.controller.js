@@ -9913,7 +9913,8 @@ exports.getCurrentPosting = async (req, res) => {
                         console.log('Matched ');
                         console.log('posting available')
                 dataAll = {
-                    Departmentdetails: await departments.findById(transferOrPostingEmployeesList.toDepartmentId).select(['department_name']),
+                    Departmentdetails: await departments.findById(transferOrPostingEmployeesList.toDepartmentId).select(
+                        ['department_name', 'address', 'phoneNumber', 'faxNumber', 'officialMobileNo']),
                     Designationdetails: await designations.findById(transferOrPostingEmployeesList.toDesignationId).select(['designation_name']),
                     employeeUpdateId:  uniqueArray[0]._id,
                     fullName: data0.fullName,
