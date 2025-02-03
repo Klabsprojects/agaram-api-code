@@ -12,8 +12,8 @@ const upload = multer({ storage });
 // 2. Create the dynamic upload middleware
 const createUploadMiddleware = (req, res, next) => {
     // Log the incoming field names to debug
-    console.log('Incoming fields:', Object.keys(req.body));
-    console.log('Incoming files:', req.files);
+    // console.log('Incoming fields:', Object.keys(req.body));
+    // console.log('Incoming files:', req.files);
 
     // Create the fields configuration
     const fields = [

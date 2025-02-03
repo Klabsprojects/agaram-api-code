@@ -480,15 +480,17 @@ exports.addHba = async (req, res) => {
  
 exports.updateHba = async (req, res) => {
     try {
-        console.log("Received HBA update request");
+        // console.log("Received HBA update request");
 
         const query = { ...req.body };
-        console.log('1')
-        console.log(req.body)
+        // console.log('1')
+        // console.log(req.body)
         // console.log("Incoming files:", req.files); // Debugging
 
         if (req.files && req.files["orderFile"]) {
             query.orderFile = req.files["orderFile"][0].path;
+        } else {
+            query.orderFile = req.body.orderFile;
         }
 
         const processedInstallments = [];
@@ -499,7 +501,7 @@ exports.updateHba = async (req, res) => {
         const installmentMap = new Map();
         installmentKeys.forEach((key) => {
             const matches = key.match(/installments\[(\d+)\]\[(.+)\]/);
-            console.log('matches',matches)
+            // console.log('matches',matches)
             if (matches) {
                 const [, index, field] = matches;
                 if (!installmentMap.has(index)) {
@@ -512,15 +514,17 @@ exports.updateHba = async (req, res) => {
         for (var z = 0; z < req.body.installments.length; z++) {
             // Correctly assign conductRulePermissionAttachment from req.files
             const fileFieldName = `installments[${z}][conductRulePermissionAttachment]`;
-            console.log(req.files, req.files[fileFieldName]);
+            // console.log(req.files, req.files[fileFieldName]);
         
             if (req.files && req.files[fileFieldName] && req.files[fileFieldName].length > 0) {
-                console.log('File found');
+                // console.log('File found');
                 // Assign the first file path as a string
                 req.body.installments[z].conductRulePermissionAttachment = req.files[fileFieldName][0].path;
-            } else {
-                console.log('No file found');
-                req.body.installments[z].conductRulePermissionAttachment = ''; // Ensure it's a string
+            } 
+            else {
+                // console.log('No file found');
+                // console.log(req.body.installments[z].conductRulePermissionAttachment)
+                req.body.installments[z].conductRulePermissionAttachment = req.body.installments[z].conductRulePermissionAttachment; 
             }
         
             processedInstallments.push(req.body.installments[z]);
@@ -530,6 +534,8 @@ exports.updateHba = async (req, res) => {
         for (const installment of processedInstallments) {
             if (!installment._id) {
                 // New installment
+                // console.log('no execute');
+                // console.log(installment)
                 updateOperations.push({
                     updateOne: {
                         filter: { _id: query.id },
@@ -538,6 +544,8 @@ exports.updateHba = async (req, res) => {
                 });
             } else if (installment.edited === "yes") {
                 // Update existing installment
+                // console.log('yes execute');
+                // console.log(installment)
                 updateOperations.push({
                     updateOne: {
                         filter: {
@@ -558,12 +566,15 @@ exports.updateHba = async (req, res) => {
 
         const mainDocUpdate = {};
         Object.keys(query).forEach((key) => {
-            if (!key.startsWith("installments[") && key !== "id") {
+            if (key !== "installments" && key !== "id") {
                 mainDocUpdate[key] = query[key];
             }
         });
+        
 
         if (Object.keys(mainDocUpdate).length > 0) {
+            // console.log('main update')
+            // console.log(mainDocUpdate)
             await hba.updateOne({ _id: query.id }, { $set: mainDocUpdate });
         }
 
