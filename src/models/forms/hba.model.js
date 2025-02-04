@@ -34,7 +34,7 @@ const hbaSchema = new Schema({
 	isExisingResidenceAvailable: String,
 	twoBRelacation: String,
 	totalHbaAvailed: Number,
-	totalNumberOfInstallments: Number,
+	totalNumberOfInstallments: String,
 	totalNumberOfRecoveryMonths: Number,
 	installments : [{
 			installmentNumber: String,
