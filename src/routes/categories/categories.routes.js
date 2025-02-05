@@ -28,4 +28,11 @@ module.exports = (app) => {
     value.getCategoryTypes
   )
 
+  app.put(
+    "/updateCategory/:id", 
+    [jwt.verifyToken], 
+    value.updateCategory
+  );
+
+
 }

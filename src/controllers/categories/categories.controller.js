@@ -70,3 +70,28 @@ exports.getCategoryTypes = async (req, res) => {
         errorRes(res, error, message);
     }
 }
+
+// Update Category API
+exports.updateCategory = async (req, res) => {
+    try {
+        const categoryId = req.params.id;
+        const updateData = req.body; // The fields to update
+
+        console.log('Updating category:', categoryId, updateData);
+
+        const updatedCategory = await categories.findByIdAndUpdate(
+            categoryId,
+            { $set: updateData },
+            { new: true, runValidators: true } // Returns updated document & validates
+        );
+
+        if (!updatedCategory) {
+            return res.status(404).json({ success: false, message: "Category not found" });
+        }
+
+        successRes(res, updatedCategory, "Category updated successfully");
+    } catch (error) {
+        console.error("Error updating category:", error);
+        errorRes(res, error, "Error updating category");
+    }
+};
