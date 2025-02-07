@@ -2516,6 +2516,8 @@ exports.getActiveEmployees = async (req, res) => {
                                 toDesignationId: transferOrPostingEmployeesList.toDesignationId,
                                 postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
                                 locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                        Departmentdetails: await departments.findById(transferOrPostingEmployeesList.toDepartmentId).select(
+                                    ['department_name', 'address']),
                         updateType: uniqueArray[0].updateType,
                         orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
                         orderNumber: uniqueArray[0].orderNumber,
@@ -9914,7 +9916,7 @@ exports.getCurrentPosting = async (req, res) => {
                         console.log('posting available')
                 dataAll = {
                     Departmentdetails: await departments.findById(transferOrPostingEmployeesList.toDepartmentId).select(
-                        ['department_name', 'address', 'phoneNumber', 'faxNumber', 'officialMobileNo']),
+                        ['department_name', 'address']),
                     Designationdetails: await designations.findById(transferOrPostingEmployeesList.toDesignationId).select(['designation_name']),
                     employeeUpdateId:  uniqueArray[0]._id,
                     fullName: data0.fullName,
