@@ -38,5 +38,6 @@ require("./state/district.route")(app);
 require("./employee/dros.routes")(app);
 require("./contactUs/contactus.route")(app);
 require("./landingpage/landingpage.route")(app);
+require("./employee/formsupload.routes")(app);
 module.exports = app;
 
