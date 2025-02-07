@@ -157,3 +157,49 @@ exports.getFormsupload = async (req, res) => {
             errorRes(res, error, "Error on listing formsupload");
         }
     }
+
+        exports.updateFormsuploadApprovalStatus = async (req, res) => {
+            try {
+                console.log('try update Formsupload status', req.body, req);
+                const query = req.body;
+                let update = {};
+                const currentDate = new Date();
+                if(query.approvedBy){
+                    update.approvedBy = query.approvedBy;
+                    update.approvalStatus = true;
+                    update.approvedDate = currentDate;
+                } 
+                else    
+                    throw 'Pls provide inputs';
+                let filter;
+                if(query.id){
+                    console.log('id coming');
+                    console.log(query.id);
+                    filter = {
+                        _id : query.id
+                    }
+                }
+                else{
+                    console.log('id coming');
+                    throw 'pls provide id field';
+                }
+                    
+                console.log('update ', update);
+                console.log('filter ', filter);
+                // Check if the update object is empty or not
+                if (Object.keys(update).length > 0) {
+                    console.log('value got');
+                    const data = await formsupload.findOneAndUpdate(filter, update, {
+                        new: true
+                      });
+                    console.log('data updated ', data);
+                    successRes(res, data, 'data updated Successfully');
+                } else {
+                    console.log('empty');
+                    throw 'Update value missing';
+                }
+            } catch (error) {
+                console.log('catch update', error);
+                errorRes(res, error, error);
+            }
+            }

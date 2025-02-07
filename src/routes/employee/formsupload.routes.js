@@ -23,5 +23,11 @@ module.exports = (app) => {
     CommonFileUpload('formsupload').single('formFile'),
     value.addFormsupload
   );
+
+  app.put(
+    "/updateFormsuploadApprovalStatus",
+    [jwt.verifyToken],
+    value.updateFormsuploadApprovalStatus
+  );
   
 }
