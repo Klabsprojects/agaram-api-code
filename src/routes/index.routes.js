@@ -39,5 +39,6 @@ require("./employee/dros.routes")(app);
 require("./contactUs/contactus.route")(app);
 require("./landingpage/landingpage.route")(app);
 require("./employee/formsupload.routes")(app);
+require("./services/announcement.route")(app);
 module.exports = app;
 
