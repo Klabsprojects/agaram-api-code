@@ -28,4 +28,9 @@ module.exports = (app) => {
     value.updateAnnouncement
     );
 
+    app.delete('/deleteAnnouncement/:id',
+     // [jwt.verifyToken],
+    value.deleteAnnouncement);
+      
+
 }
