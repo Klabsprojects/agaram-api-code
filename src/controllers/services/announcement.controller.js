@@ -32,4 +32,27 @@ exports.addAnnouncement = async (req, res) => {
             errorRes(res, error, "Error fetching recent announcements");
         }
     };
-    
+
+exports.updateAnnouncement = async (req, res) => {
+    try {
+        const id  = req.params.id; // Get the announcement ID from URL params
+        const updateData = req.body; // Get updated data from request body
+        console.log(req.params.id, req.body);
+        // Find and update the announcement
+        const updatedAnnouncement = await announcement.findByIdAndUpdate(
+            id, 
+            updateData, 
+            { new: true, runValidators: true } // Return updated doc & validate fields
+        );
+
+        // If no announcement found
+        if (!updatedAnnouncement) {
+            return errorRes(res, null, "Announcement not found", 404);
+        }
+
+        successRes(res, updatedAnnouncement, "Announcement updated successfully");
+    } catch (error) {
+        console.log("Error updating announcement:", error);
+        errorRes(res, error, "Error updating announcement");
+    }
+};

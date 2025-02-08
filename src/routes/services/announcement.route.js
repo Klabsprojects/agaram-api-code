@@ -23,15 +23,9 @@ module.exports = (app) => {
     value.getRecentAnnouncements
   );
 
-  // app.delete('/deletefaq/:id',
-  //   [jwt.verifyToken],
-  //    value.deletefaq);
-
-
-  //   app.put(
-  //   "/updatefaq",
-  //   [jwt.verifyToken],
-  //   value.updatefaq
-  //   );
+    app.put(
+    "/updateAnnouncement/:id",
+    value.updateAnnouncement
+    );
 
 }
