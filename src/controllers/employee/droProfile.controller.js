@@ -1,5 +1,5 @@
 const droProfile = require('../../models/employee/droProfile.model');
-const employeeUpdate = require('../../models/employee/employeeUpdate.model');
+const droUpdate = require('../../models/employee/droUpdate.model');
 const categories = require('../../models/categories/categories.model');
 const designations = require('../../models/categories/designation.model');
 const login = require('../../models/login/login.model');
@@ -155,3 +155,260 @@ exports.addDroProfile = async (req, res) => {
         }
     }
     }
+
+// Get droProfile
+exports.getDroProfile = async (req, res) => {
+        console.log('helo from droProfile controller', req.query);
+        try {
+            
+        let query = {};
+        let data;
+        let admins = [];
+        let resultData = [];
+            let adminIds = [];
+            if(req.query._id || req.query.fullName || req.query.batch || req.query.loginId){
+            query.where = req.query;
+            data = await droProfile.find(req.query)
+            .populate({
+                path: 'departmentId',
+                model: 'departments', // Ensure the model name matches exactly
+                //select: ['department_name', 'address', 'phoneNumber', 'faxNumber', 'officialMobileNo'] // Specify the fields you want to include from EmployeeProfile
+                select: ['department_name', 'address', 'phoneNumber', 'faxNumber', 'officialMobileNo']
+            })
+            .populate({
+                path: 'submittedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            })
+            .populate({
+                path: 'approvedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            })
+            
+            .sort({ batch: 'asc' })
+        .allowDiskUse(true)
+        //.limit(100)
+        .exec();
+        console.log('data ', data);
+        if(data.length > 0){
+            console.log('data.length', data.length)
+            for(let data0 of data){
+                let updateQueryJson = {
+                    empId: data0._id
+                }
+                uniqueArray = await this.getEmployeeUpdateFilter(updateQueryJson);
+                console.log('uniqueArray.length ==> ', uniqueArray.length, uniqueArray);
+                console.log('uniqueArray ==> ', uniqueArray[0]);
+                if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                    for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                        console.log('Check ', transferOrPostingEmployeesList.fullName);
+                        if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0._id.toString()){
+                            console.log('Matched ');
+                            console.log('posting available')
+                    dataAll = {
+                        // toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
+                        // toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
+                        // toDesignationId: uniqueArray[0].transferOrPostingEmployeesList[0].toDesignationId,
+                        // postTypeCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].postTypeCategoryCode,
+                        // locationChangeCategoryId: uniqueArray[0].transferOrPostingEmployeesList[0].locationChangeCategoryId,
+                        toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                        uniqueId:  uniqueArray[0]._id,
+                        updateType: uniqueArray[0].updateType,
+                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                        orderNumber: uniqueArray[0].orderNumber,
+                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                        fullName: data0.fullName,
+                        personalEmail: data0.personalEmail,
+                        _id: data0._id,
+                        gender: data0.gender,
+                        dateOfBirth: data0.dateOfBirth,
+                        dateOfJoining: data0.dateOfJoining,
+                        dateOfRetirement : data0.dateOfRetirement,
+                        state: data0.state,
+                        batch: data0.batch,
+                        recruitmentType: data0.recruitmentType,
+                        serviceStatus: data0.serviceStatus,
+                        qualification1: data0.qualification1,
+                        qualification2: data0.qualification2,
+                        community: data0.community,
+                        degreeData: data0.degreeData,
+                        caste: data0.caste,
+                        religion: data0.religion,
+                        promotionGrade: data0.promotionGrade,
+                        payscale: data0.payscale,
+                        officeEmail: data0.officeEmail,
+                        mobileNo1: data0.mobileNo1,
+                        mobileNo2: data0.mobileNo2,
+                        mobileNo3: data0.mobileNo3,
+                        addressLine: data0.addressLine,
+                        city: data0.city,
+                        pincode: data0.pincode,
+                        employeeId: data0.employeeId,
+                        ifhrmsId: data0.ifhrmsId,
+                        lastDateOfPromotion : data0.lastDateOfPromotion,
+                        languages : data0.languages,
+                        seniority: data0.seniority,
+                        //photo: data0.photo,
+                        imagePath: data0.imagePath,
+                        submittedBy: data0.submittedBy,
+                        approvedBy: data0.approvedBy,
+                        approvedDate: data0.approvedDate,
+                        approvalStatus: data0.approvalStatus,
+                        departmentId: data0.departmentId
+                    }
+                    resultData.push(dataAll);
+                }
+            }
+
+                }
+                else{
+                    dataAll = {
+                        fullName: data0.fullName,
+                        personalEmail: data0.personalEmail,
+                        _id: data0._id,
+                        gender: data0.gender,
+                        dateOfBirth: data0.dateOfBirth,
+                        dateOfJoining: data0.dateOfJoining,
+                        dateOfRetirement : data0.dateOfRetirement,
+                        state: data0.state,
+                        batch: data0.batch,
+                        recruitmentType: data0.recruitmentType,
+                        serviceStatus: data0.serviceStatus,
+                        qualification1: data0.qualification1,
+                        qualification2: data0.qualification2,
+                        community: data0.community,
+                        degreeData: data0.degreeData,
+                        caste: data0.caste,
+                        religion: data0.religion,
+                        promotionGrade: data0.promotionGrade,
+                        payscale: data0.payscale,
+                        officeEmail: data0.officeEmail,
+                        mobileNo1: data0.mobileNo1,
+                        mobileNo2: data0.mobileNo2,
+                        mobileNo3: data0.mobileNo3,
+                        addressLine: data0.addressLine,
+                        city: data0.city,
+                        pincode: data0.pincode,
+                        employeeId: data0.employeeId,
+                        ifhrmsId: data0.ifhrmsId,
+                        
+                        lastDateOfPromotion : data0.lastDateOfPromotion,
+                        languages : data0.languages,
+                        seniority: data0.seniority,
+                        //photo: data0.photo,
+                        imagePath: data0.imagePath,
+                        submittedBy: data0.submittedBy,
+                        approvedBy: data0.approvedBy,
+                        approvedDate: data0.approvedDate,
+                        approvalStatus: data0.approvalStatus,
+                        
+                        departmentId: data0.departmentId
+                    }
+                    resultData.push(dataAll);
+                }
+            }
+            
+        }
+            //console.log('if', data);
+            successRes(res, resultData, 'Employee listed Successfully');
+        }
+        else if(req.query.loginAs == 'Spl A - SO' ||
+            req.query.loginAs == 'Spl B - SO' ||
+            req.query.loginAs == 'Spl A - ASO' || 
+            req.query.loginAs == 'Spl B - ASO'
+        ){
+            if(req.query.loginAs == 'Spl A - SO'){
+                    admins  = await login.find({ loginAs: { $in: ['Spl A - ASO', 'Spl A - SO'] } }).select('_id').exec();
+                    if (admins .length === 0) {
+                        return res.status(404).json({ message: 'No admin users found' });
+                    }   
+            }
+            if(req.query.loginAs == 'Spl A - ASO'){
+                admins  = await login.find({ loginAs: { $in: ['Spl A - ASO'] } }).select('_id').exec();
+                if (admins .length === 0) {
+                    return res.status(404).json({ message: 'No admin users found' });
+                }   
+            }
+            if(req.query.loginAs == 'Spl B - SO'){
+                admins  = await login.find({ loginAs: { $in: ['Spl B - ASO', 'Spl B - SO'] } }).select('_id').exec();
+                if (admins .length === 0) {
+                    return res.status(404).json({ message: 'No admin users found' });
+                }   
+            }
+            if(req.query.loginAs == 'Spl B - ASO'){
+                admins  = await login.find({ loginAs: { $in: ['Spl B - ASO'] } }).select('_id').exec();
+                if (admins .length === 0) {
+                    return res.status(404).json({ message: 'No admin users found' });
+                }   
+            }
+            if(req.query.loginAs == 'Spl A - SO' || req.query.loginAs == 'Spl A - ASO' ||
+                req.query.loginAs == 'Spl B - SO' || req.query.loginAs == 'Spl B - ASO')
+            {
+                adminIds = admins.map(admin => admin._id);
+            }
+            console.log('admins ', admins);
+            console.log('adminIds ', adminIds);
+            let profileQuery = {
+                $or: [
+                    { submittedBy: { $in: adminIds } },
+                    { approvalStatus: true }
+                ]
+            }
+             // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
+             data = await droProfile.find(profileQuery)
+             .populate({
+                path: 'submittedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            })
+            .populate({
+                path: 'approvedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            })
+             .sort({ batch: 'asc' })
+        .allowDiskUse(true)
+        .exec();
+            //console.log(data, 'employeeProfile listed if Successfully');
+            successRes(res, data, 'employeeProfile listed Successfully');
+                
+        }
+        else{
+
+            data = await droProfile.find().sort({ batch: 'asc' })
+            .allowDiskUse(true)
+            .exec();
+            //console.log('else', data);
+            successRes(res, data, 'Employee listed Successfully');
+
+        }
+        } catch (error) {
+            console.log('error', error);
+            errorRes(res, error, "Error on listing employee");
+        }
+    }
+
+exports.getEmployeeUpdateFilter = async(input) => {
+    //console.log('inside getEmployeeUpdate function', input)
+    let secretariatDetails;
+
+    const dataResArray  = await droUpdate.find({
+        'transferOrPostingEmployeesList.empProfileId': input.empId,
+        'updateType': 'Transfer / Posting'
+    })
+    .populate({
+        path: 'transferOrPostingEmployeesList.empProfileId',
+        model: 'employeeProfile', // Ensure the model name matches exactly
+        select: 'orderNumber' // Specify the fields you want to include from EmployeeProfile
+    })
+    .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
+    .exec();
+    // console.log('dataResArray ==> ', dataResArray);
+    // console.log('Unique by latest date of order:', dataResArray);
+    return dataResArray;
+}

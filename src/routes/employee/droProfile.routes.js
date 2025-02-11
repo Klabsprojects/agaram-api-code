@@ -22,4 +22,10 @@ module.exports = (app) => {
     value.addDroProfile
   );
 
+  app.get(
+    "/getDroProfile",
+    //[jwt.verifyToken],
+    value.getDroProfile
+  );
+
 }
