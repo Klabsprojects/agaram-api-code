@@ -41,5 +41,6 @@ require("./landingpage/landingpage.route")(app);
 require("./employee/formsupload.routes")(app);
 require("./services/announcement.route")(app);
 require("./employee/droProfile.routes")(app);
+require("./employee/previousPosting.routes")(app);
 module.exports = app;
 
