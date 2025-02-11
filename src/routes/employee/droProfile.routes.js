@@ -14,7 +14,7 @@ module.exports = (app) => {
 
   app.post(
     "/addDroProfile",
-    [jwt.verifyToken],
+    //[jwt.verifyToken],
     CommonFileUpload("droProfile").fields([
         { name: "imagePath", maxCount: 1 },
         { name: "orderFile", maxCount: 1 },

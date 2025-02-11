@@ -19,8 +19,6 @@ const droProfileSchema = new Schema({
 	batch: Number,
 	recruitmentType: ObjectId,
 	serviceStatus: ObjectId,
-	// qualification1: String,
-	// qualification2: String,
 	community: ObjectId,
 	caste: String,
 	religion: ObjectId,
@@ -87,6 +85,10 @@ const droProfileSchema = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'login' // This references the AllocatedBlock model
 	},
+	orderType: ObjectId, 
+	orderNo: Number, 
+	orderFor: ObjectId,
+	dateOfOrder: Date,
 	orderFile: String,
 	remarks: String,
 	createdAt: {

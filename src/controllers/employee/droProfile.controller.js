@@ -5,7 +5,7 @@ const designations = require('../../models/categories/designation.model');
 const login = require('../../models/login/login.model');
 //const login = require('../../models/login/login.model');
 const whatsapp = require('../whatsapp/whatsapp.controller');
-const employeeUpdateController = require('./employeeUpdate.controller')
+const droProfileUpdateController = require('./droProfileUpdate.controller')
 const departmentController = require('../categories/department.controller')
 const departments = require('../../models/categories/department.model');
 const state = require('../../models/state/state.model');
@@ -37,19 +37,19 @@ exports.addDroProfile = async (req, res) => {
         console.log('__dirname ', __dirname);
         const baseDir = path.resolve(__dirname, '../../../');  // Go two levels up from the current directory
 
-        console.log('Base directory:', baseDir);
+        // console.log('Base directory:', baseDir);
 
         const uploadDir = path.join(baseDir, 'droProfileImages');
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir, { recursive: true });
         }
 
-        console.log('query ', query);
+        // console.log('query ', query);
 
         if (req.files && req.files['orderFile'] && req.files['orderFile'].length > 0) {
             // If conductRulePermissionAttachment file exists
             const orderPath = req.files['orderFile'][0].path;
-            console.log('Uploaded orderFile file path:', orderPath);
+            // console.log('Uploaded orderFile file path:', orderPath);
             query.orderFile = orderPath;
         }
         if (req.files && req.files['imagePath'] && req.files['imagePath'].length > 0) {
@@ -61,14 +61,14 @@ exports.addDroProfile = async (req, res) => {
             console.log('outputFilePath', outputFilePath);
             
             // Use imagemagick to convert the uploaded image to JPEG
-            console.log('req.file.path', req.files['imagePath'][0].path);
+            // console.log('req.file.path', req.files['imagePath'][0].path);
         
             await Jimp.read(req.files['imagePath'][0].path)
             .then(image => {
                 return image.writeAsync(outputFilePath);
             })
             .then(() => {
-                console.log('Conversion successful! Output saved to', outputFilePath);
+                // console.log('Conversion successful! Output saved to', outputFilePath);
                 const fileName = path.basename(outputFilePath);
             //query.imagePath = fileName;
             query.imagePath = fileName;
@@ -81,8 +81,8 @@ exports.addDroProfile = async (req, res) => {
         if(req.body.degreeData){
             console.log(' original transferOrPostingEmployeesList ', req.body.degreeData);
             //req.body.transferOrPostingEmployeesList = JSON.stringify(req.body.transferOrPostingEmployeesList);
-            console.log(' after stringify transferOrPostingEmployeesList ', req.body.degreeData);
-            console.log('yes');
+            // console.log(' after stringify transferOrPostingEmployeesList ', req.body.degreeData);
+            // console.log('yes');
             //query = req.body;
             query.degreeData = JSON.parse(req.body.degreeData);
             console.log(' after parse transferOrPostingEmployeesList ', req.body.degreeData);
@@ -133,7 +133,7 @@ exports.addDroProfile = async (req, res) => {
                         }]
                 }
                 }
-                //const dataPosting = await employeeUpdateController.handleBulkEmployeeTransferPosting(request);
+                const dataPosting = await droProfileUpdateController.handleBulkEmployeeTransferPosting(request);
                 //await employeeUpdateController.addPostingFromProfile(req, res);
                 let data1 = data;
                 successRes(res, data1, 'Employee added Successfully');
