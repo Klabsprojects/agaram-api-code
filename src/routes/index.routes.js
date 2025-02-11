@@ -40,5 +40,6 @@ require("./contactUs/contactus.route")(app);
 require("./landingpage/landingpage.route")(app);
 require("./employee/formsupload.routes")(app);
 require("./services/announcement.route")(app);
+require("./employee/droProfile.routes")(app);
 module.exports = app;
 

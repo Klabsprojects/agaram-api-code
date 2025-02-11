@@ -35,7 +35,9 @@ module.exports = function(folderName) {
             if(
                 file.mimetype == "image/png" ||
                 file.mimetype == "image/jpeg" ||
-                file.mimetype === "application/pdf"
+                file.mimetype === "application/pdf" || 
+                file.mimetype === "image/tiff" ||
+                file.mimetype === "image/heic"
             ){
                 console.log('FILE', file);
                 callback(null, true)
