@@ -10,28 +10,21 @@ module.exports = (app) => {
     next();
   });
 
-  // app.get(
-  //   "/getLeave",
-  //   [jwt.verifyToken],
-  //   value.getLeave
-  // );
-
   app.post(
     "/addPreviousPosting",
     [jwt.verifyToken],
     value.addPreviousPosting
   );
-  
-  // app.put(
-  //   "/updateLeave",
-  //   [jwt.verifyToken],
-  //   upload.single('orderFile'),
-  //   value.updateLeave
-  // );
 
-  // app.put(
-  //   "/updateLeaveApprovalStatus",
-  //   [jwt.verifyToken],
-  //   value.updateApprovalStatus
-  // );
+  app.get(
+    "/getPreviousPosting",
+    [jwt.verifyToken],
+    value.getPreviousPosting
+  );
+  
+  app.put(
+    "/updatePreviousPosting",
+    [jwt.verifyToken],
+    value.updatePreviousPosting
+  );
 }

@@ -11,6 +11,7 @@ const droProfileSchema = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'departments'
 	  },
+	fullName: String, 
 	gender: ObjectId,
 	dateOfBirth: Date,
 	dateOfJoining: Date,
