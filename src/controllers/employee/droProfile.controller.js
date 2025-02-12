@@ -393,22 +393,119 @@ exports.getDroProfile = async (req, res) => {
         }
     }
 
-exports.getEmployeeUpdateFilter = async(input) => {
-    //console.log('inside getEmployeeUpdate function', input)
-    let secretariatDetails;
+    // DroProfile updation
+    exports.updateDroProfile = async (req, res) => {
+        try {
+            console.log('try update DroProfile', req.body);
+            // const query = req.body;
+            let filter;
+            let update = {};
+            // update = req.body;
 
-    const dataResArray  = await droUpdate.find({
-        'transferOrPostingEmployeesList.empProfileId': input.empId,
-        'updateType': 'Transfer / Posting'
-    })
-    .populate({
-        path: 'transferOrPostingEmployeesList.empProfileId',
-        model: 'employeeProfile', // Ensure the model name matches exactly
-        select: 'orderNumber' // Specify the fields you want to include from EmployeeProfile
-    })
-    .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
-    .exec();
-    // console.log('dataResArray ==> ', dataResArray);
-    // console.log('Unique by latest date of order:', dataResArray);
-    return dataResArray;
-}
+
+            console.log('try create droProfile', req.body);
+        let dateOrder = new Date();
+        const query = req.body;
+        if(req.body.toDepartmentId)
+            query.departmentId = req.body.toDepartmentId;
+        if(req.body.lastDateOfPromotion)
+            query.lastDateOfPromotion = req.body.lastDateOfPromotion;
+        if(req.body.languages)
+            query.languages = req.body.languages;
+
+        console.log('__dirname ', __dirname);
+        const baseDir = path.resolve(__dirname, '../../../');  // Go two levels up from the current directory
+
+        // console.log('Base directory:', baseDir);
+
+        const uploadDir = path.join(baseDir, 'droProfileImages');
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+
+        // console.log('query ', query);
+
+        if (req.files && req.files['orderFile'] && req.files['orderFile'].length > 0) {
+            // If conductRulePermissionAttachment file exists
+            const orderPath = req.files['orderFile'][0].path;
+            // console.log('Uploaded orderFile file path:', orderPath);
+            query.orderFile = orderPath;
+        }
+        if (req.files && req.files['imagePath'] && req.files['imagePath'].length > 0) {
+            const fileExtension = path.extname(req.files['imagePath'][0].originalname);  // Get the file extension
+            //console.log('uploadDir', uploadDir);
+            
+            // Output file path for the converted image
+            const outputFilePath = path.join(uploadDir, req.files['imagePath'][0].originalname+`${Date.now()}.jpeg`);
+            console.log('outputFilePath', outputFilePath);
+            
+            // Use imagemagick to convert the uploaded image to JPEG
+            // console.log('req.file.path', req.files['imagePath'][0].path);
+        
+            await Jimp.read(req.files['imagePath'][0].path)
+            .then(image => {
+                return image.writeAsync(outputFilePath);
+            })
+            .then(() => {
+                // console.log('Conversion successful! Output saved to', outputFilePath);
+                const fileName = path.basename(outputFilePath);
+            //query.imagePath = fileName;
+            query.imagePath = fileName;
+            })
+            .catch(err => {
+                console.error('Error during conversion:', err);
+                throw new Error('Error during conversion');
+            });
+        }
+        if(req.body.degreeData){
+            console.log(' original transferOrPostingEmployeesList ', req.body.degreeData);
+            //req.body.transferOrPostingEmployeesList = JSON.stringify(req.body.transferOrPostingEmployeesList);
+            // console.log(' after stringify transferOrPostingEmployeesList ', req.body.degreeData);
+            // console.log('yes');
+            //query = req.body;
+            query.degreeData = JSON.parse(req.body.degreeData);
+            console.log(' after parse transferOrPostingEmployeesList ', req.body.degreeData);
+        }
+        
+            update = req.body;
+            
+            if(Object.keys(req.body).length >0){
+                if(query.id){
+                    console.log('id coming');
+                    console.log(query.id);
+                    filter = {
+                        _id : query.id
+                    }
+                }
+                
+            else{
+                console.log('id not coming');
+                throw 'pls provide id field';
+            }
+            }
+            
+            else{
+                console.log('problem in input query');
+                throw 'pls provideinput query';
+            }
+            
+                
+            console.log('update ', update);
+            console.log('filter ', filter);
+            // Check if the update object is empty or not
+            if (Object.keys(update).length > 0) {
+                console.log('value got');
+                const data = await droProfile.findOneAndUpdate(filter, update, {
+                    new: true
+                  });
+                console.log('data updated ', data);
+                successRes(res, data, 'data updated Successfully');
+            } else {
+                console.log('empty');
+                throw 'Update value missing';
+            }
+        } catch (error) {
+            console.log('catch update', error);
+            errorRes(res, error, "Error on updation");
+        }
+        }

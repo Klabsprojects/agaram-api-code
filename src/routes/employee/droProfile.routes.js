@@ -28,4 +28,14 @@ module.exports = (app) => {
     value.getDroProfile
   );
 
+  app.put(
+    "/updateDroProfile",
+    [jwt.verifyToken],
+    CommonFileUpload("droProfile").fields([
+      { name: "imagePath", maxCount: 1 },
+      { name: "orderFile", maxCount: 1 },
+  ]),
+    value.updateDroProfile
+  );
+
 }
