@@ -10,7 +10,7 @@ exports.addPreviousPosting = async (req, res) => {
         console.log('try create previousPosting', req.body);
         const query = req.body;
         // Check if an entry with the same droProfileId already exists
-        const existingRecord = await previousPosting.findOne({ droProfileId: query.droProfileId });
+        const existingRecord = await previousPosting.findOne({ empProfileId: query.empProfileId });
         console.log('existingRecord ', existingRecord);
         if (existingRecord) {
             return res.status(400).send({ status: 400, message: "Previous posting already exists for this employee" });
@@ -30,15 +30,24 @@ exports.getPreviousPosting = async (req, res) => {
             let data = [];
             
             if(req.query.droProfileId){
-                const query = { droProfileId: req.query.droProfileId }; // Corrected query structure
+                const query = { empProfileId: req.query.empProfileId }; // Corrected query structure
 
                 console.log('Query:', query);
 
                 data = await previousPosting.find(query)
+                // .populate({
+                //     path: 'empProfileId',
+                //     model: 'droProfile', // Model of the application collection
+                //     select: ['batch', 'mobileNo1', 'loginId', 'dateOfBirth'] // Fields to select from the application collection
+                // })
                 .populate({
-                    path: 'droProfileId',
-                    model: 'droProfile', // Model of the application collection
-                    select: ['batch', 'mobileNo1', 'loginId', 'dateOfBirth'] // Fields to select from the application collection
+
+                    path: 'empProfileId',
+
+                    model: 'employeeProfile', // Model of the employeeProfile collection
+
+                    select: ['batch', 'mobileNo1', 'fullName'] // Fields to select from the employeeProfile collection
+
                 })
                 .exec();
 
@@ -58,10 +67,19 @@ exports.getPreviousPosting = async (req, res) => {
                 console.log('Query:', query);
 
                 data = await previousPosting.find(query)
+                // .populate({
+                //     path: 'droProfileId',
+                //     model: 'droProfile', // Model of the application collection
+                //     select: ['batch', 'mobileNo1', 'loginId', 'dateOfBirth'] // Fields to select from the application collection
+                // })
                 .populate({
-                    path: 'droProfileId',
-                    model: 'droProfile', // Model of the application collection
-                    select: ['batch', 'mobileNo1', 'loginId', 'dateOfBirth'] // Fields to select from the application collection
+
+                    path: 'empProfileId',
+
+                    model: 'employeeProfile', // Model of the employeeProfile collection
+
+                    select: ['batch', 'mobileNo1', 'fullName'] // Fields to select from the employeeProfile collection
+
                 })
                 .exec();
 
@@ -78,11 +96,20 @@ exports.getPreviousPosting = async (req, res) => {
             else
                 {
                     data = await previousPosting.find()
+                    // .populate({
+                    //     path: 'droProfileId',
+                    //     model: 'droProfile', // Model of the application collection
+                    //     select: ['batch', 'mobileNo1', 'loginId', 'dateOfBirth'] // Fields to select from the application collection
+                    // }) 
                     .populate({
-                        path: 'droProfileId',
-                        model: 'droProfile', // Model of the application collection
-                        select: ['batch', 'mobileNo1', 'loginId', 'dateOfBirth'] // Fields to select from the application collection
-                    }) 
+
+                        path: 'empProfileId',
+    
+                        model: 'employeeProfile', // Model of the employeeProfile collection
+    
+                        select: ['batch', 'mobileNo1', 'fullName'] // Fields to select from the employeeProfile collection
+    
+                    })
                     .populate({
                         path: 'submittedBy',
                         model: 'login', // Ensure the model name matches exactly

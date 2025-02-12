@@ -12,19 +12,19 @@ module.exports = (app) => {
 
   app.post(
     "/addPreviousPosting",
-    [jwt.verifyToken],
+    //[jwt.verifyToken],
     value.addPreviousPosting
   );
 
   app.get(
     "/getPreviousPosting",
-    [jwt.verifyToken],
+    // [jwt.verifyToken],
     value.getPreviousPosting
   );
   
   app.put(
     "/updatePreviousPosting",
-    [jwt.verifyToken],
+    // [jwt.verifyToken],
     value.updatePreviousPosting
   );
 }

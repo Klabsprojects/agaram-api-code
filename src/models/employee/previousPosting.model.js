@@ -5,9 +5,13 @@ const login = require('../login/login.model');
 
 const previousPostingSchema = new Schema({
     updateType: String,
-	droProfileId: {
+	// droProfileId: {
+	// 	type: mongoose.Schema.Types.ObjectId,
+	// 	ref: 'droProfile' // This references the AllocatedBlock model
+	// },
+	empProfileId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'droProfile' // This references the AllocatedBlock model
+		ref: 'profile' // This references the AllocatedBlock model
 	},
 	previousPostingList: [{
 		toPostingInCategoryCode: ObjectId,
