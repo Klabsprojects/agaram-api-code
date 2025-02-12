@@ -10,9 +10,9 @@ const previousPostingSchema = new Schema({
 	// 	ref: 'droProfile' // This references the AllocatedBlock model
 	// },
 	empProfileId: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'profile' // This references the AllocatedBlock model
-	},
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'profile' // This references the AllocatedBlock model
+			},
 	previousPostingList: [{
 		toPostingInCategoryCode: ObjectId,
 		toDepartmentId: {

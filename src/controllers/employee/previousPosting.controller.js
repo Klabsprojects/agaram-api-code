@@ -29,36 +29,38 @@ exports.getPreviousPosting = async (req, res) => {
         try {
             let data = [];
             
-            if(req.query.droProfileId){
+            if(req.query.empProfileId){
                 const query = { empProfileId: req.query.empProfileId }; // Corrected query structure
 
                 console.log('Query:', query);
 
                 data = await previousPosting.find(query)
-                // .populate({
-                //     path: 'empProfileId',
-                //     model: 'droProfile', // Model of the application collection
-                //     select: ['batch', 'mobileNo1', 'loginId', 'dateOfBirth'] // Fields to select from the application collection
-                // })
-                .populate({
-
-                    path: 'empProfileId',
-
-                    model: 'employeeProfile', // Model of the employeeProfile collection
-
-                    select: ['batch', 'mobileNo1', 'fullName'] // Fields to select from the employeeProfile collection
-
-                })
                 .exec();
 
-                if (Array.isArray(data.previousPostings)) {
-                    data.previousPostings.sort((a, b) => a.date - b.date);
-                } else {
-                    console.error('previousPostings is undefined:', data.previousPostings);
-                }               
+                // if (Array.isArray(data.previousPostings)) {
+                //     data.previousPostings.sort((a, b) => a.date - b.date);
+                // } else {
+                //     console.error('previousPostings is undefined:', data.previousPostings);
+                // }               
 
                 //data.previousPostingList.sort((a, b) => new Date(a.fromDate) - new Date(b.fromDate));
                 console.log(data, 'PreviousPosting listed else Successfully');
+
+                if (data.length > 0) {
+                    data = await Promise.all(data.map(async (item) => {
+                        // Convert Mongoose document to plain JS object
+                        item = item.toObject();
+            
+                        // Fetch related employeeProfile
+                        const profile = await employeeProfile.findOne({ _id: item.empProfileId }).select(['fullName', 'batch', 'mobileNo1', 'employeeId']);
+                        
+                        // Replace empProfileId with populated data
+                        item.empProfileId = profile;
+                        return item;
+                    }));
+                }
+                console.log('Data after population:', JSON.stringify(data, null, 2));
+                console.log('data after ', data)
                 successRes(res, data, 'PreviousPosting listed Successfully');
             }
             else if(req.query._id){
@@ -83,11 +85,11 @@ exports.getPreviousPosting = async (req, res) => {
                 })
                 .exec();
 
-                if (Array.isArray(data.previousPostings)) {
-                    data.previousPostings.sort((a, b) => a.date - b.date);
-                } else {
-                    console.error('previousPostings is undefined:', data.previousPostings);
-                }               
+                // if (Array.isArray(data.previousPostings)) {
+                //     data.previousPostings.sort((a, b) => a.date - b.date);
+                // } else {
+                //     console.error('previousPostings is undefined:', data.previousPostings);
+                // }               
 
                 //data.previousPostingList.sort((a, b) => new Date(a.fromDate) - new Date(b.fromDate));
                 console.log(data, 'PreviousPosting listed else Successfully');
@@ -101,15 +103,11 @@ exports.getPreviousPosting = async (req, res) => {
                     //     model: 'droProfile', // Model of the application collection
                     //     select: ['batch', 'mobileNo1', 'loginId', 'dateOfBirth'] // Fields to select from the application collection
                     // }) 
-                    .populate({
-
-                        path: 'empProfileId',
-    
-                        model: 'employeeProfile', // Model of the employeeProfile collection
-    
-                        select: ['batch', 'mobileNo1', 'fullName'] // Fields to select from the employeeProfile collection
-    
-                    })
+                    // .populate({
+                    //     path: 'empProfileId',
+                    //     model: 'employeeProfile', // Ensure the model name matches exactly
+                    //     //select: 'orderNumber' // Specify the fields you want to include from EmployeeProfile
+                    // })
                     .populate({
                         path: 'submittedBy',
                         model: 'login', // Ensure the model name matches exactly
