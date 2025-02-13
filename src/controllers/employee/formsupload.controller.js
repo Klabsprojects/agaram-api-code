@@ -34,32 +34,44 @@ exports.getFormsupload = async (req, res) => {
             let data = [];
             let admins = [];
             let adminIds = [];
+                    if(req.query.approvalStatus){
+                        query.where = {
+                            approvalStatus: req.query.approvalStatus
+                        }
+                    }
+                    console.log('query =>', query);
+                    data = await formsupload.find(query.where)
+                    .populate({
+                        path: 'employeeProfileId',
+                        model: 'employeeProfile', // Model of the application collection
+                        select: ['batch', 'mobileNo1', 'fullName'] // Fields to select from the application collection
+                    })  
+                    .populate({
+                        path: 'approvedBy',
+                        model: 'login', // Ensure the model name matches exactly
+                        select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+                    }) 
+                    .exec();
+                    console.log(data, 'formsupload listed else Successfully');
+                    successRes(res, data, 'formsupload listed Successfully');
+        } catch (error) {
+            console.log('error', error);
+            errorRes(res, error, "Error on listing formsupload");
+        }
+    }
 
-            if(req.query._id){
-                /////old
-                query.where = req.query;
-                data = await formsupload.find(req.query)
-                .populate({
-                    path: 'employeeProfileId',
-                    model: 'employeeProfile', // Model of the application collection
-                    select: ['batch', 'mobileNo1', 'loginId'] // Fields to select from the application collection
-                })  
-                .populate({
-                    path: 'approvedBy',
-                    model: 'login', // Ensure the model name matches exactly
-                    select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
-                }) 
-                .exec();
-                console.log(data, 'formsupload listed else Successfully');
-                successRes(res, data, 'formsupload listed Successfully');
-            }
+    exports.getFormsuploadByEmployee = async (req, res) => {
+        console.log('helo from Formsupload controller', req.query);
+        try {
+            let query = {};
+            let data = [];
+            let admins = [];
+            let adminIds = [];
 
-            else if(req.query.employeeProfileId){
+            if(req.query.employeeProfileId){
                 console.log('profileid', req.query.employeeProfileId)
                 query.where = req.query;
-                data = await formsupload.find({
-                    'employeeProfileId': req.query.employeeProfileId
-                })
+                data = await formsupload.find(query.where)
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
@@ -74,84 +86,8 @@ exports.getFormsupload = async (req, res) => {
                 console.log(data, 'formsupload listed else Successfully');
                 successRes(res, data, 'formsupload listed Successfully');
             }
-
-            else if(req.query.loginAs == 'Spl A - SO' ||
-                req.query.loginAs == 'Spl B - SO' ||
-                req.query.loginAs == 'Spl A - ASO' || 
-                req.query.loginAs == 'Spl B - ASO'
-            ){
-                if(req.query.loginAs == 'Spl A - SO'){
-                    admins  = await login.find({ loginAs: { $in: ['Spl A - ASO', 'Spl A - SO'] } }).select('_id').exec();
-                    if (admins .length === 0) {
-                        return res.status(404).json({ message: 'No admin users found' });
-                    }   
-            }
-            if(req.query.loginAs == 'Spl A - ASO'){
-                admins  = await login.find({ loginAs: { $in: ['Spl A - ASO'] } }).select('_id').exec();
-                if (admins .length === 0) {
-                    return res.status(404).json({ message: 'No admin users found' });
-                }   
-            }
-            if(req.query.loginAs == 'Spl B - SO'){
-                admins  = await login.find({ loginAs: { $in: ['Spl B - ASO', 'Spl B - SO'] } }).select('_id').exec();
-                if (admins .length === 0) {
-                    return res.status(404).json({ message: 'No admin users found' });
-                }   
-            }
-            if(req.query.loginAs == 'Spl B - ASO'){
-                admins  = await login.find({ loginAs: { $in: ['Spl B - ASO'] } }).select('_id').exec();
-                if (admins .length === 0) {
-                    return res.status(404).json({ message: 'No admin users found' });
-                }   
-            }
-            if(req.query.loginAs == 'Spl A - SO' || req.query.loginAs == 'Spl A - ASO' ||
-                req.query.loginAs == 'Spl B - SO' || req.query.loginAs == 'Spl B - ASO')
-            {
-                adminIds = admins.map(admin => admin._id);
-            }
-            console.log('admins ', admins);
-            console.log('adminIds ', adminIds);
-            let profileQuery = {
-                $or: [
-                    { submittedBy: { $in: adminIds } },
-                    { approvalStatus: true }
-                ]
-            }
-                 // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
-                 data = await leave.find(profileQuery)
-                     .populate({
-                         path: 'employeeProfileId',
-                         model: 'employeeProfile',
-                         select: ['batch', 'mobileNo1']
-                     })
-                    .populate({
-                        path: 'approvedBy',
-                        model: 'login', // Ensure the model name matches exactly
-                        select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
-                    }) 
-                     .exec();   
-                
-            console.log(data, 'leave listed if Successfully');
-            successRes(res, data, 'leave listed Successfully');
-                    
-            }
             else
-                {
-                    data = await formsupload.find()
-                    .populate({
-                        path: 'employeeProfileId',
-                        model: 'employeeProfile', // Model of the application collection
-                        select: ['batch', 'mobileNo1', 'fullName'] // Fields to select from the application collection
-                    })  
-                    .populate({
-                        path: 'approvedBy',
-                        model: 'login', // Ensure the model name matches exactly
-                        select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
-                    }) 
-                    .exec();
-                    console.log(data, 'formsupload listed else Successfully');
-                    successRes(res, data, 'formsupload listed Successfully');
-                }
+                throw new Error('Pls provide valid profileId');
         } catch (error) {
             console.log('error', error);
             errorRes(res, error, "Error on listing formsupload");

@@ -17,6 +17,12 @@ module.exports = (app) => {
     value.getFormsupload
   );
 
+  app.get(
+    "/getFormsuploadByEmployee",
+    [jwt.verifyToken],
+    value.getFormsuploadByEmployee
+  );
+
   app.post(
     "/addFormsupload",
     [jwt.verifyToken],
