@@ -16,4 +16,9 @@ module.exports = (app) => {
     value.addOrUpdateVisitor
   );
 
+  app.get(
+    "/getLatestVisitor",
+    value.getLatestVisitor
+  );
+
 }

@@ -34,3 +34,20 @@ exports.addOrUpdateVisitor = async (req, res) => {
         errorRes(res, error, 'Error adding/updating visitor');
     }
 };
+
+// GET API to get the latest visitor entry by visitUpdateDate
+exports.getLatestVisitor = async (req, res) => {
+    try {
+        const latestEntry = await visitor.findOne({}).sort({ visitUpdateDate: -1 });
+        
+        if (!latestEntry) {
+            return successRes(res, null, 'No visitor entries found');
+        }
+
+        successRes(res, latestEntry, 'Latest visitor entry fetched successfully');
+    } catch (error) {
+        console.log('Error fetching latest visitor entry:', error);
+        errorRes(res, error, 'Error fetching latest visitor entry');
+    }
+};
+
