@@ -16,4 +16,22 @@ module.exports = (app) => {
     value.addContactus
   );
 
+  app.get(
+    "/getContactus",
+    [jwt.verifyToken],
+    value.getContactus
+  );
+
+  app.get(
+    "/getReadCount",
+    [jwt.verifyToken],
+    value.getReadCount
+  );
+
+  app.put(
+    "/markAsRead/:id",
+    [jwt.verifyToken],
+    value.markAsRead
+  );
+
 }

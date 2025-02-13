@@ -20,6 +20,10 @@ const contactusSchema = new Schema({
         type: String,
         required: true
     },
+    IsRead: {
+        type: Boolean,
+        default: false
+    },
     createdAt: {
         type: Date, 
         default: Date.now
