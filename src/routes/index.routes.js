@@ -42,5 +42,6 @@ require("./employee/formsupload.routes")(app);
 require("./services/announcement.route")(app);
 require("./employee/droProfile.routes")(app);
 require("./employee/previousPosting.routes")(app);
+require("./contactUs/visitor.route")(app);
 module.exports = app;
 
