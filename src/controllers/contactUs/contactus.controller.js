@@ -30,7 +30,7 @@ exports.getContactus = async (req, res) => {
 // GET API to get count of isRead == true
 exports.getReadCount = async (req, res) => {
     try {
-        const count = await contactus.countDocuments({ IsRead: true });
+        const count = await contactus.countDocuments({ IsRead: false });
         successRes(res, count, 'Count of read contactus entries fetched successfully');
     } catch (error) {
         console.log('Error fetching read count:', error);
