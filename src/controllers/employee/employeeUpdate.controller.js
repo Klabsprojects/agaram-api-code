@@ -483,6 +483,12 @@ exports.getEmployeeUpdateNew = async (req, res) => {
             query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
         }
 
+        // if (req.query.employeeProfileId) {
+        //     query['transferOrPostingEmployeesList.empProfileId'] = req.query.employeeProfileId;
+        // }
+
+        
+
         if (req.query.employeeProfileId && req.query.updateType) {
             query['transferOrPostingEmployeesList.empProfileId'] = req.query.employeeProfileId;
             query.updateType = req.query.updateType;
@@ -554,6 +560,17 @@ exports.getEmployeeUpdateNew = async (req, res) => {
                 profileQuery.dateOfOrder = query.dateOfOrder; // Apply the date filter if provided
             }
 
+            if (req.query.fromdate && req.query.todate) {
+                const fromDate = new Date(req.query.fromdate);
+                const toDate = new Date(req.query.todate);
+                profileQuery.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+            }
+
+            if (req.query.updateType) {
+                profileQuery.updateType = req.query.updateType;
+            }
+
+            console.log('employee update query ', profileQuery);
             data = await employeeUpdate.find(profileQuery)
                 .populate({
                     path: 'transferOrPostingEmployeesList.empProfileId',
