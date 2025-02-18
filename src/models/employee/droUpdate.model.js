@@ -42,11 +42,11 @@ const droUpdateSchema = new Schema({
 	// locationChangeCategoryId: ObjectId,
 	additionalCharge: String,
 	transferOrPostingEmployeesList: [{
-		droProfileId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'droProfile' // This references the AllocatedBlock model
-		},
-		//empProfileId: ObjectId,
+		// droProfileId: {
+		// 	type: mongoose.Schema.Types.ObjectId,
+		// 	ref: 'droProfile' // This references the AllocatedBlock model
+		// },
+		droProfileId: ObjectId,
 		employeeId: String,
 		fullName: String,
 		fromPostingInCategoryCode: ObjectId,

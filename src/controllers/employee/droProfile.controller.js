@@ -122,7 +122,7 @@ exports.addDroProfile = async (req, res) => {
                         updateType : req.body.updateType,
                         dateOfOrder : dateOrder,
                         transferOrPostingEmployeesList : [{
-                            empProfileId: data._id,
+                            droProfileId: data._id,
                                     employeeId: data.employeeId,
                                     fullName: data.fullName,
                                     toPostingInCategoryCode: req.body.toPostingInCategoryCode,
@@ -203,9 +203,9 @@ exports.getDroProfile = async (req, res) => {
                 if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
                     for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
                         console.log('Check ', transferOrPostingEmployeesList.fullName);
-                        if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0._id.toString()){
+                        if(transferOrPostingEmployeesList.droProfileId._id.toString() === data0._id.toString()){
                             console.log('Matched ');
-                            console.log('posting available')
+                            console.log('posting available');
                     dataAll = {
                         // toPostingInCategoryCode: uniqueArray[0].transferOrPostingEmployeesList[0].toPostingInCategoryCode,
                         // toDepartmentId: uniqueArray[0].transferOrPostingEmployeesList[0].toDepartmentId,
@@ -217,6 +217,7 @@ exports.getDroProfile = async (req, res) => {
                                 toDesignationId: transferOrPostingEmployeesList.toDesignationId,
                                 postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
                                 locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                                droProfileId: transferOrPostingEmployeesList.droProfileId,
                         uniqueId:  uniqueArray[0]._id,
                         updateType: uniqueArray[0].updateType,
                         orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
@@ -315,7 +316,7 @@ exports.getDroProfile = async (req, res) => {
             
         }
             //console.log('if', data);
-            successRes(res, resultData, 'Employee listed Successfully');
+            successRes(res, data, 'Employee listed Successfully');
         }
         else if(req.query.loginAs == 'Spl A - SO' ||
             req.query.loginAs == 'Spl B - SO' ||
@@ -509,3 +510,23 @@ exports.getDroProfile = async (req, res) => {
             errorRes(res, error, "Error on updation");
         }
         }
+
+exports.getEmployeeUpdateFilter = async(input) => {
+    //console.log('inside getEmployeeUpdate function', input)
+    let secretariatDetails;
+
+    const dataResArray  = await droUpdate.find({
+        'transferOrPostingEmployeesList.droProfileId': input.empId,
+        'updateType': 'Transfer / Posting'
+    })
+    .populate({
+        path: 'transferOrPostingEmployeesList.empProfileId',
+        model: 'employeeProfile', // Ensure the model name matches exactly
+        select: 'orderNumber' // Specify the fields you want to include from EmployeeProfile
+    })
+    .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
+    .exec();
+    // console.log('dataResArray ==> ', dataResArray);
+    // console.log('Unique by latest date of order:', dataResArray);
+    return dataResArray;
+}
