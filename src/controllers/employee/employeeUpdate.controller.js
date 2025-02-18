@@ -468,6 +468,139 @@ exports.getEmployeeUpdate = async (req, res) => {
 
 }
 
+exports.getEmployeeUpdateNew = async (req, res) => {
+    console.log('helo from employeeUpdate controller', req.query);
+    try {
+        let query = {};
+        let data;
+        let admins = [];
+        let adminIds = [];
+        
+        // Adding date filter to the query if fromdate and todate exist
+        if (req.query.fromdate && req.query.todate) {
+            const fromDate = new Date(req.query.fromdate);
+            const toDate = new Date(req.query.todate);
+            query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+        }
+
+        if (req.query.employeeProfileId && req.query.updateType) {
+            query['transferOrPostingEmployeesList.empProfileId'] = req.query.employeeProfileId;
+            query.updateType = req.query.updateType;
+
+            data = await employeeUpdate.find(query)
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login',
+                    select: ['username', 'loginAs']
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login',
+                    select: ['username', 'loginAs']
+                })
+                .sort({ dateOfOrder: -1 })
+                .exec();
+
+            console.log(data, 'Employee Update listed Successfully');
+            successRes(res, data, 'Employee Update listed Successfully');
+        } else if (req.query._id) {
+            query = req.query;
+
+            data = await employeeUpdate.find(query)
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login',
+                    select: ['username', 'loginAs']
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login',
+                    select: ['username', 'loginAs']
+                })
+                .exec();
+
+            console.log(data, 'Employee Update listed Successfully');
+            successRes(res, data, 'Employee Update listed Successfully');
+        } else if (
+            req.query.loginAs === 'Spl A - SO' ||
+            req.query.loginAs === 'Spl B - SO' ||
+            req.query.loginAs === 'Spl A - ASO' || 
+            req.query.loginAs === 'Spl B - ASO'
+        ) {
+            if (req.query.loginAs === 'Spl A - SO') {
+                admins = await login.find({ loginAs: { $in: ['Spl A - ASO', 'Spl A - SO'] } }).select('_id').exec();
+            } else if (req.query.loginAs === 'Spl A - ASO') {
+                admins = await login.find({ loginAs: { $in: ['Spl A - ASO'] } }).select('_id').exec();
+            } else if (req.query.loginAs === 'Spl B - SO') {
+                admins = await login.find({ loginAs: { $in: ['Spl B - ASO', 'Spl B - SO'] } }).select('_id').exec();
+            } else if (req.query.loginAs === 'Spl B - ASO') {
+                admins = await login.find({ loginAs: { $in: ['Spl B - ASO'] } }).select('_id').exec();
+            }
+
+            if (admins.length === 0) {
+                return res.status(404).json({ message: 'No admin users found' });
+            }
+
+            adminIds = admins.map(admin => admin._id);
+
+            let profileQuery = {
+                $or: [
+                    { submittedBy: { $in: adminIds } },
+                    { approvalStatus: true }
+                ]
+            };
+
+            if (query.dateOfOrder) {
+                profileQuery.dateOfOrder = query.dateOfOrder; // Apply the date filter if provided
+            }
+
+            data = await employeeUpdate.find(profileQuery)
+                .populate({
+                    path: 'transferOrPostingEmployeesList.empProfileId',
+                    model: 'employeeProfile',
+                    select: ['batch', 'mobileNo1']
+                })
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login',
+                    select: ['username', 'loginAs']
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login',
+                    select: ['username', 'loginAs']
+                })
+                .exec();
+
+            console.log(data, 'Employee Update listed Successfully');
+            successRes(res, data, 'Employee Update listed Successfully');
+        } else {
+            data = await employeeUpdate.find(query) // Apply query with date filter if present
+                .populate({
+                    path: 'transferOrPostingEmployeesList.empProfileId',
+                    model: 'employeeProfile',
+                    select: ['batch', 'mobileNo1']
+                })
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login',
+                    select: ['username', 'loginAs']
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login',
+                    select: ['username', 'loginAs']
+                })
+                .exec();
+
+            successRes(res, data, 'Employee Update listed Successfully');
+        }
+    } catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing employee Update");
+    }
+};
+
 
 
 // posting/promotion/transfer updation

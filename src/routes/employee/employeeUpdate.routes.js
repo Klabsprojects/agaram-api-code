@@ -14,7 +14,7 @@ module.exports = (app) => {
   app.get(
     "/getEmployeeUpdate",
     [jwt.verifyToken],
-    value.getEmployeeUpdate
+    value.getEmployeeUpdateNew
   );
 
   app.post(
