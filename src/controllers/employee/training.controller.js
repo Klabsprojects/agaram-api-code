@@ -41,9 +41,28 @@ exports.getTraining = async (req, res) => {
             let admins = [];
             let adminIds = [];
             if(req.query._id || req.query.employeeProfileId){
-                query.where = req.query;
+                //query.where = req.query;
                 //data = await education.find(req.query).exec();
-                data = await training.find(req.query)
+                if(req.query._id){
+                    query._id = req.query._id;
+                }
+                if(req.query.employeeProfileId){
+                    query.employeeProfileId = req.query.employeeProfileId;
+                }
+
+                if (req.query.fromdate && req.query.todate) {
+                    const fromDate = new Date(req.query.fromdate);
+                    const toDate = new Date(req.query.todate);
+                    //query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+                    query.fromDate= { $gte: fromDate }; // From date greater than or equal to startDate
+                    query.endDate= { $lte: toDate };   // End date less than or equal to endDate
+                }
+                if(req.query.typeOfTraining){
+                    query.typeOfLeave = req.query.typeOfTraining;
+                }
+                console.log('query ', query);
+
+                data = await training.find(query)
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
@@ -133,6 +152,20 @@ exports.getTraining = async (req, res) => {
                     { approvalStatus: true }
                 ]
             }
+
+            if (req.query.fromdate && req.query.todate) {
+                const fromDate = new Date(req.query.fromdate);
+                const toDate = new Date(req.query.todate);
+                //query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+                profileQuery.fromDate= { $gte: fromDate }; // From date greater than or equal to startDate
+                profileQuery.endDate= { $lte: toDate };   // End date less than or equal to endDate
+            }
+            if(req.query.typeOfTraining){
+                profileQuery.typeOfLeave = req.query.typeOfTraining;
+            }
+
+            console.log('profileQuery ', profileQuery);
+            
                 // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
                 data = await training.find(profileQuery)
                 .populate({
@@ -156,6 +189,19 @@ exports.getTraining = async (req, res) => {
                 successRes(res, data, 'leave listed Successfully');
             }
             else{
+
+                if (req.query.fromdate && req.query.todate) {
+                    const fromDate = new Date(req.query.fromdate);
+                    const toDate = new Date(req.query.todate);
+                    //query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+                    query.fromDate= { $gte: fromDate }; // From date greater than or equal to startDate
+                    query.endDate= { $lte: toDate };   // End date less than or equal to endDate
+                }
+                if(req.query.typeOfTraining){
+                    query.typeOfLeave = req.query.typeOfTraining;
+                }
+                console.log('query ', query);
+
                 data = await training.find()
                 .populate({
                     path: 'employeeProfileId',
