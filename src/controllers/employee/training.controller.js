@@ -58,7 +58,7 @@ exports.getTraining = async (req, res) => {
                     query.endDate= { $lte: toDate };   // End date less than or equal to endDate
                 }
                 if(req.query.typeOfTraining){
-                    query.typeOfLeave = req.query.typeOfTraining;
+                    query.typeOfTraining = req.query.typeOfTraining;
                 }
                 console.log('query ', query);
 
@@ -161,11 +161,11 @@ exports.getTraining = async (req, res) => {
                 profileQuery.endDate= { $lte: toDate };   // End date less than or equal to endDate
             }
             if(req.query.typeOfTraining){
-                profileQuery.typeOfLeave = req.query.typeOfTraining;
+                profileQuery.typeOfTraining = req.query.typeOfTraining;
             }
 
             console.log('profileQuery ', profileQuery);
-            
+
                 // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
                 data = await training.find(profileQuery)
                 .populate({
@@ -198,7 +198,7 @@ exports.getTraining = async (req, res) => {
                     query.endDate= { $lte: toDate };   // End date less than or equal to endDate
                 }
                 if(req.query.typeOfTraining){
-                    query.typeOfLeave = req.query.typeOfTraining;
+                    query.typeOfTraining = req.query.typeOfTraining;
                 }
                 console.log('query ', query);
 
