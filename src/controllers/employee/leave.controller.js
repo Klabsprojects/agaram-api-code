@@ -68,10 +68,27 @@ exports.getLeave = async (req, res) => {
 
             else if(req.query.employeeProfileId){
                 console.log('profileid', req.query.employeeProfileId)
-                query.where = req.query;
-                data = await leave.find({
-                    'employeeProfileId': req.query.employeeProfileId
-                })
+                //query.where = req.query;
+                query.employeeProfileId = req.query.employeeProfileId;
+                        // Adding date filter to the query if fromdate and todate exist
+        if (req.query.fromdate && req.query.todate) {
+            const fromDate = new Date(req.query.fromdate);
+            const toDate = new Date(req.query.todate);
+            //query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+            query.fromDate= { $gte: fromDate }; // From date greater than or equal to startDate
+            query.endDate= { $lte: toDate };   // End date less than or equal to endDate
+        }
+        if(req.query.typeOfLeave){
+            query.typeOfLeave = req.query.typeOfLeave;
+        }
+        console.log('Query ', query);
+                data = await leave.find(query)
+                
+            //     (
+            //         {
+            //         'employeeProfileId': req.query.employeeProfileId
+            //     }
+            // )
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
@@ -134,6 +151,17 @@ exports.getLeave = async (req, res) => {
                     { approvalStatus: true }
                 ]
             }
+            if (req.query.fromdate && req.query.todate) {
+                const fromDate = new Date(req.query.fromdate);
+                const toDate = new Date(req.query.todate);
+                //query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+                profileQuery.fromDate= { $gte: fromDate }; // From date greater than or equal to startDate
+                profileQuery.endDate= { $lte: toDate };   // End date less than or equal to endDate
+            }
+            if(req.query.typeOfLeave){
+                profileQuery.typeOfLeave = req.query.typeOfLeave;
+            }
+            console.log('profileQuery ', profileQuery);
                  // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
                  data = await leave.find(profileQuery)
                      .populate({
@@ -159,7 +187,18 @@ exports.getLeave = async (req, res) => {
             }
             else
                 {
-                    data = await leave.find()
+                    if (req.query.fromdate && req.query.todate) {
+                        const fromDate = new Date(req.query.fromdate);
+                        const toDate = new Date(req.query.todate);
+                        //query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+                        query.fromDate= { $gte: fromDate }; // From date greater than or equal to startDate
+                        query.endDate= { $lte: toDate };   // End date less than or equal to endDate
+                    }
+                    if(req.query.typeOfLeave){
+                        query.typeOfLeave = req.query.typeOfLeave;
+                    }
+                    console.log('query ', query);
+                    data = await leave.find(query)
                     .populate({
                         path: 'employeeProfileId',
                         model: 'employeeProfile', // Model of the application collection
