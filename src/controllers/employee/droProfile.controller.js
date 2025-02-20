@@ -203,6 +203,7 @@ exports.getDroProfile = async (req, res) => {
                 if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
                     for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
                         console.log('Check ', transferOrPostingEmployeesList.fullName);
+                        console.log('Check ', transferOrPostingEmployeesList);
                         if(transferOrPostingEmployeesList.droProfileId._id.toString() === data0._id.toString()){
                             console.log('Matched ');
                             console.log('posting available');
@@ -316,7 +317,7 @@ exports.getDroProfile = async (req, res) => {
             
         }
             //console.log('if', data);
-            successRes(res, data, 'Employee listed Successfully');
+            successRes(res, resultData, 'Employee listed Successfully');
         }
         else if(req.query.loginAs == 'Spl A - SO' ||
             req.query.loginAs == 'Spl B - SO' ||
