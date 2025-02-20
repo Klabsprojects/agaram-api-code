@@ -521,8 +521,8 @@ exports.getEmployeeUpdateFilter = async(input) => {
         'updateType': 'Transfer / Posting'
     })
     .populate({
-        path: 'transferOrPostingEmployeesList.empProfileId',
-        model: 'employeeProfile', // Ensure the model name matches exactly
+        path: 'transferOrPostingEmployeesList.droProfileId',
+        model: 'droProfile', // Ensure the model name matches exactly
         select: 'orderNumber' // Specify the fields you want to include from EmployeeProfile
     })
     .sort({ dateOfOrder: -1 }) // Sort by dateOfOrder in descending order (-1)
