@@ -202,7 +202,7 @@ exports.getTraining = async (req, res) => {
                 }
                 console.log('query ', query);
 
-                data = await training.find()
+                data = await training.find(query)
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
