@@ -217,9 +217,10 @@ exports.getPrivateForeignVisitOld = async (req, res) => {
             let resultData = [];
             let admins = [];
             let adminIds = [];
-            if(req.query._id || req.query.employeeProfileId){
+            if(req.query._id){
                 console.log('if 1');
                 query.where = req.query;
+                console.log('Query ', query);
                 data = await privateVisit.find(req.query)
                 .populate({
                     path: 'employeeProfileId',
@@ -331,6 +332,128 @@ exports.getPrivateForeignVisitOld = async (req, res) => {
                 }
                 successRes(res, resultData, 'privateVisit listed Successfully');
             }
+            else if(req.query.employeeProfileId){
+                query.employeeProfileId = req.query.employeeProfileId;
+                        // Adding date filter to the query if fromdate and todate exist
+        if (req.query.fromdate && req.query.todate) {
+            const fromDate = new Date(req.query.fromdate);
+            const toDate = new Date(req.query.todate);
+            //query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+            query.fromDate= { $gte: fromDate }; // From date greater than or equal to startDate
+            query.toDate= { $lte: toDate };   // End date less than or equal to endDate
+        }
+        console.log('Query ', query);
+        data = await privateVisit.find(query)
+        .populate({
+            path: 'employeeProfileId',
+            model: 'employeeProfile', // Model of the application collection
+            select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+        })  
+        .populate({
+            path: 'submittedBy',
+            model: 'login', // Ensure the model name matches exactly
+            select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+        })
+        .populate({
+            path: 'approvedBy',
+            model: 'login', // Ensure the model name matches exactly
+            select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+        }) 
+        .exec();
+        if(data.length > 0){
+            console.log('data.length', data.length)
+            for(let data0 of data){
+                console.log('IDDD => ', data0);
+                console.log('IDDD => ', data0.employeeProfileId._id);
+                let updateQueryJson = {
+                    empId: data0.employeeProfileId._id
+                }
+        uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+        console.log('length ==> ', uniqueArray.length);
+                if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                    for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                        console.log('Check ', transferOrPostingEmployeesList.fullName, transferOrPostingEmployeesList.empProfileId._id.toString(),
+                        data0.employeeProfileId._id.toString());
+                        if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0.employeeProfileId._id.toString()){
+                            console.log('Matched ');
+                            console.log('posting available')
+                    dataAll = {
+                        toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                        toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                        toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                        postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                        locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                        updateType: uniqueArray[0].updateType,
+                        orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                        orderNumber: uniqueArray[0].orderNumber,
+                        orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                        
+                        _id: data0._id,
+                        officerName: data0.officerName,
+                        employeeProfileId: data0.employeeProfileId,
+                        designation: data0.designation,
+                        designationId: data0.designationId,
+                        department: data0.department,
+                        departmentId: data0.departmentId,
+                        proposedCountry: data0.proposedCountry,
+                        fromDate: data0.fromDate,
+                        toDate: data0.toDate,
+                        fundSource: data0.fundSource,
+                        status: data0.status,
+                        selfOrFamily: data0.selfOrFamily,
+                        dateOfOrder: data0.dateOfOrder,
+                        orderType: data0.orderType,
+                        orderNo: data0.orderNo,
+                        orderFor: data0.orderFor,
+                        remarks: data0.remarks,
+                        orderFile: data0.orderFile,
+                        submittedBy: data0.submittedBy,
+                        approvedBy: data0.approvedBy,
+                        approvedDate: data0.approvedDate,
+                        approvalStatus: data0.approvalStatus,
+                        proposedAmountOfExpenditure: data0.proposedAmountOfExpenditure,
+            }
+    resultData.push(dataAll);
+        }
+            }
+        }
+        else{
+            let dataAll = {
+                _id: data0._id,
+                        officerName: data0.officerName,
+                        employeeProfileId: data0.employeeProfileId,
+                        designation: data0.designation,
+                        designationId: data0.designationId,
+                        department: data0.department,
+                        departmentId: data0.departmentId,
+                        proposedCountry: data0.proposedCountry,
+                        fromDate: data0.fromDate,
+                        toDate: data0.toDate,
+                        fundSource: data0.fundSource,
+                        status: data0.status,
+                        selfOrFamily: data0.selfOrFamily,
+                        dateOfOrder: data0.dateOfOrder,
+                        orderType: data0.orderType,
+                        orderNo: data0.orderNo,
+                        orderFor: data0.orderFor,
+                        remarks: data0.remarks,
+                        orderFile: data0.orderFile,
+                        submittedBy: data0.submittedBy,
+                        approvedBy: data0.approvedBy,
+                        approvedDate: data0.approvedDate,
+                        approvalStatus: data0.approvalStatus,
+                        proposedAmountOfExpenditure: data0.proposedAmountOfExpenditure,
+            }
+    resultData.push(dataAll);
+        }
+    }
+        }
+        else
+        {
+            resultData = [];
+        }
+        successRes(res, resultData, 'privateVisit listed Successfully');
+            }
             else if(req.query.loginAs == 'Spl A - SO' ||
                 req.query.loginAs == 'Spl B - SO' ||
                 req.query.loginAs == 'Spl A - ASO' || 
@@ -375,6 +498,15 @@ exports.getPrivateForeignVisitOld = async (req, res) => {
                     { approvalStatus: true }
                 ]
             }
+
+            if (req.query.fromdate && req.query.todate) {
+                const fromDate = new Date(req.query.fromdate);
+                const toDate = new Date(req.query.todate);
+                //query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+                profileQuery.fromDate= { $gte: fromDate }; // From date greater than or equal to startDate
+                profileQuery.toDate= { $lte: toDate };   // End date less than or equal to endDate
+            }
+            console.log('profileQuery ', profileQuery);
                  // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
                  data = await privateVisit.find(profileQuery)
                      .populate({
@@ -489,7 +621,16 @@ exports.getPrivateForeignVisitOld = async (req, res) => {
             }
             else{
                 console.log('Else 3');
-                data = await privateVisit.find()
+                if (req.query.fromdate && req.query.todate) {
+                    const fromDate = new Date(req.query.fromdate);
+                    const toDate = new Date(req.query.todate);
+                    //query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+                    query.fromDate= { $gte: fromDate }; // From date greater than or equal to startDate
+                    query.toDate= { $lte: toDate };   // End date less than or equal to endDate
+                }
+                console.log('query ', query);
+
+                data = await privateVisit.find(query)
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
