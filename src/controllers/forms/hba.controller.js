@@ -203,10 +203,20 @@ exports.addHba = async (req, res) => {
             }
             else if(req.query.employeeProfileId){
                 console.log('profileid', req.query.employeeProfileId)
-                query.where = req.query;
-                data = await hba.find({
-                    'employeeProfileId': req.query.employeeProfileId
-                })
+                query.employeeProfileId = req.query.employeeProfileId;
+            if (req.query.minPrice && req.query.maxPrice) {
+                const minPrice = req.query.minPrice;
+                const maxPrice = req.query.maxPrice;
+                query.totalCostOfProperty = { $gte: minPrice, $lte: maxPrice }; // Adding date range to the query
+            }
+            if(req.query.hbaAvailedFor){
+                query.hbaAvailedFor = req.query.hbaAvailedFor;
+            }
+            if(req.query.typeOfProperty){
+                query.typeOfProperty = req.query.typeOfProperty;
+            }
+            console.log('query ', query);
+                data = await hba.find(query)
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
@@ -268,6 +278,18 @@ exports.addHba = async (req, res) => {
                     { approvalStatus: true }
                 ]
             }
+            if (req.query.minPrice && req.query.maxPrice) {
+                const minPrice = req.query.minPrice;
+                const maxPrice = req.query.maxPrice;
+                profileQuery.totalCostOfProperty = { $gte: minPrice, $lte: maxPrice }; // Adding date range to the query
+            }
+            if(req.query.hbaAvailedFor){
+                profileQuery.hbaAvailedFor = req.query.hbaAvailedFor;
+            }
+            if(req.query.typeOfProperty){
+                profileQuery.typeOfProperty = req.query.typeOfProperty;
+            }
+            console.log('profileQuery ', profileQuery);
                  // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
                  data = await hba.find(profileQuery)
                      .populate({
@@ -395,7 +417,19 @@ exports.addHba = async (req, res) => {
             successRes(res, resultData, 'Hba listed Successfully');
             }
             else{
-                data = await hba.find()
+                if (req.query.minPrice && req.query.maxPrice) {
+                    const minPrice = req.query.minPrice;
+                    const maxPrice = req.query.maxPrice;
+                    query.totalCostOfProperty = { $gte: minPrice, $lte: maxPrice }; // Adding date range to the query
+                }
+                if(req.query.hbaAvailedFor){
+                    query.hbaAvailedFor = req.query.hbaAvailedFor;
+                }
+                if(req.query.typeOfProperty){
+                    query.typeOfProperty = req.query.typeOfProperty;
+                }
+                console.log('query ', query);
+                data = await hba.find(query)
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
