@@ -486,7 +486,7 @@ exports.getMovable = async (req, res) => {
             {
                 resultData = [];
             }
-            successRes(res, resultData, 'education listed Successfully');
+            successRes(res, resultData, 'movable listed Successfully');
         }
         else if(req.query.loginAs == 'Spl A - SO' ||
             req.query.loginAs == 'Spl B - SO' ||
@@ -660,10 +660,10 @@ exports.getMovable = async (req, res) => {
                 {
                     resultData = [];
                 }
-        successRes(res, resultData, 'education listed Successfully');
+        successRes(res, resultData, 'movable listed Successfully');
         }
         else{
-            query.employeeProfileId = req.query.employeeProfileId;
+           
                 if (req.query.fromdate && req.query.todate) {
                     const fromDate = new Date(req.query.fromdate);
                     const toDate = new Date(req.query.todate);
