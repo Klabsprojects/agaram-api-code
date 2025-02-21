@@ -233,9 +233,141 @@ exports.getMovable = async (req, res) => {
         let resultData = [];
         let admins = [];
         let adminIds = [];
-        if(req.query._id || req.query.employeeProfileId){
+        if(req.query._id){
             query.where = req.query;
             data = await movable.find(req.query)
+            .populate({
+                path: 'employeeProfileId',
+                model: 'employeeProfile', // Model of the application collection
+                select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+            })  
+            .populate({
+                path: 'submittedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            })
+            .populate({
+                path: 'approvedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            }) 
+            .exec();
+            if(data.length > 0){
+                console.log('data.length', data.length)
+                for(let data0 of data){
+                    console.log('IDDD => ', data0);
+                    console.log('IDDD => ', data0.employeeProfileId._id);
+                    let updateQueryJson = {
+                        empId: data0.employeeProfileId._id
+                    }
+            uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+            console.log('length ==> ', uniqueArray.length);
+                    if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                        for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                            console.log('Check ', transferOrPostingEmployeesList.fullName, transferOrPostingEmployeesList.empProfileId._id.toString(),
+                            data0.employeeProfileId._id.toString());
+                            if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0.employeeProfileId._id.toString()){
+                                console.log('Matched ');
+                                console.log('posting available')
+                                dataAll = {
+                                    toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                                    remarks: uniqueArray[0].remarks,
+                                    updateType: uniqueArray[0].updateType,
+                                    orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                                    orderNumber: uniqueArray[0].orderNumber,
+                                    orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                                    _id: data0._id,
+                                    officerName: data0.officerName,
+                                    employeeProfileId: data0.employeeProfileId,
+                                    designation: data0.designation,
+                                    designationId: data0.designationId,
+                                    department: data0.department,
+                                    departmentId: data0.departmentId,
+                                    selfOrFamily: data0.selfOrFamily,
+                                    propertyShownInIpr: data0.propertyShownInIpr,
+                                    previousSanctionOrder: data0.previousSanctionOrder,
+                                    sourceOfFunding: data0.sourceOfFunding,
+                                    typeOfMovableProperty: data0.typeOfMovableProperty,
+                                    detailsOfMovableProperty: data0.detailsOfMovableProperty,
+                                    totalCostOfProperty: data0.totalCostOfProperty,
+                                    boughtFromName: data0.boughtFromName,
+                                    boughtFromContactNumber: data0.boughtFromContactNumber,
+                                    boughtFromAddress: data0.boughtFromAddress,
+                                    dateOfOrderAdditional: data0.dateOfOrderAdditional,
+                                    movableDateOfOrder: data0.movableDateOfOrder,
+                                    dateOfOrder: data0.dateOfOrder,
+                                    orderType: data0.orderType,
+                                    orderNo: data0.orderNo,
+                                    orderFor: data0.orderFor,
+                                    remarks: data0.remarks,
+                                    orderFile: data0.orderFile,
+                                    submittedBy: data0.submittedBy,
+                                    approvedBy: data0.approvedBy,
+                                    approvedDate: data0.approvedDate,
+                                    approvalStatus: data0.approvalStatus,
+                                }
+        resultData.push(dataAll);
+            }
+                }
+            }
+            else{
+                let dataAll = {
+                    _id: data0._id,
+                                    officerName: data0.officerName,
+                                    employeeProfileId: data0.employeeProfileId,
+                                    designation: data0.designation,
+                                    designationId: data0.designationId,
+                                    department: data0.department,
+                                    departmentId: data0.departmentId,
+                                    selfOrFamily: data0.selfOrFamily,
+                                    propertyShownInIpr: data0.propertyShownInIpr,
+                                    previousSanctionOrder: data0.previousSanctionOrder,
+                                    sourceOfFunding: data0.sourceOfFunding,
+                                    typeOfMovableProperty: data0.typeOfMovableProperty,
+                                    detailsOfMovableProperty: data0.detailsOfMovableProperty,
+                                    totalCostOfProperty: data0.totalCostOfProperty,
+                                    boughtFromName: data0.boughtFromName,
+                                    boughtFromContactNumber: data0.boughtFromContactNumber,
+                                    boughtFromAddress: data0.boughtFromAddress,
+                                    dateOfOrderAdditional: data0.dateOfOrderAdditional,
+                                    movableDateOfOrder: data0.movableDateOfOrder,
+                                    dateOfOrder: data0.dateOfOrder,
+                                    orderType: data0.orderType,
+                                    orderNo: data0.orderNo,
+                                    orderFor: data0.orderFor,
+                                    remarks: data0.remarks,
+                                    orderFile: data0.orderFile,
+                                    submittedBy: data0.submittedBy,
+                                    approvedBy: data0.approvedBy,
+                                    approvedDate: data0.approvedDate,
+                                    approvalStatus: data0.approvalStatus,
+                }
+        resultData.push(dataAll);
+            }
+        }
+            }
+            else
+            {
+                resultData = [];
+            }
+            successRes(res, resultData, 'education listed Successfully');
+        }
+        else if(req.query.employeeProfileId){
+            query.employeeProfileId = req.query.employeeProfileId;
+                if (req.query.fromdate && req.query.todate) {
+                    const fromDate = new Date(req.query.fromdate);
+                    const toDate = new Date(req.query.todate);
+                    query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+                }
+                if(req.query.typeOfMovableProperty){
+                    query.typeOfMovableProperty = req.query.typeOfMovableProperty;
+                }
+                console.log('query ', query);
+            data = await movable.find(query)
             .populate({
                 path: 'employeeProfileId',
                 model: 'employeeProfile', // Model of the application collection
@@ -398,6 +530,16 @@ exports.getMovable = async (req, res) => {
                 { approvalStatus: true }
             ]
         }
+
+        if (req.query.fromdate && req.query.todate) {
+            const fromDate = new Date(req.query.fromdate);
+            const toDate = new Date(req.query.todate);
+            profileQuery.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+        }
+        if(req.query.typeOfMovableProperty){
+            profileQuery.typeOfMovableProperty = req.query.typeOfMovableProperty;
+        }
+        console.log('profileQuery ', profileQuery);
              // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
              data = await movable.find(profileQuery)
                  .populate({
@@ -521,7 +663,17 @@ exports.getMovable = async (req, res) => {
         successRes(res, resultData, 'education listed Successfully');
         }
         else{
-            data = await movable.find()
+            query.employeeProfileId = req.query.employeeProfileId;
+                if (req.query.fromdate && req.query.todate) {
+                    const fromDate = new Date(req.query.fromdate);
+                    const toDate = new Date(req.query.todate);
+                    query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+                }
+                if(req.query.typeOfMovableProperty){
+                    query.typeOfMovableProperty = req.query.typeOfMovableProperty;
+                }
+                console.log('query ', query);
+            data = await movable.find(query)
             .populate({
                 path: 'employeeProfileId',
                 model: 'employeeProfile', // Model of the application collection
