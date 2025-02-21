@@ -224,10 +224,145 @@ exports.getMedicalReimbursement = async (req, res) => {
         let resultData = [];
         let admins = [];
         let adminIds = [];
-        if(req.query._id || req.query.employeeProfileId){
+        if(req.query._id){
             console.log('if');
             query.where = req.query;
             data = await medicalReimbursement.find(req.query)
+            .populate({
+                path: 'employeeProfileId',
+                model: 'employeeProfile', // Model of the application collection
+                select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+            })  
+            .populate({
+                path: 'submittedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            })
+            .populate({
+                path: 'approvedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            }) 
+            .exec();
+            console.log('data', data);
+            if(data.length > 0){
+                console.log('data.length', data.length)
+                for(let data0 of data){
+                    console.log('IDDD => ', data0);
+                    console.log('IDDD => ', data0.employeeProfileId._id);
+                    let updateQueryJson = {
+                        empId: data0.employeeProfileId._id
+                    }
+            uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+            console.log('length ==> ', uniqueArray.length);
+                    if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                        for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                            console.log('Check ', transferOrPostingEmployeesList.fullName, transferOrPostingEmployeesList.empProfileId._id.toString(),
+                            data0.employeeProfileId._id.toString());
+                            if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0.employeeProfileId._id.toString()){
+                                console.log('Matched ');
+                                console.log('posting available')
+                        dataAll = {
+                                toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                                toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                                toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                                postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                                locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                                updateType: uniqueArray[0].updateType,
+                                orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                                orderNumber: uniqueArray[0].orderNumber,
+                                orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                                
+                                _id: data[0]._id,
+                                officerName: data[0].officerName,
+                                employeeProfileId: data[0].employeeProfileId,
+                                designation: data[0].designation,
+                                designationId: data[0].designationId,
+                                department: data[0].department,
+                                departmentId: data[0].departmentId,
+                                detailsOfMedicalReimbursement: data[0].detailsOfMedicalReimbursement,
+                                totalCostOfMedicalReimbursement: data[0].totalCostOfMedicalReimbursement,
+                                dmeConcurranceStatus: data[0].dmeConcurranceStatus,
+                                selfOrFamily: data[0].selfOrFamily,
+                                dateOfApplication: data[0].dateOfApplication,
+                                nameOfTheHospital: data[0].nameOfTheHospital,
+                                treatmentTakenFor: data[0].treatmentTakenFor,
+                                dateOfOrder: data[0].dateOfOrder,
+                                orderType: data[0].orderType,
+                                orderNo: data[0].orderNo,
+                                orderFor: data[0].orderFor,
+                                remarks: data[0].remarks,
+                                orderFile: data[0].orderFile,
+                                submittedBy: data[0].submittedBy,
+                                approvedBy: data[0].approvedBy,
+                                approvedDate: data[0].approvedDate,
+                                approvalStatus: data[0].approvalStatus,
+                                dischargeSummaryEndorsed: data[0].dischargeSummaryEndorsed,
+                                dischargeOrTestFile: data[0].dischargeOrTestFile,
+                }
+        resultData.push(dataAll);
+            }
+                }
+            }
+            else{
+                let dataAll = {
+                    _id: data[0]._id,
+                    officerName: data[0].officerName,
+                    employeeProfileId: data[0].employeeProfileId,
+                    designation: data[0].designation,
+                    designationId: data[0].designationId,
+                    department: data[0].department,
+                    departmentId: data[0].departmentId,
+                    detailsOfMedicalReimbursement: data[0].detailsOfMedicalReimbursement,
+                    totalCostOfMedicalReimbursement: data[0].totalCostOfMedicalReimbursement,
+                    dmeConcurranceStatus: data[0].dmeConcurranceStatus,
+                    selfOrFamily: data[0].selfOrFamily,
+                    dateOfApplication: data[0].dateOfApplication,
+                    nameOfTheHospital: data[0].nameOfTheHospital,
+                    treatmentTakenFor: data[0].treatmentTakenFor,
+                    dateOfOrder: data[0].dateOfOrder,
+                    orderType: data[0].orderType,
+                    orderNo: data[0].orderNo,
+                    orderFor: data[0].orderFor,
+                    remarks: data[0].remarks,
+                    orderFile: data[0].orderFile,
+                    submittedBy: data[0].submittedBy,
+                    approvedBy: data[0].approvedBy,
+                    approvedDate: data[0].approvedDate,
+                    approvalStatus: data[0].approvalStatus,
+                    dischargeSummaryEndorsed: data[0].dischargeSummaryEndorsed,
+                    dischargeOrTestFile: data[0].dischargeOrTestFile,
+                }
+        resultData.push(dataAll);
+            }
+        }
+            }
+            else
+            {
+                resultData = [];
+            }
+            successRes(res, resultData, 'medicalReimbursement listed Successfully');
+        }
+        else if(req.query.employeeProfileId){
+            console.log('else if ');
+            query.employeeProfileId = req.query.employeeProfileId;
+            if (req.query.fromdate && req.query.todate) {
+                const fromDate = new Date(req.query.fromdate);
+                const toDate = new Date(req.query.todate);
+                query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+            }
+            if(req.query.selfOrFamily){
+                query.selfOrFamily = req.query.selfOrFamily;
+            }
+
+            if (req.query.minPrice && req.query.maxPrice) {
+                const minPrice = req.query.minPrice;
+                const maxPrice = req.query.maxPrice;
+                query.totalCostOfMedicalReimbursement = { $gte: minPrice, $lte: maxPrice }; // Adding date range to the query
+            }
+            
+            console.log('query ', query);
+            data = await medicalReimbursement.find(query)
             .populate({
                 path: 'employeeProfileId',
                 model: 'employeeProfile', // Model of the application collection
@@ -385,6 +520,22 @@ exports.getMedicalReimbursement = async (req, res) => {
                 { approvalStatus: true }
             ]
         }
+
+        if (req.query.fromdate && req.query.todate) {
+            const fromDate = new Date(req.query.fromdate);
+            const toDate = new Date(req.query.todate);
+            profileQuery.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+        }
+        if(req.query.selfOrFamily){
+            profileQuery.selfOrFamily = req.query.selfOrFamily;
+        }
+        if (req.query.minPrice && req.query.maxPrice) {
+            const minPrice = req.query.minPrice;
+            const maxPrice = req.query.maxPrice;
+            profileQuery.totalCostOfMedicalReimbursement = { $gte: minPrice, $lte: maxPrice }; // Adding date range to the query
+        }
+        console.log('profileQuery spl', profileQuery);
+
              // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
              data = await medicalReimbursement.find(profileQuery)
                  .populate({
@@ -502,7 +653,21 @@ exports.getMedicalReimbursement = async (req, res) => {
         successRes(res, resultData, 'medicalReimbursement listed Successfully');
         }
         else{
-            data = await medicalReimbursement.find()
+            if (req.query.fromdate && req.query.todate) {
+                const fromDate = new Date(req.query.fromdate);
+                const toDate = new Date(req.query.todate);
+                query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
+            }
+            if(req.query.selfOrFamily){
+                query.selfOrFamily = req.query.selfOrFamily;
+            }
+            if (req.query.minPrice && req.query.maxPrice) {
+                const minPrice = req.query.minPrice;
+                const maxPrice = req.query.maxPrice;
+                query.totalCostOfMedicalReimbursement = { $gte: minPrice, $lte: maxPrice }; // Adding date range to the query
+            }
+            console.log('query ', query);
+            data = await medicalReimbursement.find(query)
             .populate({
                 path: 'employeeProfileId',
                 model: 'employeeProfile', // Model of the application collection
