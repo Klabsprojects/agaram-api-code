@@ -22,5 +22,9 @@ module.exports = (app) => {
     value.addDepartments
   );
 
-
+  app.put(
+    "/updateDepartment", 
+    //[jwt.verifyToken], 
+    value.updateDepartment
+  );
 }
