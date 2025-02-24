@@ -6,10 +6,7 @@ const { successRes, errorRes } = require("../../middlewares/response.middleware"
 
 const whatsapp = require('../whatsapp/whatsapp.controller');
 
-
-
 // employeeUpdate creation
-
 exports.addEmployeeUpdate = async (req, res) => {
 
     try {
@@ -41,8 +38,6 @@ exports.addEmployeeUpdate = async (req, res) => {
     }
 
 }
-
-
 
 exports.addTransferOrPostingManyEmployees = async (req, res) => {
 
@@ -126,8 +121,6 @@ exports.addTransferOrPostingManyEmployees = async (req, res) => {
 
 }
 
-
-
 exports.handleBulkEmployeeTransferPosting = async (req) => {
 
     let query = {};
@@ -155,7 +148,6 @@ exports.handleBulkEmployeeTransferPosting = async (req) => {
     return data;  // return the data for further use
 
 };
-
 
 exports.handlePostingEdit = async (req) => {
 
@@ -187,9 +179,7 @@ exports.handlePostingEdit = async (req) => {
 
 };
 
-
 // Get employeeUpdate
-
 exports.getEmployeeUpdate = async (req, res) => {
 
     console.log('helo from employeeUpdate controller', req.query);
@@ -483,11 +473,10 @@ exports.getEmployeeUpdateNew = async (req, res) => {
             query.dateOfOrder = { $gte: fromDate, $lte: toDate }; // Adding date range to the query
         }
 
-        // if (req.query.employeeProfileId) {
-        //     query['transferOrPostingEmployeesList.empProfileId'] = req.query.employeeProfileId;
-        // }
+        if (req.query.promotedGrade) {
+            query['transferOrPostingEmployeesList.promotedGrade'] = req.query.promotedGrade;
+        }
 
-        
 
         if (req.query.employeeProfileId && req.query.updateType) {
             query['transferOrPostingEmployeesList.empProfileId'] = req.query.employeeProfileId;
@@ -509,7 +498,29 @@ exports.getEmployeeUpdateNew = async (req, res) => {
 
             console.log(data, 'Employee Update listed Successfully');
             successRes(res, data, 'Employee Update listed Successfully');
-        } else if (req.query._id) {
+        }
+        if (req.query.updateType && !req.query.employeeProfileId) {
+            //query['transferOrPostingEmployeesList.empProfileId'] = req.query.employeeProfileId;
+            query.updateType = req.query.updateType;
+
+            data = await employeeUpdate.find(query)
+                .populate({
+                    path: 'submittedBy',
+                    model: 'login',
+                    select: ['username', 'loginAs']
+                })
+                .populate({
+                    path: 'approvedBy',
+                    model: 'login',
+                    select: ['username', 'loginAs']
+                })
+                .sort({ dateOfOrder: -1 })
+                .exec();
+
+            console.log(data, 'Employee Update listed Successfully');
+            successRes(res, data, 'Employee Update listed Successfully');
+        }
+        else if (req.query._id) {
             query = req.query;
 
             data = await employeeUpdate.find(query)
@@ -560,6 +571,10 @@ exports.getEmployeeUpdateNew = async (req, res) => {
                 profileQuery.dateOfOrder = query.dateOfOrder; // Apply the date filter if provided
             }
 
+            if (req.query.promotedGrade) {
+                profileQuery['transferOrPostingEmployeesList.promotedGrade'] = req.query.promotedGrade;
+            }
+
             if (req.query.fromdate && req.query.todate) {
                 const fromDate = new Date(req.query.fromdate);
                 const toDate = new Date(req.query.todate);
@@ -592,6 +607,9 @@ exports.getEmployeeUpdateNew = async (req, res) => {
             console.log(data, 'Employee Update listed Successfully');
             successRes(res, data, 'Employee Update listed Successfully');
         } else {
+            if (req.query.promotedGrade) {
+                query['transferOrPostingEmployeesList.promotedGrade'] = req.query.promotedGrade;
+            }
             data = await employeeUpdate.find(query) // Apply query with date filter if present
                 .populate({
                     path: 'transferOrPostingEmployeesList.empProfileId',
@@ -618,10 +636,7 @@ exports.getEmployeeUpdateNew = async (req, res) => {
     }
 };
 
-
-
 // posting/promotion/transfer updation
-
 exports.updateTransferPosting = async (req, res) => {
 
     try {
@@ -725,8 +740,6 @@ exports.updateTransferPosting = async (req, res) => {
     }
 
 }
-
-
 
 exports.updateApprovalStatus = async (req, res) => {
 
@@ -837,7 +850,6 @@ exports.updateApprovalStatus = async (req, res) => {
     }
 
 }
-
 
 exports.GetLandingGODetail = async (req, res) => {
     // console.log('helo from GO controller', req.query);
