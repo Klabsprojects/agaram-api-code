@@ -11,6 +11,8 @@ const departments = require('../../models/categories/department.model');
 const state = require('../../models/state/state.model');
 const empProfile = require('../employee/employeeProfile.controller');
 //const { Op } = require('sequelize');
+//const leaveCredit = require('../../models/employee/leaveCredit.model');
+const leaveCredit = require('../../models/employee/leaveCredit.model');
 
 const { successRes, errorRes } = require("../../middlewares/response.middleware");
 const { ObjectId, ObjectID } = require('mongodb');
@@ -94,7 +96,16 @@ exports.addEmployeeProfile = async (req, res) => {
         const data = await employeeProfile.create(query);
         console.log('data ', data);
         if(data){
-            console.log('data ', data);
+            //console.log('data ', data._id);
+            let leaveCreditData = {
+                casualLeave: 0,
+                restrictedHoliday: 0,
+                earnedLeave: 0,
+                halfPayLeave: 0,
+                empProfileId: data._id
+            }
+            console.log('leaveCreditData ', leaveCreditData)
+            const leaveCreditDataRes = await leaveCredit.create(leaveCreditData);
             if(req.body.department && req.body.department == 'yes' && req.body.toDepartmentId && 
                 req.body.deptAddress && req.body.deptPhoneNumber && req.body.deptFaxNumber && 
                 req.body.deptOfficialMobileNo 
@@ -262,7 +273,8 @@ exports.getEmployeeProfile = async (req, res) => {
                         approvedBy: data0.approvedBy,
                         approvedDate: data0.approvedDate,
                         approvalStatus: data0.approvalStatus,
-                        departmentId: data0.departmentId
+                        departmentId: data0.departmentId,
+                        leaveCredit: await leaveCredit.find(({empProfileId: data0._id}))
                     }
                     resultData.push(dataAll);
                 }
@@ -310,7 +322,8 @@ exports.getEmployeeProfile = async (req, res) => {
                         approvedDate: data0.approvedDate,
                         approvalStatus: data0.approvalStatus,
                         
-                        departmentId: data0.departmentId
+                        departmentId: data0.departmentId,
+                        leaveCredit: await leaveCredit.find({empProfileId: data0._id})
                     }
                     resultData.push(dataAll);
                 }
@@ -2556,6 +2569,7 @@ exports.getActiveEmployees = async (req, res) => {
                         approvedBy: data0.approvedBy,
                         approvedDate: data0.approvedDate,
                         approvalStatus: data0.approvalStatus,
+                        leaveCredit: await leaveCredit.find(({empProfileId: data0._id}))
                     }
                     resultData.push(dataAll);
                 }
@@ -2598,6 +2612,7 @@ exports.getActiveEmployees = async (req, res) => {
                         approvedBy: data0.approvedBy,
                         approvedDate: data0.approvedDate,
                         approvalStatus: data0.approvalStatus,
+                        leaveCredit: await leaveCredit.find(({empProfileId: data0._id}))
                     }
                     resultData.push(dataAll);
                 }
