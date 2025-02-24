@@ -392,7 +392,7 @@ exports.getVisit = async (req, res) => {
             query.proposedCountry = req.query.proposedCountry;
         }
         console.log('Query ', query);
-            data = await foreignVisit.find(req.query)
+            data = await foreignVisit.find(query)
             .populate({
                 path: 'employeeProfileId',
                 model: 'employeeProfile', // Model of the application collection
@@ -730,7 +730,6 @@ exports.getVisit = async (req, res) => {
             .exec();
         successRes(res, data, 'foreignVisit listed Successfully');
         }
-            
     } catch (error) {
         console.log('error', error);
         errorRes(res, error, "Error on listing foreignVisit");
