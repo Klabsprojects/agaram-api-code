@@ -36,4 +36,10 @@ module.exports = (app) => {
   app.route("/getUniqueUserTypesWithoutRole")
     .get([jwt.verifyToken], value.getUniqueUserTypesWithoutRole)
 
+  app.put(
+    "/updatePassword",
+    //[jwt.verifyToken],
+    value.updatePassword
+  );
+
 }

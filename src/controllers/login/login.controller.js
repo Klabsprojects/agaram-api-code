@@ -301,7 +301,6 @@ exports.getUniqueUserTypesWithoutRole = async (req, res) => {
     }
 }
 
-
 // Get getUserTypes
 exports.getUserTypes = async (req, res) => {
     console.log('helo from getUserTypes function', req.query);
@@ -332,3 +331,45 @@ exports.getUserTypes = async (req, res) => {
         throw error; // Throw error for handling in the caller
     }
 };
+
+    // Change Password
+    exports.updatePassword = async (req, res) => {
+        try {
+            console.log('Updating password');
+            const { username, oldPassword, newPassword } = req.body;
+    
+            if (!username || !oldPassword || !newPassword) {
+                return errorRes(res, null, "Please provide username, old password, and new password.");
+            }
+    
+            // Find the user by username
+            const user = await login.findOne({ username });
+    
+            if (!user) {
+                return errorRes(res, null, "User not found.");
+            }
+    
+            // Compare the old password with the hashed password in the database
+            const isMatch = await bcrypt.compare(oldPassword, user.password);
+    
+            if (!isMatch) {
+                return errorRes(res, null, "Old password is incorrect.");
+            }
+    
+            // Hash the new password
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(newPassword, salt);
+    
+            // Update the password in the database
+            user.password = hashedPassword;
+    
+            const updatedUser = await user.save();
+    
+            console.log('Password updated successfully', updatedUser);
+    
+            successRes(res, updatedUser, 'Password updated successfully');
+        } catch (error) {
+            console.log('Error while updating password', error);
+            errorRes(res, error, "Error updating password");
+        }
+    }
