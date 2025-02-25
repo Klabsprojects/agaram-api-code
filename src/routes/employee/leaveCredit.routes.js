@@ -1,5 +1,5 @@
 module.exports = (app) => {
-    const value = require("../../controllers/employee/");
+    const value = require("../../controllers/employee/leaveCredit.controller");
     const {  jwt, ERRORS, SUCCESS, Op } = require("../../helpers/index.helper");
    const upload = require("../../middlewares/upload")
    app.use(function(req, res, next) {
