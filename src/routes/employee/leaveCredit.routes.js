@@ -16,4 +16,10 @@ module.exports = (app) => {
     value.updateLeaveCredit
   );
 
+  app.get(
+    "/getLeaveCredit",
+    [jwt.verifyToken],
+    value.getLeaveCredit
+  );
+
 }

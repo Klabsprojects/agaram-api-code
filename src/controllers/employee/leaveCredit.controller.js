@@ -61,3 +61,21 @@ const employeeProfile = require('../../models/employee/employeeProfile.model');
             errorRes(res, error, "Error on updation");
         }
         }
+
+// Get leaveCredit
+exports.getLeaveCredit = async (req, res) => {
+        console.log('helo from leaveCredit controller', req.query);
+        try {
+            let query = {};
+            let data;
+            if(req.query.empProfileId){
+                data = await leaveCredit.find(req.query).exec();
+            }
+            else
+                throw 'Pls provide empProfileId';
+            successRes(res, data, 'Degree listed Successfully');
+        } catch (error) {
+            console.log('error', error);
+            errorRes(res, error, "Error on listing degree");
+        }
+    }
