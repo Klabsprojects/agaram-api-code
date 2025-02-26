@@ -46,6 +46,12 @@ exports.updateBlock = async (req, res) => {
         if(query.allocationTo){
             update.allocationTo = query.allocationTo;
         } 
+        if(query.blockNumber){
+            update.blockNumber = query.blockNumber;
+        }
+        if(query.FlatNumber){
+            update.FlatNumber = query.FlatNumber;
+        }
 
         if(query.id){
             filter = {
