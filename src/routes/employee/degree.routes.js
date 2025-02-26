@@ -21,4 +21,10 @@ module.exports = (app) => {
     [jwt.verifyToken],
     value.addDegree
   );
+
+  app.put(
+    "/updateDegree",
+    [jwt.verifyToken],
+    value.updateDegree
+  );
 }

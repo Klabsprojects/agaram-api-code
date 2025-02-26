@@ -36,3 +36,40 @@ exports.getDegree = async (req, res) => {
             errorRes(res, error, "Error on listing degree");
         }
     }
+
+// degree updation
+exports.updateDegree = async (req, res) => {
+    try {
+        console.log('try update degree');
+        const query = req.body;
+        let filter;
+        let update = {};
+        if(query.degree_name){
+            update.degree_name = query.degree_name;
+        }
+        if(query.id){
+            filter = {
+                _id : query.id
+            }
+        }
+        else
+            throw 'pls provide id field';
+        console.log('update ', update);
+        console.log('filter ', filter);
+        // Check if the update object is empty or not
+        if (Object.keys(update).length > 0) {
+            console.log('value got');
+            const data = await degree.findOneAndUpdate(filter, update, {
+                new: true
+              });
+            console.log('data updated ', data);
+            successRes(res, data, 'degree updated Successfully');
+        } else {
+            console.log('empty');
+            throw 'Update value missing';
+        }
+    } catch (error) {
+        console.log('catch update degree updation', error);
+        errorRes(res, error, "Error on degree updation");
+    }
+    }
