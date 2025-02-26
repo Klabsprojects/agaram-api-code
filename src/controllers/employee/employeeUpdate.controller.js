@@ -499,7 +499,7 @@ exports.getEmployeeUpdateNew = async (req, res) => {
             console.log(data, 'Employee Update listed Successfully');
             successRes(res, data, 'Employee Update listed Successfully');
         }
-        if (req.query.updateType && !req.query.employeeProfileId) {
+        else if (req.query.updateType && !req.query.employeeProfileId) {
             //query['transferOrPostingEmployeesList.empProfileId'] = req.query.employeeProfileId;
             query.updateType = req.query.updateType;
 
