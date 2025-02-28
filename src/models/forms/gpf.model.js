@@ -15,10 +15,17 @@ const gpfSchema = new Schema({
 	designationId: ObjectId,
 	department: String,
 	departmentId: ObjectId,
-	gpfType: String,
+	//gpfType: String,
+	gpfType: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'categories'
+	},
 	availedDate: Date,
 	availedAmount: Number,
-	purpose: String,
+	purpose: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'categories'
+	},
 	remarks: String,
 	orderType: ObjectId, 
 	orderNo: Number, 

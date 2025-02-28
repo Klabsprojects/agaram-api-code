@@ -39,7 +39,11 @@ const educationSchema = new Schema({
 		locationState: ObjectId,
 		locationCountry: ObjectId,
 		durationOfCourse: Number,
-		fund: String,
+		//fund: String,
+		fund:  {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'categories'
+		},
 		fees: Number,
 		courseCompletedYear: Number,
 		courseCompletedDate: Date,

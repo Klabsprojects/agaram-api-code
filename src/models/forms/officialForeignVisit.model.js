@@ -25,7 +25,10 @@ const officialForeignVisitSchema = new Schema({
 	dateOfOrderofFaxMessage: Date,
 	politicalClearance: String, //file
 	fcraClearance: String, //file
-	fundsSanctionedBy: String,
+	fundsSanctionedBy: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'categories'
+	},
 	fundsSanctioned: Number,
 	orderType: ObjectId, 
 	orderNo: Number, 
