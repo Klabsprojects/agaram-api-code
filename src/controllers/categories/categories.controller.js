@@ -35,7 +35,7 @@ exports.getCategories = async (req, res) => {
     }
 
 // Get getCategoryTypes
-exports.getCategoryTypes = async (req, res) => {
+exports.getCategoryTypesOld = async (req, res) => {
     console.log('helo from getCategoryTypes controller', req.query);
     try {
         let query = {};
@@ -70,6 +70,40 @@ exports.getCategoryTypes = async (req, res) => {
         errorRes(res, error, message);
     }
 }
+
+// Get getCategoryTypes
+exports.getCategoryTypes = async (req, res) => {
+    console.log('helo from getCategoryTypes controller', req.query);
+    try {
+        let query = {};
+        let data;
+        query.where = req.query; // Although it's not being used in the aggregation pipeline directly
+
+        // Perform the aggregation using async/await
+        data = await categories.aggregate([
+            {
+                $group: {
+                    _id: '$category_type'
+                }
+            },
+            {
+                $project: {
+                    _id: 0, // Exclude the default _id field
+                    category_type: '$_id', // Rename _id field to categoryName
+                    count: 1 // Include the count field
+                }
+            }
+        ]);
+
+        console.log('Categories:', data);
+        successRes(res, data, 'Category types listed Successfully');
+    } catch (error) {
+        console.log('error', error);
+        const message = error.message ? error.message : ERRORS.LISTED;
+        errorRes(res, error, message);
+    }
+};
+
 
 // Update Category API
 exports.updateCategory = async (req, res) => {
