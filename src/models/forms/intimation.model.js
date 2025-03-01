@@ -18,7 +18,10 @@ const intimationSchema = new Schema({
 	departmentId: ObjectId,
 	detailsOfIntimation: String,
 	fundSource: String,
-	typeOfIntimation: String,
+	typeOfIntimation: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'categories'
+		},
 	previousSanctionOrder: String,
 	selfOrFamily: String,
 	remarks: String,

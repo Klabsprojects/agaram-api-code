@@ -33,7 +33,10 @@ const ltcSchema = new Schema({
 	dateOfOrder: Date,
 	orderFile: String, //file
 	remarks: String,
-	leaveAvailed: String,
+	leaveAvailed: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'categories'
+	},
 	category: String,
 	submittedBy: {
 		type: mongoose.Schema.Types.ObjectId,

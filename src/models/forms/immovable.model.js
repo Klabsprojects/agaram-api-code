@@ -16,7 +16,10 @@ const immovableSchema = new Schema({
 	designationId: ObjectId,
 	department: String,
 	departmentId: ObjectId,
-	typeOfImmovableProperty: String,
+	typeOfImmovableProperty: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'categories'
+		},
 	detailsOfImovableProperty: String,
 	sourceOfFunding: String,
 	totalCostOfProperty: Number,

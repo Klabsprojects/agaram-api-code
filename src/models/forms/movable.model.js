@@ -16,7 +16,10 @@ const movableSchema = new Schema({
 	designationId: ObjectId,
 	department: String,
 	departmentId: ObjectId,
-	typeOfMovableProperty: String,
+	typeOfMovableProperty: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'categories'
+		},
 	detailsOfMovableProperty: String,
 	sourceOfFunding: String,
 	totalCostOfProperty: Number,
