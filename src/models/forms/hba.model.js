@@ -27,14 +27,23 @@ const hbaSchema = new Schema({
 		ref: 'district' // This references the profile model
 	},
 	district: String,
-	hbaAvailedFor: String,
-	typeOfProperty: String,
+	hbaAvailedFor: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'categories'
+		},
+	typeOfProperty: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'categories'
+		},
 	dateOfApplication: Date,
 	totalCostOfProperty: Number,
 	isExisingResidenceAvailable: String,
 	twoBRelacation: String,
 	totalHbaAvailed: Number,
-	totalNumberOfInstallments: String,
+	totalNumberOfInstallments: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'categories'
+		},
 	totalNumberOfRecoveryMonths: Number,
 	installments : [{
 			installmentNumber: String,

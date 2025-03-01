@@ -37,7 +37,10 @@ const ltcSchema = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'categories'
 	},
-	category: String,
+	category: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'categories'
+	},
 	submittedBy: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'login' // This references the AllocatedBlock model

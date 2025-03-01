@@ -18,7 +18,10 @@ const educationSchema = new Schema({
 	department: String,
 	departmentId: ObjectId,
 	degreeData : [{
-		courseLevel: String,
+		courseLevel: {
+					type: mongoose.Schema.Types.ObjectId,
+					ref: 'categories'
+				},
 		specialisation: String,
 		// degree: {
 		// 	type: mongoose.Schema.Types.ObjectId,
