@@ -180,7 +180,8 @@ exports.getEmployeeProfile = async (req, res) => {
         let admins = [];
         let resultData = [];
             let adminIds = [];
-            if(req.query._id || req.query.fullName || req.query.batch || req.query.loginId){
+            if((req.query._id || req.query.fullName || req.query.batch || req.query.loginId) && (!req.query.loginAs)){
+                console.log('Inside if1');
             query.where = req.query;
             data = await employeeProfile.find(req.query)
             .populate({
@@ -345,6 +346,7 @@ exports.getEmployeeProfile = async (req, res) => {
                     }   
             }
             if(req.query.loginAs == 'Spl A - ASO'){
+                console.log('Inside else if2');
                 admins  = await login.find({ loginAs: { $in: ['Spl A - ASO'] } }).select('_id').exec();
                 if (admins .length === 0) {
                     return res.status(404).json({ message: 'No admin users found' });
@@ -375,6 +377,9 @@ exports.getEmployeeProfile = async (req, res) => {
                     { approvalStatus: true }
                 ]
             }
+            if (req.query.batch) {
+                profileQuery.batch= req.query.batch;
+            }
              // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
              data = await employeeProfile.find(profileQuery)
              .populate({
@@ -395,8 +400,10 @@ exports.getEmployeeProfile = async (req, res) => {
                 
         }
         else{
-
-            data = await employeeProfile.find().sort({ batch: 'asc' })
+            if (req.query.batch) {
+                query.batch= req.query.batch;
+            }
+            data = await employeeProfile.find(query).sort({ batch: 'asc' })
 	        .allowDiskUse(true)
 	        .exec();
             //console.log('else', data);
