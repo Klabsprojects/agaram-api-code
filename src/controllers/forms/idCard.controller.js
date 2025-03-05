@@ -166,10 +166,12 @@ exports.addIdcard = async (req, res) => {
             }
             else if(req.query.employeeProfileId){
                 console.log('profileid', req.query.employeeProfileId)
-                query.where = req.query;
-                data = await idcard.find({
-                    'employeeProfileId': req.query.employeeProfileId
-                })
+                query.employeeProfileId = req.query.employeeProfileId;
+                if (req.query.designationId) {
+                    query.designationId= req.query.designationId;
+                }
+                console.log('Query ', query);
+                data = await idcard.find(query)
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
@@ -231,6 +233,10 @@ exports.addIdcard = async (req, res) => {
                     { approvalStatus: true }
                 ]
             }
+            if (req.query.designationId) {
+                profileQuery.designationId= req.query.designationId;
+            }
+            console.log('profileQuery ', profileQuery);
                  // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
                  data = await idcard.find(profileQuery)
                      .populate({
@@ -340,7 +346,11 @@ exports.addIdcard = async (req, res) => {
             successRes(res, resultData, 'education listed Successfully');
             }
             else{
-                data = await idcard.find()
+                if (req.query.designationId) {
+                    query.designationId= req.query.designationId;
+                }
+                console.log('Query ', query);
+                data = await idcard.find(query)
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection

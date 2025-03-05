@@ -151,10 +151,18 @@ exports.addGpf = async (req, res) => {
 
             else if(req.query.employeeProfileId){
                 console.log('profileid', req.query.employeeProfileId)
-                query.where = req.query;
-                data = await gpf.find({
-                    'employeeProfileId': req.query.employeeProfileId
-                })
+                query.employeeProfileId = req.query.employeeProfileId;
+                if (req.query.designationId) {
+                    query.designationId= req.query.designationId;
+                }
+                if (req.query.gpfType) {
+                    query.gpfType= req.query.gpfType;
+                }
+                if (req.query.purpose) {
+                    query.purpose= req.query.purpose;
+                }
+                console.log('Query ', query);
+                data = await gpf.find(query)
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection
@@ -216,6 +224,16 @@ exports.addGpf = async (req, res) => {
                     { approvalStatus: true }
                 ]
             }
+            if (req.query.designationId) {
+                profileQuery.designationId= req.query.designationId;
+            }
+            if (req.query.gpfType) {
+                profileQuery.gpfType= req.query.gpfType;
+            }
+            if (req.query.purpose) {
+                profileQuery.purpose= req.query.purpose;
+            }
+            console.log('profileQuery ', profileQuery);
                  // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
                  data = await gpf.find(profileQuery)
                      .populate({
@@ -323,7 +341,17 @@ exports.addGpf = async (req, res) => {
             successRes(res, resultData, 'education listed Successfully');
             }
             else{
-                data = await gpf.find()
+                if (req.query.designationId) {
+                    query.designationId= req.query.designationId;
+                }
+                if (req.query.gpfType) {
+                    query.gpfType= req.query.gpfType;
+                }
+                if (req.query.purpose) {
+                    query.purpose= req.query.purpose;
+                }
+                console.log('Query ', query);
+                data = await gpf.find(query)
                 .populate({
                     path: 'employeeProfileId',
                     model: 'employeeProfile', // Model of the application collection

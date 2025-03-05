@@ -12,19 +12,22 @@ const officersTourSchema = new Schema({
 	proposedState: String,
 	stateId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'state'
+		ref: 'categories'
 	},
 	state: String,
 	districtId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'district'
+		ref: 'categories'
 	},
 	district: String,
 	place: String,
 	typeOfTour: String,
 	fromDate: Date,
 	toDate: Date,
-	purpose: String,
+	purpose: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'categories'
+	},
 	organisationHostName: String,
 	OtherOfficers: [{
 		employeeProfileId: {
@@ -40,7 +43,10 @@ const officersTourSchema = new Schema({
 			ref: 'designations'
 		},
 	}],
-	presentStatus: String,
+	presentStatus: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'categories'
+	},
 	orderFile: String,
 	orderType: {
 		type: mongoose.Schema.Types.ObjectId,

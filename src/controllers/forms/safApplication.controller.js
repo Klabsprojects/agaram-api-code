@@ -206,9 +206,112 @@ exports.getSafApplication = async (req, res) => {
         let resultData = [];
         let admins = [];
         let adminIds = [];
-        if(req.query._id || req.query.employeeProfileId){
+        if(req.query._id){
             query.where = req.query;
             data = await safApplication.find(req.query)
+            .populate({
+                path: 'employeeProfileId',
+                model: 'employeeProfile', // Model of the application collection
+                select: ['batch', 'mobileNo1'] // Fields to select from the application collection
+            })  
+            .populate({
+                path: 'submittedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            })
+            .populate({
+                path: 'approvedBy',
+                model: 'login', // Ensure the model name matches exactly
+                select: ['username', 'loginAs'] // Specify the fields you want to include from EmployeeProfile
+            }) 
+            .exec();
+            if(data.length > 0){
+                console.log('data.length', data.length)
+                for(let data0 of data){
+                    console.log('IDDD => ', data0);
+                    console.log('IDDD => ', data0.employeeProfileId._id);
+                    let updateQueryJson = {
+                        empId: data0.employeeProfileId._id
+                    }
+            uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+            console.log('length ==> ', uniqueArray.length);
+                    if(uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList){
+                        for(let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList){
+                            console.log('Check ', transferOrPostingEmployeesList.fullName, transferOrPostingEmployeesList.empProfileId._id.toString(),
+                            data0.employeeProfileId._id.toString());
+                            if(transferOrPostingEmployeesList.empProfileId._id.toString() === data0.employeeProfileId._id.toString()){
+                                console.log('Matched ');
+                                console.log('posting available')
+                        dataAll = {
+                            toPostingInCategoryCode: transferOrPostingEmployeesList.toPostingInCategoryCode,
+                            toDepartmentId: transferOrPostingEmployeesList.toDepartmentId,
+                            toDesignationId: transferOrPostingEmployeesList.toDesignationId,
+                            postTypeCategoryCode: transferOrPostingEmployeesList.postTypeCategoryCode,
+                            locationChangeCategoryId: transferOrPostingEmployeesList.locationChangeCategoryId,
+                            updateType: uniqueArray[0].updateType,
+                            orderTypeCategoryCode: uniqueArray[0].orderTypeCategoryCode,
+                            orderNumber: uniqueArray[0].orderNumber,
+                            orderForCategoryCode: uniqueArray[0].orderForCategoryCode,
+                    
+                            _id: data0._id,
+                            officerName: data0.officerName,
+                            employeeProfileId: data0.employeeProfileId,
+                            employeeId: data0.employeeId,
+                            designation: data0.designation,
+                            designationId: data0.designationId,
+                            department: data0.department,
+                            departmentId: data0.departmentId,
+                            appliedOn: data0.appliedOn,
+                            appliedTime: data0.appliedTime,
+                            seniorityNumber: data0.seniorityNumber,
+                            waitingPeriod: data0.waitingPeriod,
+                            applicationStatus: data0.applicationStatus,
+                            submittedBy: data0.submittedBy,
+                            approvedBy: data0.approvedBy,
+                            approvedDate: data0.approvedDate,
+                            approvalStatus: data0.approvalStatus,
+                }
+        resultData.push(dataAll);
+            }
+                }
+            }
+            else{
+                let dataAll = {
+                    _id: data0._id,
+                            officerName: data0.officerName,
+                            employeeProfileId: data0.employeeProfileId,
+                            employeeId: data0.employeeId,
+                            designation: data0.designation,
+                            designationId: data0.designationId,
+                            department: data0.department,
+                            departmentId: data0.departmentId,
+                            appliedOn: data0.appliedOn,
+                            appliedTime: data0.appliedTime,
+                            seniorityNumber: data0.seniorityNumber,
+                            waitingPeriod: data0.waitingPeriod,
+                            applicationStatus: data0.applicationStatus,
+                            submittedBy: data0.submittedBy,
+                            approvedBy: data0.approvedBy,
+                            approvedDate: data0.approvedDate,
+                            approvalStatus: data0.approvalStatus,
+                }
+        resultData.push(dataAll);
+            }
+        }
+            }
+            else
+            {
+                resultData = [];
+            }
+            successRes(res, resultData, 'safApplication listed Successfully');
+        }
+        else if(req.query.employeeProfileId){
+            query.employeeProfileId = req.query.employeeProfileId;
+            if (req.query.designationId) {
+                query.designationId= req.query.designationId;
+            }
+            console.log('Query ', query);
+            data = await safApplication.find(query)
             .populate({
                 path: 'employeeProfileId',
                 model: 'employeeProfile', // Model of the application collection
@@ -347,6 +450,10 @@ exports.getSafApplication = async (req, res) => {
                 { approvalStatus: true }
             ]
         }
+        if (req.query.designationId) {
+            profileQuery.designationId= req.query.designationId;
+        }
+        console.log('profileQuery ', profileQuery);
              // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
              data = await safApplication.find(profileQuery)
                  .populate({
@@ -446,7 +553,10 @@ exports.getSafApplication = async (req, res) => {
         successRes(res, resultData, 'safApplication listed Successfully');
         }
         else{
-            data = await safApplication.find()
+            if (req.query.designationId) {
+                query.designationId= req.query.designationId;
+            }
+            data = await safApplication.find(query)
             .populate({
                 path: 'employeeProfileId',
                 model: 'employeeProfile', // Model of the application collection

@@ -82,6 +82,8 @@ exports.getOfficersTour = async (req, res) => {
             data = await officersTour.find(req.query)
                 .populate('stateId')
                 .populate('districtId')
+                .populate('purpose')
+                .populate('presentStatus')
                 // .populate('orderType')
                 // .populate('orderFor')
                 // .populate({
@@ -101,6 +103,8 @@ exports.getOfficersTour = async (req, res) => {
             data = await officersTour.find()
                 .populate('stateId')
                 .populate('districtId')
+                .populate('purpose')
+                .populate('presentStatus')
                 // .populate('orderType')
                 // .populate('orderFor')
                 // .populate({
