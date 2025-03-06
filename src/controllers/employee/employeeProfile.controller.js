@@ -380,6 +380,7 @@ exports.getEmployeeProfile = async (req, res) => {
             if (req.query.batch) {
                 profileQuery.batch= req.query.batch;
             }
+            console.log('profileQuery ', profileQuery);
              // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
              data = await employeeProfile.find(profileQuery)
              .populate({
@@ -403,6 +404,8 @@ exports.getEmployeeProfile = async (req, res) => {
             if (req.query.batch) {
                 query.batch= req.query.batch;
             }
+            
+            console.log('query ', query);
             data = await employeeProfile.find(query).sort({ batch: 'asc' })
 	        .allowDiskUse(true)
 	        .exec();
@@ -415,7 +418,6 @@ exports.getEmployeeProfile = async (req, res) => {
             errorRes(res, error, "Error on listing employee");
         }
     }
-
 
 // Get getEmployeeForLogin
 exports.getEmployeeForLogin = async (req, res) => {
@@ -5030,6 +5032,7 @@ exports.getEmployeeCurrentPosting = async (req, res) => {
         errorRes(res, error, "Error on listing employee profile with history");
     }
 }
+
 
 exports.getEmployeeAdvancedSearch = async (req, res) => {
     console.log('helo from getEmployeeAdvancedSearch controller', req.query);
@@ -9906,6 +9909,70 @@ exports.byProfileAdvanced = async(input, by) =>{
         throw 'error';
         }
 }
+
+// getDeputationCount
+exports.getDeputationCount = async (req, res) => {
+    console.log('helo from getDeputationCount api', req.query);
+    try {
+        var deputation_count = 0;
+        const tnDistricts = [
+            "Ariyalur", "Chengalpattu", "Chennai", "Coimbatore", "Cuddalore",
+            "Dharmapuri", "Dindigul", "Erode", "Kallakurichi", "Kanchipuram",
+            "Kanniyakumari", "Karur", "Krishnagiri", "Madurai", "Mayiladuthurai",
+            "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai",
+            "Ramanathapuram", "Ranipet", "Salem", "Sivagangai", "Tenkasi",
+            "Thanjavur", "Theni", "Thoothukudi", "Tiruchirappalli", "Tirunelveli",
+            "Tirupathur", "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur",
+            "Vellore", "Viluppuram", "Virudhunagar"
+        ];
+        let data;
+        let resultData = [];
+        data = await employeeProfile.find(req.query)
+            .sort({ batch: 'asc' })
+            .allowDiskUse(true)
+            //.limit(100)
+            .exec();
+        // console.log('data ', data);
+        if (data.length > 0) {
+            console.log('data.length', data.length)
+            for (let data0 of data) {
+                let updateQueryJson = {
+                    empId: data0._id
+                }
+                uniqueArray = await empProfile.getEmployeeUpdateFilter(updateQueryJson);
+                //console.log('uniqueArray.length ==> ', uniqueArray.length);
+                //console.log('uniqueArray ==> ', uniqueArray[0]);
+                if (uniqueArray.length > 0 && uniqueArray[0].transferOrPostingEmployeesList) {
+                    for (let transferOrPostingEmployeesList of uniqueArray[0].transferOrPostingEmployeesList) {
+                        //console.log('Check ', transferOrPostingEmployeesList.fullName, transferOrPostingEmployeesList);
+                        if (transferOrPostingEmployeesList.empProfileId._id.toString() === data0._id.toString()) {
+                            //console.log('Matched ');
+                            //console.log('posting available')
+                            let departmentName = await departments.findById(transferOrPostingEmployeesList.toDepartmentId).select(['department_name', 'address']);
+                            console.log('=====>', departmentName.address)
+                            
+                            let address = departmentName.address;
+
+                            if (address && !tnDistricts.some(district => address.toLowerCase().includes(district.toLowerCase()))) {
+                                console.log('*****', address);
+                                deputation_count += 1;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+        }
+        //console.log('if', data);
+        successRes(res, deputation_count, 'Employee listed Successfully');
+
+    } catch (error) {
+        console.log('error', error);
+        errorRes(res, error, "Error on listing employee");
+    }
+}
+
 
 exports.getCurrentPosting = async (req, res) => {
     console.log('helo from employeeProfile controller', req.query);

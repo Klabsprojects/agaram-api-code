@@ -23,6 +23,11 @@ module.exports = (app) => {
     value.getCurrentPosting
   );
   
+  app.get(
+    "/getDeputationCount",
+    // [jwt.verifyToken],
+    value.getDeputationCount
+  );
 
   app.get(
     "/getEmployeeForLogin",

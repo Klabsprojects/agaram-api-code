@@ -166,7 +166,7 @@ exports.getDroProfile = async (req, res) => {
         let admins = [];
         let resultData = [];
             let adminIds = [];
-            if(req.query._id || req.query.fullName || req.query.batch || req.query.loginId){
+            if((req.query._id || req.query.fullName || req.query.batch || req.query.loginId)  && (!req.query.loginAs)){
             query.where = req.query;
             data = await droProfile.find(req.query)
             .populate({
@@ -361,6 +361,10 @@ exports.getDroProfile = async (req, res) => {
                     { approvalStatus: true }
                 ]
             }
+            if (req.query.batch) {
+                profileQuery.batch= req.query.batch;
+            }
+            console.log('profileQuery ', profileQuery);
              // Step 2: Query the leave collection where submittedBy matches any of the admin IDs
              data = await droProfile.find(profileQuery)
              .populate({
@@ -378,11 +382,14 @@ exports.getDroProfile = async (req, res) => {
         .exec();
             //console.log(data, 'employeeProfile listed if Successfully');
             successRes(res, data, 'employeeProfile listed Successfully');
-                
         }
         else{
-
-            data = await droProfile.find().sort({ batch: 'asc' })
+            if (req.query.batch) {
+                query.batch= req.query.batch;
+            }
+            
+            console.log('query ', query);
+            data = await droProfile.find(query).sort({ batch: 'asc' })
             .allowDiskUse(true)
             .exec();
             //console.log('else', data);
