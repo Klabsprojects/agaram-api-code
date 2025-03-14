@@ -265,7 +265,12 @@ exports.getDroProfile = async (req, res) => {
                         approvedBy: data0.approvedBy,
                         approvedDate: data0.approvedDate,
                         approvalStatus: data0.approvalStatus,
-                        departmentId: data0.departmentId
+                        departmentId: data0.departmentId,
+                        orderType :data0.orderType,
+                        orderNo :data0.orderNo,
+                        orderFor:data0.orderFor,
+                        dateOfOrder:data0.dateOfOrder,
+                        orderFile:data0.orderFile
                     }
                     resultData.push(dataAll);
                 }
@@ -312,8 +317,12 @@ exports.getDroProfile = async (req, res) => {
                         approvedBy: data0.approvedBy,
                         approvedDate: data0.approvedDate,
                         approvalStatus: data0.approvalStatus,
-                        
-                        departmentId: data0.departmentId
+                        departmentId: data0.departmentId,
+                        orderType :data0.orderType,
+                        orderNo :data0.orderNo,
+                        orderFor:data0.orderFor,
+                        dateOfOrder:data0.dateOfOrder,
+                        orderFile:data0.orderFile
                     }
                     resultData.push(dataAll);
                 }
