@@ -88,22 +88,26 @@ exports.addDroProfile = async (req, res) => {
             console.log(' after parse transferOrPostingEmployeesList ', req.body.degreeData);
         }
         // console.log('query ', query);
+        query.orderType= req.body.orderType ? req.body.orderType : null;
+        query.orderNo= req.body.orderNo ? req.body.orderNo : '';
+        query.orderFor= req.body.orderFor? req.body.orderFor : null;
+        query.dateOfOrder = req.body.dateOfOrder? req.body.dateOfOrder : '';
         const data = await droProfile.create(query);
         // console.log('data ', data);
         if(data){
             // console.log('data ', data);
-            if(req.body.department && req.body.department == 'yes' && req.body.toDepartmentId && 
-                req.body.deptAddress && req.body.deptPhoneNumber && req.body.deptFaxNumber && 
-                req.body.deptOfficialMobileNo 
+            if(req.body.department && req.body.department == 'yes' && req.body.toDepartmentId 
+                //&& req.body.deptAddress && req.body.deptPhoneNumber && req.body.deptFaxNumber && 
+                //req.body.deptOfficialMobileNo 
                 //&& req.body.deptLastDateOfPromotion
             ){
                 console.log('department details coming' , data._id);
                 let request1 = {
                     body : {
-                        address : req.body.deptAddress,
-                        phoneNumber : req.body.deptPhoneNumber,
-                        faxNumber : req.body.deptFaxNumber,
-                        officialMobileNo : req.body.deptOfficialMobileNo,
+                        address : req.body.deptAddress ? req.body.deptAddress : '',
+                        phoneNumber : req.body.deptPhoneNumber ? req.body.deptPhoneNumber : '',
+                        faxNumber : req.body.deptFaxNumber ? req.body.deptFaxNumber : '',
+                        officialMobileNo : req.body.deptOfficialMobileNo ? req.body.deptOfficialMobileNo : ''
                         //lastDateOfPromotion : req.body.deptLastDateOfPromotion,
                     },
                     where: {
@@ -136,10 +140,10 @@ exports.addDroProfile = async (req, res) => {
                 const dataPosting = await droProfileUpdateController.handleBulkEmployeeTransferPosting(request);
                 //await employeeUpdateController.addPostingFromProfile(req, res);
                 let data1 = data;
-                successRes(res, data1, 'Employee added Successfully');
+                successRes(res, data1, 'Dro profile added Successfully');
             }
             else
-                successRes(res, data, 'Employee added Successfully');
+                successRes(res, data, 'Dro profile added Successfully');
                 //throw new Error('Pls provide valid inputs for employee current posting');
         }
     }
@@ -151,7 +155,7 @@ exports.addDroProfile = async (req, res) => {
             errorRes(res, error, errorMessage);
         }else{
             console.log('catch', error);
-            errorRes(res, error, "Error on EmployeeProfile Creation");
+            errorRes(res, error, "Error on DroProfile Creation");
         }
     }
     }
@@ -477,6 +481,10 @@ exports.getDroProfile = async (req, res) => {
         }
         
             update = req.body;
+            update.orderType= req.body.orderType ? req.body.orderType : null;
+            update.orderNo= req.body.orderNo ? req.body.orderNo : '';
+            update.orderFor= req.body.orderFor? req.body.orderFor : null;
+            update.dateOfOrder = req.body.dateOfOrder? req.body.dateOfOrder : '';
             
             if(Object.keys(req.body).length >0){
                 if(query.id){
@@ -508,7 +516,59 @@ exports.getDroProfile = async (req, res) => {
                     new: true
                   });
                 console.log('data updated ', data);
-                successRes(res, data, 'data updated Successfully');
+                if(data){
+                    // console.log('data ', data);
+                    if(req.body.department && req.body.department == 'yes' && req.body.toDepartmentId 
+                        //&& req.body.deptAddress && req.body.deptPhoneNumber && req.body.deptFaxNumber && 
+                        //req.body.deptOfficialMobileNo 
+                        //&& req.body.deptLastDateOfPromotion
+                    ){
+                        console.log('department details coming' , data._id);
+                        let request1 = {
+                            body : {
+                                address : req.body.deptAddress ? req.body.deptAddress : '',
+                                phoneNumber : req.body.deptPhoneNumber ? req.body.deptPhoneNumber : '',
+                                faxNumber : req.body.deptFaxNumber ? req.body.deptFaxNumber : '',
+                                officialMobileNo : req.body.deptOfficialMobileNo ? req.body.deptOfficialMobileNo : ''
+                                //lastDateOfPromotion : req.body.deptLastDateOfPromotion,
+                            },
+                            where: {
+                                _id: req.body.toDepartmentId
+                            }
+                        }
+                        const dataDepartment = await departmentController.handledepartmentEdit(request1);
+                    }
+                    if(req.body.updateType && req.body.toPostingInCategoryCode && req.body.toDepartmentId
+                        && req.body.toDesignationId && req.body.postTypeCategoryCode && req.body.locationChangeCategoryId
+                        && data._id
+                    ){
+                        console.log('employee current posting' , data._id);
+                        let request = {
+                            body : {
+                                updateType : req.body.updateType,
+                                dateOfOrder : dateOrder,
+                                transferOrPostingEmployeesList : [{
+                                    droProfileId: data._id,
+                                            employeeId: data.employeeId,
+                                            fullName: data.fullName,
+                                            toPostingInCategoryCode: req.body.toPostingInCategoryCode,
+                                            toDepartmentId: req.body.toDepartmentId,
+                                            toDesignationId: req.body.toDesignationId,
+                                            postTypeCategoryCode: req.body.postTypeCategoryCode,
+                                            locationChangeCategoryId: req.body.locationChangeCategoryId,
+                                }]
+                        }
+                        }
+                        const dataPosting = await droProfileUpdateController.handleBulkEmployeeTransferPosting(request);
+                        //await employeeUpdateController.addPostingFromProfile(req, res);
+                        let data1 = data;
+                        successRes(res, data1, 'data updated Successfully');
+                    }
+                    else
+                        successRes(res, data, 'data updated Successfully');
+                        //throw new Error('Pls provide valid inputs for employee current posting');
+                }
+                //successRes(res, data, 'data updated Successfully');
             } else {
                 console.log('empty');
                 throw 'Update value missing';
