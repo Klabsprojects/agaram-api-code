@@ -270,7 +270,8 @@ exports.getDroProfile = async (req, res) => {
                         orderNo :data0.orderNo,
                         orderFor:data0.orderFor,
                         dateOfOrder:data0.dateOfOrder,
-                        orderFile:data0.orderFile
+                        orderFile:data0.orderFile,
+                        remarks:data0.remarks
                     }
                     resultData.push(dataAll);
                 }
@@ -322,7 +323,8 @@ exports.getDroProfile = async (req, res) => {
                         orderNo :data0.orderNo,
                         orderFor:data0.orderFor,
                         dateOfOrder:data0.dateOfOrder,
-                        orderFile:data0.orderFile
+                        orderFile:data0.orderFile,
+                        remarks:data0.remarks
                     }
                     resultData.push(dataAll);
                 }
