@@ -12,13 +12,37 @@ exports.addHba = async (req, res) => {
         console.log('try create Hba', req.body);
         const query = req.body;
 
+        const objectIdFields = [
+            'employeeProfileId',
+            'designationId',
+            'departmentId',
+            'state',
+            'stateId',
+            'district',
+            'hbaAvailedFor',
+            'typeOfProperty',
+            'totalNumberOfInstallments',
+            'orderType',
+            'orderFor',
+            'submittedBy',
+            'approvedBy'
+        ];
+        
+        // Convert empty strings to null
+        objectIdFields.forEach(field => {
+            if (query[field] === '') {
+                query[field] = null;
+            }
+        });
+
         if (req.files && req.files['orderFile'] && req.files['orderFile'].length > 0) {
             // If orderFile file exists
             query.orderFile = req.files['orderFile'][0].path; // Assuming only one file is uploaded
             console.log('Uploaded orderFile file path:', req.files['orderFile'][0].path);
-        } else {
-            throw new Error('orderFile upload failed: No orderFile file uploaded');
-        }
+        } 
+        // else {
+        //     throw new Error('orderFile upload failed: No orderFile file uploaded');
+        // }
         console.log('query ', query);
 
         if (req.files && req.files['conductRulePermissionAttachment'] && req.files['conductRulePermissionAttachment'].length > 0) {
@@ -512,103 +536,491 @@ exports.addHba = async (req, res) => {
  
 
  
+// exports.updateHba = async (req, res) => {
+//     try {
+//         // console.log("Received HBA update request");
+
+//         const query = { ...req.body };
+//         // console.log('1')
+//         // console.log(req.body)
+//         // console.log("Incoming files:", req.files); // Debugging
+
+//         if (req.files && req.files["orderFile"]) {
+//             query.orderFile = req.files["orderFile"][0].path;
+//         } else {
+//             query.orderFile = req.body.orderFile;
+//         }
+
+//         const processedInstallments = [];
+//         const installmentKeys = Object.keys(req.body)
+//             .filter((key) => key.startsWith("installments["))
+//             .sort();
+
+//         const installmentMap = new Map();
+//         installmentKeys.forEach((key) => {
+//             const matches = key.match(/installments\[(\d+)\]\[(.+)\]/);
+//             // console.log('matches',matches)
+//             if (matches) {
+//                 const [, index, field] = matches;
+//                 if (!installmentMap.has(index)) {
+//                     installmentMap.set(index, {});
+//                 }
+//                 installmentMap.get(index)[field] = req.body[key];
+//             }
+//         });
+
+//         for (var z = 0; z < req.body.installments.length; z++) {
+//             // Correctly assign conductRulePermissionAttachment from req.files
+//             const fileFieldName = `installments[${z}][conductRulePermissionAttachment]`;
+//             // console.log(req.files, req.files[fileFieldName]);
+        
+//             if (req.files && req.files[fileFieldName] && req.files[fileFieldName].length > 0) {
+//                 // console.log('File found');
+//                 // Assign the first file path as a string
+//                 req.body.installments[z].conductRulePermissionAttachment = req.files[fileFieldName][0].path;
+//             } 
+//             else {
+//                 // console.log('No file found');
+//                 // console.log(req.body.installments[z].conductRulePermissionAttachment)
+//                 req.body.installments[z].conductRulePermissionAttachment = req.body.installments[z].conductRulePermissionAttachment; 
+//             }
+        
+//             processedInstallments.push(req.body.installments[z]);
+//         }
+
+//         const updateOperations = [];
+//         for (const installment of processedInstallments) {
+//             if (!installment._id) {
+//                 // New installment
+//                 // console.log('no execute');
+//                 // console.log(installment)
+//                 updateOperations.push({
+//                     updateOne: {
+//                         filter: { _id: query.id },
+//                         update: { $push: { installments: installment } }
+//                     }
+//                 });
+//             } else if (installment.edited === "yes") {
+//                 // Update existing installment
+//                 // console.log('yes execute');
+//                 // console.log(installment)
+//                 updateOperations.push({
+//                     updateOne: {
+//                         filter: {
+//                             _id: query.id,
+//                             "installments._id": installment._id
+//                         },
+//                         update: {
+//                             $set: { "installments.$": installment }
+//                         }
+//                     }
+//                 });
+//             }
+//         }
+
+//         if (updateOperations.length > 0) {
+//             await hba.bulkWrite(updateOperations);
+//         }
+
+//         const mainDocUpdate = {};
+//         Object.keys(query).forEach((key) => {
+//             if (key !== "installments" && key !== "id") {
+//                 mainDocUpdate[key] = query[key];
+//             }
+//         });
+        
+
+//         if (Object.keys(mainDocUpdate).length > 0) {
+//             // console.log('main update')
+//             // console.log(mainDocUpdate)
+//             await hba.updateOne({ _id: query.id }, { $set: mainDocUpdate });
+//         }
+
+//         return res.json({
+//             success: true,
+//             message: "HBA updated successfully",
+//             updatedData: {
+//                 mainUpdate: mainDocUpdate,
+//                 installments: processedInstallments
+//             }
+//         });
+
+//     } catch (error) {
+//         console.error("Error updating HBA:", error);
+//         return res.status(500).json({
+//             success: false,
+//             message: "Error updating HBA",
+//             error: error.message
+//         });
+//     }
+// };
+
+// exports.updateHba = async (req, res) => {
+//     try {
+//         const query = { ...req.body };
+//         const objectIdFields = [
+//             'employeeProfileId',
+//             'designationId',
+//             'departmentId',
+//             'state',
+//             'stateId',
+//             'district',
+//             'hbaAvailedFor',
+//             'typeOfProperty',
+//             'totalNumberOfInstallments',
+//             'orderType',
+//             'orderFor',
+//             'submittedBy',
+//             'approvedBy'
+//         ];
+        
+//         // Convert empty strings to null
+//         objectIdFields.forEach(field => {
+//             if (query[field] === '' || query[field] === 'null') {
+//                 query[field] = null;
+//             }
+//         });
+
+//         // Handle file upload for the order file
+//         if (req.files && req.files["orderFile"]) {
+//             query.orderFile = req.files["orderFile"][0].path;
+//         } else if(req.body.orderFile) {
+//             query.orderFile = req.body.orderFile;
+//         }
+
+//         // Array to store all processed installments
+//         const processedInstallments = [];
+        
+//         // Handle installments submitted as form fields with array notation
+//         if (req.body && typeof req.body === 'object') {
+//             const installmentKeys = Object.keys(req.body)
+//                 .filter((key) => key.startsWith("installments["));
+
+//             if (installmentKeys.length > 0) {
+//                 // Group installment properties by index
+//                 const installmentMap = new Map();
+                
+//                 installmentKeys.forEach((key) => {
+//                     const matches = key.match(/installments\[(\d+)\]\[(.+)\]/);
+//                     if (matches) {
+//                         const [, index, field] = matches;
+//                         if (!installmentMap.has(index)) {
+//                             installmentMap.set(index, {});
+//                         }
+                        
+//                         // Store the value, but don't process it yet
+//                         installmentMap.get(index)[field] = req.body[key];
+//                     }
+//                 });
+                
+//                 // Process and clean each installment
+//                 installmentMap.forEach((installment) => {
+//                     // Process numeric fields
+//                     if (installment.amount === 'null' || installment.amount === '') {
+//                         installment.amount = null;
+//                     } else if (installment.amount !== null && installment.amount !== undefined) {
+//                         // Ensure amount is a number if it's not null
+//                         installment.amount = Number(installment.amount) || null;
+//                     }
+                    
+//                     // Process date fields
+//                     if (installment.installmentDate === 'null' || installment.installmentDate === '') {
+//                         installment.installmentDate = null;
+//                     }
+                    
+//                     // Handle file attachment if present
+//                     const index = Array.from(installmentMap.keys()).indexOf(Array.from(installmentMap.keys()).find(k => installmentMap.get(k) === installment));
+//                     const fileFieldName = `installments[${index}][conductRulePermissionAttachment]`;
+                    
+//                     if (req.files && req.files[fileFieldName] && req.files[fileFieldName].length > 0) {
+//                         installment.conductRulePermissionAttachment = req.files[fileFieldName][0].path;
+//                     }
+                    
+//                     processedInstallments.push(installment);
+//                 });
+//             }
+//         }
+        
+//         // Handle installments submitted as a direct array
+//         if (req.body.installments && Array.isArray(req.body.installments)) {
+//             for (let i = 0; i < req.body.installments.length; i++) {
+//                 const installment = {...req.body.installments[i]};
+                
+//                 // Process numeric fields
+//                 if (installment.amount === 'null' || installment.amount === '') {
+//                     installment.amount = null;
+//                 } else if (installment.amount !== null && installment.amount !== undefined) {
+//                     // Ensure amount is a number if it's not null
+//                     installment.amount = Number(installment.amount) || null;
+//                 }
+                
+//                 // Process date fields
+//                 if (installment.installmentDate === 'null' || installment.installmentDate === '') {
+//                     installment.installmentDate = null;
+//                 }
+                
+//                 // Handle file attachment if present
+//                 const fileFieldName = `installments[${i}][conductRulePermissionAttachment]`;
+//                 if (req.files && req.files[fileFieldName] && req.files[fileFieldName].length > 0) {
+//                     installment.conductRulePermissionAttachment = req.files[fileFieldName][0].path;
+//                 }
+                
+//                 processedInstallments.push(installment);
+//             }
+//         }
+
+//         // Create update operations for MongoDB
+//         const updateOperations = [];
+//         for (const installment of processedInstallments) {
+//             if (!installment._id) {
+//                 // New installment
+//                 updateOperations.push({
+//                     updateOne: {
+//                         filter: { _id: query.id },
+//                         update: { $push: { installments: installment } }
+//                     }
+//                 });
+//             } else if (installment.edited === "yes") {
+//                 // Update existing installment
+//                 updateOperations.push({
+//                     updateOne: {
+//                         filter: {
+//                             _id: query.id,
+//                             "installments._id": installment._id
+//                         },
+//                         update: {
+//                             $set: { "installments.$": installment }
+//                         }
+//                     }
+//                 });
+//             }
+//         }
+
+//         // Execute installment updates if any
+//         if (updateOperations.length > 0) {
+//             await hba.bulkWrite(updateOperations);
+//         }
+
+//         // Update main document fields
+//         const mainDocUpdate = {};
+//         Object.keys(query).forEach((key) => {
+//             if (key !== "installments" && key !== "id") {
+//                 // Convert numeric fields from string 'null' to actual null
+//                 if (typeof query[key] === 'string' && query[key] === 'null') {
+//                     mainDocUpdate[key] = null;
+//                 } else {
+//                     mainDocUpdate[key] = query[key];
+//                 }
+//             }
+//         });
+
+//         if (Object.keys(mainDocUpdate).length > 0) {
+//             await hba.updateOne({ _id: query.id }, { $set: mainDocUpdate });
+//         }
+
+//         return res.json({
+//             success: true,
+//             message: "HBA updated successfully",
+//             updatedData: {
+//                 mainUpdate: mainDocUpdate,
+//                 installments: processedInstallments
+//             }
+//         });
+
+//     } catch (error) {
+//         console.error("Error updating HBA:", error);
+//         return res.status(500).json({
+//             success: false,
+//             message: "Error updating HBA",
+//             error: error.message
+//         });
+//     }
+// };
+
 exports.updateHba = async (req, res) => {
     try {
-        // console.log("Received HBA update request");
-
         const query = { ...req.body };
-        // console.log('1')
-        // console.log(req.body)
-        // console.log("Incoming files:", req.files); // Debugging
-
-        if (req.files && req.files["orderFile"]) {
-            query.orderFile = req.files["orderFile"][0].path;
-        } else {
-            query.orderFile = req.body.orderFile;
-        }
-
-        const processedInstallments = [];
-        const installmentKeys = Object.keys(req.body)
-            .filter((key) => key.startsWith("installments["))
-            .sort();
-
-        const installmentMap = new Map();
-        installmentKeys.forEach((key) => {
-            const matches = key.match(/installments\[(\d+)\]\[(.+)\]/);
-            // console.log('matches',matches)
-            if (matches) {
-                const [, index, field] = matches;
-                if (!installmentMap.has(index)) {
-                    installmentMap.set(index, {});
+        
+        // Fields that should be ObjectId type according to the schema
+        const objectIdFields = [
+            'employeeProfileId',
+            'designationId',
+            'departmentId',
+            'stateId',
+            'districtId',
+            'hbaAvailedFor',
+            'typeOfProperty',
+            'totalNumberOfInstallments',
+            'orderType',
+            'orderFor',
+            'submittedBy',
+            'approvedBy'
+        ];
+        
+        // Convert empty strings, 'null' strings, and non-ObjectId strings to actual null values
+        objectIdFields.forEach(field => {
+            // Check if the field exists in the query
+            if (field in query) {
+                // Check if the field is empty, 'null' or doesn't match ObjectId format (24 hex chars)
+                if (
+                    query[field] === '' || 
+                    query[field] === 'null' || 
+                    (typeof query[field] === 'string' && 
+                     !(/^[0-9a-fA-F]{24}$/.test(query[field])))
+                ) {
+                    query[field] = null;
                 }
-                installmentMap.get(index)[field] = req.body[key];
             }
         });
 
-        for (var z = 0; z < req.body.installments.length; z++) {
-            // Correctly assign conductRulePermissionAttachment from req.files
-            const fileFieldName = `installments[${z}][conductRulePermissionAttachment]`;
-            // console.log(req.files, req.files[fileFieldName]);
-        
-            if (req.files && req.files[fileFieldName] && req.files[fileFieldName].length > 0) {
-                // console.log('File found');
-                // Assign the first file path as a string
-                req.body.installments[z].conductRulePermissionAttachment = req.files[fileFieldName][0].path;
-            } 
-            else {
-                // console.log('No file found');
-                // console.log(req.body.installments[z].conductRulePermissionAttachment)
-                req.body.installments[z].conductRulePermissionAttachment = req.body.installments[z].conductRulePermissionAttachment; 
-            }
-        
-            processedInstallments.push(req.body.installments[z]);
+        // Handle file upload for the order file
+        if (req.files && req.files["orderFile"]) {
+            query.orderFile = req.files["orderFile"][0].path;
+        } else if (req.body.orderFile) {
+            query.orderFile = req.body.orderFile;
         }
 
+        // Process numeric fields
+        const numericFields = ['totalCostOfProperty', 'totalHbaAvailed', 'totalNumberOfRecoveryMonths', 'orderNo'];
+        numericFields.forEach(field => {
+            if (field in query) {
+                if (query[field] === '' || query[field] === 'null') {
+                    query[field] = null;
+                } else if (query[field] !== null && query[field] !== undefined) {
+                    // Convert to number or null if not a valid number
+                    const num = Number(query[field]);
+                    query[field] = isNaN(num) ? null : num;
+                }
+            }
+        });
+
+        // Array to store processed installments
+        const processedInstallments = [];
+        
+        // Handle installments from form fields with array notation
+        if (req.body && typeof req.body === 'object') {
+            const installmentKeys = Object.keys(req.body)
+                .filter((key) => key.startsWith("installments["));
+
+            if (installmentKeys.length > 0) {
+                // Group installment properties by index
+                const installmentMap = new Map();
+                
+                installmentKeys.forEach((key) => {
+                    const matches = key.match(/installments\[(\d+)\]\[(.+)\]/);
+                    if (matches) {
+                        const [, index, field] = matches;
+                        if (!installmentMap.has(index)) {
+                            installmentMap.set(index, {});
+                        }
+                        
+                        // Store the value, but don't process it yet
+                        installmentMap.get(index)[field] = req.body[key];
+                    }
+                });
+                
+                // Process and clean each installment
+                installmentMap.forEach((installment, index) => {
+                    // Process numeric fields
+                    if (installment.amount === '' || installment.amount === 'null') {
+                        installment.amount = null;
+                    } else if (installment.amount !== null && installment.amount !== undefined) {
+                        // Ensure amount is a number if it's not null
+                        const numAmount = Number(installment.amount);
+                        installment.amount = isNaN(numAmount) ? null : numAmount;
+                    }
+                    
+                    // Process date fields
+                    if (installment.installmentDate === '' || installment.installmentDate === 'null') {
+                        installment.installmentDate = null;
+                    }
+                    
+                    // Handle file attachment if present
+                    const fileFieldName = `installments[${index}][conductRulePermissionAttachment]`;
+                    if (req.files && req.files[fileFieldName] && req.files[fileFieldName].length > 0) {
+                        installment.conductRulePermissionAttachment = req.files[fileFieldName][0].path;
+                    }
+                    
+                    processedInstallments.push(installment);
+                });
+            }
+        }
+        
+        // Handle installments submitted as a direct array
+        if (req.body.installments && Array.isArray(req.body.installments)) {
+            for (let i = 0; i < req.body.installments.length; i++) {
+                const installment = {...req.body.installments[i]};
+                
+                // Process numeric fields
+                if (installment.amount === '' || installment.amount === 'null') {
+                    installment.amount = null;
+                } else if (installment.amount !== null && installment.amount !== undefined) {
+                    // Ensure amount is a number if it's not null
+                    const numAmount = Number(installment.amount);
+                    installment.amount = isNaN(numAmount) ? null : numAmount;
+                }
+                
+                // Process date fields
+                if (installment.installmentDate === '' || installment.installmentDate === 'null') {
+                    installment.installmentDate = null;
+                }
+                
+                // Handle file attachment if present
+                const fileFieldName = `installments[${i}][conductRulePermissionAttachment]`;
+                if (req.files && req.files[fileFieldName] && req.files[fileFieldName].length > 0) {
+                    installment.conductRulePermissionAttachment = req.files[fileFieldName][0].path;
+                }
+                
+                processedInstallments.push(installment);
+            }
+        }
+
+        // Create update operations for MongoDB
         const updateOperations = [];
         for (const installment of processedInstallments) {
-            if (!installment._id) {
+            // Create a clean copy to avoid mongoose validation issues
+            const cleanInstallment = { ...installment };
+            
+            if (!cleanInstallment._id) {
                 // New installment
-                // console.log('no execute');
-                // console.log(installment)
                 updateOperations.push({
                     updateOne: {
                         filter: { _id: query.id },
-                        update: { $push: { installments: installment } }
+                        update: { $push: { installments: cleanInstallment } }
                     }
                 });
-            } else if (installment.edited === "yes") {
+            } else if (cleanInstallment.edited === "yes") {
                 // Update existing installment
-                // console.log('yes execute');
-                // console.log(installment)
+                delete cleanInstallment.edited; // Remove the edited flag before saving
+                
                 updateOperations.push({
                     updateOne: {
                         filter: {
                             _id: query.id,
-                            "installments._id": installment._id
+                            "installments._id": cleanInstallment._id
                         },
                         update: {
-                            $set: { "installments.$": installment }
+                            $set: { "installments.$": cleanInstallment }
                         }
                     }
                 });
             }
         }
 
+        // Execute installment updates if any
         if (updateOperations.length > 0) {
             await hba.bulkWrite(updateOperations);
         }
 
+        // Update main document fields (excluding installments and id)
         const mainDocUpdate = {};
         Object.keys(query).forEach((key) => {
             if (key !== "installments" && key !== "id") {
                 mainDocUpdate[key] = query[key];
             }
         });
-        
 
         if (Object.keys(mainDocUpdate).length > 0) {
-            // console.log('main update')
-            // console.log(mainDocUpdate)
             await hba.updateOne({ _id: query.id }, { $set: mainDocUpdate });
         }
 

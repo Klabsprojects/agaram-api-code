@@ -12,12 +12,14 @@ const officersTourSchema = new Schema({
 	proposedState: String,
 	stateId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'categories'
+		ref: 'categories',
+		default: null
 	},
 	state: String,
 	districtId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'categories'
+		ref: 'categories',
+		default: null
 	},
 	district: String,
 	place: String,
@@ -26,36 +28,43 @@ const officersTourSchema = new Schema({
 	toDate: Date,
 	purpose: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'categories'
+		ref: 'categories',
+		default: null
 	},
 	organisationHostName: String,
 	OtherOfficers: [{
 		employeeProfileId: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'profile' 
+			ref: 'profile' ,
+			default: null
 		},
 		departmentId: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'departments'
+			ref: 'departments',
+			default: null
 		},
 		designationId: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'designations'
+			ref: 'designations',
+			default: null
 		},
 	}],
 	presentStatus: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'categories'
+		ref: 'categories',
+		default: null
 	},
 	orderFile: String,
 	orderType: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'categories'
+		ref: 'categories',
+		default: null
 	},
 	orderNo: Number,
 	orderFor: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'categories'
+		ref: 'categories',
+		default: null
 	},
 	dateOfOrder: Date,
 	rejectReasons: String,
