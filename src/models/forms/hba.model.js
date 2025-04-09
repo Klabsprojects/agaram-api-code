@@ -40,10 +40,11 @@ const hbaSchema = new Schema({
 	isExisingResidenceAvailable: String,
 	twoBRelacation: String,
 	totalHbaAvailed: Number,
-	totalNumberOfInstallments: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'categories'
-		},
+	// totalNumberOfInstallments: {
+	// 		type: mongoose.Schema.Types.ObjectId,
+	// 		ref: 'categories'
+	// 	},
+	totalNumberOfInstallments: String,
 	totalNumberOfRecoveryMonths: Number,
 	installments : [{
 			installmentNumber: String,
